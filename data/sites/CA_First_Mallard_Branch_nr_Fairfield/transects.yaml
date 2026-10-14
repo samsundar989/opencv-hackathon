@@ -1,0 +1,30 @@
+cam_id: CA_First_Mallard_Branch_nr_Fairfield
+frame: registration reference
+placed_by: Claude Code from reference + highest/lowest-stage daylight fit-window frames, 2026-10-14
+rationale: 'tidal slough: only marsh-reed edges; the channel widens at high tide (right reed edge at y≈160 moves left by ~100 px between 26.7
+  and 29.4 ft). Weak, lateral signal; sun glare'
+transects:
+- name: left_200
+  points:
+  - - 0
+    - 200
+  - - 170
+    - 200
+- name: left_250
+  points:
+  - - 0
+    - 250
+  - - 130
+    - 250
+- name: right_170
+  points:
+  - - 719
+    - 170
+  - - 530
+    - 170
+- name: right_130
+  points:
+  - - 719
+    - 130
+  - - 550
+    - 130
