@@ -1,0 +1,30 @@
+cam_id: NY_Neversink_River_at_Godeffroy
+frame: registration reference
+placed_by: Claude Code from reference + highest/lowest-stage daylight fit-window frames, 2026-10-14
+rationale: far bank (y≈200) and far bridge pier base (y≈255); near abutment waterline is below the frame. Expect low px/ft (far field) and a 0.6
+  ft 30-day swing — hard case by design
+transects:
+- name: far_pier
+  points:
+  - - 436
+    - 212
+  - - 436
+    - 280
+- name: farbank_a
+  points:
+  - - 100
+    - 170
+  - - 100
+    - 235
+- name: farbank_b
+  points:
+  - - 250
+    - 170
+  - - 250
+    - 235
+- name: farbank_c
+  points:
+  - - 370
+    - 180
+  - - 370
+    - 240
