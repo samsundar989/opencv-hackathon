@@ -1,0 +1,36 @@
+cam_id: CO_Sand_Creek_at_Mouth_nr_Commerce_City
+frame: registration reference
+placed_by: Claude Code from reference + highest/lowest-stage daylight fit-window frames, 2026-10-14
+rationale: exposed sandbar along the far edge (x≈40–400) drowns as stage rises 8.4→9.9 ft; channel widens; near vegetated bank on the right. Sun
+  glare/lens flare in morning frames
+transects:
+- name: bar_a
+  points:
+  - - 100
+    - 115
+  - - 100
+    - 245
+- name: bar_b
+  points:
+  - - 200
+    - 110
+  - - 200
+    - 235
+- name: bar_c
+  points:
+  - - 330
+    - 105
+  - - 330
+    - 205
+- name: nearbank
+  points:
+  - - 500
+    - 205
+  - - 500
+    - 125
+- name: farbank_r
+  points:
+  - - 600
+    - 60
+  - - 600
+    - 140
