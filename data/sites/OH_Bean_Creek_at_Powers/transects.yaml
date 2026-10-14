@@ -1,0 +1,29 @@
+cam_id: OH_Bean_Creek_at_Powers
+frame: registration reference
+placed_by: Claude Code from reference + highest/lowest-stage daylight fit-window frames, 2026-10-14
+rationale: far vegetated bank (y≈180–195), bridge abutment base, near-left grass that floods at ~11 ft
+transects:
+- name: farbank_a
+  points:
+  - - 100
+    - 140
+  - - 100
+    - 235
+- name: farbank_b
+  points:
+  - - 250
+    - 140
+  - - 250
+    - 235
+- name: abutment
+  points:
+  - - 395
+    - 135
+  - - 395
+    - 225
+- name: near_left
+  points:
+  - - 60
+    - 365
+  - - 60
+    - 250
