@@ -30,3 +30,15 @@ Options (Samuel/Cowork decide; I keep running the contract as written meanwhile)
 - (b) Reframe as event detection (rise onset/crest timing, ice/obstruction) where persistence is blind by construction.
 - (c) Proceed on the subset of sites that pass the contract as written.
 Recommendation: (a), decided **before** the test days are scored, recorded as a D-ruling so it can't be read as moving the goalposts after seeing results. Cost: ~2× more frames to register (worker-q, low priority) — about half a day of queue time at current load.
+
+### Q-0005 update (fit window only; test days still unscored)
+| site | hand transects | fit-window blocked-CV MAE (ft) | constant-median baseline (ft) | registration (daytime, QA'd) |
+|---|---|---|---|---|
+| WI Pecatonica (staff + wall) | 5 | **0.38** | 0.61 | 85.5% (fogged lens frames rejected) |
+| TX Buffalo Bayou (channel walls) | 5 | 0.41 | — | 98.9% |
+| TX Clear Fk Trinity | 5 | 0.48 | — | 99.2% |
+| TX Tenmile Ck | 6 | 0.46 | 0.39 | 100% |
+| PA Brandywine (pier) | 4 | 0.37 | 0.24 | 99.7% |
+| TX Cowhouse Ck (piers) | 5 | 0.79 | 0.32 | 99.7% |
+| TX White Rock Ck | 5 | 1.46 (coverage 74%) | — | 79.5% (bed changed after the Oct 1 flood → needs re-anchoring) |
+Reading: where there is a clean structure and real stage variation (Pecatonica: p05–p95 4.5–7.8 ft) the camera beats the baseline by ~38%; where the fit window is flat with one event, it cannot be calibrated in 20 days. Supports option (a).
