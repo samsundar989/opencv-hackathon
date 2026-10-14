@@ -1,0 +1,35 @@
+cam_id: OH_East_Fork_Little_Miami_River_at_Perintown
+frame: registration reference
+placed_by: Claude Code from reference + highest/lowest-stage daylight fit-window frames, 2026-10-14
+rationale: far mud bank (waterline y≈130 at 2.2 ft → y≈85 at 9.0 ft, ~6 px/ft), bridge pier, near bank by the debris jam
+transects:
+- name: farbank_a
+  points:
+  - - 150
+    - 65
+  - - 150
+    - 175
+- name: farbank_b
+  points:
+  - - 300
+    - 60
+  - - 300
+    - 170
+- name: farbank_c
+  points:
+  - - 430
+    - 70
+  - - 430
+    - 170
+- name: pier
+  points:
+  - - 578
+    - 165
+  - - 578
+    - 265
+- name: nearbank
+  points:
+  - - 380
+    - 345
+  - - 380
+    - 270
