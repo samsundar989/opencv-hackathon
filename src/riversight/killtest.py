@@ -51,6 +51,9 @@ class Cfg:
     inlier_px: float = 6.0
     reg_method: str = "cascade"    # ORB → ALIKED+LightGlue (OpenCV 5) fallback; "orb"/"aliked" for ablations
     min_gap_min: float = 30.0      # thin 15-min cameras to a 30-min cadence
+    night_sun_elev: float = -3.0   # sun below this (deg) → night, whatever the pixels say
+    max_corner_frac: float = 0.12  # fixed camera: frame corners may move ≤12% of the width
+    area_range: tuple = (0.8, 1.25)
     transects: str = "hand"        # "hand" (data/sites/<cam>/transects.yaml if present, else auto) or "auto"
 
 
@@ -547,7 +550,66 @@ def register_site(cam_id: str, data_dir: Path, t0, t_split, t1, cfg: Cfg = Cfg()
     else:
         reg = register_frames(frames, ref, cfg, cfg.reg_method)
         reg.join(frames["filename"]).assign(ref=ref_name).reset_index(drop=True).to_parquet(cache)
+    reg = qa_registration(reg, frames, ref.shape[:2], site_latlng(data_dir, cam_id), cfg)
     return frames, stage, ref_i, ref, reg
+
+
+def site_latlng(data_dir: Path, cam_id: str):
+    import yaml
+    for p in sorted((data_dir / "sites").glob("*.yaml")):
+        for s in (yaml.safe_load(p.read_text(encoding="utf-8")) or {}).get("sites", []):
+            if s.get("cam_id") == cam_id:
+                return float(s["lat"]), float(s["lng"])
+    return None
+
+
+def sun_elevation_deg(lat: float, lon: float, times: pd.Series) -> np.ndarray:
+    """Solar elevation (NOAA low-precision formulas; ~0.5 deg accuracy is plenty for day/night)."""
+    t = pd.DatetimeIndex(times).tz_convert("UTC")
+    jd = t.to_julian_date().values
+    n = jd - 2451545.0
+    L = np.deg2rad((280.460 + 0.9856474 * n) % 360)
+    g = np.deg2rad((357.528 + 0.9856003 * n) % 360)
+    lam = L + np.deg2rad(1.915) * np.sin(g) + np.deg2rad(0.020) * np.sin(2 * g)
+    eps = np.deg2rad(23.439 - 0.0000004 * n)
+    dec = np.arcsin(np.sin(eps) * np.sin(lam))
+    ra = np.arctan2(np.cos(eps) * np.sin(lam), np.cos(lam))
+    gmst = (18.697374558 + 24.06570982441908 * n) % 24
+    ha = np.deg2rad(gmst * 15 + lon) - ra
+    la = np.deg2rad(lat)
+    return np.rad2deg(np.arcsin(np.sin(la) * np.sin(dec) + np.cos(la) * np.cos(dec) * np.cos(ha)))
+
+
+def homography_plausible(H: np.ndarray, shape, max_corner_frac: float, scale_range) -> tuple[bool, float]:
+    """A fixed camera's frame→reference homography moves the corners a little and keeps area ~constant.
+    Returns (plausible, max corner displacement in px)."""
+    h, w = shape
+    c = np.float32([[0, 0], [w, 0], [w, h], [0, h]]).reshape(-1, 1, 2)
+    m = cv2.perspectiveTransform(c, H).reshape(-1, 2)
+    disp = float(np.max(np.linalg.norm(m - c.reshape(-1, 2), axis=1)))
+    area = cv2.contourArea(m.astype(np.float32)) / float(w * h)
+    return bool(disp <= max_corner_frac * w and scale_range[0] <= area <= scale_range[1]), disp
+
+
+def qa_registration(reg: pd.DataFrame, frames: pd.DataFrame, shape, latlng, cfg: Cfg) -> pd.DataFrame:
+    """Post-filters on (cached) registration: sun-based night flag (floodlit frames fool the image test)
+    and geometric plausibility of the homography (rejects confident false matches)."""
+    reg = reg.copy()
+    reg["night_img"] = reg["night"]
+    if latlng is not None:
+        elev = sun_elevation_deg(latlng[0], latlng[1], frames.loc[reg.index, "time"])
+        reg["sun_elev"] = elev
+        reg["night"] = reg["night"].fillna(False).astype(bool) | (elev < cfg.night_sun_elev)
+    disp, ok_geo = [], []
+    for H in reg["H"]:
+        if H is None or (isinstance(H, float) and np.isnan(H)):
+            disp.append(np.nan); ok_geo.append(False); continue
+        okg, d = homography_plausible(np.array(H).reshape(3, 3), shape, cfg.max_corner_frac, cfg.area_range)
+        disp.append(d); ok_geo.append(okg)
+    reg["corner_disp_px"] = disp
+    reg["ok_raw"] = reg["ok"]
+    reg["ok"] = reg["ok"].astype(bool) & np.array(ok_geo) & ~reg["night"].astype(bool)
+    return reg
 
 
 def run_site(cam_id: str, data_dir: Path, out_dir: Path, t0, t_split, t1, cfg: Cfg = Cfg(),

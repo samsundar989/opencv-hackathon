@@ -66,3 +66,18 @@ def test_select_keeps_tracking_transect_and_drops_noise():
     best, table = select(D, tr, t0, t0 + pd.Timedelta(days=20), Cfg())
     mae, det, keep, _ = best
     assert keep == ["good"] and mae < 0.15, (best, table)
+
+
+def test_sun_elevation_day_and_night():
+    from riversight.killtest import sun_elevation_deg
+    # Dallas, 2026-10-01: ~18:30Z is near solar noon (high sun), 06:00Z is night
+    e = sun_elevation_deg(32.8, -96.8, pd.Series(pd.to_datetime(["2026-10-01T18:30Z", "2026-10-01T06:00Z"])))
+    assert e[0] > 45 and e[1] < -20
+
+
+def test_homography_plausibility():
+    from riversight.killtest import homography_plausible
+    ok, d = homography_plausible(np.array([[1, 0, 5.0], [0, 1, -3.0], [0, 0, 1]]), (540, 720), 0.12, (0.8, 1.25))
+    assert ok and d < 10
+    bad, _ = homography_plausible(np.array([[0.6, 0.2, 150.0], [0.1, 0.7, 90.0], [0, 0.0004, 1]]), (540, 720), 0.12, (0.8, 1.25))
+    assert not bad
