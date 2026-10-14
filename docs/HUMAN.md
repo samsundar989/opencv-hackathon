@@ -42,3 +42,15 @@ Recommendation: (a), decided **before** the test days are scored, recorded as a 
 | TX Cowhouse Ck (piers) | 5 | 0.79 | 0.32 | 99.7% |
 | TX White Rock Ck | 5 | 1.46 (coverage 74%) | — | 79.5% (bed changed after the Oct 1 flood → needs re-anchoring) |
 Reading: where there is a clean structure and real stage variation (Pecatonica: p05–p95 4.5–7.8 ft) the camera beats the baseline by ~38%; where the fit window is flat with one event, it cannot be calibrated in 20 days. Supports option (a).
+
+## Q-0006 — SLICE_01 is heading for FAIL on the classical detector; direction needed before any test-day scoring
+Full fit-window evidence, 20 sites, hand transects, blocked 4-fold CV inside the 20 fit days (test days never read): `results/kill_test/fit_window_cv.csv`, `results/kill_test/registration_summary.csv`.
+- **Registration passes:** 95.7% of 9,000 true-daylight frames (bar ≥ 90%); ORB alone ≈ 40%, ALIKED+LightGlue rescued 4,892 frames. This is a strong, honest OpenCV-5 result.
+- **Waterline → stage does not (yet):** camera CV MAE ≤ 0.25 ft at **1/20** (Hancock staff, 0.048 ft); beats a constant-median baseline at 4/20 (Pecatonica 0.38 vs 0.61, Hancock 0.05 vs 0.14, Animas 0.41 vs 0.57, Stony Brook ≈ tie); beats persistence-24h at 4/20. No valid fit at the tidal site.
+- **Failure modes (per site, in the CSV):** flat fit window with one event (flashy TX creeks; calibration can't be learned in 20 days); classical edge detector picks reflections/shadows/vegetation edges (Cowhouse, Salt Ck, Bean Ck, Root River); low px/ft far banks (Root River ~3 px/ft, Neversink); registration loss after a flood changed the bed (White Rock) or a wet/fogged lens (Big Brook, Pecatonica).
+- CV here is harsher than the contract protocol (15-day fits extrapolating to the held-out event), but the gap to ≥10/20 is too large to close by protocol alone.
+Per the slice contract I am **not** scoring the 10 test days and not tuning further into them. Options:
+- (a) **Proceed, with the detector upgrade pulled forward:** keep the 10 test days frozen; build SLICE_03's water-segmentation waterline (SAM2 pseudo-labels on the 5090 via worker-q → small seg net → ONNX → `cv2.dnn` new engine) and lengthen calibration to ~90 days (SLICE_02 window); re-run the kill test once, same frozen test days, by ~Oct 17. Registration result already banks the OpenCV-5 story.
+- (b) **Reframe** to event detection (rise onset / crest timing, camera-moved / occlusion QA), where registration + change detection already work and persistence is blind.
+- (c) Switch to Porter (docs/research/ideas.md).
+Recommendation: **(a)**, with (b) as the fallback narrative if the re-run also fails on Oct 17. Cost: ~1–2 GPU-hours on the 5090 (worker-q, low priority), no AWS spend.

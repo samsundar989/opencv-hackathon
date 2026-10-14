@@ -1,5 +1,12 @@
 # STATUS (newest first)
 
+## 2026-10-14 (afternoon CT) — SLICE_01: registration PASS, waterline FAIL-likely; paused for direction (Claude Code)
+- All 20 sites fetched, registered and hand-transected (`data/sites/<cam>/transects.yaml`, placed from fit-window frames only).
+- **Registration (acceptance #1): 95.7%** of 9,000 true-daylight frames (≥90% required) — `results/kill_test/registration_summary.csv`. ORB alone ≈40%; ALIKED+LightGlue rescued 4,892; sun-elevation QA caught 1,593 floodlit night frames; geometric QA rejected 210.
+- **Waterline→stage (fit-window blocked CV, test days untouched):** MAE ≤ 0.25 ft at 1/20; beats constant-median at 4/20; beats persistence-24h at 4/20 — `results/kill_test/fit_window_cv.csv`. Kill test as specified would FAIL.
+- Test days **not scored**. Q-0005 (protocol) and Q-0006 (direction: recommend pulling the seg-net detector forward + 90-day calibration, re-run once on the same frozen test days) are open in `docs/HUMAN.md`.
+- Compute: all image passes via worker-q at `low` (jobs 2814, 2820, 2822, 2826, 2835); 2 preemptions by arc-whest, no losses (per-site caches). No RunPod/Kaggle/AWS spend.
+
 ## 2026-10-14 (late morning CT) — SLICE_01 in progress; recovered from a machine crash (Claude Code)
 - **Crash:** the box went down while RAM was ~7 GiB free (arc-whest jobs + my direct dev runs). After restart: git clean and pushed (`85b8347`), worker-q HEALTHY, image cache intact (0 partial files). From now on every image pass — dev iterations included — goes through worker-q at `low` priority (`scripts/kill_test.py --dev --only <site>`); only unit tests, single-image probes and network fetches run directly. RunPod/Kaggle remain the overflow path (no spend so far).
 - **Data:** 20 kill-test sites (`data/sites/kill_test.yaml`), 30 days ending 2026-10-14T00Z, ~24k 720-px frames cached under `data/raw/720/`, 0 download errors.
