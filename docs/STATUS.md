@@ -1,5 +1,13 @@
 # STATUS (newest first)
 
+## 2026-10-14 (late morning CT) — SLICE_01 in progress; recovered from a machine crash (Claude Code)
+- **Crash:** the box went down while RAM was ~7 GiB free (arc-whest jobs + my direct dev runs). After restart: git clean and pushed (`85b8347`), worker-q HEALTHY, image cache intact (0 partial files). From now on every image pass — dev iterations included — goes through worker-q at `low` priority (`scripts/kill_test.py --dev --only <site>`); only unit tests, single-image probes and network fetches run directly. RunPod/Kaggle remain the overflow path (no spend so far).
+- **Data:** 20 kill-test sites (`data/sites/kill_test.yaml`), 30 days ending 2026-10-14T00Z, ~24k 720-px frames cached under `data/raw/720/`, 0 download errors.
+- **Bug found:** `fetch_sites.py` never saved `stage.parquet` (frames.parquet had stage; persistence baseline and the runner need the series). Fixed; rerunning the fetch (images cached) — waiting out a USGS rate limit politely.
+- **Registration:** ORB→ALIKED+LightGlue cascade. Evidence so far: Tenmile Ck 375/375 daytime frames with ALIKED (ORB alone ≈48%); Brandywine 755/755 (754 ORB, 1 ALIKED).
+- **Detector status (fit window only):** Tenmile CV shows the hard part — fit days are mostly flat base flow (5.24–6.62 ft) and detections on the first transect design were noisy. Changes: transects now cut across the *boundary* of stage-correlated regions; projective fit constrained to have no pole inside the stage range, affine fallback for short ranges. Not yet evaluated on all sites.
+- **Next:** registration batch for 20 sites via worker-q → `--dev` CV pass (fit window) → one full run that scores the test days → `results/kill_test.md` + D-0002.
+
 ## 2026-10-14 — SLICE_01 setup (Claude Code)
 - **Environment:** Python 3.14.4 (global, `pythoncore-3.14-64`), `opencv-python-headless==5.0.0.93` (`cv2.__version__` = 5.0.0), numpy 2.4.6. `python -m pip install -e ".[dev]"` OK; `pytest -q` → 15 passed. Note: bare `pip` on this box points at a Python 3.11 Store install — always use `python -m pip`.
 - **torch:** not installed in the global 3.14 env (Q-0002 updated). Not needed for SLICE_01; needed from SLICE_03.
