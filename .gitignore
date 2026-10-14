@@ -1,0 +1,41 @@
+# secrets / env
+.env
+*.csv.secret
+cdk.context.json
+
+# data (never commit raw imagery)
+/data/*
+!/data/sites/
+/data/sites/*
+!/data/sites/*.yaml
+!/data/sites/README.md
+models/*.onnx
+models/*.pt
+models/*.pth
+
+# python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# cdk / node
+cdk.out/
+node_modules/
+web/dist/
+
+# os / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# large outputs (keep results/ small, committed)
+runs/
+*.mp4
+*.mov
