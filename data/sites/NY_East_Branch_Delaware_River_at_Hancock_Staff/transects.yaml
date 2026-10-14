@@ -1,0 +1,30 @@
+cam_id: NY_East_Branch_Delaware_River_at_Hancock_Staff
+frame: registration reference (portrait 405x720)
+placed_by: Claude Code from reference + highest/lowest-stage daylight fit-window frames, 2026-10-14
+rationale: close-up staff gauge (~60 px/ft) but the 30-day range 9.2–10.1 ft keeps the waterline at the very foot of the staff (y≈620–680); pipe
+  and wall base as extra edges
+transects:
+- name: staff_foot
+  points:
+  - - 245
+    - 560
+  - - 255
+    - 710
+- name: pipe_foot
+  points:
+  - - 325
+    - 560
+  - - 325
+    - 710
+- name: wall_base_a
+  points:
+  - - 120
+    - 470
+  - - 120
+    - 660
+- name: wall_base_b
+  points:
+  - - 40
+    - 400
+  - - 40
+    - 600
