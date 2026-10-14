@@ -1,0 +1,29 @@
+cam_id: CO_Animas_River_at_Durango
+frame: registration reference
+placed_by: Claude Code from reference + highest/lowest-stage daylight fit-window frames, 2026-10-14
+rationale: far bank waterline y≈112 at 2.1 ft → y≈97 at 4.6 ft (~6 px/ft); mid-river boulder submerges; near grassy bank
+transects:
+- name: farbank_a
+  points:
+  - - 250
+    - 65
+  - - 250
+    - 155
+- name: farbank_b
+  points:
+  - - 420
+    - 65
+  - - 420
+    - 155
+- name: boulder
+  points:
+  - - 350
+    - 105
+  - - 350
+    - 150
+- name: nearbank
+  points:
+  - - 300
+    - 375
+  - - 300
+    - 285
