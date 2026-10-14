@@ -8,6 +8,9 @@ cdk.context.json
 !/data/sites/
 /data/sites/*
 !/data/sites/*.yaml
+!/data/sites/*/
+/data/sites/*/*
+!/data/sites/*/transects.yaml
 !/data/sites/README.md
 models/onnx/
 models/*.pt

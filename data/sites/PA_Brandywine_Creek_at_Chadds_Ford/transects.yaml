@@ -1,0 +1,29 @@
+cam_id: PA_Brandywine_Creek_at_Chadds_Ford
+frame: 'registration reference (data/derived/<cam>/registration_cascade.parquet: ref)'
+placed_by: Claude Code from reference + highest/lowest-stage warped frames (scripts/render_ref_grid.py), 2026-10-14; fit-window imagery only
+rationale: stone pier face (x≈500–555) where the waterline climbs with stage; left bank by the stairs
+transects:
+- name: pier_a
+  points:
+  - - 515
+    - 325
+  - - 515
+    - 405
+- name: pier_b
+  points:
+  - - 535
+    - 330
+  - - 535
+    - 405
+- name: pier_c
+  points:
+  - - 550
+    - 335
+  - - 550
+    - 405
+- name: leftbank
+  points:
+  - - 60
+    - 475
+  - - 150
+    - 405

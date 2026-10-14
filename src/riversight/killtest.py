@@ -51,6 +51,7 @@ class Cfg:
     inlier_px: float = 6.0
     reg_method: str = "cascade"    # ORB → ALIKED+LightGlue (OpenCV 5) fallback; "orb"/"aliked" for ablations
     min_gap_min: float = 30.0      # thin 15-min cameras to a 30-min cadence
+    transects: str = "hand"        # "hand" (data/sites/<cam>/transects.yaml if present, else auto) or "auto"
 
 
 @dataclass
@@ -295,6 +296,18 @@ def transects_from_map(C: np.ndarray, cfg: Cfg) -> list[Transect]:
             continue
         out.append(Transect(f"c{ci}b{idx:02d}", (np.stack([p0, p1]) * inv).astype(np.float32), cfg.half_width))
     return out
+
+
+def load_hand_transects(data_dir: Path, cam_id: str, cfg: Cfg):
+    """Hand-placed transects (slice-contract fallback): data/sites/<camId>/transects.yaml, reference-frame
+    pixel coordinates, each a polyline drawn from land/structure towards water across the waterline."""
+    import yaml
+    p = data_dir / "sites" / cam_id / "transects.yaml"
+    if not p.exists():
+        return None
+    doc = yaml.safe_load(p.read_text(encoding="utf-8"))
+    return [Transect(t["name"], np.array(t["points"], np.float32), int(t.get("half_width", cfg.half_width)))
+            for t in doc["transects"]]
 
 
 def detect_all(frames: pd.DataFrame, reg: pd.DataFrame, ref_shape, transects: list[Transect], cfg: Cfg,
@@ -555,7 +568,9 @@ def run_site(cam_id: str, data_dir: Path, out_dir: Path, t0, t_split, t1, cfg: C
         return res
     C = correlation_map(acc, cfg)
     cm = cv2.applyColorMap((np.clip(C / max(C.max(), 1e-6), 0, 1) * 255).astype(np.uint8), cv2.COLORMAP_INFERNO)
-    transects = transects_from_map(C, cfg)
+    hand = load_hand_transects(data_dir, cam_id, cfg) if cfg.transects == "hand" else None
+    transects = hand if hand else transects_from_map(C, cfg)
+    res.notes.append(f"transects: {'hand' if hand else 'auto'} ({len(transects)})")
     res.transects = [{"name": t.name, "points": t.points.tolist()} for t in transects]
     ref_vis = ref.copy()
     for t in transects:

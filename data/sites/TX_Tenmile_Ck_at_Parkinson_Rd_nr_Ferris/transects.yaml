@@ -1,0 +1,41 @@
+cam_id: TX_Tenmile_Ck_at_Parkinson_Rd_nr_Ferris
+frame: 'registration reference (data/derived/<cam>/registration_cascade.parquet: ref)'
+placed_by: Claude Code from reference + highest/lowest-stage warped frames (scripts/render_ref_grid.py), 2026-10-14; fit-window imagery only
+rationale: far rock bank (base-flow edge y≈190, flood edge y≈105) and near gravel bank; bridge pier foot
+transects:
+- name: far_a
+  points:
+  - - 100
+    - 85
+  - - 100
+    - 240
+- name: far_b
+  points:
+  - - 200
+    - 85
+  - - 200
+    - 240
+- name: far_c
+  points:
+  - - 290
+    - 95
+  - - 290
+    - 240
+- name: near_a
+  points:
+  - - 150
+    - 385
+  - - 150
+    - 290
+- name: near_b
+  points:
+  - - 250
+    - 390
+  - - 250
+    - 300
+- name: pier
+  points:
+  - - 548
+    - 195
+  - - 548
+    - 280

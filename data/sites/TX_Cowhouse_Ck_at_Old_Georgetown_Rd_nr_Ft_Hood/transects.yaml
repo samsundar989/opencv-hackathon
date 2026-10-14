@@ -1,0 +1,35 @@
+cam_id: TX_Cowhouse_Ck_at_Old_Georgetown_Rd_nr_Ft_Hood
+frame: 'registration reference (data/derived/<cam>/registration_cascade.parquet: ref)'
+placed_by: Claude Code from reference + highest/lowest-stage warped frames (scripts/render_ref_grid.py), 2026-10-14; fit-window imagery only
+rationale: four bridge piers; base flow sits at the pier feet (y≈330–355), the 10.8 ft flood covers y≈280–330
+transects:
+- name: pier1
+  points:
+  - - 335
+    - 245
+  - - 335
+    - 365
+- name: pier2
+  points:
+  - - 390
+    - 245
+  - - 390
+    - 365
+- name: pier3
+  points:
+  - - 445
+    - 245
+  - - 445
+    - 360
+- name: pier4
+  points:
+  - - 500
+    - 245
+  - - 500
+    - 355
+- name: pool_left
+  points:
+  - - 195
+    - 290
+  - - 195
+    - 360
