@@ -1,5 +1,7 @@
 # AWS setup — Samuel's checklist (do tonight; ~45 min)
 
+> **Superseded 2026-10-14 (D-0003):** the account uses the new AWS experience (project-based), Region **us-east-2**, and the CLI signs in with `aws login --profile riversight` instead of access keys. Read every `us-east-1` below as `us-east-2`, and skip steps 5–7 (no IAM user or access keys).
+
 Everything below is clickable by you only. Tick items in `docs/STATUS.md` or tell Cowork. Region for everything: **us-east-1 (N. Virginia)** — COOL AMIs, Graviton c8g and the Bedrock models we need are all there.
 
 ## A. Create the account (10 min)
