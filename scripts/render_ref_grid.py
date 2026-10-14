@@ -52,6 +52,9 @@ def main():
             from riversight.killtest import sun_elevation_deg
             r = reg[reg["ok"] == True].merge(fr, on="filename").dropna(subset=["stage_ft"])  # noqa: E712
             r = r[sun_elevation_deg(s["lat"], s["lng"], r["time"]) > 5].reset_index(drop=True)  # real daylight only
+            from riversight.killtest import homography_plausible
+            keep = [homography_plausible(np.array(H).reshape(3, 3), img.shape[:2], 0.12, (0.8, 1.25))[0] for H in r["H"]]
+            r = r[keep].reset_index(drop=True)  # same geometric QA as the pipeline
             for i in (r["stage_ft"].idxmax(), r["stage_ft"].idxmin()):
                 im = cv2.imread(str(ROOT / "data/raw/720" / cam / r.loc[i, "filename"]))
                 H = np.array(r.loc[i, "H"]).reshape(3, 3)

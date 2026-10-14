@@ -1,0 +1,35 @@
+cam_id: NJ_Stony_Brook_at_Princeton
+frame: registration reference
+placed_by: Claude Code from reference + highest/lowest-stage daylight fit-window frames, 2026-10-14
+rationale: stone-arch bridge pier faces (waterline y≈300 low → ≈210 at 5.9 ft); gravel island and rocks flood; far bank
+transects:
+- name: pier_mid
+  points:
+  - - 178
+    - 165
+  - - 178
+    - 335
+- name: pier_left
+  points:
+  - - 115
+    - 225
+  - - 115
+    - 365
+- name: island
+  points:
+  - - 380
+    - 300
+  - - 380
+    - 400
+- name: backbank
+  points:
+  - - 300
+    - 160
+  - - 300
+    - 250
+- name: rocks
+  points:
+  - - 430
+    - 245
+  - - 430
+    - 300
