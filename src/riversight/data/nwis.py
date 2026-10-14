@@ -26,6 +26,32 @@ class _Transient(Exception):
     pass
 
 
+class RateLimited(RuntimeError):
+    """The API said 'come back later' for longer than we are willing to sleep. Do not retry blindly:
+    every retried request also counts against the hourly quota (1000/h per key on Oct 14)."""
+
+    def __init__(self, retry_after_s: float):
+        super().__init__(f"USGS rate limit hit; retry after {retry_after_s:.0f}s")
+        self.retry_after_s = retry_after_s
+
+
+MAX_POLITE_SLEEP_S = 90.0
+
+
+def check_rate_limit(r: httpx.Response) -> None:
+    """Raise RateLimited on 429 with a long Retry-After; _Transient on short waits/5xx."""
+    if r.status_code == 429:
+        try:
+            ra = float(r.headers.get("retry-after", "0"))
+        except ValueError:
+            ra = 0.0
+        if ra > MAX_POLITE_SLEEP_S:
+            raise RateLimited(ra)
+        raise _Transient(f"429 (retry-after {ra:.0f}s)")
+    if r.status_code in (500, 502, 503, 504):
+        raise _Transient(f"{r.status_code} for {r.url}")
+
+
 def _iso(dt: datetime) -> str:
     return dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -69,8 +95,7 @@ class NwisClient:
         if self.api_key:
             params["api_key"] = self.api_key
         r = self._http.get(url, params=params)
-        if r.status_code in (429, 500, 502, 503, 504):
-            raise _Transient(f"{r.status_code} for {url}")
+        check_rate_limit(r)
         r.raise_for_status()
         return r.json()
 
@@ -101,3 +126,36 @@ class NwisClient:
                 keep = df["ts_id"].value_counts().idxmax()
                 df = df[df["ts_id"] == keep].reset_index(drop=True)
         return df
+
+
+LEGACY_IV = "https://waterservices.usgs.gov/nwis/iv/"
+
+
+def parse_waterml_json(data: dict) -> dict[str, pd.DataFrame]:
+    """Legacy NWIS IV WaterML-JSON → {site_no: DataFrame(time, value)}; keeps the longest series per site."""
+    out: dict[str, pd.DataFrame] = {}
+    for ts in data.get("value", {}).get("timeSeries", []):
+        site = ts["sourceInfo"]["siteCode"][0]["value"]
+        nodata = ts.get("variable", {}).get("noDataValue", -999999.0)
+        for block in ts.get("values", []):
+            rows = [(v["dateTime"], float(v["value"])) for v in block.get("value", [])
+                    if v.get("value") not in (None, "") and float(v["value"]) != nodata]
+            if not rows:
+                continue
+            df = pd.DataFrame(rows, columns=["time", "value"])
+            df["time"] = pd.to_datetime(df["time"], utc=True, format="ISO8601")
+            if site not in out or len(df) > len(out[site]):
+                out[site] = df.sort_values("time").reset_index(drop=True)
+    return out
+
+
+def legacy_iv_multi(sites: list[str], start: datetime, end: datetime, parameter: str = PARAM_STAGE,
+                    timeout: float = 180.0) -> dict[str, pd.DataFrame]:
+    """Screening only: one request for many sites (legacy waterservices IV). Ground truth for
+    evaluation still comes from the OGC API (NwisClient.stage)."""
+    r = httpx.get(LEGACY_IV, params={"sites": ",".join(sites), "parameterCd": parameter, "startDT": _iso(start),
+                                      "endDT": _iso(end), "format": "json", "siteStatus": "all"},
+                  timeout=timeout, headers={"User-Agent": "RiverSight/0.1"})
+    check_rate_limit(r)
+    r.raise_for_status()
+    return parse_waterml_json(r.json())

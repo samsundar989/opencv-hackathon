@@ -1,0 +1,180 @@
+window:
+  end: '2026-10-14T00:00:00Z'
+  days: 30
+  fit_days: 20
+  test_days: 10
+selection: scripts/select_sites.py (stage swing from batched NWIS IV) + scripts/contact_sheets.py (min/median/max-stage frames reviewed by eye);
+  see results/kill_test/contacts/
+substitutions: Named TX sites Blanco_River_at_Wimberley (0.12 ft swing), Zacate_Creek_at_Jacaman_Road_Laredo (0.06 ft) and San_Antonio_River_at_East_Nueva_St
+  (no 00065 data in window) have no stage signal in the 30-day window; replaced by Cottonwood_Ck, Tenmile_Ck, Langham_Creek.
+rejected:
+  TX_Trinity_Rv_at_Dallas: water not visible at base flow (floodplain view)
+  WI_Underwood_Creek_at_Wauwatosa_ABOVE_WATER_FISH_CAMERA: partly submerged fish camera, black wedge
+  NJ_Assunpink_Creek_near_Clarksville: camera view/zoom changes between frames
+  SC_Wando_River_above_Mt_Pleasant: open estuary; only a distant marsh edge
+  TX_San_Antonio_River_at_Mitchell_St_San_Antonio: banks hidden by vegetation
+  PA_Neshaminy_Creek_near_Langhorne: vegetation + lens droplets
+  MN_Cannon_River_at_Northfield: wide river, low px/ft
+  NY_Delaware_River_at_Port_Jervis: wide river, low px/ft
+  TX_Cottonwood_Ck_at_E_Beltline_Rd_nr_Wilmer: gauge record only starts 2026-10-01 → <7 fit days (excellent visuals; reuse in SLICE_02)
+sites:
+- cam_id: TX_Cowhouse_Ck_at_Old_Georgetown_Rd_nr_Ft_Hood
+  nwis_id: 08101200
+  state: TX
+  lat: 31.24878888888889
+  lng: -97.83784722222222
+  swing_p95_p05_ft: 1.39
+  frames_per_day: 96.0
+  reason: TX creek under a bridge; piers + far bank; 96 frames/day (replaces Cottonwood Ck, whose gauge record starts 2026-10-01)
+- cam_id: TX_Tenmile_Ck_at_Parkinson_Rd_nr_Ferris
+  nwis_id: 08057466
+  state: TX
+  lat: 32.56369444
+  lng: -96.62425278
+  swing_p95_p05_ft: 1.49
+  frames_per_day: 24.0
+  reason: TX creek; rip-rap bank + bridge pier; strong visible change (5.3→15.3 ft)
+- cam_id: TX_Buffalo_Bayou_at_State_HWY_6_near_Addicks
+  nwis_id: 08072600
+  state: TX
+  lat: 29.76938056
+  lng: -95.6431667
+  swing_p95_p05_ft: 2.67
+  frames_per_day: 24.0
+  reason: TX named site; concrete channel walls + weir, waterline on walls
+- cam_id: TX_Clear_Fk_Trinity_Rv_at_Ft_Worth
+  nwis_id: 08047500
+  state: TX
+  lat: 32.732353
+  lng: -97.3589063
+  swing_p95_p05_ft: 0.98
+  frames_per_day: 24.0
+  reason: TX named site; vertical wall beside the gauge house, waterline visible on wall
+- cam_id: TX_White_Rk_Ck_at_Greenville_Ave_Dallas
+  nwis_id: 08057200
+  state: TX
+  lat: 32.88929207
+  lng: -96.7566664
+  swing_p95_p05_ft: 1.52
+  frames_per_day: 24.0
+  reason: TX named site; rock bed + concrete headwall; big swing in floods (69.9→87.3 ft)
+- cam_id: TX_Langham_Creek_at_Addicks_Reservoir_Outflow_near_Addicks
+  nwis_id: 08073100
+  state: TX
+  lat: 29.79027778
+  lng: -95.6238889
+  swing_p95_p05_ft: 5.9
+  frames_per_day: 96.0
+  reason: TX outflow channel with concrete walls; 96 frames/day; hazy lens (registration stress test)
+- cam_id: WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet
+  nwis_id: '05433000'
+  state: WI
+  lat: 42.78555556
+  lng: -89.8611111
+  swing_p95_p05_ft: 4.12
+  frames_per_day: 24.0
+  reason: WI; staff gauge on a concrete wall + grassy bank; 4.1 ft swing
+- cam_id: WI_Swan_Creek_at_Lalor_Road_near_Fitchburg
+  nwis_id: 05429369
+  state: WI
+  lat: 42.99951944
+  lng: -89.3615417
+  swing_p95_p05_ft: 2.19
+  frames_per_day: 24.0
+  reason: WI small creek; gabion wall + fence posts; floodplain inundation visible
+- cam_id: MN_Root_River_near_Pilot_Mound
+  nwis_id: 05383950
+  state: MN
+  lat: 43.782779
+  lng: -92.03163
+  swing_p95_p05_ft: 8.39
+  frames_per_day: 22.0
+  reason: MN; bridge abutment + bank; 8.4 ft swing
+- cam_id: NY_East_Branch_Delaware_River_at_Hancock_Staff
+  nwis_id: '01421500'
+  state: NY
+  lat: 41.952167
+  lng: -75.276694
+  swing_p95_p05_ft: 0.79
+  frames_per_day: 22.0
+  reason: NY; close-up staff gauge on a pier (best case for pixel/ft); small swing 0.8 ft
+- cam_id: NY_Neversink_River_at_Godeffroy
+  nwis_id: '01437500'
+  state: NY
+  lat: 41.4413611
+  lng: -74.60188889
+  swing_p95_p05_ft: 0.6
+  frames_per_day: 24.0
+  reason: NY; bridge abutment and bank; modest swing 0.6 ft (hard case)
+- cam_id: NJ_Stony_Brook_at_Princeton
+  nwis_id: '01401000'
+  state: NJ
+  lat: 40.33305556
+  lng: -74.6819444
+  swing_p95_p05_ft: 2.13
+  frames_per_day: 24.0
+  reason: NJ brook; stone arch bridge piers + gravel bar
+- cam_id: NJ_Big_Brook_near_Marlboro
+  nwis_id: 01407290
+  state: NJ
+  lat: 40.3197222
+  lng: -74.2141667
+  swing_p95_p05_ft: 1.52
+  frames_per_day: 23.0
+  reason: 'NJ brook; vegetated banks only (hard case: no hard structure)'
+- cam_id: OH_East_Fork_Little_Miami_River_at_Perintown
+  nwis_id: '03247500'
+  state: OH
+  lat: 39.13700548
+  lng: -84.2379918
+  swing_p95_p05_ft: 4.36
+  frames_per_day: 24.0
+  reason: OH; bridge pier + mud bank; 4.4 ft swing
+- cam_id: OH_Bean_Creek_at_Powers
+  nwis_id: 04184500
+  state: OH
+  lat: 41.6594951
+  lng: -84.2491148
+  swing_p95_p05_ft: 2.73
+  frames_per_day: 24.0
+  reason: OH creek; bridge abutment + grassy bank
+- cam_id: CO_Animas_River_at_Durango
+  nwis_id: 09361500
+  state: CO
+  lat: 37.279167
+  lng: -107.879722
+  swing_p95_p05_ft: 2.06
+  frames_per_day: 49.0
+  reason: CO; rocks + banks; 49 frames/day; snowmelt/rain river
+- cam_id: CO_Sand_Creek_at_Mouth_nr_Commerce_City
+  nwis_id: '394839104570300'
+  state: CO
+  lat: 39.8109722
+  lng: -104.9515833
+  swing_p95_p05_ft: 0.7
+  frames_per_day: 147.3
+  reason: CO urban creek; long straight bank; 147 frames/day
+- cam_id: IL_Salt_Creek_at_Wood_Dale
+  nwis_id: '05531175'
+  state: IL
+  lat: 41.96413889
+  lng: -87.9841667
+  swing_p95_p05_ft: 4.28
+  frames_per_day: 24.0
+  reason: IL; bridge pier + concrete apron; 4.3 ft swing
+- cam_id: PA_Brandywine_Creek_at_Chadds_Ford
+  nwis_id: 01481000
+  state: PA
+  lat: 39.8698328
+  lng: -75.5932623
+  swing_p95_p05_ft: 1.5
+  frames_per_day: 96.0
+  reason: PA; bridge pier; 96 frames/day
+- cam_id: CA_First_Mallard_Branch_nr_Fairfield
+  nwis_id: '381142122015801'
+  state: CA
+  lat: 38.1948944444444
+  lng: -122.032813888889
+  swing_p95_p05_ft: 4.37
+  frames_per_day: 75.7
+  reason: CA tidal slough (daily 4 ft tides) — tests tracking when persistence is weak; marsh edge only

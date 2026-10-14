@@ -53,3 +53,33 @@ def test_join_interpolates_within_tolerance():
     assert pd.isna(j.loc[1, "stage_ft"])                 # 3 hours away → no label
     v = stage_variability(stage)
     assert v["n"] == 2 and abs(v["range_ft"] - 1.0) < 1e-9
+
+
+def test_long_retry_after_raises_instead_of_retrying():
+    """Bug (Oct 14): 429s were retried with backoff, and each retry burned hourly quota."""
+    import httpx
+    import pytest
+    from riversight.data.nwis import NwisClient, RateLimited
+
+    calls = []
+
+    def handler(request):
+        calls.append(request)
+        return httpx.Response(429, headers={"retry-after": "1033"})
+
+    c = NwisClient(api_key="x")
+    c._http = httpx.Client(transport=httpx.MockTransport(handler))
+    with pytest.raises(RateLimited):
+        c._get("https://example.invalid/items")
+    assert len(calls) == 1
+
+
+def test_parse_waterml_json():
+    from riversight.data.nwis import parse_waterml_json
+    data = {"value": {"timeSeries": [{"sourceInfo": {"siteCode": [{"value": "05576100"}]},
+                                      "variable": {"noDataValue": -999999.0},
+                                      "values": [{"value": [{"dateTime": "2026-10-10T00:00:00.000-05:00", "value": "3.5"},
+                                                            {"dateTime": "2026-10-10T00:15:00.000-05:00", "value": "-999999"}]}]}]}}
+    out = parse_waterml_json(data)
+    assert list(out) == ["05576100"] and len(out["05576100"]) == 1
+    assert out["05576100"]["time"].iloc[0] == __import__("pandas").Timestamp("2026-10-10T05:00:00Z")

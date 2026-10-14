@@ -52,3 +52,14 @@ def test_orb_registration_recovers_shift():
     assert np.linalg.norm(p - q) < 1.5
     back = warp_to_reference(frame, reg.H, ref.shape[:2])
     assert back.shape == ref.shape
+
+
+def test_detect_changepoint_either_direction():
+    from riversight.vision.transect import detect_changepoint
+    img = _river_scene(waterline_y=120)
+    down = Transect("down", np.array([[160, 20], [160, 190]], np.float32), half_width=3)
+    up = Transect("up", np.array([[160, 190], [160, 20]], np.float32), half_width=3)
+    s1, c1 = detect_changepoint(profile_features(img, down))
+    s2, c2 = detect_changepoint(profile_features(img, up))
+    assert abs((20 + s1) - 120) <= 3 and abs((190 - s2) - 120) <= 3, (s1, s2)
+    assert c1 > 0.3 and c2 > 0.3

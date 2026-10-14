@@ -9,7 +9,7 @@ cdk.context.json
 /data/sites/*
 !/data/sites/*.yaml
 !/data/sites/README.md
-models/*.onnx
+models/onnx/
 models/*.pt
 models/*.pth
 
@@ -39,3 +39,6 @@ Thumbs.db
 runs/
 *.mp4
 *.mov
+
+# review contact sheets are near-raw USGS frames (non-negotiable 7): keep local
+results/kill_test/contacts/

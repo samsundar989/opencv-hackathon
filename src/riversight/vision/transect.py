@@ -117,3 +117,36 @@ def detect_transition(features: dict[str, np.ndarray], prior_s: Optional[float] 
     peak = float(score[i])
     conf = float(np.clip((peak - np.median(score)) / (peak + 1e-6), 0, 1))
     return float(s[i]), conf
+
+
+def detect_changepoint(features: dict[str, np.ndarray], prior_s: Optional[float] = None,
+                       prior_sigma: float = 40.0, min_seg: int = 4,
+                       channels: tuple[str, ...] = ("gray", "sat", "texture")) -> tuple[float, float]:
+    """Direction-agnostic land/water boundary: the single split that best explains the profile.
+
+    Each channel is standardized along the profile; for every split k the cost is the summed
+    within-segment variance of [0, k) and [k, n) (1-D two-class Otsu / binary segmentation).
+    Unlike `detect_transition` it does not assume which side is land, so a transect can be drawn in
+    either direction. A Gaussian prior on the previous position softly penalizes jumps.
+    Returns (s*, confidence) where confidence = 1 - best_cost / no-split cost (variance explained).
+    """
+    s = features["s"]
+    n = len(s)
+    if n < 2 * min_seg + 1:
+        return float("nan"), 0.0
+    X = np.stack([features[c] for c in channels if c in features], axis=1).astype(np.float64)
+    X = (X - X.mean(0)) / (X.std(0) + 1e-6)
+    cs = np.cumsum(X, axis=0)
+    cs2 = np.cumsum(X ** 2, axis=0)
+    k = np.arange(min_seg, n - min_seg)
+    left_n, right_n = k.astype(float), (n - k).astype(float)
+    sum_l, sum2_l = cs[k - 1], cs2[k - 1]
+    sum_r, sum2_r = cs[-1] - sum_l, cs2[-1] - sum2_l
+    cost = (sum2_l - sum_l ** 2 / left_n[:, None]).sum(1) + (sum2_r - sum_r ** 2 / right_n[:, None]).sum(1)
+    total = float((cs2[-1] - cs[-1] ** 2 / n).sum())
+    expl = 1.0 - cost / max(total, 1e-9)
+    score = expl.copy()
+    if prior_s is not None and np.isfinite(prior_s):
+        score = expl - 0.5 * ((s[k] - prior_s) / prior_sigma) ** 2 * 0.05
+    i = int(np.argmax(score))
+    return float(s[k[i]]), float(np.clip(expl[i], 0, 1))

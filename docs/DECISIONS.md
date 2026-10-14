@@ -21,7 +21,10 @@ Summary: total AWS charges for the competition ≤ $100. Before any EC2 launch, 
 Context: the box is shared across agents/projects; worker-q docs at `C:\Users\samsu\Documents\gpu-queue\README.md` (CLI `workerq`, alias `gpuq`). Samuel (Oct 14): RSNA knee detection and arc-whest have priority for now.
 Decision: every RiverSight job that is heavy in RAM, CPU or VRAM (batch registration/waterline over thousands of frames, SAM2 pseudo-labelling, seg training, large inference) is submitted as
 
-    workerq submit --project riversight --priority low --ram <GiB> --cpus <n> [--vram <GiB>] \
-      --describe "<what>" --blocks "<what waits>" [--eta <dur>] [--preemptible] -- python <script> <args>
+    workerq submit --project riversight --priority low --gpus 0 --ram <GiB> --cpus <n> --node local \
+      --describe "<what>" --blocks "<what waits>" [--eta <dur>] [--preemptible] -- \
+      C:/Users/samsu/AppData/Local/Python/pythoncore-3.14-64/python.exe scripts/<script>.py <args>
 
-`.gpuq.toml` sets `[project] priority = "low"`, `passthrough = ["data"]` (image cache stays outside git) and `outputs = ["results", "runs"]`. Scripts write results to absolute paths inside the repo and report progress to `$WORKERQ_PROGRESS`. Light work (API fetches with ≤4 concurrent downloads, unit tests, single-frame debugging) runs directly. Never run `workerq priority`; never bypass the queue because the GPU looks idle.
+Gotchas learned on Oct 14: (1) bare `python` inside a job resolves to an interpreter without our deps — always pass the absolute 3.14 path; (2) CPU-only jobs need `--gpus 0` (the default requests a GPU); (3) passthrough only links directories that contain no committed file, so we pass `data/raw`, `data/derived`, `models/onnx` (not `data/`, which holds committed site YAMLs); (4) `--node local` because the image cache is not staged on the 3080ti worker yet; (5) scripts put `<repo>/src` first on `sys.path` so the job runs the snapshot's code, not the editable install's live tree.
+
+`.gpuq.toml` sets `[project] priority = "low"`, `passthrough = ["data/raw", "data/derived", "models/onnx"]` and `outputs = ["results", "runs"]`. Scripts write results to absolute paths inside the repo and report progress to `$WORKERQ_PROGRESS`. Light work (API fetches with ≤4 concurrent downloads, unit tests, single-frame debugging) runs directly. Never run `workerq priority`; never bypass the queue because the GPU looks idle.

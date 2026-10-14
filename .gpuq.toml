@@ -3,5 +3,5 @@
 priority = "low"   # RSNA knee + arc-whest outrank RiverSight for now (Samuel, 2026-10-14)
 
 [snapshot]
-passthrough = ["data"]                 # image cache + derived parquet live outside git
+passthrough = ["data/raw", "data/derived", "models/onnx"]   # uncommitted dirs only (a dir holding a committed file is copied, not linked)
 outputs     = ["results", "runs"]      # copied home when a job ends

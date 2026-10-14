@@ -122,6 +122,9 @@ class NimsClient:
            wait=wait_exponential(multiplier=1, min=1, max=30), reraise=True)
     def _get(self, url: str, params: Optional[dict] = None) -> httpx.Response:
         r = self._http.get(url, params=params)
+        if r.status_code == 429 and float(r.headers.get("retry-after", "0") or 0) > 90:
+            from .nwis import RateLimited
+            raise RateLimited(float(r.headers["retry-after"]))
         if r.status_code in (429, 500, 502, 503, 504):
             raise _Transient(f"{r.status_code} for {url}")
         r.raise_for_status()

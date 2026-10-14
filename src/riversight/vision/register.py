@@ -81,8 +81,11 @@ class Registrar:
             return Registration(None, 0, 0, float("nan"), 0.0, self.method)
         if self.method == "aliked+lightglue":
             h, w = frame.shape[:2]
-            self._lg.setPairInfo(w, h, self._ref_shape[1], self._ref_shape[0])
-            matches = self._lg.match(desc, self._ref_desc, kp, self._ref_kp)
+            q = np.float32([k.pt for k in kp]).reshape(-1, 2)
+            t = np.float32([k.pt for k in self._ref_kp]).reshape(-1, 2)
+            # OpenCV 5.0 API: keypoint coordinates + image sizes (w, h) give LightGlue its spatial context
+            self._lg.setPairInfo(q, t, (w, h), (self._ref_shape[1], self._ref_shape[0]))
+            matches = self._lg.match(desc, self._ref_desc)
         else:
             bf = cv2.BFMatcher(cv2.NORM_HAMMING)
             knn = bf.knnMatch(desc, self._ref_desc, k=2)
