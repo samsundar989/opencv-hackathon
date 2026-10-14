@@ -1,0 +1,35 @@
+cam_id: IL_Salt_Creek_at_Wood_Dale
+frame: registration reference
+placed_by: Claude Code from reference + highest/lowest-stage daylight fit-window frames, 2026-10-14
+rationale: bridge pier with a staff (waterline y≈165 at 6.6 ft → y≈80 at 11.2 ft, ~18 px/ft); near leafy bank; concrete apron under the bridge
+transects:
+- name: pier_staff
+  points:
+  - - 415
+    - 55
+  - - 415
+    - 205
+- name: pier_b
+  points:
+  - - 428
+    - 55
+  - - 428
+    - 205
+- name: nearbank_a
+  points:
+  - - 300
+    - 305
+  - - 300
+    - 215
+- name: nearbank_b
+  points:
+  - - 450
+    - 305
+  - - 450
+    - 225
+- name: apron
+  points:
+  - - 580
+    - 165
+  - - 580
+    - 255
