@@ -46,3 +46,23 @@ def test_aliked_lightglue_registration_recovers_shift():
     p = cv2.perspectiveTransform(np.float32([[[200, 150]]]), reg.H)[0, 0]
     q = cv2.perspectiveTransform(np.float32([[[200, 150]]]), H_true)[0, 0]
     assert np.linalg.norm(p - q) < 2.0
+
+
+def test_select_keeps_tracking_transect_and_drops_noise():
+    from riversight.killtest import Cfg, select
+    from riversight.vision.transect import Transect
+    rng = np.random.default_rng(0)
+    t0 = pd.Timestamp("2026-09-14T00:00Z")
+    t = t0 + pd.to_timedelta(np.arange(400) * 72, unit="min")  # 20 days
+    h = 5 + 2 * np.sin(np.arange(400) / 15) ** 2
+    rows = []
+    for i, (ti, hi) in enumerate(zip(t, h)):
+        rows.append({"idx": i, "time": ti, "stage_ft": hi, "transect": "good", "detector": "changepoint",
+                     "s": 120 - 12 * hi + rng.normal(0, 1), "conf": 0.8})
+        rows.append({"idx": i, "time": ti, "stage_ft": hi, "transect": "noise", "detector": "changepoint",
+                     "s": rng.uniform(0, 140), "conf": 0.8})
+    D = pd.DataFrame(rows)
+    tr = [Transect("good", np.zeros((2, 2), np.float32)), Transect("noise", np.zeros((2, 2), np.float32))]
+    best, table = select(D, tr, t0, t0 + pd.Timedelta(days=20), Cfg())
+    mae, det, keep, _ = best
+    assert keep == ["good"] and mae < 0.15, (best, table)

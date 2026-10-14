@@ -46,7 +46,7 @@ class Cfg:
     prior_sigma: float = 40.0
     prior_hours: float = 6.0
     min_conf: float = 0.05
-    cv_days: float = 6.0           # last N fit days used as the CV block for selection
+    cv_folds: int = 4              # blocked time folds inside the 20 fit days
     max_cv_mae_ft: float = 1.0     # transects worse than this on CV are dropped
     inlier_px: float = 6.0
     reg_method: str = "cascade"    # ORB → ALIKED+LightGlue (OpenCV 5) fallback; "orb"/"aliked" for ablations
@@ -393,38 +393,55 @@ def predict(D: pd.DataFrame, models: list[TransectModel], kind: str = "proj") ->
                                   include_groups=False)
 
 
-def select(D_fit: pd.DataFrame, transects: list[Transect], cv_split, cfg: Cfg):
-    """Blocked CV inside the fit window → (detector, chosen transect names, weights, cv table)."""
-    A, B = D_fit[D_fit["time"] < cv_split], D_fit[D_fit["time"] >= cv_split]
+def _oof_predictions(D_fit: pd.DataFrame, det: str, names: list[str], folds: list, cfg: Cfg, kind: str = "single"):
+    """Out-of-fold predictions: for each time fold, fit on the other folds, predict the held-out one.
+    Returns {transect: Series(idx -> h)} (kind="single") or a fused Series for `names` (kind="fused")."""
+    out: dict = {n: [] for n in names}
+    fused = []
+    for lo, hi in folds:
+        tr = D_fit[(D_fit["time"] < lo) | (D_fit["time"] >= hi)]
+        te = D_fit[(D_fit["time"] >= lo) & (D_fit["time"] < hi)]
+        ms = fit_models(tr, det, names, cfg)
+        if kind == "single":
+            for m in ms:
+                out[m.name].append(predict(te, [m]))
+        elif ms:
+            fused.append(predict(te, ms))
+    if kind == "single":
+        return {n: pd.concat(v) for n, v in out.items() if v}
+    return pd.concat(fused) if fused else pd.Series(dtype=float)
+
+
+def select(D_fit: pd.DataFrame, transects: list[Transect], t_fit0, t_split, cfg: Cfg):
+    """Blocked k-fold CV inside the fit window (contiguous time folds, so a fold never trains on its
+    own hours) → (detector, chosen transects, weights, cv table). The test days are never touched."""
+    edges = pd.date_range(t_fit0, t_split, periods=cfg.cv_folds + 1)
+    folds = list(zip(edges[:-1], edges[1:]))
     names = [t.name for t in transects]
+    g = D_fit.drop_duplicates("idx").set_index("idx")["stage_ft"]
     table, best = [], None
     for det in DETECTORS:
-        ms = fit_models(A, det, names, cfg)
+        oof = _oof_predictions(D_fit, det, names, folds, cfg, "single")
         per = {}
-        for m in ms:
-            pB = predict(B, [m])
-            gB = B.drop_duplicates("idx").set_index("idx")["stage_ft"]
-            j = pd.concat([pB.rename("p"), gB.rename("g")], axis=1).dropna()
-            if len(j) >= 5:
-                per[m.name] = float((j["p"] - j["g"]).abs().mean())
-                table.append({"detector": det, "transect": m.name, "cv_mae_ft": per[m.name], "cv_n": len(j),
-                              "px_per_ft": float(abs(m.proj.du_dh(np.median(A["stage_ft"].dropna()))))})
+        for n, p in oof.items():
+            j = pd.concat([p.rename("p"), g.rename("g")], axis=1).dropna()
+            if len(j) >= 10:
+                per[n] = float((j["p"] - j["g"]).abs().mean())
+                table.append({"detector": det, "transect": n, "cv_mae_ft": per[n], "cv_n": len(j)})
         keep = [n for n, e in per.items() if e <= cfg.max_cv_mae_ft]
         if per and not keep:
             keep = [min(per, key=per.get)]
         if not keep:
             continue
-        # keep transects within 2x of the best one, weight by inverse CV error
         bmin = min(per[n] for n in keep)
         keep = [n for n in keep if per[n] <= max(2 * bmin, bmin + 0.05)]
         weights = {n: 1.0 / (per[n] + 0.05) for n in keep}
-        fused = predict(B, [m for m in ms if m.name in keep])
-        gB = B.drop_duplicates("idx").set_index("idx")["stage_ft"]
-        j = pd.concat([fused.rename("p"), gB.rename("g")], axis=1).dropna()
+        fused = _oof_predictions(D_fit, det, keep, folds, cfg, "fused")
+        j = pd.concat([fused.rename("p"), g.rename("g")], axis=1).dropna()
         if not len(j):
             continue
         mae = float((j["p"] - j["g"]).abs().mean())
-        cov = len(j) / max(len(gB.dropna()), 1)
+        cov = len(j) / max(len(g.dropna()), 1)
         table.append({"detector": det, "transect": "FUSED", "cv_mae_ft": mae, "cv_n": len(j), "cv_coverage": cov})
         if best is None or mae < best[0]:
             best = (mae, det, keep, weights)
@@ -556,8 +573,7 @@ def run_site(cam_id: str, data_dir: Path, out_dir: Path, t0, t_split, t1, cfg: C
     D = D.merge(frames[["time", "stage_ft", "window"]], left_on="idx", right_index=True)
     D.to_parquet(data_dir / "derived" / cam_id / "detections.parquet", index=False)
     D_fit, D_test = D[D["window"] == "fit"], D[D["window"] == "test"]
-    cv_split = t_split - pd.Timedelta(days=cfg.cv_days)
-    best, cvt = select(D_fit, transects, cv_split, cfg)
+    best, cvt = select(D_fit, transects, t0, t_split, cfg)
     cvt.to_csv(out_dir / "cv_selection.csv", index=False)
     if best is None:
         res.notes.append("no transect produced a valid projective fit on the fit window")
