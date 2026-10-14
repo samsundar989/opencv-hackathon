@@ -1,0 +1,36 @@
+cam_id: WI_Swan_Creek_at_Lalor_Road_near_Fitchburg
+frame: registration reference
+placed_by: Claude Code from reference + highest/lowest-stage daylight fit-window frames, 2026-10-14
+rationale: 'small channel (x≈520–660); at 8.9 ft the floodplain behind the gabion and the grass by the fence flood. Note: a fogged dawn frame
+  was registered with an implausible warp (QA rejects it).'
+transects:
+- name: chan_leftbank
+  points:
+  - - 460
+    - 185
+  - - 565
+    - 185
+- name: chan_rightbank
+  points:
+  - - 715
+    - 150
+  - - 635
+    - 150
+- name: floodplain_back
+  points:
+  - - 300
+    - 110
+  - - 300
+    - 215
+- name: grass_front
+  points:
+  - - 430
+    - 335
+  - - 430
+    - 235
+- name: fence_right
+  points:
+  - - 700
+    - 340
+  - - 700
+    - 240
