@@ -1,0 +1,36 @@
+cam_id: TX_Langham_Creek_at_Addicks_Reservoir_Outflow_near_Addicks
+frame: registration reference
+placed_by: Claude Code from reference + highest/lowest-stage daylight fit-window frames, 2026-10-14
+rationale: 'concrete outflow channel (as Buffalo Bayou): waterline on the inner wall faces + weir drowning. Hazy lens; fit-window range only ~55.1–56.5
+  ft (the large event falls in the test window → extrapolation risk)'
+transects:
+- name: lwall_a
+  points:
+  - - 110
+    - 330
+  - - 250
+    - 330
+- name: lwall_b
+  points:
+  - - 90
+    - 430
+  - - 230
+    - 430
+- name: rwall_a
+  points:
+  - - 600
+    - 300
+  - - 470
+    - 300
+- name: rwall_b
+  points:
+  - - 630
+    - 420
+  - - 500
+    - 420
+- name: weir
+  points:
+  - - 350
+    - 360
+  - - 350
+    - 470
