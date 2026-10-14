@@ -1,0 +1,30 @@
+cam_id: MN_Root_River_near_Pilot_Mound
+frame: registration reference
+placed_by: Claude Code from reference + highest/lowest-stage daylight fit-window frames, 2026-10-14
+rationale: 'near-bank water/vegetation edge beside the bridge abutment: y≈200 at 7.9 ft, y≈230 at 19.5 ft (only ~3 px/ft — low resolution; far
+  bank hidden by trees)'
+transects:
+- name: nearbank_a
+  points:
+  - - 250
+    - 290
+  - - 250
+    - 140
+- name: nearbank_b
+  points:
+  - - 300
+    - 290
+  - - 300
+    - 140
+- name: nearbank_c
+  points:
+  - - 350
+    - 290
+  - - 350
+    - 140
+- name: abutment
+  points:
+  - - 212
+    - 310
+  - - 212
+    - 140
