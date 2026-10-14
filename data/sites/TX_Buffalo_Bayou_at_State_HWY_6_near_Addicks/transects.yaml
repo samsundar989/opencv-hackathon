@@ -1,0 +1,36 @@
+cam_id: TX_Buffalo_Bayou_at_State_HWY_6_near_Addicks
+frame: registration reference
+placed_by: Claude Code from reference + highest/lowest-stage daylight fit-window frames, 2026-10-14
+rationale: 'concrete channel walls: waterline climbs the wall faces with stage; upper weir crest drowns at ~58 ft. Caveat: the 58.4 ft fit frame
+  may be ~100 px misregistered.'
+transects:
+- name: lwall_a
+  points:
+  - - 30
+    - 300
+  - - 175
+    - 300
+- name: lwall_b
+  points:
+  - - 10
+    - 420
+  - - 150
+    - 420
+- name: rwall_a
+  points:
+  - - 545
+    - 250
+  - - 430
+    - 250
+- name: rwall_b
+  points:
+  - - 565
+    - 380
+  - - 440
+    - 380
+- name: weir_crest
+  points:
+  - - 300
+    - 150
+  - - 300
+    - 265

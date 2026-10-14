@@ -49,7 +49,9 @@ def main():
             reg = pd.read_parquet(cache)
             fr = pd.read_parquet(d / "frames.parquet")[["filename", "time", "stage_ft"]]
             fr = fr[(fr["time"] >= t0) & (fr["time"] < ts)]  # fit window only: never look at test days
+            from riversight.killtest import sun_elevation_deg
             r = reg[reg["ok"] == True].merge(fr, on="filename").dropna(subset=["stage_ft"])  # noqa: E712
+            r = r[sun_elevation_deg(s["lat"], s["lng"], r["time"]) > 5].reset_index(drop=True)  # real daylight only
             for i in (r["stage_ft"].idxmax(), r["stage_ft"].idxmin()):
                 im = cv2.imread(str(ROOT / "data/raw/720" / cam / r.loc[i, "filename"]))
                 H = np.array(r.loc[i, "H"]).reshape(3, 3)
