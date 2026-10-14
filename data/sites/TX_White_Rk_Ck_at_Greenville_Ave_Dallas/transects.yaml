@@ -1,0 +1,36 @@
+cam_id: TX_White_Rk_Ck_at_Greenville_Ave_Dallas
+frame: registration reference
+placed_by: Claude Code from reference + highest/lowest-stage daylight fit-window frames, 2026-10-14
+rationale: 'pool and channel edges against gravel bars; right bank/headwall. Failure mode noted: after the 87 ft flood (Oct 1) the bed changed
+  and registration to the Sep 14 reference drops (all failures Oct 2+) → needs re-anchoring (agent behaviour, S06).'
+transects:
+- name: pool_left
+  points:
+  - - 330
+    - 100
+  - - 450
+    - 100
+- name: pool_left_b
+  points:
+  - - 350
+    - 160
+  - - 470
+    - 160
+- name: channel_left
+  points:
+  - - 220
+    - 300
+  - - 380
+    - 300
+- name: rightbank
+  points:
+  - - 690
+    - 230
+  - - 590
+    - 230
+- name: headwall
+  points:
+  - - 620
+    - 120
+  - - 540
+    - 120
