@@ -1,0 +1,36 @@
+cam_id: NJ_Big_Brook_near_Marlboro
+frame: registration reference
+placed_by: Claude Code from reference + highest/lowest-stage daylight fit-window frames, 2026-10-14
+rationale: 'vegetated banks only; channel widens strongly with stage (left edge at y≈400: x≈290 at 9.5 ft → x≈150 at 13.5 ft, ~35 px/ft laterally).
+  Registration only 74% (vegetation-only scene + lens droplets) — failure mode'
+transects:
+- name: left_400
+  points:
+  - - 110
+    - 400
+  - - 330
+    - 400
+- name: left_470
+  points:
+  - - 90
+    - 470
+  - - 320
+    - 470
+- name: right_400
+  points:
+  - - 715
+    - 400
+  - - 500
+    - 400
+- name: right_300
+  points:
+  - - 690
+    - 300
+  - - 480
+    - 300
+- name: left_300
+  points:
+  - - 170
+    - 300
+  - - 350
+    - 300
