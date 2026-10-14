@@ -1,0 +1,7 @@
+# worker-q config for RiverSight (see docs/DECISIONS.md D-0005)
+[project]
+priority = "low"   # RSNA knee + arc-whest outrank RiverSight for now (Samuel, 2026-10-14)
+
+[snapshot]
+passthrough = ["data"]                 # image cache + derived parquet live outside git
+outputs     = ["results", "runs"]      # copied home when a job ends
