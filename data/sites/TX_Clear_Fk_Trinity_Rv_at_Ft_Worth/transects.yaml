@@ -1,0 +1,35 @@
+cam_id: TX_Clear_Fk_Trinity_Rv_at_Ft_Worth
+frame: registration reference
+placed_by: Claude Code from reference + highest/lowest-stage daylight fit-window frames, 2026-10-14
+rationale: far sloped concrete bank (right) and bridge pier bases in the background; foreground wall face is not visible from this angle
+transects:
+- name: farbank_a
+  points:
+  - - 600
+    - 72
+  - - 600
+    - 135
+- name: farbank_b
+  points:
+  - - 680
+    - 80
+  - - 680
+    - 140
+- name: pier_a
+  points:
+  - - 345
+    - 55
+  - - 345
+    - 135
+- name: pier_b
+  points:
+  - - 425
+    - 55
+  - - 425
+    - 135
+- name: pier_c
+  points:
+  - - 515
+    - 55
+  - - 515
+    - 125
