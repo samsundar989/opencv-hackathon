@@ -23,16 +23,21 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from riversight.killtest import Cfg, run_site  # noqa: E402
+from riversight.killtest import Cfg, register_site, run_site  # noqa: E402
 
 RES = ROOT / "results" / "kill_test"
 MAE_PASS, MIN_SITES, REG_PASS = 0.25, 10, 0.90
 
 
-def _one(cam: str, t0, ts, t1, score_test: bool = True):
+def _one(cam: str, t0, ts, t1, score_test: bool = True, register_only: bool = False):
     import cv2
     cv2.setNumThreads(1)
     try:
+        if register_only:
+            frames, _, _, _, reg = register_site(cam, ROOT / "data", t0, ts, t1, Cfg())
+            day = reg[reg["night"] == False]  # noqa: E712
+            return cam, {"n_day": len(day), "reg_rate": float(day["ok"].mean()) if len(day) else float("nan"),
+                         "methods": day.loc[day["ok"], "method"].value_counts().to_dict()}, [], None
         r = run_site(cam, ROOT / "data", RES / cam, t0, ts, t1, Cfg(), score_test=score_test)
         return cam, r.metrics, r.notes, None
     except Exception:
@@ -45,6 +50,7 @@ def main():
     ap.add_argument("--only", nargs="*")
     ap.add_argument("--jobs", type=int, default=1)
     ap.add_argument("--dev", action="store_true", help="fit-window CV only; never score the test days")
+    ap.add_argument("--register-only", action="store_true", help="only the (expensive, cached) registration pass")
     a = ap.parse_args()
     doc = yaml.safe_load(a.sites.read_text(encoding="utf-8"))
     w = doc["window"]
@@ -54,21 +60,22 @@ def main():
     cams = [s["cam_id"] for s in doc["sites"] if not a.only or s["cam_id"] in a.only]
     rows, prog = [], os.environ.get("WORKERQ_PROGRESS")
     with ProcessPoolExecutor(a.jobs) as ex:
-        futs = [ex.submit(_one, c, t0, ts, t1, not a.dev) for c in cams]
+        futs = [ex.submit(_one, c, t0, ts, t1, not a.dev, a.register_only) for c in cams]
         for k, f in enumerate(as_completed(futs), 1):
             cam, m, notes, err = f.result()
             if err:
                 print(f"[FAIL] {cam}\n{err}", flush=True)
                 m = {"error": err.strip().splitlines()[-1]}
             else:
-                head = (f"CV MAE {m.get('cv_mae_ft')} cv-cov {m.get('cv_coverage')}" if a.dev else
+                head = (f"registration {m}" if a.register_only else
+                        f"CV MAE {m.get('cv_mae_ft')} cv-cov {m.get('cv_coverage')}" if a.dev else
                         f"MAE {m.get('MAE_ft')} cov {m.get('coverage')} CV {m.get('cv_mae_ft')}")
                 print(f"[done] {cam}: {head} reg {m.get('reg_rate')} | "
                       + "; ".join(notes), flush=True)
             rows.append({"site": cam, **m, "notes": " | ".join(notes)})
             if prog:
                 Path(prog).write_text(f"{k / len(cams):.3f}")
-    if a.only or a.dev:
+    if a.only or a.dev or a.register_only:
         return
     S = pd.DataFrame(rows).sort_values("site")
     S.to_csv(RES / "summary.csv", index=False)

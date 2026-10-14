@@ -61,3 +61,26 @@ def test_isotonic_lookup_monotone():
     assert np.all(np.diff(hk) >= 0)
     d = np.diff(uk)
     assert np.all(d <= 1e-9) or np.all(d >= -1e-9)  # monotone in one direction
+
+
+def test_fit_robust_never_returns_pole_inside_range():
+    """Bug (Oct 14): unconstrained 3-point samples put poles inside the stage range on noisy real data."""
+    import numpy as np
+    from riversight.geometry.projective import fit_robust
+    rng = np.random.default_rng(1)
+    h = np.concatenate([rng.normal(5.3, 0.05, 200), rng.uniform(5, 15, 20)])
+    u = 100 - 8 * h + rng.normal(0, 3, len(h))
+    u[rng.choice(len(h), 60, replace=False)] = rng.uniform(0, 200, 60)  # 27% junk detections
+    m = fit_robust(h, u)
+    assert m.is_monotone_over(h.min() - 1, h.max() + 1)
+    assert abs(m.du_dh(6.0) + 8) < 3.0
+
+
+def test_fit_robust_small_range_is_affine():
+    import numpy as np
+    from riversight.geometry.projective import fit_robust
+    rng = np.random.default_rng(2)
+    h = rng.uniform(5.0, 5.6, 100)
+    u = 40 + 20 * h + rng.normal(0, 1, 100)
+    m = fit_robust(h, u)
+    assert m.c == 0.0 and abs(m.a - 20) < 3

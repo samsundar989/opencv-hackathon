@@ -39,7 +39,9 @@ class Cfg:
     map_scale: float = 0.5         # correlation map resolution relative to the frame
     corr_floor: float = 0.35       # minimum |corr| for a pixel to belong to a stage-sensitive band
     max_components: int = 3
-    transects_per_component: int = 3
+    transects_per_component: int = 4   # x2 points sampled per contour
+    max_transects: int = 16
+    transect_half_len: float = 70.0    # px at full res on each side of the boundary
     half_width: int = 3
     prior_sigma: float = 40.0
     prior_hours: float = 6.0
@@ -244,43 +246,54 @@ def correlation_map(acc: CorrAccumulator, cfg: Cfg) -> np.ndarray:
 
 
 def transects_from_map(C: np.ndarray, cfg: Cfg) -> list[Transect]:
-    """Bands of high |corr| are where the waterline sweeps; cut across each band (minor PCA axis)."""
+    """Transects across the *boundaries* of stage-correlated regions.
+
+    On real sites the strongest stage signal is often the water body itself (turbidity, texture) and
+    the band of bank that floods; either way the waterline is the region's boundary. We take the
+    contours of the high-|corr| regions, sample points evenly along them (away from the frame edge and
+    the overlay band), and cut a short transect along the local contour normal so each transect crosses
+    exactly one boundary. The fit-window CV later keeps only the transects that track stage.
+    """
     hi = float(np.quantile(C[C > 0], 0.995)) if (C > 0).any() else 0.0
     thr = max(cfg.corr_floor, 0.6 * hi)
     B = ((C >= thr) * 255).astype(np.uint8)
     B = cv2.morphologyEx(B, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
+    B = cv2.morphologyEx(B, cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
     n, lab, stats, _ = cv2.connectedComponentsWithStats(B, connectivity=8)
-    comps = []
-    for k in range(1, n):
-        if stats[k, cv2.CC_STAT_AREA] < 15:
-            continue
-        comps.append((float(C[lab == k].sum()), k))
-    comps.sort(reverse=True)
+    comps = sorted(((float(C[lab == k].sum()), k) for k in range(1, n) if stats[k, cv2.CC_STAT_AREA] >= 15),
+                   reverse=True)[: cfg.max_components]
     H, W = C.shape
+    top = cfg.mask_top * cfg.map_scale + 2
+    L = cfg.transect_half_len * cfg.map_scale
     inv = 1.0 / cfg.map_scale
-    out: list[Transect] = []
-    for ci, (_, k) in enumerate(comps[: cfg.max_components]):
-        ys, xs = np.nonzero(lab == k)
-        P = np.stack([xs, ys], 1).astype(np.float64)
-        w = C[ys, xs].astype(np.float64)
-        mu = (P * w[:, None]).sum(0) / w.sum()
-        cov = np.cov((P - mu).T, aweights=w)
-        evals, evecs = np.linalg.eigh(cov)
-        e_major, e_minor = evecs[:, 1], evecs[:, 0]
-        proj_major = (P - mu) @ e_major
-        proj_minor = (P - mu) @ e_minor
-        half = max(2.5 * float(np.sqrt(max(evals[0], 1e-6))) + 6.0, 12.0)
-        if np.ptp(proj_minor) > 0:
-            half = max(half, 0.75 * float(np.ptp(proj_minor)) + 6.0)
-        qs = np.linspace(0.2, 0.8, cfg.transects_per_component) if cfg.transects_per_component > 1 else [0.5]
-        for qi, q in enumerate(qs):
-            c = mu + float(np.quantile(proj_major, q)) * e_major
-            p0, p1 = c - half * e_minor, c + half * e_minor
-            p0 = np.clip(p0, [1, cfg.mask_top * cfg.map_scale + 2], [W - 2, H - 2])
-            p1 = np.clip(p1, [1, cfg.mask_top * cfg.map_scale + 2], [W - 2, H - 2])
-            if np.hypot(*(p1 - p0)) < 10:
+    cands = []  # (contour-length weight, centre, normal)
+    for ci, (_, k) in enumerate(comps):
+        cnts, _ = cv2.findContours(((lab == k) * 255).astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+        for cnt in cnts:
+            P = cnt[:, 0, :].astype(np.float64)
+            if len(P) < 20:
                 continue
-            out.append(Transect(f"c{ci}t{qi}", (np.stack([p0, p1]) * inv).astype(np.float32), cfg.half_width))
+            # usable boundary: not on the frame edge / overlay band (those are not waterlines)
+            ok = (P[:, 0] > 3) & (P[:, 0] < W - 4) & (P[:, 1] > top + 2) & (P[:, 1] < H - 4)
+            seg = np.diff(np.vstack([P, P[:1]]), axis=0)
+            cum = np.concatenate([[0], np.cumsum(np.hypot(seg[:, 0], seg[:, 1]))])[:-1]
+            per = cum[-1] + np.hypot(*seg[-1])
+            m = cfg.transects_per_component * 2
+            for q in (np.arange(m) + 0.5) / m * per:
+                j = int(np.searchsorted(cum, q)) % len(P)
+                if not ok[j]:
+                    continue
+                t = P[(j + 5) % len(P)] - P[(j - 5) % len(P)]
+                nrm = np.array([-t[1], t[0]]) / (np.hypot(*t) + 1e-9)
+                cands.append((ci, P[j], nrm))
+    out: list[Transect] = []
+    for idx, (ci, c, nrm) in enumerate(cands[: cfg.max_transects]):
+        p0, p1 = c - L * nrm, c + L * nrm
+        p0 = np.clip(p0, [1, top], [W - 2, H - 2])
+        p1 = np.clip(p1, [1, top], [W - 2, H - 2])
+        if np.hypot(*(p1 - p0)) < 0.8 * L:
+            continue
+        out.append(Transect(f"c{ci}b{idx:02d}", (np.stack([p0, p1]) * inv).astype(np.float32), cfg.half_width))
     return out
 
 
@@ -484,21 +497,16 @@ def draw_timeseries(stage: pd.DataFrame, pred: pd.Series, times: pd.Series, t0, 
     return img
 
 
-def run_site(cam_id: str, data_dir: Path, out_dir: Path, t0, t_split, t1, cfg: Cfg = Cfg(),
-             score_test: bool = True) -> SiteResult:
-    """score_test=False (development): only fit-window CV numbers are produced; test days are never scored."""
-    tic = time.time()
-    res = SiteResult(cam_id)
+def register_site(cam_id: str, data_dir: Path, t0, t_split, t1, cfg: Cfg = Cfg()):
+    """Load frames, choose the reference, register (cached per site + method + reference).
+    Returns (frames, stage, ref_index, ref_image, registration table)."""
     d = data_dir / "derived" / cam_id
     frames = pd.read_parquet(d / "frames.parquet")
     stage = pd.read_parquet(d / "stage.parquet")
     frames = frames[(frames["time"] >= t0) & (frames["time"] < t1)].sort_values("time").reset_index(drop=True)
     frames = thin_frames(frames, cfg.min_gap_min).reset_index(drop=True)
     frames["window"] = np.where(frames["time"] < t_split, "fit", "test")
-    out_dir.mkdir(parents=True, exist_ok=True)
-
     ref_i, ref = choose_reference(frames, cfg)
-    res.notes.append(f"reference {frames.loc[ref_i, 'filename']} stage {frames.loc[ref_i, 'stage_ft']:.2f} ft")
     cache = d / f"registration_{cfg.reg_method}.parquet"
     ref_name = frames.loc[ref_i, "filename"]
     cached = pd.read_parquet(cache) if cache.exists() else None
@@ -509,6 +517,18 @@ def run_site(cam_id: str, data_dir: Path, out_dir: Path, t0, t_split, t1, cfg: C
     else:
         reg = register_frames(frames, ref, cfg, cfg.reg_method)
         reg.join(frames["filename"]).assign(ref=ref_name).reset_index(drop=True).to_parquet(cache)
+    return frames, stage, ref_i, ref, reg
+
+
+def run_site(cam_id: str, data_dir: Path, out_dir: Path, t0, t_split, t1, cfg: Cfg = Cfg(),
+             score_test: bool = True) -> SiteResult:
+    """score_test=False (development): only fit-window CV numbers are produced; test days are never scored."""
+    tic = time.time()
+    res = SiteResult(cam_id)
+    d = data_dir / "derived" / cam_id
+    out_dir.mkdir(parents=True, exist_ok=True)
+    frames, stage, ref_i, ref, reg = register_site(cam_id, data_dir, t0, t_split, t1, cfg)
+    res.notes.append(f"reference {frames.loc[ref_i, 'filename']} stage {frames.loc[ref_i, 'stage_ft']:.2f} ft")
     acc = accumulate_corr(frames, reg, ref.shape[:2], cfg)
     F = frames.join(reg)
     day = F[F["night"] == False]  # noqa: E712
