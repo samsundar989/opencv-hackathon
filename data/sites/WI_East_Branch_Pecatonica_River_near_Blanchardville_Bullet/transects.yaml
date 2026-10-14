@@ -1,0 +1,35 @@
+cam_id: WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet
+frame: registration reference
+placed_by: Claude Code from reference + highest/lowest-stage daylight fit-window frames, 2026-10-14
+rationale: 'staff gauge + concrete wall: waterline y≈310 at 4.5 ft, y≈160 at 10.7 ft (~25 px/ft); grassy bank floods at high water'
+transects:
+- name: staff
+  points:
+  - - 420
+    - 110
+  - - 420
+    - 385
+- name: wall_a
+  points:
+  - - 480
+    - 100
+  - - 480
+    - 385
+- name: wall_b
+  points:
+  - - 560
+    - 100
+  - - 560
+    - 385
+- name: wall_c
+  points:
+  - - 650
+    - 100
+  - - 650
+    - 385
+- name: grassbank
+  points:
+  - - 200
+    - 180
+  - - 200
+    - 385
