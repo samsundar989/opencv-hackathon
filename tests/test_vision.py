@@ -63,3 +63,25 @@ def test_detect_changepoint_either_direction():
     s2, c2 = detect_changepoint(profile_features(img, up))
     assert abs((20 + s1) - 120) <= 3 and abs((190 - s2) - 120) <= 3, (s1, s2)
     assert c1 > 0.3 and c2 > 0.3
+
+
+def test_registrar_survives_matcher_exception():
+    import cv2
+    import numpy as np
+    from riversight.vision.register import Registrar
+
+    class Boom:
+        def setPairInfo(self, *a):
+            pass
+
+        def match(self, *a):
+            raise cv2.error("Unknown C++ exception from OpenCV code")
+
+    R = Registrar(use_aliked=False)
+    rng = np.random.default_rng(0)
+    img = cv2.GaussianBlur(rng.integers(0, 255, (240, 320, 3), dtype=np.uint8), (3, 3), 0)
+    R.set_reference(img)
+    R.method, R._lg = "aliked+lightglue", Boom()
+    R._detect = lambda im: (R._ref_kp, R._ref_desc)
+    r = R.register(img)
+    assert r.H is None and not r.ok

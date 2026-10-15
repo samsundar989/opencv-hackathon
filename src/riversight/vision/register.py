@@ -84,8 +84,13 @@ class Registrar:
             q = np.float32([k.pt for k in kp]).reshape(-1, 2)
             t = np.float32([k.pt for k in self._ref_kp]).reshape(-1, 2)
             # OpenCV 5.0 API: keypoint coordinates + image sizes (w, h) give LightGlue its spatial context
-            self._lg.setPairInfo(q, t, (w, h), (self._ref_shape[1], self._ref_shape[0]))
-            matches = self._lg.match(desc, self._ref_desc)
+            try:
+                self._lg.setPairInfo(q, t, (w, h), (self._ref_shape[1], self._ref_shape[0]))
+                matches = self._lg.match(desc, self._ref_desc)
+            except cv2.error:
+                # seen on rare history frames (White Rock, Oct 15): "Unknown C++ exception" inside LightGlue.
+                # One bad frame is a failed registration, not a dead site.
+                return Registration(None, 0, 0, float("nan"), 0.0, self.method)
         else:
             bf = cv2.BFMatcher(cv2.NORM_HAMMING)
             knn = bf.knnMatch(desc, self._ref_desc, k=2)
