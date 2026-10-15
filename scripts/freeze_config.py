@@ -24,7 +24,8 @@ CODE = ["scripts/scene_score.py", "scripts/scene_tune.py", "scripts/scene_featur
 
 
 def sha(p: Path) -> str:
-    return hashlib.sha256(p.read_bytes()).hexdigest()
+    """sha256 of the content with line endings normalised (worker-q snapshots are git checkouts with CRLF)."""
+    return hashlib.sha256(p.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
 def main():

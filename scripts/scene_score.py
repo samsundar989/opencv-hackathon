@@ -47,7 +47,7 @@ def check_guards():
         sys.exit(f"refusing: {OUT_CSV} exists — the frozen test days are scored exactly once (D-0006)")
     if not FROZEN.exists():
         sys.exit("refusing: no frozen config (D-0007) yet")
-    digest = hashlib.sha256(FROZEN.read_bytes()).hexdigest()
+    digest = hashlib.sha256(FROZEN.read_bytes().replace(b"\r\n", b"\n")).hexdigest()   # git checkout may add CRLF
     hashes = (RES / "constants.sha256").read_text(encoding="utf-8") if (RES / "constants.sha256").exists() else ""
     if digest not in hashes:
         sys.exit(f"refusing: sha256 {digest} of frozen_config.json is not in results/constants.sha256")
