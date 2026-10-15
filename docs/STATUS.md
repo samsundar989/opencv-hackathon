@@ -6,7 +6,7 @@
   - [x] History coverage table; frames and stage cached for 19/20 sites with ≥ 90 days: `results/history/coverage_summary.csv`.
   - [x] D-0007 recorded before test scoring: commits `fff4d5f`/`1e24d7f`; hashes in `results/constants.sha256`.
   - [x] `results/kill_test_v2.md` + D-0002 verdict; test days scored exactly once (job 2986).
-  - [ ] Flood-height maps + event GIF in `results/demo/`: next.
+  - [x] Flood-height maps (5 best sites) + 2 event GIFs in `results/demo/` (`scripts/scene_demo.py`; YuNet face blur applied, 0 faces found). Known v1 limitations: h* maps are blocky and have isolated mislabelled blocks (no spatial regularisation yet); the GIF wet area is patchy because only reliable blocks are drawn. Polish goes in SLICE_02.
   - [x] Tests green (47). No spend outside worker-q; no secrets.
 - **Verdict PASS:** P1 14/20 (11/20 by MAE alone), P2 15/16 event sites, P3 95.7 %. Median MAE 0.182 ft. The camera never beats 15-min persistence (0/20); it beats last-known value for 72 h / 7 d outages at 15/20 and 18/20. Full caveats in D-0002.
 - Compute: history registration needed ~7 h of CPU after four preemption-thrash restarts (see the morning entry). Every image pass ran on worker-q at low priority. No RunPod/Kaggle/AWS spend.

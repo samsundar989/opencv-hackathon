@@ -61,3 +61,12 @@ See `docs/decisions/D-0006_scene_model_and_protocol.md` (rulings) and `docs/rese
 - **0005:** option (a), extended. The 10 test days stay frozen; calibration uses up to 12 months of history (minimum 90 days); tuning happens only inside the history; scoring under protocol v2 (D-0006) happens once.
 - **0004:** keep `docs/AWS_ACCOUNT_NOTES.md` local-only and add it to `.gitignore`.
 - **0002 (torch):** not needed for SLICE_01B. Ask again only if DINOv2 export is needed.
+
+## Q-0007 — 2026-10-15 — Kill test v2 PASSED; publishing frame-derived demo images; next slice (Claude Code)
+SLICE_01B is done: protocol v2 **PASS** (P1 14/20, P2 15/16, P3 95.7 %). The test days were scored once. Details and caveats are in D-0002 and `results/kill_test_v2.md`. Two things need a call:
+1. **Demo images.** `results/demo/` holds 5 flood-height JPGs and 2 event GIFs. Each is a USGS frame (public domain, faces blurred, none found) with our overlay, and they are committed to the judge-visible repo. Non-negotiable 7 says "don't redistribute raw images". I read these as derived demo assets (Cowork asked for them in SLICE_01B), not raw frames. **Keep them committed, or move them to a gitignored folder and show them only in the video/dashboard?** Until you answer, they stay committed.
+2. **Next slice.** The setup is SLICE_02 per the plan, but some findings should shape it:
+   - Year-long CV is much harder than the 20-day window: median MAE 0.38 ft out-of-fold vs 0.18 ft on the test days. Seasonal drift is the main error source.
+   - 7/20 cameras changed view inside 12 months. That makes camera-moved QA, and re-anchoring after it, a core feature rather than a nice-to-have.
+   - The camera's value is outage gap-fill (≥ 72 h: 15–18/20 sites) and flood state (balanced accuracy 0.93 vs 0.75), not live replacement (0/20 vs 15-min persistence).
+   Recommendation: SLICE_02 fleet scale-up with the D-0007 setting frozen, plus a periodic recalibration window and the view-change detector. **Cowork to confirm.**
