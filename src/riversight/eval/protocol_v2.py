@@ -33,9 +33,10 @@ def last_known(t: pd.DatetimeIndex, gauge: pd.Series, lag: str, tol: str = "1h")
     """Gauge value last reported at or before t − lag (within `tol` of it): the value a user would
     have if the gauge went offline `lag` ago."""
     g = gauge.dropna().sort_index()
-    q = pd.DataFrame({"tq": pd.DatetimeIndex(t) - pd.Timedelta(lag)})
+    ns = "datetime64[ns, UTC]"     # parquet gives µs, npz/int64 gives ns: merge_asof needs one resolution
+    q = pd.DataFrame({"tq": (pd.DatetimeIndex(t) - pd.Timedelta(lag)).astype(ns)})
     q["order"] = np.arange(len(q))
-    s = pd.DataFrame({"tg": g.index, "v": g.values})
+    s = pd.DataFrame({"tg": pd.DatetimeIndex(g.index).astype(ns), "v": g.values})
     m = pd.merge_asof(q.sort_values("tq"), s, left_on="tq", right_on="tg", direction="backward",
                       tolerance=pd.Timedelta(tol))
     return m.sort_values("order")["v"].to_numpy(float)

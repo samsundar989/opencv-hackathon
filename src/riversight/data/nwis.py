@@ -128,7 +128,7 @@ class NwisClient:
         return df
 
 
-LEGACY_IV = "https://waterservices.usgs.gov/nwis/iv/"
+LEGACY_IV = "https://nwis.waterservices.usgs.gov/nwis/iv/"   # 301 from waterservices.usgs.gov since Oct 2026
 
 
 def parse_waterml_json(data: dict) -> dict[str, pd.DataFrame]:
@@ -155,7 +155,7 @@ def legacy_iv_multi(sites: list[str], start: datetime, end: datetime, parameter:
     evaluation still comes from the OGC API (NwisClient.stage)."""
     r = httpx.get(LEGACY_IV, params={"sites": ",".join(sites), "parameterCd": parameter, "startDT": _iso(start),
                                       "endDT": _iso(end), "format": "json", "siteStatus": "all"},
-                  timeout=timeout, headers={"User-Agent": "RiverSight/0.1"})
+                  timeout=timeout, headers={"User-Agent": "RiverSight/0.1"}, follow_redirects=True)
     check_rate_limit(r)
     r.raise_for_status()
     return parse_waterml_json(r.json())

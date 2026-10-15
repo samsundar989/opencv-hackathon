@@ -134,3 +134,22 @@ def test_site_metrics_and_verdict():
     assert v["verdict"] == "PASS"
     bad = dict(r, p1=False, p2=False)
     assert pv.verdict(pd.DataFrame([bad] * 20), 0.957)["verdict"] == "FAIL"
+
+
+def test_failure_runs_find_multiday_breaks_only():
+    from riversight.history import failure_runs
+    t = pd.date_range("2026-03-01", periods=20 * 6, freq="2h", tz="UTC")   # 20 days, 12 frames/day
+    frames = pd.DataFrame({"time": t})
+    day = (t - t[0]).days
+    ok = ~(((day >= 5) & (day <= 9)) | (day == 14))    # a 5-day outage (scene change) and a 1-day blip
+    reg = pd.DataFrame({"ok": ok, "night": False}, index=frames.index)
+    runs = failure_runs(frames, reg)
+    assert len(runs) == 1
+    assert runs[0][0] == pd.Timestamp("2026-03-06", tz="UTC") and runs[0][1] == pd.Timestamp("2026-03-10", tz="UTC")
+
+
+def test_last_known_mixed_time_resolution():
+    # gauge from parquet (µs) vs frame times from npz (ns) must not break the as-of join
+    g = pd.Series(np.arange(10.0), index=pd.date_range("2026-10-01", periods=10, freq="1h", tz="UTC").astype("datetime64[us, UTC]"))
+    t = pd.to_datetime(np.array([pd.Timestamp("2026-10-01 05:30", tz="UTC").value]), utc=True)
+    assert list(pv.last_known(t, g, "2h")) == [3.0]

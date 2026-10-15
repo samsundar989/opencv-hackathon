@@ -1,5 +1,19 @@
 # STATUS (newest first)
 
+## 2026-10-14 (night CT) — SLICE_01B under way: gate passed, history fetch running (Claude Code)
+- Cowork review committed (`6d765b9`): D-0006 appended to DECISIONS. My earlier stage-source entry, which also used the number D-0006, is renumbered **D-0005a** (it was referenced nowhere else). `docs/AWS_ACCOUNT_NOTES.md` and `_xfer/` gitignored; `_xfer/` (2.2 GB of transfer tarballs) deleted.
+- **Step 1 gate PASSED** (`ebb1178`). New modules: `vision/scene_features.py`, `calib/flood_height_map.py`, `calib/scene_regressor.py`, `eval/protocol_v2.py`, plus 14 synthetic unit tests. Fit20 CV with our own ALIKED+LightGlue registration over the 17 shared sites: scene-ridge median MAE **0.278 ft** (Cowork 0.249, +0.029); water-block **0.238** (Cowork 0.220, +0.018). Both are inside ±0.05. 8/17 sites ≤ 0.25 ft (Cowork 9/17). Source: `results/scene/gate_fit20.csv`. Remaining gap: we register 30-min frames to a different reference, and our sun-based night filter drops dusk frames.
+  - Caveat: Cowork's water-block number skips folds with < 20 ROI blocks (e.g. Cowhouse 0.045 vs 0.33 with all frames predicted). The production regressor falls back to all blocks and predicts every frame.
+- **Step 2:**
+  - NIMS archives are patchy. Spot checks: Animas has no frames before ~summer 2026; Tenmile covers 52/52 weeks of the 12-month window. Coverage per site goes to `results/history/coverage_*.csv`.
+  - The first fetch job (2896) died because (a) the OGC key quota was exhausted (429, retry-after 27 min) and (b) the legacy NWIS IV fallback now 301-redirects to `nwis.waterservices.usgs.gov`. Fixed with a test; history stage now comes from legacy IV (identical values, D-0005a). Retry is job **2898**.
+- Ready, not yet run:
+  - `scripts/history_pass.py`: registration with piecewise references + features.
+  - `scripts/scene_tune.py`: forward-chaining monthly CV, 36 settings.
+  - `scripts/scene_score.py`: one-shot scoring, guarded by a frozen-config hash and refusing a second run; its `--dry-run` was exercised on the fit window and caught a dtype bug.
+  - `scripts/scene_demo.py`: flood-height JPGs, plus an event GIF written by `cv2.imwriteanimation`, with YuNet face blur via `cv2.FaceDetectorYN`. `face_detection_yunet_2023mar.onnx` was downloaded from opencv_zoo into `models/onnx/` (gitignored).
+- Compute: jobs 2876 (features, 1 min), 2896 (failed), 2898 (queued), all at low priority. No RunPod/Kaggle/AWS spend.
+
 ## 2026-10-14 (afternoon CT) — SLICE_01: registration PASS, waterline FAIL-likely; paused for direction (Claude Code)
 - All 20 sites fetched, registered and hand-transected (`data/sites/<cam>/transects.yaml`, placed from fit-window frames only).
 - **Registration (acceptance #1): 95.7%** of 9,000 true-daylight frames (≥90% required) — `results/kill_test/registration_summary.csv`. ORB alone ≈40%; ALIKED+LightGlue rescued 4,892; sun-elevation QA caught 1,593 floodlit night frames; geometric QA rejected 210.

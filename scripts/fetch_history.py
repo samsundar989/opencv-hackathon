@@ -42,6 +42,7 @@ H_END = datetime(2026, 10, 3, tzinfo=timezone.utc)      # history ends 1 day bef
 PROBE_FROM = datetime(2025, 1, 6, tzinfo=timezone.utc)
 SUN_MIN = 3.0
 EVENT_DAY_FT = 0.5
+PREFER_LEGACY = True
 
 
 def _progress(frac: float):
@@ -118,14 +119,17 @@ def stage_history(nwis: NwisClient, nwis_id: str, d: Path) -> pd.DataFrame:
     if sp.exists():
         return pd.read_parquet(sp)
     s0, s1 = H_START - timedelta(days=2), H_END + timedelta(hours=1)
-    try:
-        st = nwis.stage(nwis_id, s0, s1)[["time", "value"]].assign(source="ogc")
-    except RateLimited as e:
-        print(f"  OGC rate limited ({e.retry_after_s:.0f}s); legacy IV fallback", flush=True)
-        st = pd.DataFrame(columns=["time", "value"])
-    if not len(st):
+    st = pd.DataFrame(columns=["time", "value"])
+    if PREFER_LEGACY:
+        # one request per site-year; keeps the OGC key quota (1000/h, exhausted on Oct 14-15) free. Values are
+        # identical to OGC (D-0005a).
         got = legacy_iv_multi([nwis_id], s0, s1)
-        st = got.get(nwis_id, pd.DataFrame(columns=["time", "value"])).assign(source="nwis_iv_legacy")
+        st = got.get(nwis_id, st).assign(source="nwis_iv_legacy")
+    if not len(st):
+        try:
+            st = nwis.stage(nwis_id, s0, s1)[["time", "value"]].assign(source="ogc")
+        except RateLimited as e:
+            print(f"  OGC rate limited ({e.retry_after_s:.0f}s); no stage for this site yet", flush=True)
     st.to_parquet(sp, index=False)
     return st
 
@@ -169,8 +173,12 @@ def main():
         cam, nid = s["cam_id"], str(s["nwis_id"]).zfill(8)
         d = DATA / "derived" / cam / "history"
         t0 = time.time()
-        files, cov = listing(P, cam, d)
-        st = stage_history(nwis, nid, d)
+        try:
+            files, cov = listing(P, cam, d)
+            st = stage_history(nwis, nid, d)
+        except Exception as e:                       # one bad site must not stop the other 19
+            print(f"[{i+1}/{len(sites)}] {cam}: ERROR {e!r}"[:300], flush=True)
+            continue
         sel = select(frames_table(files), st, float(s["lat"]), float(s["lng"]))
         sel_all[cam] = sel
         full = cov[cov["kind"] == "full_listing"]
@@ -190,7 +198,7 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(summary).to_csv(out / "coverage_summary.csv", index=False)
     pd.concat([pd.read_csv(DATA / "derived" / s["cam_id"] / "history" / "coverage.csv").assign(cam_id=s["cam_id"])
-               for s in sites]).to_csv(out / "coverage_weekly.csv", index=False)
+               for s in sites if s["cam_id"] in sel_all]).to_csv(out / "coverage_weekly.csv", index=False)
     if a.list_only:
         return
     jobs = [(cam, f) for cam, sel in sel_all.items() for f in sel["filename"] if not (raw / "720" / cam / f).exists()]
@@ -208,6 +216,8 @@ def main():
                 _progress(0.4 + 0.6 * k / len(jobs))
     for s in sites:
         cam = s["cam_id"]
+        if cam not in sel_all:
+            continue
         d = DATA / "derived" / cam / "history"
         sel = sel_all[cam]
         st = pd.read_parquet(d / "stage.parquet")

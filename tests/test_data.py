@@ -83,3 +83,23 @@ def test_parse_waterml_json():
     out = parse_waterml_json(data)
     assert list(out) == ["05576100"] and len(out["05576100"]) == 1
     assert out["05576100"]["time"].iloc[0] == __import__("pandas").Timestamp("2026-10-10T05:00:00Z")
+
+
+def test_legacy_iv_follows_redirect(monkeypatch):
+    # waterservices.usgs.gov answers 301 → nwis.waterservices.usgs.gov (Oct 2026); the client must follow it
+    import httpx
+    from riversight.data import nwis
+    seen = {}
+
+    class R:
+        status_code = 200
+        def raise_for_status(self): pass
+        def json(self): return {"value": {"timeSeries": []}}
+
+    def fake_get(url, **kw):
+        seen.update(kw, url=url)
+        return R()
+    monkeypatch.setattr(httpx, "get", fake_get)
+    from datetime import datetime, timezone
+    nwis.legacy_iv_multi(["01481500"], datetime(2026, 1, 1, tzinfo=timezone.utc), datetime(2026, 1, 2, tzinfo=timezone.utc))
+    assert seen["follow_redirects"] is True and seen["url"].startswith("https://nwis.waterservices.usgs.gov/")
