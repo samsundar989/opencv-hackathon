@@ -43,3 +43,17 @@ Summary:
 - **PASS** = P1∧P2∧P3 → verdict in D-0002. **FAIL** = <6/20 on P1 and P2 fails → narrow to flood-state/rise detection + flood-height map (no pivot). Otherwise **partial pass** → proceed with tiers.
 - Night frames out of scope for v1 (gaps reported). Compute/spend unchanged (D-0004, D-0005); no RunPod/AWS spend for SLICE_01B.
 - Q-0004: `docs/AWS_ACCOUNT_NOTES.md` stays local-only (gitignored).
+
+## D-0007 — 2026-10-15 (14:43 CT) — Frozen global scene-model setting for the kill test v2 (Claude Code, per SLICE_01B step 3)
+Recorded **before** the frozen test days (Oct 4 00Z – Oct 14 00Z) were read. Config: `results/scene/frozen_config.json`; sha256 of the config and of every scoring module in `results/constants.sha256` (config `aa81e492…2622`).
+- **Setting (global, all sites):** block size 4 px (3,600 blocks), flood-height ROI reliability ≥ **0.80** (fallback to all blocks below 50 ROI blocks), kernel-ridge **λ = 1.0**, causal **1-D Kalman** smoothing. Kalman parameters: q = variance of the training gauge's hourly increments; r = var(LOO residuals) · (1 − ρ₁).
+- **How chosen:** forward-chaining monthly CV with a 7-day gap, inside the calibration data only (history Oct 2025 – Oct 2 2026 plus the SLICE_01 fit window before Oct 3 00Z). 36 settings were tried. The selection rule was fixed in `scripts/scene_tune.py` (commit `96daf05`) before any CV result existed: most sites meeting P1 on pooled out-of-fold predictions; ties go to the lower median nMAE.
+- **CV evidence:** P1 met at **9/20** sites; median nMAE **0.145**; median MAE 0.380 ft. Sources: `results/scene/tune_cv_summary.csv`, `tune_cv_sites.csv`. Runner-ups: 8/20 at λ = 3 or 0.3. Year-long forward chaining is much harder than the 20-day fit-window CV (gate: median 0.278 ft), because seasons drift and early folds train on 1–2 months.
+- **Pre-registered reporting rules (not pass/fail):**
+  - event site = ≥ 3 scored frames with |Δ24h| ≥ 0.25 ft;
+  - tier A = Hancock (staff) and Pecatonica (structure);
+  - tier C = test-day registration < 0.80, or CV Spearman < 0.5, or < 90 calibration days;
+  - every other site is tier B.
+- **σ per site** = std of that site's out-of-fold residuals for this setting.
+- **Calibration data per site:** see `results/history/coverage_summary.csv`. Frames from history periods registered to a reference that could not be linked back to the current view are excluded (`data/derived/<cam>/history/segments.csv`). Camera view changes were found at Pecatonica (11 failure runs), White Rock (6), Big Brook (2: different view until May 2026), Sand Ck, Salt Ck, Brandywine and First Mallard.
+

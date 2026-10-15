@@ -1,0 +1,51 @@
+{
+  "decision": "D-0007",
+  "bs": 4,
+  "thr": 0.8,
+  "lam": 1.0,
+  "smooth": "kalman",
+  "min_roi": 50,
+  "cv": {
+    "sites": 20,
+    "p1_sites_oof": 9,
+    "median_nmae_oof": 0.1447,
+    "median_mae_oof": 0.38,
+    "tuned_sites": [
+      "CA_First_Mallard_Branch_nr_Fairfield",
+      "CO_Animas_River_at_Durango",
+      "CO_Sand_Creek_at_Mouth_nr_Commerce_City",
+      "IL_Salt_Creek_at_Wood_Dale",
+      "MN_Root_River_near_Pilot_Mound",
+      "NJ_Big_Brook_near_Marlboro",
+      "NJ_Stony_Brook_at_Princeton",
+      "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+      "NY_Neversink_River_at_Godeffroy",
+      "OH_Bean_Creek_at_Powers",
+      "OH_East_Fork_Little_Miami_River_at_Perintown",
+      "PA_Brandywine_Creek_at_Chadds_Ford",
+      "TX_Buffalo_Bayou_at_State_HWY_6_near_Addicks",
+      "TX_Clear_Fk_Trinity_Rv_at_Ft_Worth",
+      "TX_Cowhouse_Ck_at_Old_Georgetown_Rd_nr_Ft_Hood",
+      "TX_Langham_Creek_at_Addicks_Reservoir_Outflow_near_Addicks",
+      "TX_Tenmile_Ck_at_Parkinson_Rd_nr_Ferris",
+      "TX_White_Rk_Ck_at_Greenville_Ave_Dallas",
+      "WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet",
+      "WI_Swan_Creek_at_Lalor_Road_near_Fitchburg"
+    ]
+  },
+  "tier_a": [
+    "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+    "WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet"
+  ],
+  "tier_c_reg_rate": 0.8,
+  "tier_c_cv_spearman": 0.5,
+  "tier_c_min_days": 90,
+  "event_ft": 0.25,
+  "min_event_frames_per_site": 3,
+  "calibration_cut_utc": "2026-10-03T00:00:00Z",
+  "test_window_utc": [
+    "2026-10-04T00:00:00Z",
+    "2026-10-14T00:00:00Z"
+  ],
+  "frozen_at_utc": "2026-10-15T19:43:07Z"
+}
