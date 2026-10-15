@@ -112,7 +112,9 @@ class _Transient(Exception):
 class NimsClient:
     """Small, polite client. One instance per process; reuse the HTTP connection."""
 
-    def __init__(self, timeout: float = 30.0, user_agent: str = "RiverSight/0.1 (OpenCV AI Competition 2026)"):
+    def __init__(self, timeout: float = 30.0, user_agent: str = "RiverSight/0.1 (OpenCV AI Competition 2026)",
+                 api_key: Optional[str] = None):
+        self.api_key = api_key
         self._http = httpx.Client(timeout=timeout, headers={"User-Agent": user_agent}, follow_redirects=True)
 
     def close(self) -> None:
@@ -138,6 +140,8 @@ class NimsClient:
                    limit: int = 1000, recent: bool = True) -> list[str]:
         """Filenames for a camera in [after, before]. Newest first when recent=True."""
         params: dict = {"camId": cam_id, "limit": int(limit), "recent": "true" if recent else "false"}
+        if self.api_key:
+            params["api_key"] = self.api_key
         if after:
             params["after"] = after.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         if before:
