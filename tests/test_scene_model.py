@@ -153,3 +153,17 @@ def test_last_known_mixed_time_resolution():
     g = pd.Series(np.arange(10.0), index=pd.date_range("2026-10-01", periods=10, freq="1h", tz="UTC").astype("datetime64[us, UTC]"))
     t = pd.to_datetime(np.array([pd.Timestamp("2026-10-01 05:30", tz="UTC").value]), utc=True)
     assert list(pv.last_known(t, g, "2h")) == [3.0]
+
+
+def test_month_folds_forward_chaining_with_gap():
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+    from scene_tune import CUT, GAP, month_folds
+    t = pd.date_range(pd.Timestamp("2026-01-01", tz="UTC"), CUT - pd.Timedelta("2h"), freq="2h")
+    folds = month_folds(t)
+    assert folds and folds[0][0] == "2026-03"   # Feb would train on Jan 1-25 only (< 30 days)
+    for name, tr, te in folds:
+        assert t[tr].max() < t[te].min() - GAP + pd.Timedelta("1s")   # ≥ 7 days between train and test
+        assert t[te].max() < CUT                                       # never past the calibration cut
+        assert (t[te].strftime("%Y-%m") == name).all()
