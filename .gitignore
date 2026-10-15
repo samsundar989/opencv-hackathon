@@ -45,3 +45,10 @@ runs/
 
 # review contact sheets are near-raw USGS frames (non-negotiable 7): keep local
 results/kill_test/contacts/
+
+# local-only account notes (Q-0004 / D-0006) and Cowork transfer tarballs
+docs/AWS_ACCOUNT_NOTES.md
+_xfer/
+
+# near-raw USGS frames side by side (non-negotiable 7): keep local
+experiments/cowork_2026-10-14/floodheight_maps.jpg

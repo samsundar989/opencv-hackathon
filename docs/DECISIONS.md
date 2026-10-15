@@ -29,7 +29,17 @@ Gotchas learned on Oct 14: (1) bare `python` inside a job resolves to an interpr
 
 `.gpuq.toml` sets `[project] priority = "low"`, `passthrough = ["data/raw", "data/derived", "models/onnx"]` and `outputs = ["results", "runs"]`. Scripts write results to absolute paths inside the repo and report progress to `$WORKERQ_PROGRESS`. Light work (API fetches with ≤4 concurrent downloads, unit tests, single-frame debugging) runs directly. Never run `workerq priority`; never bypass the queue because the GPU looks idle.
 
-## D-0006 — 2026-10-14 — Gauge stage source: OGC API where available, legacy NWIS IV otherwise (identical values)
+## D-0005a — 2026-10-14 — (first filed as D-0006; renumbered the same evening because Cowork's D-0006 below claimed the number) Gauge stage source: OGC API where available, legacy NWIS IV otherwise (identical values)
 Context: the OGC API key quota (1000 req/h) was exhausted twice on Oct 14 (screening + crash-recovery refetch). The legacy `waterservices.usgs.gov/nwis/iv` service returns the same USGS instantaneous-value record and accepts many sites per request.
 Check: on the 3 kill-test sites that have both, every overlapping 15-min reading is identical (max |diff| = 0.0000 ft; Clear Fk Trinity 2881/2881, Swan Ck 4065/4065, Brandywine 2869/2869 matched; OGC has a few extra points only in the ±1 h padding).
 Decision: `data/derived/<cam>/stage.parquet` carries a `source` column (`ogc` | `nwis_iv_legacy`); 3 sites ogc, 17 legacy IV for SLICE_01. Later slices prefer OGC (batched within quota) and keep the source column. Bug fixed alongside: `fetch_sites.py` previously never saved `stage.parquet`.
+
+## D-0006 — 2026-10-14 (evening CT) — No pivot; scene model replaces the waterline detector; kill-test protocol v2 (Cowork for Samuel; answers Q-0005/Q-0006)
+Full ruling: `docs/decisions/D-0006_scene_model_and_protocol.md`. Evidence: `docs/research/2026-10-14_waterlevel_investigation.md`, `experiments/cowork_2026-10-14/`. Executed by `docs/slices/SLICE_01B_SCENE_MODEL_RERUN.md`.
+Summary:
+- Primary estimator = **scene model**: registration → per-block appearance features → flood-height map (per-block inundation threshold h*, reliability-scored) as ROI → kernel ridge → causal smoothing/Kalman → stage ± σ. Transects/classical detector demoted to overlay/QA; seg net off the critical path.
+- Test days stay frozen (Oct 4 00Z – Oct 14 00Z). Calibration uses history before Oct 3 00Z (target 12 months, min 90 days). Tuning only by forward-chaining CV inside the history.
+- **Protocol v2** (pre-registered, daylight frames, 20 sites of `data/sites/kill_test.yaml`, scored once): **P1** ≥10/20 sites with MAE ≤ 0.25 ft or nMAE (MAE ÷ calibration p95−p5) ≤ 10%; **P2** camera beats 24 h last-known-value on event frames (|Δ24h| ≥ 0.25 ft) at ≥70% of sites with events (if <5 such sites, also report P2 on last 30 history days by forward-chaining CV, labelled); **P3** registration ≥90% (met: 95.7%). Reported, not pass/fail: all-frame MAE vs 15 min/24 h persistence and constant median; outage gap-fill vs last-known value at 6 h/24 h/72 h/7 d; flood-state balanced accuracy (stage > calibration p90); Spearman ρ; tier A/B/C.
+- **PASS** = P1∧P2∧P3 → verdict in D-0002. **FAIL** = <6/20 on P1 and P2 fails → narrow to flood-state/rise detection + flood-height map (no pivot). Otherwise **partial pass** → proceed with tiers.
+- Night frames out of scope for v1 (gaps reported). Compute/spend unchanged (D-0004, D-0005); no RunPod/AWS spend for SLICE_01B.
+- Q-0004: `docs/AWS_ACCOUNT_NOTES.md` stays local-only (gitignored).

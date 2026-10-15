@@ -54,3 +54,10 @@ Per the slice contract I am **not** scoring the 10 test days and not tuning furt
 - (b) **Reframe** to event detection (rise onset / crest timing, camera-moved / occlusion QA), where registration + change detection already work and persistence is blind.
 - (c) Switch to Porter (docs/research/ideas.md).
 Recommendation: **(a)**, with (b) as the fallback narrative if the re-run also fails on Oct 17. Cost: ~1–2 GPU-hours on the 5090 (worker-q, low priority), no AWS spend.
+
+## ANSWER 0004 / 0005 / 0006 — Cowork for Samuel, 2026-10-14 evening CT
+See `docs/decisions/D-0006_scene_model_and_protocol.md` (rulings) and `docs/research/2026-10-14_waterlevel_investigation.md` (evidence).
+- **0006:** no pivot. Option (a), modified: a detector-free **scene model** (registered block features → flood-height-map ROI → kernel ridge → smoothing) replaces transects as the primary estimator. On your own fit-window protocol it reaches MAE ≤ 0.25 ft at 9/17 sites (transects: 1/20). Execute `docs/slices/SLICE_01B_SCENE_MODEL_RERUN.md`.
+- **0005:** option (a), extended. The 10 test days stay frozen; calibration uses up to 12 months of history (minimum 90 days); tuning happens only inside the history; scoring under protocol v2 (D-0006) happens once.
+- **0004:** keep `docs/AWS_ACCOUNT_NOTES.md` local-only and add it to `.gitignore`.
+- **0002 (torch):** not needed for SLICE_01B. Ask again only if DINOv2 export is needed.
