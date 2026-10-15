@@ -1,2 +1,21 @@
 cam_id,listed_frames_12m,weeks_with_frames_12m,weeks_12m,first_frame,probe_weeks_with_frames_pre,probe_weeks_pre,stage_points,stage_source,selected_frames,selected_event_day_frames,days_with_selected_frames
+TX_Cowhouse_Ck_at_Old_Georgetown_Rd_nr_Ft_Hood,8352,13,52,2026-07-06 15:59:21+00:00,0,39,98753,nwis_iv_legacy,567,64,89
 TX_Tenmile_Ck_at_Parkinson_Rd_nr_Ferris,8291,52,52,2025-10-03 00:00:14+00:00,5,39,35045,ogc,2368,665,349
+TX_Buffalo_Bayou_at_State_HWY_6_near_Addicks,8013,48,52,2025-10-03 00:00:13+00:00,39,39,35229,nwis_iv_legacy,2484,1032,335
+TX_Clear_Fk_Trinity_Rv_at_Ft_Worth,8740,52,52,2025-10-03 00:00:02+00:00,39,39,35012,nwis_iv_legacy,2350,443,365
+TX_White_Rk_Ck_at_Greenville_Ave_Dallas,8744,52,52,2025-10-03 00:00:14+00:00,39,39,34842,nwis_iv_legacy,2562,866,365
+TX_Langham_Creek_at_Addicks_Reservoir_Outflow_near_Addicks,29701,52,52,2025-10-03 00:45:06+00:00,39,39,35182,nwis_iv_legacy,2323,1218,341
+WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet,4884,50,52,2025-10-03 16:00:03+00:00,23,39,34800,nwis_iv_legacy,1614,378,290
+WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,9648,52,52,2025-10-03 00:00:03+00:00,39,39,49740,nwis_iv_legacy,2239,279,365
+MN_Root_River_near_Pilot_Mound,5721,41,52,2025-12-19 21:01:24+00:00,0,39,28829,nwis_iv_legacy,1893,379,288
+NY_East_Branch_Delaware_River_at_Hancock_Staff,3039,25,52,2026-04-14 13:00:04+00:00,0,39,32229,nwis_iv_legacy,1259,227,172
+NY_Neversink_River_at_Godeffroy,6655,42,52,2025-10-03 00:00:03+00:00,34,39,35056,nwis_iv_legacy,1767,127,289
+NJ_Stony_Brook_at_Princeton,8732,52,52,2025-10-03 00:00:16+00:00,39,39,35237,nwis_iv_legacy,2360,596,364
+NJ_Big_Brook_near_Marlboro,7576,48,52,2025-10-03 01:00:03+00:00,39,39,103618,nwis_iv_legacy,2034,474,333
+OH_East_Fork_Little_Miami_River_at_Perintown,8750,52,52,2025-10-03 00:00:13+00:00,39,39,33317,nwis_iv_legacy,2805,1398,365
+OH_Bean_Creek_at_Powers,21416,45,52,2025-10-03 00:00:14+00:00,39,39,35076,nwis_iv_legacy,1866,591,302
+CO_Animas_River_at_Durango,5383,14,52,2026-06-30 22:15:02+00:00,0,39,35236,nwis_iv_legacy,618,55,94
+CO_Sand_Creek_at_Mouth_nr_Commerce_City,26335,45,52,2025-10-03 00:00:03+00:00,27,39,100406,nwis_iv_legacy,1614,148,302
+IL_Salt_Creek_at_Wood_Dale,8655,52,52,2025-10-03 00:00:03+00:00,35,39,35079,nwis_iv_legacy,2712,1215,364
+PA_Brandywine_Creek_at_Chadds_Ford,14296,23,52,2025-10-03 00:00:02+00:00,4,39,38512,nwis_iv_legacy,1185,381,152
+CA_First_Mallard_Branch_nr_Fairfield,10318,30,52,2026-03-05 20:45:03+00:00,0,39,34936,nwis_iv_legacy,2337,2337,184
