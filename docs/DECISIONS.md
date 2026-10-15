@@ -5,8 +5,23 @@ Context: `docs/research/ideas.md`, `docs/research/prior-art.md`, `docs/research/
 Decision: build RiverSight per `docs/PLAN_2026-10-13_RIVERSIGHT.md`. Alternatives (Porter, SkyFix) are fallbacks only if SLICE_01 fails.
 Constraints restated by Samuel: use the latest globally installed Python environment; GPU jobs via workerq (read its docs first); RunPod credits are limited and shared — use only when needed; get to a POC and working demo ASAP.
 
-## D-0002 — (pending) — Kill test verdict
-To be written by Claude Code at the end of SLICE_01 with the per-site table (PASS requires registration ≥90% and MAE ≤0.25 ft at ≥10/20 sites on the 10 test days).
+## D-0002 — 2026-10-15 (15:1x CT) — Kill test verdict: **PASS** under protocol v2 (D-0006), setting D-0007, frozen test days scored once
+History: SLICE_01 (classical transects) would have failed (1/20 sites ≤ 0.25 ft on fit-window CV); the test days were left unscored. Cowork's D-0006 then pre-registered protocol v2 and the scene model. SLICE_01B ran it, and the test days were read **once**: worker-q job 2986, `scripts/scene_score.py`, with the guard on the frozen-config hash. Table: `results/kill_test_v2.md` / `.csv`; verdict JSON: `results/kill_test_v2_verdict.json`.
+- **P1 accuracy: 14/20 sites** (need ≥ 10) with MAE ≤ 0.25 ft or nMAE ≤ 10 %. By MAE alone: 11/20; Buffalo, Bean and First Mallard pass on nMAE only.
+- **P2 value: 15/16 event sites** (need ≥ 70 %): on event frames the camera beats the 24 h last-known value. The exception is White Rock.
+- **P3 registration: 95.7 %** of the 30-day daylight frames (SLICE_01).
+- **Reported, not pass/fail:**
+  - median MAE 0.182 ft, median nMAE 0.092, median Spearman ρ 0.66;
+  - camera vs constant calibration median: better at 16/20;
+  - camera vs 24 h persistence on all frames: better at 10/20; vs 15-min persistence: better at **0/20**, so the camera does not replace a live gauge;
+  - outage gap-fill vs last-known value: camera better at 3/20 (6 h), 10/20 (24 h), 15/20 (72 h), 18/20 (7 d);
+  - flood-state balanced accuracy 0.93 vs 0.75 for 24 h persistence (median over the 9 sites with flood frames).
+- **Honest caveats:**
+  - Several P1 passes are near-flat test windows where simple baselines are better still: Swan, Sand, Big Brook, and Cowhouse vs 24 h persistence.
+  - First Mallard is tidal, so it has events every day.
+  - Tier C (8 sites) includes White Rock (58 test frames, 48 % test-day registration after the scene change) and Tenmile (ρ −0.10). Failures: Tenmile, White Rock, Langham, Root, East Fork, Brandywine.
+- **Consequence:** RiverSight proceeds on the scene model (D-0006). No re-runs on these test days. Anything learned now goes to SLICE_02+ as "v3, new test window". The pitch claim is outage gap-fill and flood state; it is not live-gauge replacement.
+
 
 ## D-0003 — 2026-10-14 — AWS Region us-east-2, profile `riversight`, Agent Toolkit for AWS
 Context: Samuel's AWS project uses the new AWS experience with assigned Region us-east-2. Projects can only create Regional resources in their assigned Region (us-east-1 is allowed only for CloudFront, global WAF and their CloudWatch Logs).

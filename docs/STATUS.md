@@ -1,5 +1,16 @@
 # STATUS (newest first)
 
+## 2026-10-15 (afternoon CT) — SLICE_01B: kill test v2 **PASS** (frozen test days scored once) (Claude Code)
+- Acceptance:
+  - [x] Reference reproduced on the fit window (step-1 gate): `results/scene/gate_fit20.csv`.
+  - [x] History coverage table; frames and stage cached for 19/20 sites with ≥ 90 days: `results/history/coverage_summary.csv`.
+  - [x] D-0007 recorded before test scoring: commits `fff4d5f`/`1e24d7f`; hashes in `results/constants.sha256`.
+  - [x] `results/kill_test_v2.md` + D-0002 verdict; test days scored exactly once (job 2986).
+  - [ ] Flood-height maps + event GIF in `results/demo/`: next.
+  - [x] Tests green (47). No spend outside worker-q; no secrets.
+- **Verdict PASS:** P1 14/20 (11/20 by MAE alone), P2 15/16 event sites, P3 95.7 %. Median MAE 0.182 ft. The camera never beats 15-min persistence (0/20); it beats last-known value for 72 h / 7 d outages at 15/20 and 18/20. Full caveats in D-0002.
+- Compute: history registration needed ~7 h of CPU after four preemption-thrash restarts (see the morning entry). Every image pass ran on worker-q at low priority. No RunPod/Kaggle/AWS spend.
+
 ## 2026-10-15 (morning CT) — SLICE_01B step 2: history fetched; registration starved by preemption (Claude Code)
 - History fetch done (job 2898): **36,416 daylight frames, 0 download errors; 19/20 sites have ≥ 90 days** (Cowhouse 89 d). `results/history/coverage_*.csv`.
 - History registration and features: jobs 2924 → 2934 → 2954 → **2955**.
