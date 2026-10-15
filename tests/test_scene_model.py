@@ -167,3 +167,23 @@ def test_month_folds_forward_chaining_with_gap():
         assert t[tr].max() < t[te].min() - GAP + pd.Timedelta("1s")   # ≥ 7 days between train and test
         assert t[te].max() < CUT                                       # never past the calibration cut
         assert (t[te].strftime("%Y-%m") == name).all()
+
+
+def test_register_chunked_reuses_legacy_chunks(tmp_path, monkeypatch):
+    from riversight import history
+    calls = []
+
+    def fake_reg(fr, ref, cfg, method, progress):
+        calls.append((fr.index[0], len(fr)))
+        return pd.DataFrame({"ok": True}, index=fr.index)
+    monkeypatch.setattr(history, "register_frames", fake_reg)
+    frames = pd.DataFrame({"time": pd.date_range("2026-01-01", periods=750, freq="2h", tz="UTC")})
+    cdir = tmp_path / "reg_chunks"
+    cdir.mkdir()
+    pd.DataFrame({"ok": True}, index=frames.index[:300]).to_pickle(cdir / "chunk_0000_750.pkl")   # legacy chunk 0
+    out = history._register_chunked(frames, None, None, tmp_path)
+    assert list(out.index) == list(frames.index)
+    assert calls == [(300, 100), (400, 100), (500, 100), (600, 100), (700, 50)]
+    calls.clear()
+    history._register_chunked(frames, None, None, tmp_path)     # fully cached now
+    assert calls == []

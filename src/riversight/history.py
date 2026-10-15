@@ -78,7 +78,8 @@ def _pick_segment_reference(frames: pd.DataFrame, cfg: Cfg, n_cand: int = 30):
     return best_i, best_img
 
 
-CHUNK = 300
+CHUNK = 100          # ~5 min per worker; survives frequent preemption
+LEGACY_CHUNK = 300
 
 
 def _register_chunked(frames: pd.DataFrame, ref: np.ndarray, cfg: Cfg, d: Path) -> pd.DataFrame:
@@ -87,16 +88,20 @@ def _register_chunked(frames: pd.DataFrame, ref: np.ndarray, cfg: Cfg, d: Path) 
     boundaries; the direct ORB → ALIKED cascade is unaffected.)"""
     cdir = d / "reg_chunks"
     cdir.mkdir(parents=True, exist_ok=True)
-    parts = []
-    for k, s in enumerate(range(0, len(frames), CHUNK)):
-        p = cdir / f"chunk_{k:04d}_{len(frames)}.pkl"
-        if p.exists():
-            parts.append(pd.read_pickle(p))
+    parts, s, n = [], 0, len(frames)
+    while s < n:
+        legacy = cdir / f"chunk_{s // LEGACY_CHUNK:04d}_{n}.pkl"      # 300-frame chunks from the first runs
+        if s % LEGACY_CHUNK == 0 and legacy.exists():
+            parts.append(pd.read_pickle(legacy))
+            s += LEGACY_CHUNK
             continue
-        part = register_frames(frames.iloc[s:s + CHUNK], ref, cfg, "cascade", progress=(0.0, 0.0))
-        part.to_pickle(p.with_suffix(".tmp"))
-        p.with_suffix(".tmp").replace(p)
-        parts.append(part)
+        p = cdir / f"c{s:06d}_{CHUNK}_{n}.pkl"
+        if not p.exists():
+            part = register_frames(frames.iloc[s:s + CHUNK], ref, cfg, "cascade", progress=(0.0, 0.0))
+            part.to_pickle(p.with_suffix(".tmp"))
+            p.with_suffix(".tmp").replace(p)
+        parts.append(pd.read_pickle(p))
+        s += CHUNK
     return pd.concat(parts)
 
 
