@@ -78,6 +78,28 @@ def _pick_segment_reference(frames: pd.DataFrame, cfg: Cfg, n_cand: int = 30):
     return best_i, best_img
 
 
+CHUNK = 300
+
+
+def _register_chunked(frames: pd.DataFrame, ref: np.ndarray, cfg: Cfg, d: Path) -> pd.DataFrame:
+    """register_frames in time-ordered chunks, each cached under history/reg_chunks/ so a preempted
+    worker-q job resumes where it stopped. (Chained registration only loses its 'last good frame' at chunk
+    boundaries; the direct ORB → ALIKED cascade is unaffected.)"""
+    cdir = d / "reg_chunks"
+    cdir.mkdir(parents=True, exist_ok=True)
+    parts = []
+    for k, s in enumerate(range(0, len(frames), CHUNK)):
+        p = cdir / f"chunk_{k:04d}_{len(frames)}.pkl"
+        if p.exists():
+            parts.append(pd.read_pickle(p))
+            continue
+        part = register_frames(frames.iloc[s:s + CHUNK], ref, cfg, "cascade", progress=(0.0, 0.0))
+        part.to_pickle(p.with_suffix(".tmp"))
+        p.with_suffix(".tmp").replace(p)
+        parts.append(part)
+    return pd.concat(parts)
+
+
 def register_history(data_dir: Path, cam: str, cfg: Cfg = Cfg(), progress=None) -> pd.DataFrame:
     d = data_dir / "derived" / cam / "history"
     out = d / "registration.parquet"
@@ -87,7 +109,7 @@ def register_history(data_dir: Path, cam: str, cfg: Cfg = Cfg(), progress=None) 
     ref_name, ref = main_reference(data_dir, cam)
     shape = ref.shape[:2]
     latlng = site_latlng(data_dir, cam)
-    raw = register_frames(frames, ref, cfg, "cascade", progress=progress or (0.0, 0.8))
+    raw = _register_chunked(frames, ref, cfg, d)
     reg = qa_registration(raw, frames, shape, latlng, cfg)
     reg["segment"] = "main"
     H_list, ok_list, seg_list = list(reg["H"]), list(reg["ok"].astype(bool)), list(reg["segment"])

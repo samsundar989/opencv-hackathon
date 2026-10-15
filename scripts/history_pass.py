@@ -26,6 +26,7 @@ DATA = Path(os.environ.get("RIVERSIGHT_DATA", ROOT / "data"))
 def one(cam: str) -> str:
     import cv2
     cv2.setNumThreads(1)
+    os.environ.pop("WORKERQ_PROGRESS", None)   # workers must not overwrite the parent's per-site progress
     from riversight.history import register_history
     import scene_features
     t0 = time.time()
