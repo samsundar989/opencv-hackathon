@@ -1,5 +1,13 @@
 # STATUS (newest first)
 
+## 2026-10-15 (morning CT) — SLICE_01B step 2: history fetched; registration starved by preemption (Claude Code)
+- History fetch done (job 2898): **36,416 daylight frames, 0 download errors; 19/20 sites have ≥ 90 days** (Cowhouse 89 d). `results/history/coverage_*.csv`.
+- History registration and features: jobs 2924 → 2934 → 2954 → **2955**.
+  - The preemptible runs were displaced by arc-whest (critical, then high) 3 times, then **13 times in one hour**. Not one 300-frame chunk (~14 min) finished in that hour.
+  - Now: 100-frame chunks (300-frame chunks already done are reused) and a **non-preemptible** low-priority submission. It still waits its turn, but once admitted it finishes. 51 of ~125 chunks are cached. Finished sites: Cowhouse reg 0.972, Tenmile 0.991, no scene changes.
+- Fixed: a rare `LightGlueMatcher.match` C++ exception (White Rock) killed a whole site; it is now a failed frame (test added).
+- Timeline: tuning (~1 h) and the single scoring run follow; the Oct 17 09:00 CT deadline holds if 2955 starts by Oct 16 midday.
+
 ## 2026-10-14 (night CT) — SLICE_01B under way: gate passed, history fetch running (Claude Code)
 - Cowork review committed (`6d765b9`): D-0006 appended to DECISIONS. My earlier stage-source entry, which also used the number D-0006, is renumbered **D-0005a** (it was referenced nowhere else). `docs/AWS_ACCOUNT_NOTES.md` and `_xfer/` gitignored; `_xfer/` (2.2 GB of transfer tarballs) deleted.
 - **Step 1 gate PASSED** (`ebb1178`). New modules: `vision/scene_features.py`, `calib/flood_height_map.py`, `calib/scene_regressor.py`, `eval/protocol_v2.py`, plus 14 synthetic unit tests. Fit20 CV with our own ALIKED+LightGlue registration over the 17 shared sites: scene-ridge median MAE **0.278 ft** (Cowork 0.249, +0.029); water-block **0.238** (Cowork 0.220, +0.018). Both are inside ±0.05. 8/17 sites ≤ 0.25 ft (Cowork 9/17). Source: `results/scene/gate_fit20.csv`. Remaining gap: we register 30-min frames to a different reference, and our sun-based night filter drops dusk frames.
