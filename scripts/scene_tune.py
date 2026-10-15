@@ -47,22 +47,23 @@ BSS = (4, 8)
 MIN_ROI = 50
 
 
-def load_train(cam: str):
-    """(t, h, F float16 at block size 4) of all calibration frames, time-sorted."""
-    parts = []
+def load_train(cam: str, data: Path | None = None):
+    """(t, h, F float16 at block size 4) of all calibration frames, time-sorted, deduplicated by filename."""
+    data = data or DATA
+    metas, feats = [], []
     for name in ("scene_history_all.npz", "scene_kill30_fit.npz"):
-        p = DATA / "derived" / cam / name
+        p = data / "derived" / cam / name
         if p.exists():
             z = np.load(p)
-            parts.append(pd.DataFrame({"t": z["t"], "h": z["h"], "fn": z["filename"], "src": name, "k": np.arange(len(z["t"]))}))
-            parts[-1].attrs["F"] = z["F"]
-    if not parts:
+            metas.append(pd.DataFrame({"t": z["t"], "h": z["h"], "fn": z["filename"], "src": len(feats),
+                                       "k": np.arange(len(z["t"]))}))
+            feats.append(z["F"])
+    if not metas:
         return None
-    F_all = {d["src"].iloc[0]: d.attrs["F"] for d in parts if len(d)}
-    df = pd.concat(parts, ignore_index=True)
+    df = pd.concat(metas, ignore_index=True)
     df["t"] = pd.to_datetime(df["t"], utc=True)
     df = df[(df["t"] < CUT) & np.isfinite(df["h"])].drop_duplicates("fn").sort_values("t").reset_index(drop=True)
-    F = np.stack([F_all[s][k] for s, k in zip(df["src"], df["k"])]) if len(df) else np.zeros((0, 3600, 5), np.float16)
+    F = np.stack([feats[s][k] for s, k in zip(df["src"], df["k"])]) if len(df) else np.zeros((0, 3600, 5), np.float16)
     return pd.DatetimeIndex(df["t"]), df["h"].to_numpy(float), F
 
 
@@ -173,6 +174,9 @@ def summarise(cams: list[str]):
                          "n_oof": int(ok.sum()), "n_folds": len(set(z["fold"][ok])), "span_days": int(z["span_days"]),
                          "roi_median": float(nr), "mae": mae, "nmae": mae / rng, "p1": (mae <= 0.25) or (mae / rng <= 0.10)})
     df = pd.DataFrame(rows)
+    if df.empty:
+        print("no tuned sites yet")
+        return
     out = ROOT / "results" / "scene"
     out.mkdir(parents=True, exist_ok=True)
     df.round(4).to_csv(out / "tune_cv_sites.csv", index=False)

@@ -187,3 +187,19 @@ def test_register_chunked_reuses_legacy_chunks(tmp_path, monkeypatch):
     calls.clear()
     history._register_chunked(frames, None, None, tmp_path)     # fully cached now
     assert calls == []
+
+
+def test_load_train_merges_dedupes_and_cuts(tmp_path):
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+    from scene_tune import CUT, load_train
+    d = tmp_path / "derived" / "cam"
+    d.mkdir(parents=True)
+    t1 = pd.date_range(CUT - pd.Timedelta("10D"), periods=5, freq="1D").asi8
+    t2 = np.r_[t1[-1], CUT.value, (CUT + pd.Timedelta("1D")).value]           # one duplicate, two at/after the cut
+    F1, F2 = np.zeros((5, 3600, 5), np.float16), np.ones((3, 3600, 5), np.float16)
+    np.savez(d / "scene_history_all.npz", t=t1, h=np.arange(5.0), filename=np.array([f"a{i}" for i in range(5)]), F=F1)
+    np.savez(d / "scene_kill30_fit.npz", t=t2, h=np.array([9.0, 9, 9]), filename=np.array(["a4", "b1", "b2"]), F=F2)
+    t, h, F = load_train("cam", tmp_path)
+    assert len(t) == 5 and (t < CUT).all() and list(h) == [0, 1, 2, 3, 4] and F.shape == (5, 3600, 5)
