@@ -1,0 +1,12 @@
+{
+  "app": "python app.py",
+  "context": {
+    "region": "us-east-2",
+    "alert_email": "samsundar989@gmail.com",
+    "budget_usd": 100,
+    "stop_at_pct": 90,
+    "worker_ami": "ubuntu",
+    "worker_instance_type": "c8g.medium",
+    "bedrock_profile": "us.anthropic.claude-haiku-5-5*"
+  }
+}
