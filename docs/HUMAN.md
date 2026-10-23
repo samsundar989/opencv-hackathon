@@ -76,3 +76,9 @@ SLICE_01B is done: protocol v2 **PASS** (P1 14/20, P2 15/16, P3 95.7 %). The tes
 **Action:** run `aws login --profile riversight` in a terminal on sam-mega-pc (browser sign-in), then reply `## ANSWER 0008` or say so in the W1 chat.
 Meanwhile W1 works offline on the site bundles and the local live cycle (SPRINT_W1 steps 1–2).
 Heads-up for the next ask: launching the live worker from the COOL G5 AMI needs your AWS Marketplace subscription to `prodview-igdweaoo6prb6` ("COOL Graviton 5-1.0"). W1 will file that as its own `Q-` once the budget guard is live.
+
+## Q-0009 — 2026-10-23 — Subscribe to the COOL Graviton5 AMI in AWS Marketplace (W1)
+D-0008 ruling 2 runs the live worker on the **COOL G5 AMI** (m9g). Launching it fails with `OptInRequired` until the project owner accepts the Marketplace terms. That is your click, not an agent's.
+**Action:** while signed in to the riversight project, open https://aws.amazon.com/marketplace/pp/prodview-igdweaoo6prb6 ("COOL Graviton 5-1.0") → *View purchase options* → *Subscribe / Accept terms*. The research note puts the software fee at about $0.005/h on m9g.large, on top of EC2. Then reply `## ANSWER 0009`.
+**Meanwhile:** after the budget guard is live (needs Q-0008), W1 deploys the live site on the fallback: stock Ubuntu 24.04 arm64 with pip `opencv-python-headless==5.0.0.93`. Once you've subscribed, it redeploys on COOL with `python scripts/deploy.py --worker-ami cool --cool-ami-id <ami> --instance-type m9g.medium|large`.
+**Cost:** projected spend stays under $60 through Nov 10 on either image. No single action exceeds $10.
