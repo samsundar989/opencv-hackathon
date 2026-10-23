@@ -1,0 +1,70 @@
+{
+  "source": "results/kill_test_v2.csv",
+  "n_sites": 20,
+  "p1_sites": 14,
+  "p1_sites_mae_only": 11,
+  "p2_event_sites": 16,
+  "p2_sites": 15,
+  "median_mae_ft": 0.182,
+  "median_nmae": 0.092,
+  "median_spearman": 0.66,
+  "mean_mae_ft": 0.262,
+  "sites_beat_const": 16,
+  "sites_beat_persist_24h": 10,
+  "sites_beat_persist_15min": 0,
+  "gapfill_sites_beat_lkv_6h": 3,
+  "gapfill_sites_beat_lkv_24h": 10,
+  "gapfill_sites_beat_lkv_72h": 15,
+  "gapfill_sites_beat_lkv_7d": 18,
+  "flood_sites": 9,
+  "flood_bacc_cam_median": 0.93,
+  "flood_bacc_persist24_median": 0.75,
+  "tiers": {
+    "A": 2,
+    "B": 10,
+    "C": 8
+  },
+  "test_frames_scored": 2834,
+  "registration": {
+    "source": "results/kill_test/registration_summary.csv",
+    "day_frames": 9000,
+    "registered": 8611,
+    "rate": 0.957,
+    "orb": 3567,
+    "orb_rate": 0.396,
+    "aliked_lightglue": 4892,
+    "chain": 152
+  },
+  "year_cv": {
+    "source": "results/scene/tune_cv_summary.csv",
+    "p1_sites": 9,
+    "median_mae_ft": 0.38,
+    "median_nmae": 0.145,
+    "settings_tried": 36
+  },
+  "fit_window": {
+    "source": [
+      "results/kill_test/fit_window_cv.csv",
+      "results/scene/gate_fit20.csv"
+    ],
+    "transect_sites_le_025": 1,
+    "transect_sites": 20,
+    "scene_sites_le_025": 9,
+    "scene_sites": 19,
+    "scene_median_mae_ft": 0.278
+  },
+  "history_view_segments": {
+    "source": "data/derived/<cam>/history/segments.csv (local index)",
+    "sites_with_unlinked_segments": 8,
+    "per_site_unlinked": {
+      "CA_First_Mallard_Branch_nr_Fairfield": 2,
+      "CO_Sand_Creek_at_Mouth_nr_Commerce_City": 1,
+      "IL_Salt_Creek_at_Wood_Dale": 2,
+      "MN_Root_River_near_Pilot_Mound": 6,
+      "NJ_Big_Brook_near_Marlboro": 2,
+      "PA_Brandywine_Creek_at_Chadds_Ford": 1,
+      "TX_White_Rk_Ck_at_Greenville_Ave_Dallas": 6,
+      "WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet": 7
+    }
+  }
+}
