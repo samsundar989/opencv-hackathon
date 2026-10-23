@@ -152,7 +152,7 @@ def run_episode(ep, arm, rep, sink):
             "fallback": d.get("fallback_reason", ""), "n_steps": len(d.get("steps", [])),
             "tools": "+".join(s["tool"] for s in d.get("steps", [])), "tokens_in": d.get("tokens_in", 0),
             "tokens_out": d.get("tokens_out", 0), "usd": d.get("usd", 0.0), "llm_ms": d.get("llm_ms", 0),
-            "tool_ms": tool_ms, "wall_ms": wall, "latency_ms": d.get("llm_ms", 0) + tool_ms,
+            "tool_ms": tool_ms, "wall_ms": wall, "n_llm_calls": d.get("n_llm_calls", 0), "latency_ms": d.get("llm_ms", 0) + tool_ms,
             **score(ep, d), "rationale": d.get("rationale", ""), "decision": d}
 
 
@@ -335,7 +335,7 @@ def main():
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
     r = sub.add_parser("run")
-    r.add_argument("--arm", choices=list(ARMS), required=True)
+    r.add_argument("--arm", choices=list(ARMS), nargs="+", required=True)
     r.add_argument("--reps", type=int, default=3)
     r.add_argument("--final", action="store_true")
     r.add_argument("--limit", type=int)
@@ -345,7 +345,8 @@ def main():
     sub.add_parser("report")
     a = ap.parse_args()
     if a.cmd == "run":
-        run(a.arm, a.reps, a.final, a.limit, a.jobs, a.only)
+        for arm in a.arm:                      # arms sharing a model run back to back under one rate limiter
+            run(arm, a.reps, a.final, a.limit, a.jobs, a.only)
     elif a.cmd == "freeze":
         freeze()
     else:

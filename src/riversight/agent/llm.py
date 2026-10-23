@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import os
+import threading
 import time
 from typing import Any, Callable
 
@@ -80,7 +81,8 @@ gauge is stale, publish only a lower bound (camera_lower_bound at the calibrated
 - When the river rises to a high stage for this site or rises fast, sample more often, render what will be \
 under water now and at the expected crest, and draft an alert. Alerts and tickets always go to a human; never \
 claim that one was sent.
-- Use at most 8 tool calls. Call submit_decision exactly once, with a rationale of at most 3 sentences."""
+- Use at most 8 tool calls. Request tools that do not depend on each other in the same turn. Call \
+submit_decision exactly once, with a rationale of at most 3 sentences."""
 
 SUBMIT = {"toolSpec": {"name": "submit_decision", "description": "Submit the final decision for this flagged reading.",
                        "inputSchema": {"json": {"type": "object", "required": ["actions", "rationale"], "properties": {
@@ -133,6 +135,21 @@ class TokenLedger:
 
 
 _client = None
+# The account's cross-region quota is 10 requests/min per model (service-quotas, Oct 23). Pace below it in-process
+# and retry throttles with long backoff, so a throttle never silently turns an LLM decision into a rules fallback.
+RPM = float(os.environ.get("RIVERSIGHT_BEDROCK_RPM", "9"))
+THROTTLE_BACKOFF_S = (15, 30, 45, 60, 60, 60, 60, 60)
+_pace_lock = threading.Lock()
+_next_slot: dict[str, float] = {}
+
+
+def _pace(model: str):
+    with _pace_lock:
+        now = time.monotonic()
+        slot = max(now, _next_slot.get(model, 0.0))
+        _next_slot[model] = slot + 60.0 / RPM
+    if slot > now:
+        time.sleep(slot - now)
 
 
 def bedrock_converse(**kw) -> dict:
@@ -141,8 +158,16 @@ def bedrock_converse(**kw) -> dict:
         import boto3
         from botocore.config import Config
         _client = boto3.client("bedrock-runtime", region_name=REGION,
-                               config=Config(retries={"max_attempts": 4, "mode": "adaptive"}, read_timeout=60))
-    return _client.converse(**kw)
+                               config=Config(retries={"max_attempts": 2, "mode": "standard"}, read_timeout=90))
+    from botocore.exceptions import ClientError
+    for i in range(len(THROTTLE_BACKOFF_S) + 1):
+        _pace(kw["modelId"])
+        try:
+            return _client.converse(**kw)
+        except ClientError as e:
+            if e.response.get("Error", {}).get("Code") != "ThrottlingException" or i == len(THROTTLE_BACKOFF_S):
+                raise
+            time.sleep(THROTTLE_BACKOFF_S[i])
 
 
 def _jsonable(x: Any) -> Any:
@@ -165,6 +190,7 @@ def run(event: dict, ctx: tools.ToolContext, model: str = HAIKU, converse: Calla
             kw["additionalModelRequestFields"] = extra
         t0 = time.perf_counter()
         resp = converse(**kw)
+        d["n_llm_calls"] = d.get("n_llm_calls", 0) + 1
         u = resp.get("usage") or {}
         d["tokens_in"] += int(u.get("inputTokens", 0))
         d["tokens_out"] += int(u.get("outputTokens", 0))

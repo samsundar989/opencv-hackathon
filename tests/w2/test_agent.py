@@ -263,6 +263,23 @@ def test_llm_tool_budget_is_enforced(monkeypatch):
     assert len(calls) == llm.MAX_TOOL_CALLS and d["n_tool_calls"] == 12
 
 
+def test_bedrock_throttle_is_retried_not_fallen_back(monkeypatch):
+    """Regression (pilot, Oct 23): 3/12 decisions fell back to rules on ThrottlingException at a 10 RPM quota."""
+    from botocore.exceptions import ClientError
+    calls = []
+
+    class Fake:
+        def converse(self, **kw):
+            calls.append(1)
+            if len(calls) < 3:
+                raise ClientError({"Error": {"Code": "ThrottlingException", "Message": "slow down"}}, "Converse")
+            return {"ok": True}
+    monkeypatch.setattr(llm, "_client", Fake())
+    monkeypatch.setattr(llm, "THROTTLE_BACKOFF_S", (0, 0, 0))
+    monkeypatch.setattr(llm, "RPM", 1e6)
+    assert llm.bedrock_converse(modelId="m") == {"ok": True} and len(calls) == 3
+
+
 def test_llm_failure_falls_back_to_rules(monkeypatch):
     canned(monkeypatch, get_gauge={"latest_ft": 4.2, "age_min": 15, "change_1h_ft": 0.1}, get_nws_forecast={"available": False})
 
