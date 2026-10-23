@@ -27,6 +27,11 @@ Episode kinds (source = what is real):
 
 Frames used to calibrate tool thresholds (results/agent_eval/tool_calibration.csv) are excluded.
 
+v2 (2026-10-23): every real view episode is checked against exactly the bank it exposes (`bank_match`, the same
+deterministic registration cascade as the agent's tool). v1 trusted the history pipeline's registration flags and
+mislabelled 3 episodes (2 Salt Creek frames that match an earlier calibrated reference, 1 Mallard frame that
+registers to the main reference); the rules run exposed them. v1 + its rules run are kept in runs_v1/.
+
   python scripts/agent_build_episodes.py        (light; reads cached frames, ~2 min)
 """
 from __future__ import annotations
@@ -160,6 +165,14 @@ def later_refs(site, t):
     return [e["file"] for e in site.meta.get("extra_references", []) if pd.Timestamp(e["start"], tz="UTC") > t]
 
 
+def bank_match(site, key, exclude) -> dict:
+    """Ground-truth check (v2): what the frame actually registers to, against exactly the bank the episode exposes
+    (same deterministic cascade the agent's tool uses). History registration flags alone mislabelled 3 v1 episodes."""
+    ctx = tools.ToolContext(mode="eval", bundle_root=BUNDLES, bank_exclude=tuple(exclude),
+                            event={"cam_id": site.cam, "reading": {}})
+    return tools.call(ctx, "reregister_fullres", {"cam": site.cam, "frame_key": key}).get("best") or {}
+
+
 def build_reg_loss(sites, max_segments=6):
     n = 0
     for site in sites:
@@ -174,6 +187,22 @@ def build_reg_loss(sites, max_segments=6):
                 (site.frames["time"] < pd.Timestamp(s["end"], tz="UTC") + pd.Timedelta("1D")))]
             fr = fr[~fr["night"] & ~fr["ok"] & ~fr["filename"].isin(EXCLUDE)].sort_values("time")
             fr = fr[[usable(site, site.key(f)) for f in fr["filename"].iloc[:40]] + [False] * max(len(fr) - 40, 0)]
+            keep, n_re = [], 0
+            for _, r in fr.iloc[:12].iterrows():
+                excl = sorted(set(own + later_refs(site, r["time"])))
+                b = bank_match(site, site.key(r["filename"]), excl)
+                if b.get("ok") and b.get("ref") == "reference.jpg":
+                    continue                                   # registers to the current reference: not a loss
+                if b.get("ok") and b.get("calibrated"):
+                    if n_re < 2:
+                        n_re += 1
+                        add("reanchor_banked", "real", site, r["time"], reading(site, r, ["VIEW_CHANGE"]), recent(site, r["time"]),
+                            ["SET_REFERENCE"], ["QUARANTINE", "OPEN_TICKET", "DRAFT_ALERT"], args={"SET_REFERENCE": {"ref": b["ref"]}},
+                            severity=2, ctx={"bank_exclude": excl},
+                            note=f"frame of unlinked {s['segment']} matches earlier calibrated reference {b['ref']} (bank check)")
+                    continue
+                keep.append(r)
+            fr = pd.DataFrame(keep)
             if len(fr) < 4:
                 continue
             for idx in (0, 3):
@@ -200,7 +229,9 @@ def build_reanchor(sites, per_segment=2):
                 continue
             fr = site.frames[(site.frames["segment"] == s["segment"]) & ~site.frames["night"] & (site.frames["filename"] != s["seg_ref"])]
             fr = pick(fr, 8, 7)
-            fr = fr[[usable(site, site.key(f)) for f in fr["filename"]]].iloc[:per_segment] if len(fr) else fr
+            fr = fr[[usable(site, site.key(f)) for f in fr["filename"]]] if len(fr) else fr
+            fr = fr[[bank_match(site, site.key(f), later_refs(site, t)).get("ref") == ref_file
+                     for f, t in zip(fr["filename"], fr["time"])]].iloc[:per_segment] if len(fr) else fr
             for _, r in fr.iterrows():
                 t = r["time"]
                 add("reanchor_banked", "real", site, t, reading(site, r, ["VIEW_CHANGE"], reg_ok=False), recent(site, t),
@@ -255,7 +286,8 @@ def build_controls(sites, n_view=8, n_dis=5):
     ok = [s for s in sites if len(test_frames(s))]
     for j, site in enumerate(RNG.permutation(ok)[:n_view]):
         for _, r in pick(test_frames(site), 1, j).iterrows():
-            if not usable(site, site.key(r["filename"])):
+            if not usable(site, site.key(r["filename"])) or \
+                    bank_match(site, site.key(r["filename"]), later_refs(site, r["time"])).get("ref") != "reference.jpg":
                 continue
             add("control_view", "real", site, r["time"], reading(site, r, ["VIEW_CHANGE"]), recent(site, r["time"]),
                 [], ALL_BUT_NOOP, severity=0, injected={"spurious_flag": "VIEW_CHANGE"},
