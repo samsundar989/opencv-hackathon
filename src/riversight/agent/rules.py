@@ -114,7 +114,8 @@ def rising(ctx, ev, d, why):
     meta = _meta(ctx, cam)
     out = [action("DENSIFY", minutes=15, hours=12)]
     g = _run(ctx, d, "get_gauge", hours=6)
-    now_ft = g.get("latest_ft") if (g.get("age_min") or 1e9) <= 60 else None
+    age = g.get("age_min")
+    now_ft = g.get("latest_ft") if age is not None and age <= 60 else None      # age 0.0 is fresh, not missing
     if now_ft is None:
         est = _run(ctx, d, "estimate_stage", cam=cam, frame_key=key)
         now_ft = est.get("stage_ft")

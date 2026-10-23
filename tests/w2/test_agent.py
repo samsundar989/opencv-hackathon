@@ -118,6 +118,16 @@ def test_rising_high_stage_drafts_alert_with_overlays(monkeypatch):
     assert alert["needs_approval"] and alert["args"]["overlay_now"] == "ov_6.5" and alert["args"]["crest_ft"] == 7.7
 
 
+def test_rising_uses_gauge_reading_zero_minutes_old(monkeypatch):
+    """Regression (Hancock replay): age_min 0.0 is a fresh gauge; it was treated as missing and the saturated
+    camera (10.2 ft) replaced the 17.1 ft gauge, so no alert was drafted."""
+    canned(monkeypatch, get_gauge={"latest_ft": 17.1, "age_min": 0.0, "change_1h_ft": -0.3},
+           estimate_stage={"ok": True, "stage_ft": 4.0}, get_nws_forecast={"available": False},
+           render_wet_overlay={"overlay_key": "ov"})
+    d = rules.decide(ev(["RISING"]), CTX())
+    assert "DRAFT_ALERT" in acts(d) and next(a for a in d["actions"] if a["type"] == "DRAFT_ALERT")["args"]["stage_ft"] == 17.1
+
+
 def test_rising_low_stage_only_densifies(monkeypatch):
     canned(monkeypatch, get_gauge={"latest_ft": 4.2, "age_min": 15, "change_1h_ft": 0.1}, get_nws_forecast={"available": False})
     assert acts(rules.decide(ev(["RISING"]), CTX())) == {"DENSIFY"}
