@@ -6,3 +6,4 @@
 | `rules_v2set_agebug.jsonl`, `REPORT_v2set_agebug.md` | v2 (sha `e12e0f29…`) | rules bug: `rules.rising` read a gauge 0.0 min old as missing (`age or 1e9`) and fell back to the camera. Found in the Hancock flood replay; fixed with a regression test (`test_rising_uses_gauge_reading_zero_minutes_old`), rules re-frozen. |
 
 No LLM arm had run when either was superseded.
+| `rules_v2set_prehysteresis.jsonl` | v2 | valid decisions (92.3%); superseded only because `tools.py` changed afterwards (display-only overlay cleanup), which changes the frozen hash. Re-run expected to be identical. |

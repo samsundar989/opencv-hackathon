@@ -295,6 +295,21 @@ def estimate_stage(ctx: ToolContext, cam: str, frame_key: str, ref: str | None =
     return out
 
 
+MIN_WET_BLOCKS = 6
+
+
+def clean_wet_mask(wet: np.ndarray) -> np.ndarray:
+    """Display-only cleanup of the block wet mask: morphological close then open (3×3 blocks) and drop connected
+    components smaller than MIN_WET_BLOCKS — isolated tree/shadow blocks the flood-height map marks reliable
+    would otherwise speckle the overlay. Decisions never use this mask."""
+    k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
+    m = cv2.morphologyEx(cv2.morphologyEx(wet, cv2.MORPH_CLOSE, k), cv2.MORPH_OPEN, k)
+    n, lab, stats, _ = cv2.connectedComponentsWithStats(m, connectivity=8)
+    keep = np.zeros(n, bool)
+    keep[1:] = stats[1:, cv2.CC_STAT_AREA] >= MIN_WET_BLOCKS
+    return keep[lab].astype(np.uint8)
+
+
 def render_wet_overlay(ctx: ToolContext, cam: str, frame_key: str, stage_ft: float, label: str = "") -> dict:
     from riversight.vision.privacy import blur_faces
     from riversight.vision.scene_features import GRID
@@ -309,13 +324,13 @@ def render_wet_overlay(ctx: ToolContext, cam: str, frame_key: str, stage_ft: flo
             from riversight.vision.register import warp_to_reference
             im = img if img.shape[:2] == ref.shape[:2] else cv2.resize(img, ref.shape[1::-1], interpolation=cv2.INTER_AREA)
             base = warp_to_reference(im, np.asarray(r["H"], float).reshape(3, 3), ref.shape[:2])
-    wet = S.wet_mask(float(stage_ft)).astype(np.uint8)
+    wet = clean_wet_mask(S.wet_mask(float(stage_ft)).astype(np.uint8))
     m = cv2.resize(wet, (base.shape[1], base.shape[0]), interpolation=cv2.INTER_NEAREST).astype(bool)
     tint = base.copy()
     tint[m] = (0.45 * tint[m] + 0.55 * np.array([255, 120, 20])).astype(np.uint8)
     edges = cv2.Canny(m.astype(np.uint8) * 255, 50, 150)
     tint[edges > 0] = (255, 255, 255)
-    txt = f"{label or 'wet at'} {float(stage_ft):.2f} ft  |  RiverSight agent  |  USGS HIVIS (public domain)"
+    txt = f"blue = newly under water at {float(stage_ft):.2f} ft ({label or 'stage'})  |  RiverSight  |  USGS HIVIS (public domain)"
     cv2.rectangle(tint, (0, tint.shape[0] - 28), (tint.shape[1], tint.shape[0]), (0, 0, 0), -1)
     cv2.putText(tint, txt, (8, tint.shape[0] - 9), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
     tint, n_faces = blur_faces(tint)

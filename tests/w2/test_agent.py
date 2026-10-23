@@ -154,6 +154,20 @@ def test_kill_switch_and_audit_log(tmp_path, monkeypatch):
     assert logs and "kill_switch" in logs[0].read_text()
 
 
+def test_alert_hysteresis_suppresses_repeat_drafts(tmp_path, monkeypatch):
+    sink = Sink(local_dir=tmp_path, bucket="")
+    out = []
+    for hour, stage in ((0, 6.5), (1, 6.6), (2, 7.2), (20, 6.7)):
+        canned(monkeypatch, get_gauge={"latest_ft": stage, "age_min": 0.0, "change_1h_ft": 0.0},
+               get_nws_forecast={"available": False}, render_wet_overlay={"overlay_key": "ov"})
+        e = ev(["RISING"], mode="replay")
+        e["reading"]["t_frame"] = (pd.Timestamp("2026-07-29T00:00Z") + pd.Timedelta(hours=hour)).isoformat()
+        out.append(agent.handle(e, ctx=tools.ToolContext(sink=sink), use_llm=False))
+    has = ["DRAFT_ALERT" in schema.action_types(d) for d in out]
+    assert has == [True, False, True, True]          # first, suppressed, +0.7 ft higher, after the 12 h hold
+    assert out[1]["approval_id"] is None and "duplicate suppressed" in out[1]["rationale"]
+
+
 def test_token_cap_falls_back_to_rules(tmp_path, monkeypatch):
     canned(monkeypatch, get_gauge={"latest_ft": 4.2, "age_min": 15, "change_1h_ft": 0.1}, get_nws_forecast={"available": False})
     sink = Sink(local_dir=tmp_path, bucket="")

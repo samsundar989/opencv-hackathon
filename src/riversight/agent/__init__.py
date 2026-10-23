@@ -12,6 +12,7 @@
 """
 from __future__ import annotations
 
+import json
 import os
 from typing import Any
 
@@ -37,6 +38,30 @@ def _kill_decision(event: Event) -> Decision:
     d["actions"] = [schema.action("NOOP")]
     d["rationale"] = "Agent disabled by the kill switch (live/agent/ENABLED=false); no action taken."
     return schema.finalize(event, d)
+
+
+ALERT_HOLD_H, ALERT_STEP_FT = 12.0, 0.5
+
+
+def alert_hysteresis(event: Event, d: Decision, sink: Sink) -> Decision:
+    """One drafted alert per site per rise: a new DRAFT_ALERT within ALERT_HOLD_H of the last one is suppressed
+    unless the stage or crest is ALERT_STEP_FT higher. Without this the agent drafts an alert (and the live cycle
+    emails the approver) every cycle the river stays high — 40 drafts in the Hancock Jul 29 replay."""
+    alert = next((a for a in d["actions"] if a["type"] == "DRAFT_ALERT"), None)
+    if alert is None:
+        return d
+    key = f"live/agent/alerts/{event.get('cam_id')}.json"
+    t = pd.Timestamp((event.get("reading") or {}).get("t_frame") or pd.Timestamp.now(tz="UTC"))
+    level = max(v for v in (alert["args"].get("stage_ft"), alert["args"].get("crest_ft"), -1e9) if v is not None)
+    txt = sink.get_text(key)
+    last = json.loads(txt) if txt else None
+    if last and (t - pd.Timestamp(last["t"])).total_seconds() < ALERT_HOLD_H * 3600 and level < last["level"] + ALERT_STEP_FT:
+        d["actions"] = [a for a in d["actions"] if a["type"] != "DRAFT_ALERT"]
+        d["suppressed_alert"] = {"previous": last, "level_ft": level}
+        d["rationale"] += f" [alert already drafted {last['t']} at {last['level']:.2f} ft; duplicate suppressed]"
+        return schema.finalize(event, d)
+    sink.put_json(key, {"t": t.isoformat(), "level": level, "approval_id": d.get("approval_id")})
+    return d
 
 
 def second_opinion(event: Event, ctx: ToolContext, d: Decision, converse=None) -> Decision:
@@ -91,6 +116,8 @@ def handle(event: Event, ctx: ToolContext | None = None, model: str | None = Non
             d = rules.handle(event, ctx)
             d["rationale"] += f" [LLM unavailable ({type(e).__name__}): rules policy]"
             d["fallback_reason"] = f"{type(e).__name__}: {str(e)[:200]}"
+    if event.get("mode", "live") != "eval":           # eval episodes are independent; live/replay keep state
+        d = alert_hysteresis(event, d, sink)
     if record:
         ledger.add(d.get("tokens_in", 0) + d.get("tokens_out", 0), d.get("usd", 0.0))
     if write_log:

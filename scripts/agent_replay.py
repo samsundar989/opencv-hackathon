@@ -56,7 +56,7 @@ def make_agent_fn(cam: str, bundles: Path, store_dir: Path, use_llm: bool):
 
 
 def draw_timeline(df: pd.DataFrame, gauge: pd.Series, meta: dict, title: str, path: Path):
-    W, H, L, R, T, B = 1500, 640, 80, 30, 50, 170
+    W, H, L, R, T, B = 1500, 660, 80, 30, 70, 170
     img = np.full((H, W, 3), 24, np.uint8)
     t0, t1 = df["t"].min(), df["t"].max()
     g = gauge[(gauge.index >= t0) & (gauge.index <= t1)]
@@ -92,7 +92,7 @@ def draw_timeline(df: pd.DataFrame, gauge: pd.Series, meta: dict, title: str, pa
             cv2.circle(img, (X(r["t"]), y), 5, COLORS[kind], -1, cv2.LINE_AA)
     cv2.putText(img, title, (L, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (240, 240, 240), 1, cv2.LINE_AA)
     cv2.putText(img, "white = USGS gauge   orange = camera stage +/- sigma (bundle trained before this flood)",
-                (L + 520, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (200, 200, 200), 1, cv2.LINE_AA)
+                (L, 54), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (200, 200, 200), 1, cv2.LINE_AA)
     cv2.imwrite(str(path), img)
 
 
