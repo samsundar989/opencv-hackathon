@@ -1,0 +1,45 @@
+flowchart LR
+  subgraph USGS["USGS public data"]
+    NIMS["HIVIS / NIMS frames<br/>usgs-nims-images S3"]
+    NWIS["NWIS IV / OGC<br/>gauge stage"]
+    NWPS["NWS NWPS<br/>forecast + flood categories"]
+  end
+
+  subgraph OFF["Offline calibration (sam-mega-pc, worker-q)"]
+    HIST["12-month frame + stage history"]
+    REG0["Registration cascade<br/>ORB → ALIKED+LightGlue → USAC_MAGSAC"]
+    FEAT0["Block features<br/>warpPerspective · Lab · Sobel"]
+    FHM["Flood-height map h* per block<br/>+ reliability ROI"]
+    KR["Kernel ridge + Kalman<br/>frozen setting D-0007"]
+    BUNDLE["Site bundle<br/>reference.jpg · scene_model.npz · meta.json"]
+    HIST --> REG0 --> FEAT0 --> FHM --> KR --> BUNDLE
+  end
+
+  subgraph AWS["AWS us-east-2"]
+    S3[("S3<br/>models · live JSON · overlays · approvals")]
+    subgraph EC2["EC2 m9g.large Graviton5 · COOL OpenCV"]
+      CYCLE["live.cycle every 30 min<br/>register → features → stage ± σ<br/>quality · flags · wet overlay · YuNet blur"]
+      AGENT["River Steward agent<br/>OpenCV tools · rules fallback"]
+    end
+    BR["Amazon Bedrock<br/>Claude Haiku 5.5 (Converse tool use)"]
+    LURL["Lambda Function URL<br/>approval API"]
+    SNS["SNS email"]
+    CW["CloudWatch<br/>dashboard · alarms · budget guard"]
+  end
+
+  CF["CloudFront<br/>dashboard · /judge · /proof · /approvals"]
+  HUMAN(("Human<br/>operator"))
+
+  BUNDLE --> S3
+  NIMS --> CYCLE
+  NWIS --> CYCLE
+  S3 --> CYCLE
+  CYCLE -- "flagged reading" --> AGENT
+  AGENT <-- "numbers only, no images" --> BR
+  NWPS --> AGENT
+  CYCLE --> S3
+  AGENT -- "decisions + pending approvals" --> S3
+  AGENT --> SNS --> HUMAN
+  S3 --> CF --> HUMAN
+  HUMAN -- "approve / reject" --> LURL --> S3
+  CYCLE --> CW

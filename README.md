@@ -43,7 +43,9 @@ USGS NIMS frame ─► register (ALIKED + LightGlue + USAC_MAGSAC) ─► warpPe
    ─► flags (VIEW_CHANGE, LOW_QUALITY, GAUGE_STALE, DISAGREE, RISING) ─► River Steward agent ─► human approval
 ```
 
-Architecture diagram and agent loop: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Every OpenCV 5 call that carries weight, and what breaks without it: [`docs/OPENCV5_USAGE.md`](docs/OPENCV5_USAGE.md). COOL vs stock OpenCV on Graviton: `docs/COOL_BENCHMARK.md` (in progress).
+![RiverSight architecture](docs/img/architecture.svg)
+
+Agent loop and component details: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Every OpenCV 5 call that carries weight, and what breaks without it: [`docs/OPENCV5_USAGE.md`](docs/OPENCV5_USAGE.md). COOL vs stock OpenCV on Graviton: `docs/COOL_BENCHMARK.md` (in progress).
 
 ## Quick start
 

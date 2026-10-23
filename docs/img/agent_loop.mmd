@@ -1,0 +1,22 @@
+flowchart TD
+  R["Reading from live.cycle<br/>stage ± σ, registration, quality, gauge"] --> F{"Any flag?"}
+  F -- "no" --> LOG0["Store reading<br/>(no LLM call, $0)"]
+  F -- "yes" --> K{"Kill switch<br/>live/agent/ENABLED"}
+  K -- "off" --> NOOP["NOOP, logged"]
+  K -- "on" --> P["River Steward<br/>Bedrock Converse, ≤ 8 tool calls, T = 0"]
+  P <--> T["OpenCV tools<br/>reregister_fullres · compare_to_last_good (phaseCorrelate)<br/>image_quality · estimate_stage · render_wet_overlay<br/>get_gauge · get_nws_forecast · fetch_recent_frames"]
+  P -- "Bedrock error / cap" --> RULES["Deterministic rules policy"]
+  P --> A{"Action"}
+  RULES --> A
+  A -- "VIEW_CHANGE" --> A1["SET_REFERENCE · QUARANTINE · NOOP (transient)"]
+  A -- "GAUGE_STALE" --> A2["MARK_PROVISIONAL + DENSIFY"]
+  A -- "DISAGREE" --> A3["QUARANTINE (camera fault)<br/>or OPEN_TICKET (gauge suspect)"]
+  A -- "RISING" --> A4["DENSIFY + wet overlay at forecast crest<br/>→ DRAFT_ALERT"]
+  A1 --> AUTO["Autonomous, reversible, logged"]
+  A2 --> AUTO
+  A3 --> APP["Pending approval<br/>live/approvals/&lt;id&gt;.json"]
+  A4 --> APP
+  APP --> H(("Human approves / rejects<br/>dashboard or SNS link"))
+  H --> OUT["Ticket / alert e-mail sent"]
+  AUTO --> DLOG["live/agent/YYYY-MM-DD.jsonl"]
+  OUT --> DLOG
