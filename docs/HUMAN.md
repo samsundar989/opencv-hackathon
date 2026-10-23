@@ -70,3 +70,9 @@ SLICE_01B is done: protocol v2 **PASS** (P1 14/20, P2 15/16, P3 95.7 %). The tes
    - 7/20 cameras changed view inside 12 months. That makes camera-moved QA, and re-anchoring after it, a core feature rather than a nice-to-have.
    - The camera's value is outage gap-fill (≥ 72 h: 15–18/20 sites) and flood state (balanced accuracy 0.93 vs 0.75), not live replacement (0/20 vs 15-min persistence).
    Recommendation: SLICE_02 fleet scale-up with the D-0007 setting frozen, plus a periodic recalibration window and the view-change detector. **Cowork to confirm.**
+
+## Q-0008 — 2026-10-23 — AWS session expired: please run `aws login --profile riversight` (W1)
+`aws sts get-caller-identity --profile riversight` says the session has expired. W1 cannot create the budget guard (D-0004), so nothing else in AWS can happen until it exists.
+**Action:** run `aws login --profile riversight` in a terminal on sam-mega-pc (browser sign-in), then reply `## ANSWER 0008` or say so in the W1 chat.
+Meanwhile W1 works offline on the site bundles and the local live cycle (SPRINT_W1 steps 1–2).
+Heads-up for the next ask: launching the live worker from the COOL G5 AMI needs your AWS Marketplace subscription to `prodview-igdweaoo6prb6` ("COOL Graviton 5-1.0"). W1 will file that as its own `Q-` once the budget guard is live.
