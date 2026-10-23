@@ -11,13 +11,22 @@ AMI_KIND="__AMI_KIND__"
 mkdir -p /opt/riversight /var/cache/riversight
 
 if [ "$AMI_KIND" = "cool" ]; then
-  # COOL G5 AMI: use its newest Python venv whose cv2 imports (record which in proof.json)
-  PY=""
-  for c in $(ls -d /opt/*/venv*/bin/python3* /opt/*/*/bin/python3* /home/*/venv*/bin/python3* 2>/dev/null | sort -rV); do
-    if "$c" -c "import cv2" 2>/dev/null; then PY="$c"; break; fi
+  # COOL G5 AMI (Python 3.12-3.14 bindings): find the newest interpreter whose cv2 imports, then build a
+  # --system-site-packages venv on it so our deps install without shadowing COOL's cv2 or its numpy.
+  echo "== COOL discovery =="; ls -la /opt 2>/dev/null || true
+  find / -xdev \( -path /proc -o -path /sys \) -prune -o -name "cv2*.so" -print 2>/dev/null | head -20 || true
+  BASE=""
+  for c in $(find / -xdev \( -path /proc -o -path /sys -o -path /snap \) -prune -o -type f -name 'python3.1[234]' -perm -u+x -print 2>/dev/null | sort -rV); do
+    if "$c" -c "import cv2; print('cv2', cv2.__version__, cv2.__file__)" 2>/dev/null; then BASE="$c"; break; fi
   done
-  [ -n "$PY" ] || { echo "no COOL python with cv2 found"; exit 1; }
-  "$PY" -m pip install "numpy>=2,<3" pandas pyarrow scipy httpx pyyaml tenacity boto3 || true
+  [ -n "$BASE" ] || { echo "no COOL python with cv2 found"; exit 1; }
+  echo "COOL python: $BASE"
+  "$BASE" -m venv --system-site-packages /opt/riversight/venv || { "$BASE" -m ensurepip || true; "$BASE" -m venv --system-site-packages --without-pip /opt/riversight/venv; }
+  PY=/opt/riversight/venv/bin/python
+  "$PY" -m ensurepip 2>/dev/null || true
+  "$PY" -m pip install pandas pyarrow scipy httpx pyyaml tenacity boto3
+  "$PY" -c "import cv2, numpy; print('venv cv2', cv2.__version__, cv2.__file__, 'numpy', numpy.__version__)"
+  if "$PY" -m pip show opencv-python-headless >/dev/null 2>&1; then echo "pip opencv shadows COOL: removing"; "$PY" -m pip uninstall -y opencv-python-headless; fi
 else
   export DEBIAN_FRONTEND=noninteractive
   apt-get update -y
