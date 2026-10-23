@@ -40,7 +40,10 @@ def main() -> None:
     args = ap.parse_args()
     repo = args.dest / "riversight"
     if repo.exists():
-        shutil.rmtree(repo)
+        def _writable(fn, path, _exc):          # git marks pack files read-only on Windows
+            os.chmod(path, 0o700)
+            fn(path)
+        shutil.rmtree(repo, onexc=_writable)
     args.dest.mkdir(parents=True, exist_ok=True)
     log: list[dict] = []
     run("git clone", ["git", "clone", "-q", args.url, str(repo)], args.dest, log)
@@ -52,6 +55,7 @@ def main() -> None:
         ("summarize_results", [str(py), "report/summarize_results.py"]),
         ("build_report_tables", [str(py), "report/build_report_tables.py"]),
         ("check_report_numbers", [str(py), "scripts/check_report_numbers.py"]),
+        ("verify_frozen", [str(py), "report/verify_frozen.py"]),
         ("results byte-identical", ["git", "diff", "--exit-code", "--stat", "results", "report"]),
     ]
     for name, cmd in steps:
