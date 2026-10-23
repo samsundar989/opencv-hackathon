@@ -40,3 +40,14 @@ def test_committed_summary_is_current():
     fresh = sr.summarize(*_load())
     for k, v in fresh.items():
         assert committed[k] == v, k
+
+
+def test_day_bootstrap_constant_error_has_zero_width():
+    import numpy as np
+    spec = importlib.util.spec_from_file_location("bootstrap_coverage", ROOT / "report" / "bootstrap_coverage.py")
+    bc = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bc)
+    err = np.full(48, -0.2)
+    days = np.repeat(np.arange(4), 12)
+    bs = bc.day_bootstrap(err, days, np.random.default_rng(0), b=50)
+    assert np.allclose(bs[:, 0], 0.2) and np.allclose(bs[:, 1], 0.2) and np.allclose(bs[:, 2], -0.2)

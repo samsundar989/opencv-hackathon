@@ -1,0 +1,25 @@
+{
+  "bootstrap": {
+    "B": 2000,
+    "seed": 20261015,
+    "block": "UTC day"
+  },
+  "median_mae_ft": 0.182,
+  "median_mae_ci95_ft": [
+    0.148,
+    0.22
+  ],
+  "p1_sites": 14,
+  "p1_sites_ci95": [
+    12,
+    16
+  ],
+  "coverage": {
+    "test_days": 10,
+    "median_pct_hours": 47.5,
+    "median_pct_daylight_hours": 94.1,
+    "median_pct_daylight_frames": 93.3,
+    "fleet_camera_hours_per_day": 219.4,
+    "fleet_daylight_hours_per_day": 238.6
+  }
+}
