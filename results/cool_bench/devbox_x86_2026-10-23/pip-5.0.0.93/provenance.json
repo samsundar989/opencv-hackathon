@@ -1,0 +1,31 @@
+{
+ "arm": "pip-5.0.0.93",
+ "cv2_file": "C:\\Users\\samsu\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\cv2\\__init__.py",
+ "cv2_version": "5.0.0",
+ "build_info_sha256": "ce2f2890911cf9cf8d7c54cfbc8ccd4fb073cc2b53be1f4c7cbae8e5fd294e1c",
+ "kleidicv": false,
+ "python": "3.14.4",
+ "numpy": "2.4.4",
+ "platform": "Windows-11-10.0.26200-SP0",
+ "machine": "AMD64",
+ "cpu": "AMD64 Family 26 Model 68 Stepping 0, AuthenticAMD",
+ "nproc": 16,
+ "cv2_default_threads": 16,
+ "ec2_identity": null,
+ "ami_id": null,
+ "started_utc": "2026-10-23T18:56:23Z",
+ "finished_utc": "2026-10-23T19:28:27Z",
+ "args": {
+  "pack": "C:\\Users\\samsu\\Documents\\opencv-hackathon\\data\\bench_pack",
+  "out": "C:\\Users\\samsu\\Documents\\opencv-hackathon\\results\\cool_bench\\devbox_x86_2026-10-23",
+  "arm": "pip-5.0.0.93",
+  "warmup": "50",
+  "iters": "300",
+  "dnn_warmup": "10",
+  "dnn_iters": "30",
+  "threads": "1,8",
+  "fleet": "20,880",
+  "fleet_repeats": "5",
+  "only": "None"
+ }
+}

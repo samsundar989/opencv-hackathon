@@ -56,7 +56,47 @@ What the live worker actually runs, in `src/riversight/live/bundle.py` and `visi
 
 ### Dev box (x86, harness validation, pip arm only)
 
-_Pending (worker-q run in progress)._
+Windows 11 workstation shared with other jobs, run through the local job queue with 8 cores reserved. Caveats that apply only here: Windows cannot pin the 1-thread regime to a core; CPU utilisation is coarse (process time ticks at 15.6 ms) and includes OpenCV's spinning worker threads; other jobs share the machine. Use these numbers for scale (which stages dominate the frame time), not for speed claims. Three things they do show: ALIKED + LightGlue costs seconds per frame on CPU, so the cascade's ORB-first design matters; the classical kernels COOL targets cost a millisecond or less each; and the fleet cycle is dominated by the frames ORB cannot register.
+
+<!-- BEGIN:cool:devbox_x86_2026-10-23 -->
+**Provenance**
+
+- **pip-5.0.0.93:** OpenCV 5.0.0 from `C:\Users\samsu\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\cv2\__init__.py`, build-info sha256 `ce2f2890911c…`, KleidiCV no, Python 3.14.4, AMD64 Family 26 Model 68 Stepping 0, AuthenticAMD, 16 cores; AMD64, not EC2.
+
+**Per-stage latency, pip-5.0.0.93**
+
+| threads | stage | n | p50 ms | p95 ms | p99 ms | CPU util |
+|---|---|---|---|---|---|---|
+| 1 | imdecode | 300 | 0.860 | 1.549 | 1.640 | 1.03 |
+| 1 | register_orb_magsac | 300 | 67.3 | 113.8 | 187.2 | 0.91 |
+| 1 | register_aliked_lightglue_magsac | 30 | 1913.4 | 2141.4 | 3554.1 | 0.96 |
+| 1 | warpPerspective | 300 | 1.357 | 2.106 | 2.915 | 1.00 |
+| 1 | resize_area | 300 | 0.622 | 0.794 | 1.021 | 1.05 |
+| 1 | cvtColor_lab | 300 | 0.140 | 0.159 | 0.282 | 1.08 |
+| 1 | sobel_magnitude | 300 | 0.039 | 0.055 | 0.071 | 1.25 |
+| 1 | block_features | 300 | 1.871 | 2.253 | 2.473 | 0.96 |
+| 1 | ridge_predict | 300 | 0.021 | 0.046 | 0.130 | 0.00 |
+| 1 | frame_pipeline | 30 | 112.4 | 2036.1 | 2277.7 | 0.98 |
+| 8 | imdecode | 300 | 0.843 | 1.411 | 1.696 | 0.95 |
+| 8 | register_orb_magsac | 300 | 18.9 | 24.2 | 29.2 | 5.02 |
+| 8 | register_aliked_lightglue_magsac | 30 | 705.8 | 855.4 | 969.6 | 5.89 |
+| 8 | warpPerspective | 300 | 0.564 | 0.784 | 0.863 | 4.34 |
+| 8 | resize_area | 300 | 0.629 | 0.784 | 0.870 | 1.05 |
+| 8 | cvtColor_lab | 300 | 0.138 | 0.155 | 0.299 | 1.06 |
+| 8 | sobel_magnitude | 300 | 0.045 | 0.063 | 0.090 | 1.10 |
+| 8 | block_features | 300 | 1.753 | 2.265 | 2.441 | 0.98 |
+| 8 | ridge_predict | 300 | 0.022 | 0.087 | 0.128 | 0.00 |
+| 8 | frame_pipeline | 30 | 26.7 | 732.2 | 734.8 | 5.91 |
+
+**Fleet cycles** (mean over repeats; `registered` = frames the cascade registered)
+
+| arm | threads | fleet | repeats | wall_s | frames_per_s | registered | cpu_util |
+|---|---|---|---|---|---|---|---|
+| pip-5.0.0.93 | 1 | 20 | 5 | 20.6 | 0.98 | 20 | 0.93 |
+| pip-5.0.0.93 | 1 | 880 | 1 | 1166.7 | 0.75 | 756 | 0.91 |
+| pip-5.0.0.93 | 8 | 20 | 5 | 6.9 | 2.88 | 20 | 5.79 |
+| pip-5.0.0.93 | 8 | 880 | 1 | 392.7 | 2.24 | 756 | 5.87 |
+<!-- END:cool:devbox_x86_2026-10-23 -->
 
 ### AWS m9g.large (Graviton5), COOL vs pip
 
