@@ -1,0 +1,110 @@
+[
+ {
+  "id": "night_ir",
+  "cam_id": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+  "image": "results/failures/night_ir_hancock.jpg",
+  "night_frames_30d": 7256,
+  "frames_30d": 16256,
+  "night_share_30d": 0.446
+ },
+ {
+  "id": "fog_lens",
+  "cam_id": "NJ_Big_Brook_near_Marlboro",
+  "image": "results/failures/fog_lens_bigbrook.jpg",
+  "fog_bad": 0.36,
+  "lap_bad": 369.1,
+  "bad_registered": true,
+  "fog_good": 0.151,
+  "lap_good": 5960.6,
+  "test_reg_rate": 0.4833,
+  "test_frames": 58
+ },
+ {
+  "id": "view_change_whiterock",
+  "cam_id": "TX_White_Rk_Ck_at_Greenville_Ave_Dallas",
+  "image": "results/failures/view_change_whiterock.jpg",
+  "test_reg_rate": 0.4833,
+  "mae_ft": 0.7824,
+  "p1": false,
+  "p2": false,
+  "failed_daylight_test_frames": 55
+ },
+ {
+  "id": "view_change_pecatonica",
+  "cam_id": "WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet",
+  "image": "results/failures/view_change_pecatonica.jpg",
+  "unlinked_segments": 7,
+  "segment_frames": 138,
+  "segment_start": "2025-11-05",
+  "segment_end": "2025-12-02",
+  "sites_with_unlinked_segments": 8
+ },
+ {
+  "id": "diurnal_artifact_tenmile",
+  "cam_id": "TX_Tenmile_Ck_at_Parkinson_Rd_nr_Ferris",
+  "image": "results/kill_test_v2/TX_Tenmile_Ck_at_Parkinson_Rd_nr_Ferris_ts.png",
+  "floodheight": "results/kill_test_v2/TX_Tenmile_Ck_at_Parkinson_Rd_nr_Ferris_floodheight.png",
+  "mae_ft": 0.6168,
+  "spearman": -0.0961,
+  "sigma_ft": 0.6463,
+  "n_roi": 1470,
+  "mae_p15": 0.0044,
+  "test_range_ft": 1.11,
+  "gap_6h_lkv": 0.0495,
+  "p1": false
+ },
+ {
+  "id": "far_bank_rootriver",
+  "cam_id": "MN_Root_River_near_Pilot_Mound",
+  "image": "results/kill_test_v2/MN_Root_River_near_Pilot_Mound_ts.png",
+  "floodheight": "results/kill_test_v2/MN_Root_River_near_Pilot_Mound_floodheight.png",
+  "mae_ft": 0.4506,
+  "spearman": 0.5165,
+  "sigma_ft": 1.743,
+  "n_roi": 327,
+  "mae_p15": 0.007,
+  "test_range_ft": 0.41,
+  "gap_6h_lkv": 0.0139,
+  "p1": false
+ },
+ {
+  "id": "tidal_firstmallard",
+  "cam_id": "CA_First_Mallard_Branch_nr_Fairfield",
+  "image": "results/kill_test_v2/CA_First_Mallard_Branch_nr_Fairfield_ts.png",
+  "floodheight": "results/kill_test_v2/CA_First_Mallard_Branch_nr_Fairfield_floodheight.png",
+  "mae_ft": 0.3908,
+  "spearman": 0.927,
+  "sigma_ft": 0.4932,
+  "n_roi": 365,
+  "mae_p15": 0.1482,
+  "test_range_ft": 5.18,
+  "gap_6h_lkv": 2.1617,
+  "p1": true
+ },
+ {
+  "id": "above_calibrated_range_hancock",
+  "cam_id": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+  "image": "results/failures/above_range_hancock.png",
+  "rmse_ft": 4.3224,
+  "cal_max_ft": 11.97,
+  "gauge_max_ft": 18.08,
+  "flood_state_recall": 1.0,
+  "median_kalman_sigma_ft": 0.0399
+ },
+ {
+  "id": "seasonal_drift",
+  "cam_id": "fleet",
+  "image": "results/failures/seasonal_drift.png",
+  "csv": "results/failures/seasonal_monthly_mae.csv",
+  "sites": [
+   "OH_Bean_Creek_at_Powers",
+   "NY_Neversink_River_at_Godeffroy",
+   "WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet",
+   "CO_Animas_River_at_Durango"
+  ],
+  "year_cv_median_mae_ft": 0.38,
+  "test_median_mae_ft": 0.182,
+  "monthly_median_mae_min": 0.142,
+  "monthly_median_mae_max": 0.445
+ }
+]

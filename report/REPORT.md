@@ -130,7 +130,7 @@ The camera never beats a 15-minute-old gauge reading. Its value appears when the
 | calibration horizon: year-long forward-chaining CV (frozen setting) | P1 at 9/20, median MAE 0.38 ft, median nMAE 0.145; 36 settings tried | `scene/tune_cv_summary.csv` |
 <!-- END:ablations -->
 
-The year-long CV is the honest long-run number. Its error is about twice the test-day error, because the scene changes with the seasons (vegetation, sun angle, sediment) and the early folds train on only one or two months. Periodic recalibration is planned for the live models (they are refit on all data up to export, and never mixed into the frozen numbers).
+The year-long CV is the honest long-run number. Its error is about twice the test-day error. Two causes are confounded: the scene changes through the year (vegetation, sun angle, sediment), and the early folds train on only one or two months (`results/failures/seasonal_monthly_mae.csv`). Periodic recalibration is planned for the live models (they are refit on all data up to export, and never mixed into the frozen numbers).
 
 ### 6.6 Head-to-head at Hancock, NY
 
@@ -168,7 +168,7 @@ _Pending._ COOL vs stock pip OpenCV 5.0.0.93 on the same m9g.large: per-kernel s
 
 ### 6.9 Failure cases
 
-_Pending (Sat)._ `results/failures/`: night/IR, fog and wet lens, view changes, the Tenmile flash flood, Root River's far bank, seasonal drift, the tidal First Mallard site.
+Nine concrete cases, each with an image, its numbers and a paragraph: [`results/failures/README.md`](../results/failures/README.md). Night/IR frames; a hazy lens on a high-flow day (the QA metric cannot separate lens haze from turbid water); a scene changed by a flood (White Rock); a re-aimed camera (Pecatonica); a model that learned the sun instead of the water (Tenmile); a far bank with almost no signal (Root River); tides (First Mallard); a flood above the calibrated range (Hancock); and month-to-month drift.
 
 ## 7. Limitations (not claimed)
 
