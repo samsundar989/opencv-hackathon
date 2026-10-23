@@ -54,6 +54,7 @@ chmod +x /opt/riversight/update.sh
 
 cat > /opt/riversight/env <<EOF
 AWS_DEFAULT_REGION=$REGION
+RIVERSIGHT_BUCKET=$BUCKET
 PYTHONPATH=/opt/riversight/app/src
 RIVERSIGHT_BUNDLES=/opt/riversight/app/models/sites
 RIVERSIGHT_MODELS=/opt/riversight/app/models/onnx
