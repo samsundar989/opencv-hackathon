@@ -1,0 +1,61 @@
+t,gauge_ft,camera_ft,sigma_ft,flags,decided_by,actions,approval_id,tokens,rationale
+2026-07-03 00:00:04+00:00,6.88,6.817,0.321,LOW_QUALITY,rules,NOOP,,0,low-quality frame; the quality gate already suppresses it
+2026-07-03 01:00:02+00:00,6.86,6.754,0.321,,,,,0,
+2026-07-03 11:00:06+00:00,9.79,8.493,0.321,LOW_QUALITY+RISING,rules,DENSIFY+DRAFT_ALERT,apr-20261023-f3fef26d48,0,rising +0.11 ft/h at 9.79 ft (site p90 9.531); alert drafted for approval with overlays low-quality frame; the quality gate already suppresses it
+2026-07-03 12:00:03+00:00,9.91,,,VIEW_CHANGE+RISING,rules,DENSIFY+QUARANTINE,,0,rising +0.12 ft/h at 9.91 ft (site p90 9.531); alert drafted for approval with overlays frame matches no calibrated reference; readings quarantined [alert already drafted 2026-07-03T11:00:06+00:00 at 10.12 ft; duplicate suppressed]
+2026-07-03 13:00:03+00:00,10.04,,,RISING,rules,DENSIFY,,0,rising +0.13 ft/h at 10.04 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-03T11:00:06+00:00 at 10.12 ft; duplicate suppressed]
+2026-07-03 14:00:04+00:00,10.13,,,RISING,rules,DENSIFY,,0,rising +0.09 ft/h at 10.13 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-03T11:00:06+00:00 at 10.12 ft; duplicate suppressed]
+2026-07-03 15:00:04+00:00,10.21,,,RISING,rules,DENSIFY,,0,rising +0.08 ft/h at 10.21 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-03T11:00:06+00:00 at 10.12 ft; duplicate suppressed]
+2026-07-03 16:00:03+00:00,10.28,,,RISING,rules,DENSIFY,,0,rising +0.07 ft/h at 10.28 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-03T11:00:06+00:00 at 10.12 ft; duplicate suppressed]
+2026-07-03 17:00:03+00:00,10.31,,,RISING,rules,DENSIFY,,0,rising +0.03 ft/h at 10.31 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-03T11:00:06+00:00 at 10.12 ft; duplicate suppressed]
+2026-07-03 18:00:04+00:00,10.39,,,RISING,rules,DENSIFY+DRAFT_ALERT,apr-20261023-379c18d4ed,0,rising +0.08 ft/h at 10.39 ft (site p90 9.531); alert drafted for approval with overlays
+2026-07-03 19:00:04+00:00,10.58,,,LOW_QUALITY+RISING,rules,DENSIFY+DRAFT_ALERT,apr-20261023-7c1addde4c,0,rising +0.19 ft/h at 10.58 ft (site p90 9.531); alert drafted for approval with overlays low-quality frame; the quality gate already suppresses it
+2026-07-03 20:00:04+00:00,10.65,,,RISING,rules,DENSIFY,,0,rising +0.07 ft/h at 10.65 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-03T19:00:04+00:00 at 11.15 ft; duplicate suppressed]
+2026-07-03 21:00:04+00:00,10.77,,,RISING,rules,DENSIFY,,0,rising +0.12 ft/h at 10.77 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-03T19:00:04+00:00 at 11.15 ft; duplicate suppressed]
+2026-07-03 22:00:08+00:00,10.85,,,RISING,rules,DENSIFY,,0,rising +0.08 ft/h at 10.85 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-03T19:00:04+00:00 at 11.15 ft; duplicate suppressed]
+2026-07-03 23:00:06+00:00,10.91,,,RISING,rules,DENSIFY,,0,rising +0.06 ft/h at 10.91 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-03T19:00:04+00:00 at 11.15 ft; duplicate suppressed]
+2026-07-04 00:00:04+00:00,10.95,,,LOW_QUALITY+RISING,rules,DENSIFY,,0,rising +0.04 ft/h at 10.95 ft (site p90 9.531); alert drafted for approval with overlays low-quality frame; the quality gate already suppresses it [alert already drafted 2026-07-03T19:00:04+00:00 at 11.15 ft; duplicate suppressed]
+2026-07-04 01:00:03+00:00,10.98,,,LOW_QUALITY+RISING,rules,DENSIFY,,0,rising +0.03 ft/h at 10.98 ft (site p90 9.531); alert drafted for approval with overlays low-quality frame; the quality gate already suppresses it [alert already drafted 2026-07-03T19:00:04+00:00 at 11.15 ft; duplicate suppressed]
+2026-07-04 11:00:04+00:00,12.16,,,LOW_QUALITY+RISING,rules,DENSIFY+DRAFT_ALERT,apr-20261023-1dc83251be,0,rising +0.02 ft/h at 12.16 ft (site p90 9.531); alert drafted for approval with overlays low-quality frame; the quality gate already suppresses it
+2026-07-04 12:00:03+00:00,12.15,,,RISING,rules,DENSIFY,,0,rising -0.01 ft/h at 12.15 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-04T11:00:04+00:00 at 12.22 ft; duplicate suppressed]
+2026-07-04 13:00:04+00:00,12.13,,,RISING,rules,DENSIFY,,0,rising -0.02 ft/h at 12.13 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-04T11:00:04+00:00 at 12.22 ft; duplicate suppressed]
+2026-07-04 14:00:04+00:00,12.1,,,RISING,rules,DENSIFY,,0,rising -0.03 ft/h at 12.1 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-04T11:00:04+00:00 at 12.22 ft; duplicate suppressed]
+2026-07-04 15:00:04+00:00,12.06,,,RISING,rules,DENSIFY,,0,rising -0.04 ft/h at 12.06 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-04T11:00:04+00:00 at 12.22 ft; duplicate suppressed]
+2026-07-04 16:00:03+00:00,12.02,,,RISING,rules,DENSIFY,,0,rising -0.04 ft/h at 12.02 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-04T11:00:04+00:00 at 12.22 ft; duplicate suppressed]
+2026-07-04 17:00:04+00:00,11.95,,,RISING,rules,DENSIFY,,0,rising -0.07 ft/h at 11.95 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-04T11:00:04+00:00 at 12.22 ft; duplicate suppressed]
+2026-07-04 18:00:03+00:00,11.89,,,RISING,rules,DENSIFY,,0,rising -0.06 ft/h at 11.89 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-04T11:00:04+00:00 at 12.22 ft; duplicate suppressed]
+2026-07-04 19:00:04+00:00,11.83,,,RISING,rules,DENSIFY,,0,rising -0.06 ft/h at 11.83 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-04T11:00:04+00:00 at 12.22 ft; duplicate suppressed]
+2026-07-04 20:00:04+00:00,11.76,,,RISING,rules,DENSIFY,,0,rising -0.07 ft/h at 11.76 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-04T11:00:04+00:00 at 12.22 ft; duplicate suppressed]
+2026-07-04 21:00:04+00:00,11.69,,,RISING,rules,DENSIFY,,0,rising -0.07 ft/h at 11.69 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-04T11:00:04+00:00 at 12.22 ft; duplicate suppressed]
+2026-07-04 22:00:03+00:00,11.61,,,LOW_QUALITY+RISING,rules,DENSIFY,,0,rising -0.08 ft/h at 11.61 ft (site p90 9.531); alert drafted for approval with overlays low-quality frame; the quality gate already suppresses it [alert already drafted 2026-07-04T11:00:04+00:00 at 12.22 ft; duplicate suppressed]
+2026-07-04 23:00:03+00:00,11.54,,,LOW_QUALITY+RISING,rules,DENSIFY,,0,rising -0.07 ft/h at 11.54 ft (site p90 9.531); alert drafted for approval with overlays low-quality frame; the quality gate already suppresses it [alert already drafted 2026-07-04T11:00:04+00:00 at 12.22 ft; duplicate suppressed]
+2026-07-05 00:00:03+00:00,11.47,,,RISING,rules,DENSIFY+DRAFT_ALERT,apr-20261023-89e5d843ab,0,rising -0.07 ft/h at 11.47 ft (site p90 9.531); alert drafted for approval with overlays
+2026-07-05 01:00:04+00:00,11.4,,,LOW_QUALITY+RISING,rules,DENSIFY,,0,rising -0.07 ft/h at 11.4 ft (site p90 9.531); alert drafted for approval with overlays low-quality frame; the quality gate already suppresses it [alert already drafted 2026-07-05T00:00:03+00:00 at 11.47 ft; duplicate suppressed]
+2026-07-05 11:00:15+00:00,11.15,,,RISING,rules,DENSIFY,,0,rising -0.03 ft/h at 11.15 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-05T00:00:03+00:00 at 11.47 ft; duplicate suppressed]
+2026-07-05 12:00:03+00:00,11.14,,,RISING,rules,DENSIFY+DRAFT_ALERT,apr-20261023-4626697003,0,rising -0.01 ft/h at 11.14 ft (site p90 9.531); alert drafted for approval with overlays
+2026-07-05 13:00:08+00:00,11.12,,,RISING,rules,DENSIFY,,0,rising -0.02 ft/h at 11.12 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-05T12:00:03+00:00 at 11.14 ft; duplicate suppressed]
+2026-07-05 14:00:04+00:00,11.09,,,RISING,rules,DENSIFY,,0,rising -0.03 ft/h at 11.09 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-05T12:00:03+00:00 at 11.14 ft; duplicate suppressed]
+2026-07-05 15:00:03+00:00,11.07,,,RISING,rules,DENSIFY,,0,rising -0.02 ft/h at 11.07 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-05T12:00:03+00:00 at 11.14 ft; duplicate suppressed]
+2026-07-05 16:00:04+00:00,11.02,,,RISING,rules,DENSIFY,,0,rising -0.05 ft/h at 11.02 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-05T12:00:03+00:00 at 11.14 ft; duplicate suppressed]
+2026-07-05 17:00:04+00:00,10.96,,,RISING,rules,DENSIFY,,0,rising -0.06 ft/h at 10.96 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-05T12:00:03+00:00 at 11.14 ft; duplicate suppressed]
+2026-07-05 18:00:03+00:00,10.9,,,RISING,rules,DENSIFY,,0,rising -0.06 ft/h at 10.9 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-05T12:00:03+00:00 at 11.14 ft; duplicate suppressed]
+2026-07-05 19:00:04+00:00,10.85,,,RISING,rules,DENSIFY,,0,rising -0.05 ft/h at 10.85 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-05T12:00:03+00:00 at 11.14 ft; duplicate suppressed]
+2026-07-05 20:00:04+00:00,10.78,,,RISING,rules,DENSIFY,,0,rising -0.07 ft/h at 10.78 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-05T12:00:03+00:00 at 11.14 ft; duplicate suppressed]
+2026-07-05 21:00:02+00:00,10.72,,,RISING,rules,DENSIFY,,0,rising -0.06 ft/h at 10.72 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-05T12:00:03+00:00 at 11.14 ft; duplicate suppressed]
+2026-07-05 22:00:08+00:00,10.66,,,RISING,rules,DENSIFY,,0,rising -0.06 ft/h at 10.66 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-05T12:00:03+00:00 at 11.14 ft; duplicate suppressed]
+2026-07-05 23:00:04+00:00,10.61,,,RISING,rules,DENSIFY,,0,rising -0.05 ft/h at 10.61 ft (site p90 9.531); alert drafted for approval with overlays [alert already drafted 2026-07-05T12:00:03+00:00 at 11.14 ft; duplicate suppressed]
+2026-07-06 00:00:03+00:00,10.57,,,RISING,rules,DENSIFY+DRAFT_ALERT,apr-20261023-a905f7799b,0,rising -0.04 ft/h at 10.57 ft (site p90 9.531); alert drafted for approval with overlays
+2026-07-06 01:00:04+00:00,10.52,,,LOW_QUALITY+RISING,rules,DENSIFY,,0,rising -0.05 ft/h at 10.52 ft (site p90 9.531); alert drafted for approval with overlays low-quality frame; the quality gate already suppresses it [alert already drafted 2026-07-06T00:00:03+00:00 at 10.57 ft; duplicate suppressed]
+2026-07-06 11:00:04+00:00,9.69,,,LOW_QUALITY+RISING,rules,DENSIFY,,0,rising -0.11 ft/h at 9.69 ft (site p90 9.531); alert drafted for approval with overlays low-quality frame; the quality gate already suppresses it [alert already drafted 2026-07-06T00:00:03+00:00 at 10.57 ft; duplicate suppressed]
+2026-07-06 12:00:03+00:00,9.58,,,RISING,rules,DENSIFY+DRAFT_ALERT,apr-20261023-934aa5226f,0,rising -0.11 ft/h at 9.58 ft (site p90 9.531); alert drafted for approval with overlays
+2026-07-06 13:00:08+00:00,9.47,,,,,,,0,
+2026-07-06 14:00:04+00:00,9.39,,,,,,,0,
+2026-07-06 15:00:04+00:00,9.3,,,,,,,0,
+2026-07-06 16:00:04+00:00,9.26,,,LOW_QUALITY,rules,NOOP,,0,low-quality frame; the quality gate already suppresses it
+2026-07-06 17:00:04+00:00,9.21,,,,,,,0,
+2026-07-06 18:00:03+00:00,9.16,,,,,,,0,
+2026-07-06 19:00:03+00:00,9.09,,,,,,,0,
+2026-07-06 20:00:04+00:00,9.05,,,VIEW_CHANGE,rules,NOOP,,0,frame still registers to the current reference; the homography absorbs the shift
+2026-07-06 21:00:03+00:00,9.01,,,LOW_QUALITY,rules,NOOP,,0,low-quality frame; the quality gate already suppresses it
+2026-07-06 22:00:03+00:00,8.98,,,LOW_QUALITY,rules,NOOP,,0,low-quality frame; the quality gate already suppresses it
+2026-07-06 23:00:04+00:00,8.93,,,,,,,0,
