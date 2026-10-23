@@ -3,12 +3,14 @@
 Frame keys (INTERFACES §2 `frame_key`) resolve in this order:
   synth:<fault>:<seed>:<base key>   a deterministic synthetic fault applied to the base frame (eval only;
                                     `faults.apply`). The agent never sees the fault name: tools get pixels.
-  <RIVERSIGHT_LIVE_DIR>/<key>       W1's local live cycle mirrors the S3 layout on disk
+  <live dir>/<key>                  W1's local live cycle mirrors the S3 layout on disk (RIVERSIGHT_LIVE_DIR,
+                                    default <repo>/live_local, the same default as `live.cycle --local`)
   <repo>/<key> or an absolute path  cached history frames (data/raw/720/...)
   s3://<RIVERSIGHT_BUCKET>/<key>    the deployed live cycle
 
-The sink mirrors the same key layout: local directory (default `runs/agent_live/`) or S3 when
-RIVERSIGHT_BUCKET is set. Kill switch: the object `live/agent/ENABLED` containing "false" (or the env var
+The sink mirrors the same key layout: the live dir, or S3 when RIVERSIGHT_BUCKET is set. In the live cycle W1
+writes the decision log and approval items itself (`live.cycle.apply_decision`); the agent's sink holds the
+kill switch, the token ledger and the overlays it renders. Kill switch: the object `live/agent/ENABLED` containing "false" (or the env var
 RIVERSIGHT_AGENT_ENABLED=false) turns every decision into a logged NOOP.
 """
 from __future__ import annotations
@@ -24,6 +26,11 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[3]
 KILL_KEY = "live/agent/ENABLED"
+
+
+def live_dir() -> Path:
+    """W1's local live store (`python -m riversight.live.cycle --local` defaults to <repo>/live_local)."""
+    return Path(os.environ.get("RIVERSIGHT_LIVE_DIR", ROOT / "live_local"))
 
 
 def _bucket() -> str | None:
@@ -61,8 +68,7 @@ def load_frame(key: str) -> np.ndarray | None:
         b = load_frame(base)
         img = None if b is None else faults.apply(b, fault, int(seed))
     else:
-        live = os.environ.get("RIVERSIGHT_LIVE_DIR")
-        for p in ([Path(live) / key] if live else []) + [Path(key), ROOT / key]:
+        for p in (live_dir() / key, Path(key), ROOT / key):
             if p.exists():
                 img = cv2.imread(str(p))
                 break
@@ -83,7 +89,7 @@ class Sink:
 
     def __init__(self, local_dir: Path | None = None, bucket: str | None = None):
         self.bucket = bucket if bucket is not None else _bucket()
-        self.dir = Path(local_dir or os.environ.get("RIVERSIGHT_AGENT_OUT", ROOT / "runs" / "agent_live"))
+        self.dir = Path(local_dir) if local_dir else live_dir()
 
     # -- primitives
     def put_bytes(self, key: str, data: bytes, content_type: str = "application/octet-stream") -> str:

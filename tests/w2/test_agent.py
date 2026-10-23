@@ -138,7 +138,7 @@ def test_kill_switch_and_audit_log(tmp_path, monkeypatch):
     sink = Sink(local_dir=tmp_path, bucket="")
     sink.put_bytes("live/agent/ENABLED", b"false")
     e = ev(["RISING"], mode="live")
-    d = agent.handle(e, ctx=tools.ToolContext(sink=sink))
+    d = agent.handle(e, ctx=tools.ToolContext(sink=sink), write_log=True)
     assert d["decided_by"] == "kill_switch" and schema.action_types(d) == ["NOOP"]
     logs = list((tmp_path / "live" / "agent").glob("*.jsonl"))
     assert logs and "kill_switch" in logs[0].read_text()

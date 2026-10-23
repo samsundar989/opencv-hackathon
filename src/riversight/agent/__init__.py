@@ -40,8 +40,12 @@ def _kill_decision(event: Event) -> Decision:
 
 
 def handle(event: Event, ctx: ToolContext | None = None, model: str | None = None, converse=None,
-           use_llm: bool | None = None, record: bool | None = None) -> Decision:
-    """Decide what to do about one flagged reading."""
+           use_llm: bool | None = None, record: bool | None = None, write_log: bool = False) -> Decision:
+    """Decide what to do about one flagged reading.
+
+    record     honour the kill switch and charge the daily token ledger (default: live mode only)
+    write_log  also append the decision log and pending approval items; off by default because the live
+               cycle (W1 `apply_decision`) writes those itself — the replay script turns it on."""
     from riversight.agent import llm
     ctx = ctx or default_context(event)
     ctx.event = event
@@ -66,6 +70,7 @@ def handle(event: Event, ctx: ToolContext | None = None, model: str | None = Non
             d["fallback_reason"] = f"{type(e).__name__}: {str(e)[:200]}"
     if record:
         ledger.add(d.get("tokens_in", 0) + d.get("tokens_out", 0), d.get("usd", 0.0))
+    if write_log:
         if d.get("approval_id"):
             sink.write_approval(event, d)
         sink.log_decision(d)
