@@ -1,17 +1,17 @@
 {
-  "frozen_at_utc": "2026-10-23T21:01:27+00:00",
-  "git_head": "3e15c15c63e40e4578ef3e9f9309955e8e8d23b4",
+  "frozen_at_utc": "2026-10-23T21:05:36+00:00",
+  "git_head": "68b1d5d0ffb5d6387400e84c53c4c46ee0dc6dfe",
   "n_episodes": 110,
   "n_single": 98,
   "n_real": 63,
   "hashes": {
     "episodes.jsonl": "074bda748f3989d28dd709b3d795bf13a69382116d37a7e06d32ec2ae2459920",
-    "src/riversight/agent/llm.py": "f38cdc1c92fc5d34014fb6615f79253e6458c9eeef89576d618a5efbcf84b7ab",
+    "src/riversight/agent/llm.py": "de292e51fa1310b547fb5d5e63bcb6f85adf12a0404a5754cf78b2cfd9a7ad46",
     "src/riversight/agent/rules.py": "f246712c5258638c5dcb0203ff94c0b6ac68383b332f1c51996026d721702331",
     "src/riversight/agent/tools.py": "744248d967b571289beb3caaa6e314ba2b970a50569c0decb268ac6c5dc07f8e",
     "src/riversight/agent/schema.py": "f09e0c1d7d3153dc7c45af590531fed6950bd65ba538f2fd77e26ecad346ff3f",
     "src/riversight/agent/fleet.py": "81a1bc71bc611ddfcbf156d1ad46cbef35e686c3a7cb25afbec02e019c017b18",
-    "scripts/agent_eval.py": "4bf8a4cfcebb8ab0d71ee1ec102104c8eacce28ed39fe43f52dfae46201a5121"
+    "scripts/agent_eval.py": "d943f03444568c95f60e7055ef18edeaef57219f2348438ce24ba477c077adf8"
   },
   "models": {
     "haiku": "us.anthropic.claude-haiku-5-5",
