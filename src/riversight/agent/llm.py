@@ -179,10 +179,9 @@ def run(event: dict, ctx: tools.ToolContext, model: str = HAIKU, converse: Calla
             if n_tools > MAX_TOOL_CALLS:
                 res = {"error": "tool budget exhausted", "summary": "tool budget (8) exhausted; call submit_decision now"}
             else:
-                t1 = time.perf_counter()
-                res = tools.call(ctx, tu["name"], tu.get("input") or {})
+                res, ms = tools.timed_call(ctx, tu["name"], tu.get("input") or {})
                 d["steps"].append({"tool": tu["name"], "args": tu.get("input") or {}, "result_summary": res.get("summary", ""),
-                                   "ms": round(1000 * (time.perf_counter() - t1))})
+                                   "ms": ms})
             results.append({"toolResult": {"toolUseId": tu["toolUseId"], "content": [{"json": _jsonable(res)}],
                                            **({"status": "error"} if "error" in res else {})}})
         msgs.append({"role": "user", "content": results})

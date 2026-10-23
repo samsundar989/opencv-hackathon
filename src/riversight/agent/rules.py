@@ -19,7 +19,6 @@ as the LLM agent and maps their numbers to actions with fixed, hand-written thre
 """
 from __future__ import annotations
 
-import time
 from typing import Any
 
 from riversight.agent import schema, tools
@@ -30,10 +29,8 @@ PERSIST_CYCLES = 2          # previous consecutive readings with the same flag â
 
 
 def _run(ctx: tools.ToolContext, d: dict, name: str, **args) -> dict:
-    t0 = time.perf_counter()
-    res = tools.call(ctx, name, args)
-    d["steps"].append({"tool": name, "args": args, "result_summary": res.get("summary", ""),
-                       "ms": round(1000 * (time.perf_counter() - t0))})
+    res, ms = tools.timed_call(ctx, name, args)
+    d["steps"].append({"tool": name, "args": args, "result_summary": res.get("summary", ""), "ms": ms})
     return res
 
 

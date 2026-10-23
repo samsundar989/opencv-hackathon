@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import json
 import os
+import threading
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -86,16 +87,18 @@ def _frame(key: str) -> np.ndarray:
 # ---- registration helpers ---------------------------------------------------------------------------
 
 _registrars: dict[tuple[str, str], Any] = {}
+_reg_lock = threading.RLock()        # ALIKED/LightGlue objects are not shared across threads concurrently
 
 
 def _registrar(ref_path: str, method: str, ref_img: np.ndarray):
     from riversight.killtest import Cfg, make_registrar
     k = (ref_path, method)
-    if k not in _registrars:
-        R = make_registrar(Cfg(), method)
-        R.set_reference(ref_img)
-        _registrars[k] = R
-    return _registrars[k]
+    with _reg_lock:
+        if k not in _registrars:
+            R = make_registrar(Cfg(), method)
+            R.set_reference(ref_img)
+            _registrars[k] = R
+        return _registrars[k]
 
 
 def _register(img: np.ndarray, ref_path: str, ref_img: np.ndarray, methods=("orb", "aliked")) -> dict:
@@ -106,7 +109,8 @@ def _register(img: np.ndarray, ref_path: str, ref_img: np.ndarray, methods=("orb
     if img.shape[:2] != ref_img.shape[:2]:
         img = cv2.resize(img, (ref_img.shape[1], ref_img.shape[0]), interpolation=cv2.INTER_AREA)
     for m in methods:
-        r = _registrar(ref_path, m, ref_img).register(img)
+        with _reg_lock:
+            r = _registrar(ref_path, m, ref_img).register(img)
         plaus, disp = (homography_plausible(r.H, ref_img.shape[:2], cfg.max_corner_frac, cfg.area_range)
                        if r.H is not None else (False, None))
         cand = {"ok": bool(r.ok and plaus), "inliers": int(r.n_inliers), "score": round(float(r.score), 3),
@@ -508,6 +512,19 @@ def bedrock_tool_config(extra: list[dict] | None = None) -> dict:
                            "inputSchema": {"json": {"type": "object", "properties": t["props"], "required": t["req"]}}}}
              for t in TOOL_SPECS]
     return {"tools": tools + (extra or [])}
+
+
+_tl = threading.local()        # a caching wrapper (scripts/agent_eval.py) reports original compute ms here
+
+
+def timed_call(ctx: ToolContext, name: str, args: dict) -> tuple[dict, int]:
+    """(result, ms) — ms is the original compute time when a cache served the result."""
+    _tl.ms = None
+    t0 = time.perf_counter()
+    res = call(ctx, name, args)
+    ms = _tl.ms if getattr(_tl, "ms", None) is not None else round(1000 * (time.perf_counter() - t0))
+    _tl.ms = None
+    return res, ms
 
 
 def call(ctx: ToolContext, name: str, args: dict) -> dict:
