@@ -469,7 +469,29 @@ def load_agent() -> tuple[Callable[[dict], dict] | None, Callable[[dict], dict]]
 _AGENT = None
 
 
+AGENT_TIMEOUT_S = 300
+
+
 def default_agent_fn(event: dict) -> dict:
+    """W2's agent in a short-lived spawned process, so whatever its OpenCV tools load (each ALIKED+LightGlue
+    instance is ~1.5 GB on arm64) is returned to the OS when the call ends. Falls back to the rules in-process
+    on timeout or crash. RIVERSIGHT_AGENT_ISOLATE=0 runs it in-process (tests, replay)."""
+    if os.environ.get("RIVERSIGHT_AGENT_ISOLATE", "1") == "0":
+        return _agent_in_process(event)
+    import multiprocessing as mp
+    from concurrent.futures import ProcessPoolExecutor
+    try:
+        with ProcessPoolExecutor(1, mp_context=mp.get_context("spawn")) as ex:
+            return ex.submit(_agent_in_process, event).result(timeout=AGENT_TIMEOUT_S)
+    except Exception:
+        traceback.print_exc()
+        from riversight.agent import rules
+        d = rules.handle(event)
+        d.setdefault("decided_by", "rules")
+        return d
+
+
+def _agent_in_process(event: dict) -> dict:
     """W2's agent, falling back to the deterministic rules if import or the call fails (INTERFACES §3)."""
     global _AGENT
     if _AGENT is None:
