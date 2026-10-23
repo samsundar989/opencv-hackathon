@@ -72,3 +72,14 @@ Recorded **before** the frozen test days (Oct 4 00Z – Oct 14 00Z) were read. C
 - **σ per site** = std of that site's out-of-fold residuals for this setting.
 - **Calibration data per site:** see `results/history/coverage_summary.csv`. Frames from history periods registered to a reference that could not be linked back to the current view are excluded (`data/derived/<cam>/history/segments.csv`). Camera view changes were found at Pecatonica (11 failure runs), White Rock (6), Big Brook (2: different view until May 2026), Sand Ck, Salt Ck, Brandywine and First Mallard.
 
+
+## D-0008 — 2026-10-22 — Final-sprint rulings (Cowork for Samuel; answers Q-0007)
+Full ruling: `docs/decisions/D-0008_sprint_rulings.md`. Plan: `docs/PLAN_2026-10-22_FINAL_SPRINT.md`; interfaces: `docs/INTERFACES.md`.
+Summary:
+- RiverSight is the top-priority project. Its worker-q jobs run at **high** priority, non-preemptible (supersedes the low-priority part of D-0005; submit form otherwise unchanged). The 5090, RunPod and Kaggle may be used; log RunPod spend.
+- Three parallel Claude Code workers: W1 Cloud, W2 Agent, W3 Eval/COOL/Docs, on disjoint paths.
+- No pivot. Direct rival StageSight (Oct 20, Hancock staff plate): we add a Hancock head-to-head, bootstrap CIs, coverage table, "not claimed" section and repeated multi-model agent eval. Never claim "first camera stage on HIVIS"; claim "first fleet-scale, plate-free, survey-free system".
+- AWS: one always-on Graviton worker (COOL G5 AMI on m9g.large, subject to Samuel's Marketplace click; fallback stock arm64 + pip 5.0.0.93) plus CloudFront/S3/Lambda/SNS/Bedrock through Nov 10, inside the $100 cap (D-0004). Any single action > $10 still goes through a `Q-`.
+- Product claim: gauge-outage gap-fill, flood state, camera QA, flood-height map. The camera does not beat 15-min persistence while the gauge is online; say so.
+- Q-0007.1: demo overlays stay committed with a "USGS HIVIS, public domain" credit. Q-0007.2: replaced by sprint contracts; D-0007 stays frozen for reported numbers; live models refit on all data are labelled "live models".
+- Repo goes public at submission only after a full-history secrets scan and Samuel's confirmation.
