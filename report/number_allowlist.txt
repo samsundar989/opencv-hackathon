@@ -1,0 +1,11 @@
+# Numbers that are design or protocol constants, not results. One per line: <number>  <reason and source>.
+320    scene-model working frame width, 320x180 (src/riversight/vision/scene_features.py OUT_W)
+180    scene-model working frame height (scene_features.py OUT_H)
+3600   blocks per frame at 4 px, 80x45 (scene_features.py GRID)
+0.25   protocol v2 P1 accuracy threshold, ft (D-0006)
+10     protocol v2 P1 nMAE threshold, % (D-0006); also test-day count
+30     live cycle cadence, minutes (INTERFACES, SPRINT_W1)
+90     flood state = stage above calibration p90 (D-0006)
+880    approximate number of public HIVIS cameras next to a USGS gauge (docs/research/competition-briefing.md); fleet bench size
+2000   bootstrap replicates (report/bootstrap_coverage.py)
+100    AWS budget cap, USD (D-0004)
