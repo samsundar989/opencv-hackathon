@@ -39,6 +39,27 @@ def _kill_decision(event: Event) -> Decision:
     return schema.finalize(event, d)
 
 
+def second_opinion(event: Event, ctx: ToolContext, d: Decision, converse=None) -> Decision:
+    """Sonnet 5.5 re-decides an event whose Haiku decision would page a human (RIVERSIGHT_AGENT_ESCALATE=1).
+    The Haiku decision stands; disagreement is recorded so the approver sees it."""
+    from riversight.agent import llm
+    try:
+        s = llm.run(event, ctx, model=llm.SONNET, converse=converse)
+    except Exception as e:                                                        # noqa: BLE001
+        d["second_opinion"] = {"error": f"{type(e).__name__}"}
+        return d
+    mine = {a["type"] for a in d["actions"] if a["needs_approval"]}
+    theirs = {a["type"] for a in s["actions"] if a["needs_approval"]}
+    d["second_opinion"] = {"model": s["model"], "actions": schema.action_types(s), "agrees": mine == theirs,
+                           "rationale": s["rationale"]}
+    d["tokens_in"] += s["tokens_in"]
+    d["tokens_out"] += s["tokens_out"]
+    d["usd"] = round(d["usd"] + s["usd"], 6)
+    if mine != theirs:
+        d["rationale"] += f" [Sonnet second opinion disagrees: {', '.join(sorted(theirs)) or 'no approval needed'}]"
+    return d
+
+
 def handle(event: Event, ctx: ToolContext | None = None, model: str | None = None, converse=None,
            use_llm: bool | None = None, record: bool | None = None, write_log: bool = False) -> Decision:
     """Decide what to do about one flagged reading.
@@ -64,6 +85,8 @@ def handle(event: Event, ctx: ToolContext | None = None, model: str | None = Non
     else:
         try:
             d = llm.run(event, ctx, model=model or llm.HAIKU, converse=converse)
+            if d.get("approval_id") and os.environ.get("RIVERSIGHT_AGENT_ESCALATE") == "1" and (model or llm.HAIKU) != llm.SONNET:
+                d = second_opinion(event, ctx, d, converse)
         except Exception as e:                                                    # noqa: BLE001
             d = rules.handle(event, ctx)
             d["rationale"] += f" [LLM unavailable ({type(e).__name__}): rules policy]"

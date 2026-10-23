@@ -202,6 +202,21 @@ def test_llm_failure_falls_back_to_rules(monkeypatch):
     assert d["decided_by"] == "rules" and "AccessDenied" in d["fallback_reason"]
 
 
+def test_sonnet_second_opinion_recorded_when_escalating(monkeypatch):
+    canned(monkeypatch)
+    monkeypatch.setenv("RIVERSIGHT_AGENT_ESCALATE", "1")
+    submit = lambda acts: [{"toolUse": {"toolUseId": "s", "name": "submit_decision",          # noqa: E731
+                                        "input": {"actions": [{"type": a} for a in acts], "rationale": "r"}}}]
+
+    def conv(**kw):
+        acts = ["DENSIFY"] if "sonnet" in kw["modelId"] else ["DRAFT_ALERT"]
+        return {"output": {"message": {"role": "assistant", "content": submit(acts)}}, "stopReason": "tool_use",
+                "usage": {"inputTokens": 10, "outputTokens": 5}}
+    d = agent.handle(ev(["RISING"]), ctx=CTX(), converse=conv)
+    assert schema.action_types(d) == ["DRAFT_ALERT"] and d["second_opinion"]["agrees"] is False
+    assert "Sonnet second opinion disagrees" in d["rationale"]
+
+
 def test_flags_only_ablation_withholds_evidence():
     ctx = tools.ToolContext(evidence="flags_only", event=ev(["VIEW_CHANGE"]))
     r = tools.call(ctx, "estimate_stage", {"cam": "CAM", "frame_key": "k.jpg"})
