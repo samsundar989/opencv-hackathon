@@ -13,20 +13,22 @@ mkdir -p /opt/riversight /var/cache/riversight
 if [ "$AMI_KIND" = "cool" ]; then
   # COOL G5 AMI (Python 3.12-3.14 bindings): find the newest interpreter whose cv2 imports, then build a
   # --system-site-packages venv on it so our deps install without shadowing COOL's cv2 or its numpy.
-  echo "== COOL discovery =="; ls -la /opt 2>/dev/null || true
-  find / -xdev \( -path /proc -o -path /sys \) -prune -o -name "cv2*.so" -print 2>/dev/null | head -20 || true
-  BASE=""
-  for c in $(find / -xdev \( -path /proc -o -path /sys -o -path /snap \) -prune -o -type f -name 'python3.1[234]' -perm -u+x -print 2>/dev/null | sort -rV); do
-    if "$c" -c "import cv2; print('cv2', cv2.__version__, cv2.__file__)" 2>/dev/null; then BASE="$c"; break; fi
+  # COOL's own activate script does exactly this: cv2 from the central store via PYTHONPATH, the C++ SDK and
+  # FFmpeg via LD_LIBRARY_PATH. We reproduce it for our own venv and pin numpy to the version COOL ships.
+  for v in 3.14 3.13 3.12; do
+    if [ -d "/opt/cool/python_$v/site-packages/cv2/python-$v" ] && [ -x "/usr/bin/python$v" ]; then CV=$v; break; fi
   done
-  [ -n "$BASE" ] || { echo "no COOL python with cv2 found"; exit 1; }
-  echo "COOL python: $BASE"
-  "$BASE" -m venv --system-site-packages /opt/riversight/venv || { "$BASE" -m ensurepip || true; "$BASE" -m venv --system-site-packages --without-pip /opt/riversight/venv; }
+  [ -n "${CV:-}" ] || { echo "no COOL cv2 found under /opt/cool"; ls -R /opt/cool | head -50; exit 1; }
+  COOL_PYTHONPATH="/opt/cool/python_$CV/site-packages/cv2/python-$CV"
+  COOL_LD="/opt/cool/cpp_sdk/lib:/opt/ffmpeg/lib"
+  NUMPY_V=$(ls -d /opt/cool/python_$CV/site-packages/numpy-*.dist-info | sed -E 's/.*numpy-([^-]+)\.dist-info/\1/' | head -1)
+  "/usr/bin/python$CV" -m venv /opt/riversight/venv
   PY=/opt/riversight/venv/bin/python
-  "$PY" -m ensurepip 2>/dev/null || true
-  "$PY" -m pip install pandas pyarrow scipy httpx pyyaml tenacity boto3
-  "$PY" -c "import cv2, numpy; print('venv cv2', cv2.__version__, cv2.__file__, 'numpy', numpy.__version__)"
-  if "$PY" -m pip show opencv-python-headless >/dev/null 2>&1; then echo "pip opencv shadows COOL: removing"; "$PY" -m pip uninstall -y opencv-python-headless; fi
+  "$PY" -m pip install -U pip
+  "$PY" -m pip install "numpy==$NUMPY_V" pandas pyarrow scipy httpx pyyaml tenacity boto3
+  PYTHONPATH="$COOL_PYTHONPATH" LD_LIBRARY_PATH="$COOL_LD" "$PY" -c \
+    "import cv2, numpy; print('COOL cv2', cv2.__version__, cv2.__file__, 'numpy', numpy.__version__, 'ALIKED', hasattr(cv2, 'ALIKED'))"
+  if "$PY" -m pip show opencv-python-headless >/dev/null 2>&1; then "$PY" -m pip uninstall -y opencv-python-headless; fi
 else
   export DEBIAN_FRONTEND=noninteractive
   apt-get update -y
@@ -64,7 +66,8 @@ chmod +x /opt/riversight/update.sh
 cat > /opt/riversight/env <<EOF
 AWS_DEFAULT_REGION=$REGION
 RIVERSIGHT_BUCKET=$BUCKET
-PYTHONPATH=/opt/riversight/app/src
+PYTHONPATH=/opt/riversight/app/src${COOL_PYTHONPATH:+:$COOL_PYTHONPATH}
+LD_LIBRARY_PATH=${COOL_LD:-}
 RIVERSIGHT_BUNDLES=/opt/riversight/app/models/sites
 RIVERSIGHT_MODELS=/opt/riversight/app/models/onnx
 RIVERSIGHT_FRAME_CACHE=/var/cache/riversight

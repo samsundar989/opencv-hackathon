@@ -93,7 +93,7 @@ def code_sha() -> str:
 def opencv_info() -> dict:
     info = cv2.getBuildInformation()
     return {"version": cv2.__version__, "file": cv2.__file__,
-            "cool": "cool" in cv2.__file__.lower() or "COOL" in info,
+            "cool": "/opt/cool/" in cv2.__file__ or "COOL" in info,
             "kleidicv": "KleidiCV" in info or "kleidicv" in info.lower()}
 
 

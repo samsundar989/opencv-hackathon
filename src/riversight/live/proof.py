@@ -36,7 +36,7 @@ def build_summary() -> dict:
                                      "Platform:", "Host:", "CPU/HW features", "NEON", "SVE", "COOL", "Extra modules"))]
     return {"version": cv2.__version__, "file": cv2.__file__,
             "build_info_sha256": hashlib.sha256(info.encode()).hexdigest(), "build_info_excerpt": keep[:40],
-            "cool": "cool" in cv2.__file__.lower() or "COOL" in info,
+            "cool": "/opt/cool/" in cv2.__file__ or "COOL" in info,
             "dnn_engines": [n for n in dir(cv2.dnn) if n.startswith("ENGINE_")]}
 
 
