@@ -10,3 +10,5 @@
 2000   bootstrap replicates (report/bootstrap_coverage.py)
 100    AWS budget cap, USD (D-0004)
 01421500  USGS site number of the Hancock NY gauge (identifier, not a result)
+300    benchmark timed iterations per stage (bench/cool_bench.py --iters; SPRINT_W3 §2)
+50     benchmark warm-up iterations (bench/cool_bench.py --warmup)
