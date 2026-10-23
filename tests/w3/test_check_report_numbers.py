@@ -13,13 +13,24 @@ def test_doc_numbers_skips_dates_ids_code_and_splits_fractions():
     assert nums == ["14", "20", "0.182", "4892"]
 
 
-def test_check_flags_untraced_and_accepts_roundings(tmp_path):
+def test_check_flags_untraced_and_accepts_roundings(tmp_path, monkeypatch):
     res = tmp_path / "r.csv"
     res.write_text("mae\n0.18217\n0.9567\n")
     known = crn.corpus([res])
     assert {"0.182", "95.7", "96"} <= known
     doc = tmp_path / "d.md"
     doc.write_text("median 0.182 ft, registration 95.7 %, made-up 0.444 ft, 15/20 sites\n")
-    crn.ROOT = tmp_path
+    monkeypatch.setattr(crn, "ROOT", tmp_path)
     bad = crn.check([doc], known, set())
     assert [n for _, _, n in bad] == ["0.444"]
+
+
+def test_html_visible_text_only_and_stale_claims(tmp_path, monkeypatch):
+    page = tmp_path / "judge.html"
+    page.write_text("<p>Shown: 0.444 ft</p><script>const x = 0.777;</script><pre>pip install 0.888</pre>\n"
+                    "<li>7 of 20 cameras were re-aimed</li>\n<li>9/17 sites</li>\n<li>14 of 20 sites accurate</li>\n")
+    rules = crn.stale_claims()                      # the committed report/stale_claims.txt
+    monkeypatch.setattr(crn, "ROOT", tmp_path)
+    assert [n for _, _, n in crn.check([page], set(), set())] == ["0.444"]
+    hits = crn.check_stale([page], rules)
+    assert [line for _, line, _ in hits] == [2, 3]

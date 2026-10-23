@@ -156,6 +156,7 @@ StageSight, another entry, reads the staff plate on the same USGS camera (Hancoc
 - On the July flood we fail: with that flood left out, the calibration never saw a stage above 11.97 ft, and the scene model cannot extrapolate. It saturates near its calibrated ceiling while the river rises above it. Its Kalman σ stays small, so it is confidently wrong.
 - What survives is flood state: the camera put itself above the calibration p90 on every July frame where the gauge was there.
 - A plate reader measures stages it has never seen; a model calibrated from history does not. This is the main limitation of the approach (§7). The live system now has to flag readings at the edge of the calibrated range instead of reporting them as numbers.
+- Future work: every flood the gauge records could extend the camera's calibrated range, because the site bundle can be refit on new data. Today that refit is a manual export (`scripts/export_site_models.py`), not a scheduled job.
 - Our advantage is elsewhere: 20 cameras without plates, and coverage of most daylight hours, against 2.4 % of hourly frames reported for the plate reader.
 
 ### 6.7 Agent evaluation

@@ -7,8 +7,11 @@ like 14/20 are checked part by part.
 
 Not checked (stated so nobody over-reads a pass):
   * dates, times, versions, IDs (D-0007, Q-0008, #29794), file paths, URLs, code spans and fenced code;
-  * integers ≤ 20 (site counts and small counts match almost anything);
+  * integers ≤ 20 (site counts and small counts match almost anything), and years 1900–2099;
   * protocol constants and other non-results numbers listed with a reason in report/number_allowlist.txt.
+HTML pages are scanned as visible text: script, style and pre blocks and tags are removed first (numbers the
+page renders from results JSON at runtime are therefore not checked here; they come straight from results/).
+Known-wrong claims in report/stale_claims.txt (regex, reason) fail the check wherever they appear.
 
     python scripts/check_report_numbers.py            exit 1 and list offenders if any number is untraced
 """
@@ -21,8 +24,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ["README.md", "report/REPORT.md", "docs/COOL_BENCHMARK.md", "docs/OPENCV5_USAGE.md",
-        "docs/RESPONSIBLE_USE.md", "docs/REPRODUCE.md", "docs/ARCHITECTURE.md"]
+        "docs/RESPONSIBLE_USE.md", "docs/REPRODUCE.md", "docs/ARCHITECTURE.md", "docs/PRIOR_ART.md",
+        "results/failures/README.md", "web/judge.html"]
 ALLOW = ROOT / "report" / "number_allowlist.txt"
+STALE = ROOT / "report" / "stale_claims.txt"
+HTML_STRIP = [re.compile(r"<(script|style|pre)\b.*?</\1>", re.S | re.I), re.compile(r"<!--.*?-->", re.S),
+              re.compile(r"<[^>]+>"), re.compile(r"&[a-z]+;|&#\d+;")]
 
 NUM = re.compile(r"(?<![\w.\-/#])(\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?)(?![\w\-]|\.\d)")
 FRACTION = re.compile(r"(?<![\w.])(\d+)\s*/\s*(\d+)(?![\w.])")
@@ -37,6 +44,7 @@ STRIP = [
     re.compile(r"\b(?:D|Q|S|P|W|G)-?\d+[a-z]?\b"),  # decision/question/slice/gate ids, P1, W3, G1
     re.compile(r"#\d+"),                            # issue numbers
     re.compile(r"\bv?\d+\.\d+\.\d+(?:\.\d+)?\b"),   # versions
+    re.compile(r"\b(?:19|20)\d{2}\b"),                # years (citations, dates in prose)
     re.compile(r"\b(?:Python|python|py)\s*\d+(?:\.\d+)*"),
     re.compile(r"\b[A-Za-z]+\d+[A-Za-z0-9]*\b"),    # identifiers with digits: m9g, sm_120, Graviton5, h264
     re.compile(r"\b(?:Oct|Nov|Sep|Jul|Aug|Mon|Tue|Wed|Thu|Fri|Sat|Sun)\w*\.? \d{1,2}\b"),
@@ -95,12 +103,44 @@ def doc_numbers(text: str) -> list[tuple[int, str]]:
     return out
 
 
+def visible_text(p: Path) -> str:
+    text = p.read_text(encoding="utf-8")
+    if p.suffix == ".html":
+        for rx in HTML_STRIP:
+            text = rx.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), text)
+    return text
+
+
+def stale_claims() -> list[tuple[re.Pattern, str]]:
+    if not STALE.exists():
+        return []
+    out = []
+    for ln in STALE.read_text(encoding="utf-8").splitlines():
+        if ln.strip() and not ln.lstrip().startswith("#"):
+            rx, _, why = ln.partition("\t")
+            out.append((re.compile(rx, re.I), why.strip()))
+    return out
+
+
+def check_stale(paths: list[Path], rules: list[tuple[re.Pattern, str]]) -> list[tuple[str, int, str]]:
+    bad = []
+    for p in paths:
+        if not p.exists():
+            continue
+        for i, ln in enumerate(visible_text(p).splitlines(), 1):
+            for rx, why in rules:
+                m = rx.search(ln)
+                if m:
+                    bad.append((str(p.relative_to(ROOT)), i, f"stale claim '{m.group(0)}': {why}"))
+    return bad
+
+
 def check(paths: list[Path], known: set[str], allowed: set[str]) -> list[tuple[str, int, str]]:
     bad = []
     for p in paths:
         if not p.exists():
             continue
-        for line, n in doc_numbers(p.read_text(encoding="utf-8")):
+        for line, n in doc_numbers(visible_text(p)):
             if n in known or n in allowed:
                 continue
             if "." not in n and int(n) <= 20:
@@ -111,11 +151,15 @@ def check(paths: list[Path], known: set[str], allowed: set[str]) -> list[tuple[s
 
 def main() -> None:
     known = corpus(tracked_results())
-    bad = check([ROOT / d for d in DOCS], known, allowlist())
+    paths = [ROOT / d for d in DOCS]
+    bad = check(paths, known, allowlist())
     for f, line, n in bad:
         print(f"{f}:{line}: {n} not found in any committed results file")
-    print(f"{len(bad)} untraced number(s)")
-    sys.exit(1 if bad else 0)
+    stale = check_stale(paths, stale_claims())
+    for f, line, msg in stale:
+        print(f"{f}:{line}: {msg}")
+    print(f"{len(bad)} untraced number(s), {len(stale)} stale claim(s)")
+    sys.exit(1 if bad or stale else 0)
 
 
 if __name__ == "__main__":
