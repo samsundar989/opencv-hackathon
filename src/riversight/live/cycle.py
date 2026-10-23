@@ -321,6 +321,7 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
             reg_cache[cam] = SiteRegistrar(model)
         reg = reg_cache[cam].register(frame.img)
         H = reg.pop("H")
+        reg["H_frame_to_ref"] = None if H is None else [round(float(v), 6) for v in np.asarray(H).ravel()]
         if (not reg["ok"] or (reg["inlier_ratio"] or 0) < VIEW_MIN_INLIER_RATIO
                 or (reg["reproj_px"] or 0) > VIEW_MAX_REPROJ_PX):
             flags.append("VIEW_CHANGE")

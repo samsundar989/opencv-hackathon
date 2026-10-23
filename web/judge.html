@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RiverSight — for judges</title>
+<link rel="stylesheet" href="assets/app.css">
+<script src="assets/common.js"></script>
+</head>
+<body>
+<main>
+  <h1>For judges: a 60-second tour</h1>
+  <ol class="panel" style="padding-left:32px">
+    <li><a href="index.html">Live</a>: 20 public USGS river cameras, re-read every 30 minutes by a Graviton worker. Camera stage ± σ sits next to the USGS gauge.</li>
+    <li>Open any site, e.g. <a href="site.html?cam=NY_East_Branch_Delaware_River_at_Hancock_Staff">Hancock, NY</a> or
+      <a href="site.html?cam=IL_Salt_Creek_at_Wood_Dale">Salt Creek, IL</a>. <b>Drag the stage slider</b> to see what goes under water at any stage,
+      drawn onto today's frame from a flood-height map the camera learned from its own gauge.</li>
+    <li>Check the <b>agent decisions</b> on a flagged site, and the <a href="approvals.html">approvals</a> queue (alerts and tickets need a human).</li>
+    <li><a href="proof.html">Proof</a>: which OpenCV build and instance produced the readings (Graviton, COOL or stock 5.0.0.93), with model hashes.</li>
+    <li>The numbers below come from the <b>frozen test</b> (Oct 4–14, 2026). Constants were hashed before the test days were read, and the test was scored once.</li>
+  </ol>
+
+  <h2>Frozen test (protocol v2, scored once)</h2>
+  <div class="kpis" id="kpis"><div class="panel kpi">Loading…</div></div>
+  <p class="small muted" id="src"></p>
+
+  <h2>What we claim, and what we don't</h2>
+  <div class="panel small" id="claims">
+    <p><b>We claim:</b> a fleet-scale, plate-free, survey-free system. Each camera calibrates itself from its own USGS gauge history,
+      reads stage when the gauge is down (gap-fill), reports flood state, flags its own problems (view change, lens, disagreement),
+      and shows what is under water at any stage.</p>
+    <p><b>We do not claim:</b> that the camera replaces a working gauge. While the gauge is online, the camera does not beat
+      15-minute persistence at any site. We also make no night readings (v1), no discharge, and no accuracy on cameras outside the 20 evaluated.
+      Year-long cross-validation is harder than the 10 test days (median 0.38 ft vs 0.18 ft) because seasons drift.</p>
+  </div>
+
+  <h2>Per-site results</h2>
+  <div class="panel tablewrap"><table id="tbl"><thead><tr>
+    <th>site</th><th>tier</th><th>n</th><th>MAE ft</th><th>nMAE</th><th>P1</th><th>15-min pers.</th><th>72 h gap: cam / LKV</th><th>7 d gap: cam / LKV</th></tr></thead><tbody></tbody></table></div>
+
+  <h2>Failure cases (shown, not hidden)</h2>
+  <div class="panel small" id="fails">
+    <ul>
+      <li><b>View changes:</b> 7 of 20 cameras were re-aimed or moved within 12 months. Registration catches it (VIEW_CHANGE),
+        and the agent re-anchors or quarantines the site. Look for <span class="pill view_change">view changed</span> on the live page.</li>
+      <li><b>Out-of-range stages:</b> a live model cannot read above its calibrated range. Each site page shows that range, and DISAGREE fires
+        when the camera and the gauge part ways.</li>
+      <li><b>Night:</b> no camera reading at night (IR frames). Gaps are shown, not filled.</li>
+      <li id="tierc"></li>
+    </ul>
+  </div>
+
+  <h2 id="agent-h">Agent evaluation</h2>
+  <div class="panel small" id="agent">Results appear here once <code>results/agent_eval/summary.json</code> is committed.</div>
+  <h2>COOL on Graviton</h2>
+  <div class="panel small" id="cool">Results appear here once <code>results/cool_bench/summary.json</code> is committed.</div>
+
+  <h2>Reproduce</h2>
+  <pre>git clone https://github.com/samsundar989/opencv-hackathon && cd opencv-hackathon
+pip install -e ".[dev]"            # opencv-python-headless==5.0.0.93 (pinned)
+pytest -q
+python scripts/export_site_models.py          # live model bundles from the cached history
+python -m riversight.live.cycle --local       # one live cycle over all 20 cameras
+python scripts/deploy.py                      # the AWS stack (us-east-2), budget guard first</pre>
+  <p class="small">Full steps: <code>docs/REPRODUCE.md</code> · technical report: <code>report/</code> · architecture: <code>docs/ARCHITECTURE.md</code>.</p>
+</main>
+<script>
+(async () => {
+  const f2 = (v, d = 2) => v == null || Number.isNaN(v) ? "—" : Number(v).toFixed(d);
+  try {
+    const [s, ci, v] = await Promise.all([RS.json("data/kill_test_v2_summary.json"), RS.json("data/kill_test_v2_ci_summary.json").catch(() => null),
+      RS.json("data/kill_test_v2_verdict.json").catch(() => null)]);
+    const k = (val, label) => `<div class="panel kpi"><div class="v">${val}</div><div class="l">${label}</div></div>`;
+    document.getElementById("kpis").innerHTML = [
+      k(v ? RS.esc(v.verdict) : "—", "pre-registered verdict (P1 ∧ P2 ∧ P3)"),
+      k(`${f2(s.median_mae_ft)} ft`, `median MAE across 20 sites${ci ? ` (95% CI ${f2(ci.median_mae_ci95_ft[0])}–${f2(ci.median_mae_ci95_ft[1])})` : ""}`),
+      k(`${s.p1_sites}/${s.n_sites}`, "sites accurate (P1: MAE ≤ 0.25 ft or nMAE ≤ 10%)"),
+      k(`${s.p2_sites}/${s.p2_event_sites}`, "event sites where the camera beats a 24 h-stale gauge (P2)"),
+      k(`${(s.registration.rate * 100).toFixed(1)}%`, `daylight frames registered (P3; ${s.registration.registered}/${s.registration.day_frames})`),
+      k(`${s.gapfill_sites_beat_lkv_72h}/${s.n_sites}`, "sites where the camera beats a 72 h last-known value (gauge outage)"),
+      k(`${s.gapfill_sites_beat_lkv_7d}/${s.n_sites}`, "… and a 7-day last-known value"),
+      k(`${f2(s.flood_bacc_cam_median)} vs ${f2(s.flood_bacc_persist24_median)}`, "flood-state balanced accuracy: camera vs 24 h persistence"),
+      k(`${s.sites_beat_persist_15min}/${s.n_sites}`, "sites where the camera beats 15-min persistence (it doesn't; shown on purpose)"),
+    ].join("");
+    document.getElementById("src").innerHTML = `Sources: <code>results/kill_test_v2_summary.json</code>, <code>results/kill_test_v2_ci_summary.json</code> (bootstrap by UTC day),
+      <code>results/kill_test_v2.csv</code>; constants hashed in <code>results/constants.sha256</code>. ${s.test_frames_scored} test frames scored.`;
+  } catch (e) { document.getElementById("kpis").innerHTML = `<div class="panel err">${RS.esc(e.message)}</div>`; }
+  try {
+    const rows = await RS.json("data/kill_test_v2.json");
+    document.querySelector("#tbl tbody").innerHTML = rows.map((r) => `<tr>
+      <td><a href="site.html?cam=${encodeURIComponent(r.cam_id)}">${RS.esc(RS.nice(r.cam_id))}</a></td><td>${RS.esc(r.tier)}</td><td>${r.n}</td>
+      <td>${f2(r.mae)}</td><td>${f2(r.nmae)}</td><td>${r.p1 ? "✔" : "✘"}</td><td>${f2(r.mae_p15)}</td>
+      <td>${f2(r.gap_72h_cam)} / ${f2(r.gap_72h_lkv)}</td><td>${f2(r.gap_7d_cam)} / ${f2(r.gap_7d_lkv)}</td></tr>`).join("");
+    const c = rows.filter((r) => r.tier === "C").map((r) => RS.nice(r.cam_id));
+    document.getElementById("tierc").innerHTML = `<b>Tier C (${c.length} sites):</b> low registration, weak year-long correlation, or under 90 calibration days. They are kept in every number above: ${RS.esc(c.join("; "))}.`;
+  } catch {}
+  for (const [id, url] of [["agent", "data/agent_eval_summary.json"], ["cool", "data/cool_bench_summary.json"]]) {
+    try {
+      const d = await RS.json(url);
+      document.getElementById(id).innerHTML = `<pre>${RS.esc(JSON.stringify(d, null, 2))}</pre>`;
+    } catch {}
+  }
+})();
+</script>
+</body>
+</html>

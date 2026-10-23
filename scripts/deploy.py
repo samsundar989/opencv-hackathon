@@ -112,9 +112,10 @@ def site_data() -> dict[str, bytes]:
     if kt.exists():
         df = pd.read_csv(kt)
         out["data/kill_test_v2.json"] = df.to_json(orient="records").encode()
-    v = ROOT / "results" / "kill_test_v2_verdict.json"
-    if v.exists():
-        out["data/kill_test_v2_verdict.json"] = v.read_bytes()
+    for v in sorted((ROOT / "results").glob("kill_test_v2_*.json")):
+        out[f"data/{v.name}"] = v.read_bytes()
+    for v in sorted((ROOT / "results" / "demo").glob("*")):
+        out[f"demo/{v.name}"] = v.read_bytes()
     for extra in ("results/agent_eval/summary.json", "results/cool_bench/summary.json", "results/fleet_summary.json"):
         p = ROOT / extra
         if p.exists():

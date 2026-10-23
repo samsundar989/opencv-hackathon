@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RiverSight — approvals</title>
+<link rel="stylesheet" href="assets/app.css">
+<script src="assets/common.js"></script>
+</head>
+<body>
+<main>
+  <h1>Approvals</h1>
+  <p class="lede">The agent acts on its own only when the action is reversible: re-anchoring, quarantining a reading, sampling more often,
+    marking a reading provisional. Alerts and tickets wait here until a person approves them. Anyone can view this page;
+    approving or rejecting needs the operator token, which goes only to the operator's email.</p>
+  <div class="panel" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <label for="tok">Operator token</label>
+    <input type="password" id="tok" autocomplete="off" placeholder="from the RiverSight email" style="min-width:240px">
+    <span class="small muted">kept in this tab only</span>
+  </div>
+  <div id="list" style="margin-top:12px">Loading…</div>
+</main>
+<script>
+(() => {
+  const tok = document.getElementById("tok");
+  try { tok.value = sessionStorage.getItem("rs_tok") || ""; } catch {}
+  tok.addEventListener("change", () => { try { sessionStorage.setItem("rs_tok", tok.value); } catch {} });
+  async function load() {
+    const el = document.getElementById("list");
+    let items;
+    try { items = (await RS.json("api/approvals")).approvals; }
+    catch (e) { el.innerHTML = `<p class="err">Could not load approvals (${RS.esc(e.message)}).</p>`; return; }
+    if (!items.length) { el.innerHTML = `<p class="muted">Nothing pending. Approvals appear when the agent drafts an alert or opens a ticket.</p>`; return; }
+    el.innerHTML = items.map((a) => `
+      <article class="panel" id="${RS.esc(a.approval_id)}" style="margin-bottom:12px">
+        <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between">
+          <div><b>${(a.actions || []).map((x) => RS.esc(x.type)).join(", ")}</b> · <a href="site.html?cam=${encodeURIComponent(a.cam_id)}">${RS.esc(RS.nice(a.cam_id))}</a>
+            <div class="small muted">created ${RS.ago(a.created)} · ${RS.pill(a.status === "pending" ? "provisional" : a.status === "approved" ? "ok" : "error").replace(/>[^<]+</, ">" + RS.esc(a.status) + "<")}</div></div>
+          ${a.status === "pending" ? `<div style="display:flex;gap:6px"><button class="primary" data-id="${RS.esc(a.approval_id)}" data-d="approve">Approve</button>
+            <button class="danger" data-id="${RS.esc(a.approval_id)}" data-d="reject">Reject</button></div>` : `<div class="small muted">${RS.esc(a.status)} ${RS.ago(a.decided)}${a.note ? " · " + RS.esc(a.note) : ""}</div>`}
+        </div>
+        <p class="small">${RS.esc(a.rationale || "")}</p>
+        <p class="small">camera ${RS.ft(a.reading?.camera_stage_ft)} · gauge ${RS.ft(a.reading?.gauge_stage_ft)} · ${RS.esc(a.reading?.flood_state)} ${RS.flags(a.reading?.flags)}</p>
+        ${(a.actions || []).map((x) => x.args && Object.keys(x.args).length ? `<pre>${RS.esc(JSON.stringify(x.args, null, 2))}</pre>` : "").join("")}
+        ${a.overlay_key ? `<img src="${RS.esc(a.overlay_key)}" alt="Frame the agent saw" style="max-width:100%;border-radius:8px" loading="lazy">` : ""}
+      </article>`).join("");
+    el.querySelectorAll("button[data-id]").forEach((b) => b.addEventListener("click", async () => {
+      if (!tok.value) { tok.focus(); return; }
+      b.disabled = true;
+      const r = await fetch(`api/approvals/${encodeURIComponent(b.dataset.id)}`, { method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({ decision: b.dataset.d, token: tok.value }) });
+      if (!r.ok) { b.disabled = false; b.insertAdjacentHTML("afterend", ` <span class="err small">${r.status === 403 ? "wrong token" : "failed (" + r.status + ")"}</span>`); return; }
+      load();
+    }));
+    if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+  }
+  load();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RiverSight — proof</title>
+<link rel="stylesheet" href="assets/app.css">
+<script src="assets/common.js"></script>
+</head>
+<body>
+<main>
+  <h1>Proof: what produced these readings</h1>
+  <p class="lede">The worker writes this file every cycle. It records the instance it runs on (from EC2's instance-identity document),
+    the OpenCV build it actually imported, and the hash of every site model.</p>
+  <div class="kpis" id="kpis"></div>
+  <h2>OpenCV build</h2>
+  <div class="panel" id="build">Loading…</div>
+  <h2>Models</h2>
+  <div class="panel tablewrap"><table id="models"><thead><tr><th>site</th><th>model sha256</th><th>trained</th><th>calibration frames</th></tr></thead><tbody></tbody></table></div>
+  <h2>Raw</h2>
+  <p class="small"><a href="live/proof.json">live/proof.json</a></p>
+</main>
+<script>
+(async () => {
+  let p;
+  try { p = await RS.json("live/proof.json"); }
+  catch (e) { document.getElementById("build").innerHTML = `<span class="err">${RS.esc(e.message)}</span>`; return; }
+  const id = p.instance_identity || {};
+  const k = (v, l) => `<div class="panel kpi"><div class="v" style="font-size:18px">${RS.esc(v ?? "—")}</div><div class="l">${l}</div></div>`;
+  document.getElementById("kpis").innerHTML = [
+    k(id.instanceType, "instance type"), k(id.architecture || p.machine, "architecture"), k(id.imageId, "AMI"),
+    k(p.ami_kind, "image kind (cool = COOL Marketplace AMI)"), k(p.opencv.version, "cv2.__version__"),
+    k(p.opencv.cool ? "yes" : "no", "COOL build detected"), k(p.python, "Python"), k(RS.ago(p.generated), "written")].join("");
+  document.getElementById("build").innerHTML = `<p class="small"><b>cv2.__file__</b> <code>${RS.esc(p.opencv.file)}</code><br>
+    <b>getBuildInformation() sha256</b> <code>${RS.esc(p.opencv.build_info_sha256)}</code><br>
+    <b>DNN engines</b> ${RS.esc((p.opencv.dnn_engines || []).join(", "))}<br><b>code</b> ${RS.esc(p.code_sha)}</p>
+    <pre>${RS.esc((p.opencv.build_info_excerpt || []).join("\n"))}</pre>`;
+  document.querySelector("#models tbody").innerHTML = (p.models || []).map((m) => `<tr><td>${RS.esc(RS.nice(m.cam_id))}</td>
+    <td><code>${RS.esc(m.model_sha.slice(0, 16))}…</code></td><td>${RS.esc(m.trained_at)}</td><td>${m.n_calib_frames}</td></tr>`).join("");
+})();
+</script>
+</body>
+</html>
