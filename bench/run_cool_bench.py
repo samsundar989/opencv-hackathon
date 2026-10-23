@@ -30,7 +30,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 REGION = "us-east-2"
-BUDGET = "riversight-monthly"
+BUDGET = "riversight-cap"     # W1 GuardStack (D-0004); its 90 % action stops instances tagged Project=riversight
+UBUNTU_ARM64 = "/aws/service/canonical/ubuntu/server/24.04/stable/current/arm64/hvm/ebs-gp3/ami-id"
 
 USER_DATA = r"""#!/bin/bash
 exec > /var/log/riversight-bench.log 2>&1
@@ -43,7 +44,8 @@ curl -sfS "{pack_url}" -o pack.tgz && tar xzf pack.tgz -C pack
 # arm A: COOL. On the COOL AMI the only preinstalled cv2 is COOL's: take the newest python >= 3.12 whose cv2
 # imports and has ALIKED (--cool-python overrides). provenance.json records the cv2 path and build hash.
 COOL_PY="{cool_python}"
-if [ -z "$COOL_PY" ]; then
+SKIP_COOL="{skip_cool}"      # 1 on the stock-Ubuntu fallback (D-0009): no COOL arm at all
+if [ -z "$COOL_PY" ] && [ "$SKIP_COOL" != "1" ]; then
   for py in $(ls -d /opt/*/bin/python3.1? /opt/*/*/bin/python3.1? /opt/*/*/*/bin/python3.1? /home/*/*/bin/python3.1? /usr/local/bin/python3.1? 2>/dev/null | sort -V); do
     r=$($py -c "import sys,cv2;print(sys.version_info[:2]>=(3,12) and hasattr(cv2,'ALIKED'), cv2.__file__)" 2>/dev/null)
     echo "candidate $py -> $r"
@@ -58,7 +60,9 @@ fi
 
 # arm B: stock pip OpenCV 5.0.0.93 in a clean venv on the same interpreter version where possible.
 BASE=$($COOL_PY -c "import sys;print(sys._base_executable)" 2>/dev/null || echo python3)
-$BASE -m venv /opt/pipvenv || python3 -m venv /opt/pipvenv
+$BASE -m venv /opt/pipvenv || python3 -m venv /opt/pipvenv || {{
+  # stock Ubuntu ships python3 without ensurepip
+  apt-get update -q && DEBIAN_FRONTEND=noninteractive apt-get install -y -q python3-venv && python3 -m venv /opt/pipvenv; }}
 /opt/pipvenv/bin/pip install -q "opencv-python-headless==5.0.0.93" "numpy<3"
 /opt/pipvenv/bin/pip freeze > $W/results/pip_freeze.txt
 /opt/pipvenv/bin/python code/bench/cool_bench.py --pack $W/pack --out $W/results --arm pip-5.0.0.93 {bench_args} || echo "pip arm failed" >> $W/results/arms.txt
@@ -103,9 +107,11 @@ def ec2_price(sess, instance_type: str) -> float | None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--bucket", required=True)
-    ap.add_argument("--ami", required=True, help="COOL G5 AMI id in us-east-2 (after the Marketplace subscription)")
+    ap.add_argument("--ami", help="COOL G5 AMI id in us-east-2 (after the Marketplace subscription)")
+    ap.add_argument("--stock", action="store_true",
+                    help="D-0009 fallback: stock Ubuntu 24.04 arm64, pip arm only (Graviton vs the x86 dev box); COOL not run")
     ap.add_argument("--instance-type", default="m9g.large")
-    ap.add_argument("--cool-price", type=float, required=True, help="COOL software fee, USD/h, from the listing")
+    ap.add_argument("--cool-price", type=float, default=0.0, help="COOL software fee, USD/h, from the listing")
     ap.add_argument("--ec2-price", type=float, help="override the Price List lookup, USD/h")
     ap.add_argument("--pack", type=Path, default=ROOT / "data" / "bench_pack")
     ap.add_argument("--run", default=datetime.now(timezone.utc).strftime("aws_%Y-%m-%d"))
@@ -116,13 +122,20 @@ def main() -> None:
     ap.add_argument("--dry-run", action="store_true", help="print the user data and stop before any AWS call")
     args = ap.parse_args()
 
+    if not args.stock and (not args.ami or args.cool_price <= 0):
+        ap.error("the COOL run needs --ami and --cool-price (or pass --stock for the D-0009 fallback)")
+    skip_cool = "1" if args.stock else ""
+
     import boto3
     sess = boto3.Session(profile_name=args.profile, region_name=REGION)
     if args.dry_run:
         print(USER_DATA.format(watchdog_min=args.watchdog_min, code_url="<code>", pack_url="<pack>",
                                results_url="<results>", log_url="<log>", bench_args=args.bench_args,
-                               cool_python=args.cool_python))
+                               cool_python=args.cool_python, skip_cool=skip_cool))
         return
+    if args.stock:
+        args.ami = sess.client("ssm").get_parameter(Name=UBUNTU_ARM64)["Parameter"]["Value"]
+        args.cool_price = 0.0
 
     acct = sess.client("sts").get_caller_identity()["Account"]
     try:
@@ -145,7 +158,7 @@ def main() -> None:
     ud = USER_DATA.format(watchdog_min=args.watchdog_min, code_url=url("get_object", "code.tgz"),
                           pack_url=url("get_object", "pack.tgz"), results_url=url("put_object", "results.tgz"),
                           log_url=url("put_object", "bench.log"), bench_args=args.bench_args,
-                          cool_python=args.cool_python)
+                          cool_python=args.cool_python, skip_cool=skip_cool)
 
     ec2 = sess.client("ec2")
     r = ec2.run_instances(
