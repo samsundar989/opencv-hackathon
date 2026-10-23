@@ -1,0 +1,111 @@
+{
+ "title": "River Steward \u2014 fleet agent evaluation",
+ "status": "rules baseline final; LLM arms pending: haiku, haiku_noev, sonnet",
+ "episode_set": {
+  "file": "results/agent_eval/episodes.jsonl",
+  "sha256": "074bda748f3989d28dd709b3d795bf13a69382116d37a7e06d32ec2ae2459920",
+  "frozen_utc": "2026-10-23T21:05:36+00:00",
+  "single_camera_episodes": 98,
+  "real": 63,
+  "synthetic_labelled": 35,
+  "clean_controls": 26,
+  "fleet_cycles": 12,
+  "expected_actions_written": "by the builder, before any arm ran"
+ },
+ "arms": {
+  "rules": {
+   "arm": "deterministic rules policy (baseline)",
+   "model": null,
+   "repeats": 3,
+   "task_success_pct": {
+    "mean": 93.9,
+    "min": 93.9,
+    "max": 93.9
+   },
+   "task_success_real_pct": 98.4,
+   "task_success_synthetic_pct": 85.7,
+   "false_actions_on_clean_controls_pct": 0.0,
+   "unneeded_escalations_per_episode": 0.01,
+   "fleet_triage_top1_pct": 91.7,
+   "fleet_triage_kendall_tau": 0.89,
+   "llm_fallbacks_to_rules": "0/294",
+   "latency_s": {
+    "p50": 2.1,
+    "p95": 14.3
+   },
+   "tokens_per_episode": 0,
+   "estimated_usd_total": 0.0,
+   "success_by_kind_pct": {
+    "control_disagree": 100.0,
+    "control_rise": 100.0,
+    "control_view": 100.0,
+    "disagree_camfault": 75.0,
+    "gauge_drift": 0.0,
+    "gauge_flatline": 100.0,
+    "gauge_offset": 75.0,
+    "muddy_rise": 100.0,
+    "muddy_stale": 100.0,
+    "oor_gauge": 100.0,
+    "oor_live": 100.0,
+    "oor_stale": 100.0,
+    "reanchor_banked": 100.0,
+    "reg_loss_onset": 100.0,
+    "reg_loss_persist": 100.0,
+    "rise_alert": 87.5,
+    "rise_minor": 100.0,
+    "stale_camera": 100.0,
+    "stale_night": 100.0,
+    "view_shift": 100.0,
+    "view_transient": 100.0
+   }
+  }
+ },
+ "opencv_evidence_effect": null,
+ "flood_replays": [
+  {
+   "camera": "IL_Salt_Creek_at_Wood_Dale",
+   "replay_start": "2026-07-03",
+   "policy": "rules",
+   "frames": 60,
+   "flagged": 52,
+   "first_alert_utc": "2026-07-03T11:00:06+00:00",
+   "alerts_drafted": 8,
+   "camera_quarantined_cycles": 1,
+   "figure": "results/agent_eval/replay/IL_Salt_Creek_at_Wood_Dale_2026-07-03_rules_timeline.png"
+  },
+  {
+   "camera": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "replay_start": "2026-07-28",
+   "policy": "rules",
+   "frames": 47,
+   "flagged": 40,
+   "first_alert_utc": "2026-07-29T11:00:06+00:00",
+   "alerts_drafted": 4,
+   "camera_quarantined_cycles": 0,
+   "figure": "results/agent_eval/replay/NY_East_Branch_Delaware_River_at_Hancock_Staff_2026-07-28_rules_timeline.png"
+  },
+  {
+   "camera": "WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet",
+   "replay_start": "2026-04-14",
+   "policy": "rules",
+   "frames": 44,
+   "flagged": 44,
+   "first_alert_utc": "2026-04-14T19:00:03+00:00",
+   "alerts_drafted": 7,
+   "camera_quarantined_cycles": 2,
+   "figure": "results/agent_eval/replay/WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet_2026-04-14_rules_timeline.png"
+  }
+ ],
+ "honest_limits": [
+  "Gauge-stale episodes are synthetic dropouts on real frames: no real outage > 3 h exists in the 20 histories.",
+  "Above its calibrated range a camera saturates and cannot measure the flood; the agent trusts the gauge and publishes only a lower bound when the gauge is out.",
+  "Re-anchoring is tested on 10 real episodes, 8 from one camera (Pecatonica).",
+  "Costs are estimates at Anthropic list prices; Bedrock bills its own rates."
+ ],
+ "sources": [
+  "results/agent_eval/REPORT.md",
+  "results/agent_eval/runs/*.jsonl",
+  "results/agent_eval/FROZEN.json",
+  "results/agent_eval/runs_v1/README.md (superseded runs and why)"
+ ]
+}
