@@ -6,7 +6,7 @@
 
 | item | status | evidence |
 |---|---|---|
-| `handle()` / `rules.handle()` keep the INTERFACES signatures; every behaviour has a test | **done** | `src/riversight/agent/`; `tests/w2/` has 32 tests and the full suite is green |
+| `handle()` / `rules.handle()` keep the INTERFACES signatures; every behaviour has a test | **done** | `src/riversight/agent/`; `tests/w2/` has 28 tests and the full suite is green |
 | ≥ 60 episodes, expected actions written first, hash before the final arms | **done** | 78 single-camera episodes (48 real), 26 clean controls, 12 fleet cycles; `results/agent_eval/FROZEN.json` (episodes sha `e12e0f29…`) |
 | 3 arms × 3 repeats, 2 LLM models | **1 of 4 arms run** | the rules arm is final. Haiku, Haiku-without-OpenCV and Sonnet are blocked on `aws login` (Q-0008) |
 | ≥ 2 real floods replayed through the full loop, plus a timeline image | **done (rules policy)** | 3 floods through W1's `live.cycle.replay`; `results/agent_eval/replay/` |
