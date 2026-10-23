@@ -108,6 +108,11 @@ def main() -> None:
         segs[f.parents[1].name] = pd.read_csv(f)
     out = summarize(kt, reg, cv, fit_cv, gate, segs or None)
     dst = RES / "kill_test_v2_summary.json"
+    if not segs and dst.exists():
+        # fresh clone: the history segment index is local (data/ is gitignored); keep the committed block
+        prev = json.loads(dst.read_text(encoding="utf-8")).get("history_view_segments")
+        if prev:
+            out["history_view_segments"] = prev
     dst.write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(out, indent=2))
 
