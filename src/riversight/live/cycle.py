@@ -606,7 +606,7 @@ def run_cycle(store, models: list[SiteModel], agent_fn=default_agent_fn, now: da
         try:
             state = store.get_json(f"live/state/{cam}.json")
             if not force and not due(state, now):
-                sites.append(prev.get(cam) or {"cam_id": cam, "status": "pending"})
+                sites.append(prev.get(cam) or last_slim(store, m) or {"cam_id": cam, "status": "pending"})
                 continue
             fr = newest_frame(nims, cam, now, cache)
             if fr is None or (state and state.get("last_frame") == fr.filename):
@@ -635,6 +635,11 @@ def run_cycle(store, models: list[SiteModel], agent_fn=default_agent_fn, now: da
         traceback.print_exc()
     put_metrics(idx, [s["agent"] for s in sites if s.get("agent") and s.get("t_cycle") == iso(now)])
     return idx
+
+
+def last_slim(store, m: SiteModel) -> dict | None:
+    r = store.get_json(f"live/sites/{m.cam_id}/latest.json")
+    return slim_reading(r, m.meta) if r else None
 
 
 def slim_reading(r: dict, meta: dict) -> dict:
