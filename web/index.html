@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RiverSight — live</title>
 <meta name="description" content="Public USGS river cameras read as water-level instruments, live.">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="assets/vendor/leaflet.min.css">
 <link rel="stylesheet" href="assets/app.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="assets/vendor/leaflet.min.js"></script>
 <script src="assets/common.js"></script>
 </head>
 <body>
@@ -38,33 +38,40 @@
     <span><b>${prov}</b> camera-only (gauge down)</span>
     <span class="muted small">cycle took ${(idx.cycle_ms / 1000).toFixed(0)} s · OpenCV ${RS.esc(idx.opencv?.version)}${idx.opencv?.cool ? " (COOL)" : ""}</span>`;
 
+  await RS.panel("map", async () => {
   const map = L.map("map", { scrollWheelZoom: false }).setView([39, -96], 4);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 12, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
-  const colour = { ok: "#1a7f37", provisional: "#9a6700", view_change: "#9a6700", quarantined: "#c62828", error: "#c62828" };
+  const colour = { ok: "#1a7f37", provisional: "#9a6700", view_change: "#9a6700", above_range: "#9a6700",
+    above_range_provisional: "#9a6700", stale: "#57606a", quarantined: "#c62828", error: "#c62828" };
   const pts = [];
   for (const s of sites) {
     if (s.lat == null) continue;
     pts.push([s.lat, s.lon]);
     L.circleMarker([s.lat, s.lon], { radius: 8, weight: 2, color: "#fff", fillOpacity: 0.9, fillColor: colour[s.status] || "#57606a" })
       .addTo(map).bindPopup(`<b><a href="site.html?cam=${encodeURIComponent(s.cam_id)}">${RS.esc(RS.nice(s.cam_id))}</a></b><br>
-        camera ${RS.ft(s.camera_stage_ft)} · gauge ${RS.ft(s.gauge_stage_ft)}<br>${RS.pill(s.status)}`);
+        camera ${RS.cam(s, false)} · gauge ${RS.ft(s.gauge_stage_ft)}<br>${RS.pill(s.status)}`);
   }
   if (pts.length) map.fitBounds(pts, { padding: [24, 24] });
+  });
 
-  const order = { quarantined: 0, view_change: 1, provisional: 2, ok: 3, night: 4, no_frame: 5 };
-  sites.sort((a, b) => (order[a.status] ?? 9) - (order[b.status] ?? 9) || a.cam_id.localeCompare(b.cam_id));
+  await RS.panel("sites", async () => {
+  sites.sort((a, b) => RS.featuredRank(a.cam_id) - RS.featuredRank(b.cam_id) || a.cam_id.localeCompare(b.cam_id));
   document.getElementById("sites").innerHTML = sites.map((s) => `
     <a class="panel card" href="site.html?cam=${encodeURIComponent(s.cam_id)}">
-      ${s.overlay_key ? `<img loading="lazy" src="${RS.esc(s.overlay_key)}" alt="Latest frame from ${RS.esc(RS.nice(s.cam_id))} with the under-water area in blue">` : `<img alt="">`}
+      ${(() => { const dark = !s.daylight || s.status === "stale" || s.status === "night";
+        const key = dark && s.last_daylight_overlay_key ? s.last_daylight_overlay_key : s.overlay_key;
+        return key ? `<img loading="lazy" src="${RS.esc(key)}" alt="${dark && s.last_daylight_overlay_key ? "Last daylight frame" : "Latest frame"} from ${RS.esc(RS.nice(s.cam_id))} with the under-water area in blue">` : `<img alt="">`; })()}
       <div class="body">
         <div class="name">${RS.esc(RS.nice(s.cam_id))}</div>
-        <div>${RS.pill(s.status)} <span class="muted small">tier ${RS.esc(s.tier || "?")} · ${RS.ago(s.t_frame)}</span></div>
-        <div class="nums"><span>camera <b>${RS.ft(s.camera_stage_ft)}</b>${s.camera_sigma_ft ? ` ± ${Number(s.camera_sigma_ft).toFixed(2)}` : ""}</span>
+        <div>${RS.featuredRank(s.cam_id) < 99 ? '<span class="pill">featured</span> ' : ""}${RS.pill(s.status)} <span class="muted small">tier ${RS.esc(s.tier || "?")} · ${RS.ago(s.t_frame)}</span></div>
+        <div class="nums"><span>camera <b>${RS.cam(s)}</b></span>
           <span>gauge <b>${RS.ft(s.gauge_stage_ft)}</b></span></div>
+        ${(!s.daylight || s.status === "stale") && s.last_daylight_t ? `<div class="muted small">image: last daylight frame ${RS.ago(s.last_daylight_t)}</div>` : ""}
         <div>${RS.flags((s.flags || []).filter((f) => f !== "NIGHT"))}</div>
       </div>
     </a>`).join("");
+  });
 })();
 </script>
 </body>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RiverSight — site</title>
 <link rel="stylesheet" href="assets/app.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="assets/vendor/chart.umd.min.js"></script>
 <script src="assets/common.js"></script>
 </head>
 <body>
@@ -18,6 +18,7 @@
       <h2 style="margin-top:0">What's under water at a given stage?</h2>
       <p class="muted small" style="margin:0 0 8px">Drag the slider. Blue blocks are where the flood-height map says the water reaches at that stage.
         Each block's height h* was learned from this camera's own gauge history. Nobody surveyed anything.</p>
+      <div id="banner"></div>
       <div class="stage-wrap"><canvas id="cv" role="img" aria-label="Latest camera frame with the area under water at the selected stage in blue"></canvas></div>
       <div class="slider">
         <label for="stage">Stage</label>
@@ -64,114 +65,144 @@
     RS.json(`sites/${cam}/meta.json`).catch(() => null),
     RS.json(`sites/${cam}/hstar.json`).catch(() => null),
     RS.json(`live/sites/${cam}/latest.json`).catch(() => null)]);
-  const fh = document.getElementById("fh");
-  fh.src = `sites/${cam}/floodheight.png`;
-  fh.onerror = () => fh.replaceWith(Object.assign(document.createElement("p"), { className: "muted small", textContent: "No flood-height image." }));
+  const ld = latest?.last_daylight || null;
+  // draw on the latest registered daylight frame; otherwise on the last remembered daylight frame (D-0009 W1-2)
+  const live = latest && latest.daylight && latest.registration?.ok && latest.status !== "stale";
+  const shown = live ? { frame_key: latest.frame_key, t_frame: latest.t_frame, H_frame_to_ref: latest.registration.H_frame_to_ref }
+    : ld || (latest?.daylight ? { frame_key: latest.frame_key, t_frame: latest.t_frame, noOverlay: true } : null);
 
-  const strip = document.getElementById("strip");
-  if (latest) {
+  await RS.panel("fh", async (fh) => {
+    fh.src = `sites/${cam}/floodheight.png`;
+    fh.onerror = () => fh.replaceWith(Object.assign(document.createElement("p"), { className: "muted small", textContent: "No flood-height image." }));
+  });
+
+  await RS.panel("strip", async (strip) => {
+    if (!latest) { strip.textContent = "No live reading yet for this site."; return; }
     strip.innerHTML = `${RS.pill(latest.status)} <span>frame ${RS.ago(latest.t_frame)}</span>
-      <span>camera <b>${RS.ft(latest.camera_stage_ft)}</b>${latest.camera_sigma_ft ? ` ± ${latest.camera_sigma_ft.toFixed(2)}` : ""}</span>
+      <span>camera <b>${RS.cam(latest)}</b></span>
       <span>gauge <b>${RS.ft(latest.gauge_stage_ft)}</b> <span class="muted small">(${latest.gauge_age_min ?? "—"} min old)</span></span>
       <span>flood state <b>${RS.esc(latest.flood_state)}</b></span> ${RS.flags(latest.flags)}`;
+  });
+
+  await RS.panel("now", async (el) => {
+    if (!latest) return;
     const reg = latest.registration || {};
-    document.getElementById("now").innerHTML = `<table>
+    const rng = latest.calibrated_range_ft || [meta?.stage_min, meta?.stage_max];
+    el.innerHTML = `<table>
+      ${(latest.flags || []).includes("OUT_OF_RANGE") ? `<tr><th>Range</th><td><b>Outside the calibrated range</b> (${rng[0]}–${rng[1]} ft). The camera has not seen this stage, so it only reports "at least", and the gauge is trusted.</td></tr>` : ""}
       <tr><th>Registration</th><td>${reg.ok ? "OK" : "failed"} · ${RS.esc(reg.method || "—")} · ${reg.inliers ?? "—"} inliers (ratio ${reg.inlier_ratio ?? "—"}) · reprojection ${reg.reproj_px ?? "—"} px · ref ${RS.esc(reg.ref || "—")}</td></tr>
       <tr><th>Image quality</th><td>sharpness ${latest.quality?.lap_var ?? "—"} · fog ${latest.quality?.fog_score ?? "—"} · glare ${latest.quality?.glare_frac ?? "—"}</td></tr>
       <tr><th>Rise (3 h)</th><td>gauge ${RS.ft(latest.gauge_rise_3h_ft)} · camera ${RS.ft(latest.camera_rise_3h_ft)}</td></tr>
-      <tr><th>Sun</th><td>${latest.sun_elev_deg ?? "—"}° ${latest.daylight ? "(day)" : "(night: no camera reading)"}</td></tr>
+      <tr><th>Sun</th><td>${latest.sun_elev_deg ?? "—"}° ${latest.daylight ? "(day)" : "(night: gauge only, no camera reading)"}</td></tr>
       <tr><th>Model</th><td>live model ${RS.esc(latest.model_sha)} · code ${RS.esc(latest.code_sha)} · OpenCV ${RS.esc(latest.opencv?.version)}</td></tr>
-      ${meta ? `<tr><th>Calibration</th><td>${meta.n_calib_frames} frames, ${meta.calib_start.slice(0, 10)} → ${meta.calib_end.slice(0, 10)}; stage p5–p95 ${meta.stage_p05}–${meta.stage_p95} ft; tier ${meta.tier}; σ ${meta.sigma_ft} ft (year-long out-of-fold)</td></tr>` : ""}
+      ${meta ? `<tr><th>Calibration</th><td>${meta.n_calib_frames} frames, ${meta.calib_start.slice(0, 10)} → ${meta.calib_end.slice(0, 10)}; range ${meta.stage_min}–${meta.stage_max} ft; tier ${meta.tier}; σ ${meta.sigma_ft} ft (year-long out-of-fold)</td></tr>` : ""}
     </table>`;
-  } else strip.textContent = "No live reading yet for this site.";
+  });
 
-  // ---- stage slider: h* blocks drawn onto the latest frame (projective map ref → frame) ----
-  const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
-  const slider = document.getElementById("stage"), out = document.getElementById("stageOut");
-  const img = new Image();
-  let Hinv = null;
-  if (latest?.registration?.H_frame_to_ref) Hinv = inv3(latest.registration.H_frame_to_ref);
-  function inv3(m) {
-    const [a, b, c, d, e, f, g, h, i] = m;
-    const A = e * i - f * h, B = -(d * i - f * g), C = d * h - e * g;
-    const det = a * A + b * B + c * C;
-    if (!det) return null;
-    return [A, -(b * i - c * h), b * f - c * e, B, a * i - c * g, -(a * f - c * d), C, -(a * h - b * g), a * e - b * d].map((v) => v / det);
-  }
-  const map = (H, x, y) => { const w = H[6] * x + H[7] * y + H[8]; return [(H[0] * x + H[1] * y + H[2]) / w, (H[3] * x + H[4] * y + H[5]) / w]; };
-  function draw() {
-    const s = Number(slider.value);
-    out.textContent = `${s.toFixed(2)} ft`;
-    if (!img.complete || !img.naturalWidth) return;
-    cv.width = img.naturalWidth; cv.height = img.naturalHeight;
-    ctx.drawImage(img, 0, 0);
-    if (!hstar || !meta) return;
-    const [rows, cols] = hstar.grid, [rh, rw] = meta.ref_shape;
-    const sx = rw / hstar.small_wh[0] * hstar.block_px, sy = rh / hstar.small_wh[1] * hstar.block_px;
-    const wet = (r, c) => r >= 0 && c >= 0 && r < rows && c < cols && hstar.thr[r * cols + c] !== null && hstar.thr[r * cols + c] <= s;
-    ctx.fillStyle = "rgba(30,140,255,0.45)";
-    ctx.beginPath();
-    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
-      if (!wet(r, c)) continue;
-      let nb = 0;
-      for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) if ((dr || dc) && wet(r + dr, c + dc)) nb++;
-      if (nb < 1) continue;                                   // drop isolated specks
-      const pts = [[c, r], [c + 1, r], [c + 1, r + 1], [c, r + 1]].map(([x, y]) => {
-        const p = [x * sx, y * sy];
-        return Hinv ? map(Hinv, p[0], p[1]) : [p[0] * cv.width / rw, p[1] * cv.height / rh];
-      });
-      ctx.moveTo(...pts[0]); pts.slice(1).forEach((p) => ctx.lineTo(...p)); ctx.closePath();
+  // ---- stage slider: h* blocks drawn onto the shown frame (projective map ref → frame) ----
+  await RS.panel("cv", async (cv) => {
+    const ctx = cv.getContext("2d");
+    const slider = document.getElementById("stage"), out = document.getElementById("stageOut");
+    const banner = document.getElementById("banner");
+    if (shown?.noOverlay) {
+      banner.innerHTML = `<div class="banner">The latest frame could not be registered to this camera's reference (view changed?), so the flood-height overlay is not drawn.</div>`;
+    } else if (!live && ld) {
+      const why = !latest?.daylight ? "Night now" : latest.status === "stale" ? "No new frame from this camera recently"
+        : "The latest frame could not be registered";
+      const when = new Date(ld.t_frame).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", timeZoneName: "short" });
+      banner.innerHTML = `<div class="banner">${why}: showing the <b>last daylight frame</b> (${RS.esc(when)}). The gauge reading above is current.</div>`;
+    } else if (!shown) banner.innerHTML = `<div class="banner">No daylight frame recorded yet for this site.</div>`;
+    const img = new Image();
+    const Hinv = shown?.H_frame_to_ref ? inv3(shown.H_frame_to_ref) : null;
+    function inv3(m) {
+      const [a, b, c, d, e, f, g, h, i] = m;
+      const A = e * i - f * h, B = -(d * i - f * g), C = d * h - e * g;
+      const det = a * A + b * B + c * C;
+      if (!det) return null;
+      return [A, -(b * i - c * h), b * f - c * e, B, a * i - c * g, -(a * f - c * d), C, -(a * h - b * g), a * e - b * d].map((v) => v / det);
     }
-    ctx.fill();
-    ctx.fillStyle = "rgba(0,0,0,.6)"; ctx.fillRect(0, cv.height - 30, cv.width, 30);
-    ctx.fillStyle = "#fff"; ctx.font = "16px system-ui, sans-serif";
-    ctx.fillText(`Under water at ${s.toFixed(2)} ft (blue)`, 10, cv.height - 10);
-  }
-  if (hstar) {
-    const vals = hstar.thr.filter((v) => v !== null);
-    const lo = Math.min(meta?.stage_min ?? hstar.lo, ...vals), hi = Math.max(meta?.stage_max ?? hstar.hi, ...vals);
-    slider.min = (lo - 0.1).toFixed(2); slider.max = (hi + 0.1).toFixed(2);
-    slider.value = (latest?.camera_stage_ft ?? latest?.gauge_stage_ft ?? meta?.stage_p50 ?? (lo + hi) / 2).toFixed(2);
-    document.getElementById("marks").innerHTML = `Calibrated range ${lo.toFixed(2)}–${hi.toFixed(2)} ft · p90 (elevated) ${meta?.flood_elevated_ft ?? "—"} ft ·
-      <button type="button" id="toNow">current stage</button> <button type="button" id="toHigh">calibration max</button>`;
-    document.getElementById("toNow").onclick = () => { slider.value = latest?.camera_stage_ft ?? latest?.gauge_stage_ft ?? slider.value; draw(); };
-    document.getElementById("toHigh").onclick = () => { slider.value = hi; draw(); };
-  }
-  slider.addEventListener("input", draw);
-  img.onload = draw;
-  if (latest) img.src = latest.frame_key;
+    const map = (H, x, y) => { const w = H[6] * x + H[7] * y + H[8]; return [(H[0] * x + H[1] * y + H[2]) / w, (H[3] * x + H[4] * y + H[5]) / w]; };
+    function draw() {
+      const s = Number(slider.value);
+      out.textContent = `${s.toFixed(2)} ft`;
+      if (!img.complete || !img.naturalWidth) return;
+      cv.width = img.naturalWidth; cv.height = img.naturalHeight;
+      ctx.drawImage(img, 0, 0);
+      if (!hstar || !meta || shown.noOverlay) return;
+      const [rows, cols] = hstar.grid, [rh, rw] = meta.ref_shape;
+      const sx = rw / hstar.small_wh[0] * hstar.block_px, sy = rh / hstar.small_wh[1] * hstar.block_px;
+      const wet = (r, c) => r >= 0 && c >= 0 && r < rows && c < cols && hstar.thr[r * cols + c] !== null && hstar.thr[r * cols + c] <= s;
+      ctx.fillStyle = "rgba(30,140,255,0.45)";
+      ctx.beginPath();
+      for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+        if (!wet(r, c)) continue;
+        let nb = 0;
+        for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) if ((dr || dc) && wet(r + dr, c + dc)) nb++;
+        if (nb < 1) continue;                                   // drop isolated specks
+        const pts = [[c, r], [c + 1, r], [c + 1, r + 1], [c, r + 1]].map(([x, y]) => {
+          const p = [x * sx, y * sy];
+          return Hinv ? map(Hinv, p[0], p[1]) : [p[0] * cv.width / rw, p[1] * cv.height / rh];
+        });
+        ctx.moveTo(...pts[0]); pts.slice(1).forEach((p) => ctx.lineTo(...p)); ctx.closePath();
+      }
+      ctx.fill();
+      ctx.fillStyle = "rgba(0,0,0,.6)"; ctx.fillRect(0, cv.height - 30, cv.width, 30);
+      ctx.fillStyle = "#fff"; ctx.font = "16px system-ui, sans-serif";
+      ctx.fillText(`Under water at ${s.toFixed(2)} ft (blue)`, 10, cv.height - 10);
+    }
+    if (hstar) {
+      const vals = hstar.thr.filter((v) => v !== null);
+      const lo = Math.min(meta?.stage_min ?? hstar.lo, ...vals), hi = Math.max(meta?.stage_max ?? hstar.hi, ...vals);
+      const now = latest?.camera_stage_ft ?? latest?.camera_at_least_ft ?? latest?.gauge_stage_ft ?? ld?.camera_stage_ft ?? meta?.stage_p50 ?? (lo + hi) / 2;
+      slider.min = (lo - 0.1).toFixed(2); slider.max = (hi + 0.1).toFixed(2);
+      slider.value = Math.min(Math.max(now, lo - 0.1), hi + 0.1).toFixed(2);
+      document.getElementById("marks").innerHTML = `Calibrated range ${lo.toFixed(2)}–${hi.toFixed(2)} ft · p90 (elevated) ${meta?.flood_elevated_ft ?? "—"} ft ·
+        <button type="button" id="toNow">current stage</button> <button type="button" id="toHigh">calibration max</button>`;
+      document.getElementById("toNow").onclick = () => { slider.value = now; draw(); };
+      document.getElementById("toHigh").onclick = () => { slider.value = hi; draw(); };
+    }
+    slider.addEventListener("input", draw);
+    out.textContent = `${Number(slider.value).toFixed(2)} ft`;
+    img.onload = draw;
+    if (shown?.frame_key) img.src = shown.frame_key;
+  });
 
   // ---- 7-day chart ----
-  const rows = (await Promise.all(RS.days(7).map((d) => RS.jsonl(`live/sites/${cam}/${d}.jsonl`)))).flat()
-    .sort((a, b) => Date.parse(a.t_frame) - Date.parse(b.t_frame));
-  const pt = (k) => rows.filter((r) => r[k] != null).map((r) => ({ x: Date.parse(r.t_frame), y: r[k] }));
-  const band = (sgn) => rows.filter((r) => r.camera_stage_ft != null && r.camera_sigma_ft != null)
-    .map((r) => ({ x: Date.parse(r.t_frame), y: r.camera_stage_ft + sgn * r.camera_sigma_ft }));
-  const flagged = rows.filter((r) => (r.flags || []).some((f) => f !== "NIGHT")).map((r) => ({ x: Date.parse(r.t_frame), y: r.camera_stage_ft ?? r.gauge_stage_ft, f: r.flags }));
-  const css = getComputedStyle(document.documentElement);
-  const c = (v) => css.getPropertyValue(v).trim();
-  new Chart(document.getElementById("chart"), {
-    type: "line",
-    data: { datasets: [
-      { label: "camera + σ", data: band(1), borderWidth: 0, pointRadius: 0, fill: "+1", backgroundColor: "rgba(30,140,255,.15)" },
-      { label: "camera − σ", data: band(-1), borderWidth: 0, pointRadius: 0, fill: false },
-      { label: "camera", data: pt("camera_stage_ft"), borderColor: c("--water"), pointRadius: 1.5, borderWidth: 1.5, spanGaps: 3 * 3600e3 },
-      { label: "gauge", data: pt("gauge_stage_ft"), borderColor: c("--ink"), pointRadius: 0, borderWidth: 1.5 },
-      { label: "flagged", data: flagged, showLine: false, pointStyle: "triangle", pointRadius: 5, borderColor: c("--warn"), backgroundColor: c("--warn") }]},
-    options: { responsive: true, maintainAspectRatio: false, animation: false, parsing: false,
-      scales: { x: { type: "linear", ticks: { color: c("--muted"), callback: (v) => new Date(v).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit" }) }, grid: { color: c("--line") } },
-                y: { title: { display: true, text: "stage (ft)", color: c("--muted") }, ticks: { color: c("--muted") }, grid: { color: c("--line") } } },
-      plugins: { legend: { labels: { color: c("--ink"), filter: (i) => !i.text.includes("σ") } },
-                 tooltip: { callbacks: { title: (it) => new Date(it[0].parsed.x).toLocaleString(), afterLabel: (it) => it.raw.f ? it.raw.f.join(", ") : "" } } } } });
-  document.getElementById("chartnote").textContent = rows.length
-    ? `${rows.length} readings since ${new Date(rows[0].t_frame).toLocaleString()}. Night frames have no camera reading.`
-    : "No readings recorded yet.";
+  await RS.panel("chart", async (canvas) => {
+    const rows = (await Promise.all(RS.days(7).map((d) => RS.jsonl(`live/sites/${cam}/${d}.jsonl`)))).flat()
+      .sort((a, b) => Date.parse(a.t_frame) - Date.parse(b.t_frame));
+    document.getElementById("chartnote").textContent = rows.length
+      ? `${rows.length} readings since ${new Date(rows[0].t_frame).toLocaleString()}. Night frames and above-range frames have no camera number.`
+      : "No readings recorded yet.";
+    if (typeof Chart === "undefined") throw new Error("chart library failed to load");
+    const pt = (k) => rows.filter((r) => r[k] != null).map((r) => ({ x: Date.parse(r.t_frame), y: r[k] }));
+    const band = (sgn) => rows.filter((r) => r.camera_stage_ft != null && r.camera_sigma_ft != null)
+      .map((r) => ({ x: Date.parse(r.t_frame), y: r.camera_stage_ft + sgn * r.camera_sigma_ft }));
+    const flagged = rows.filter((r) => (r.flags || []).some((f) => f !== "NIGHT"))
+      .map((r) => ({ x: Date.parse(r.t_frame), y: r.camera_stage_ft ?? r.camera_at_least_ft ?? r.gauge_stage_ft, f: r.flags }));
+    const css = getComputedStyle(document.documentElement);
+    const c = (v) => css.getPropertyValue(v).trim();
+    new Chart(canvas, {
+      type: "line",
+      data: { datasets: [
+        { label: "camera + σ", data: band(1), borderWidth: 0, pointRadius: 0, fill: "+1", backgroundColor: "rgba(30,140,255,.15)" },
+        { label: "camera − σ", data: band(-1), borderWidth: 0, pointRadius: 0, fill: false },
+        { label: "camera", data: pt("camera_stage_ft"), borderColor: c("--water"), pointRadius: 1.5, borderWidth: 1.5, spanGaps: 3 * 3600e3 },
+        { label: "camera ≥ (above range)", data: pt("camera_at_least_ft"), showLine: false, pointStyle: "rectRot", pointRadius: 4, borderColor: c("--water") },
+        { label: "gauge", data: pt("gauge_stage_ft"), borderColor: c("--ink"), pointRadius: 0, borderWidth: 1.5 },
+        { label: "flagged", data: flagged, showLine: false, pointStyle: "triangle", pointRadius: 5, borderColor: c("--warn"), backgroundColor: c("--warn") }]},
+      options: { responsive: true, maintainAspectRatio: false, animation: false, parsing: false,
+        scales: { x: { type: "linear", ticks: { color: c("--muted"), callback: (v) => new Date(v).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit" }) }, grid: { color: c("--line") } },
+                  y: { title: { display: true, text: "stage (ft)", color: c("--muted") }, ticks: { color: c("--muted") }, grid: { color: c("--line") } } },
+        plugins: { legend: { labels: { color: c("--ink"), filter: (i) => !i.text.includes("σ") } },
+                   tooltip: { callbacks: { title: (it) => new Date(it[0].parsed.x).toLocaleString(), afterLabel: (it) => it.raw.f ? it.raw.f.join(", ") : "" } } } } });
+  });
 
   // ---- frozen-test numbers ----
-  try {
+  await RS.panel("frozen", async (el) => {
     const kt = (await RS.json("data/kill_test_v2.json")).find((r) => r.cam_id === cam);
     const f2 = (v) => v == null ? "—" : Number(v).toFixed(2);
-    document.getElementById("frozen").innerHTML = kt ? `<table>
+    el.innerHTML = kt ? `<table>
       <tr><th>Tier</th><td>${RS.esc(kt.tier)}</td></tr>
       <tr><th>Test frames</th><td>${kt.n} (Oct 4–14, scored once)</td></tr>
       <tr><th>MAE</th><td>${f2(kt.mae)} ft (normalized ${f2(kt.nmae)}) · P1 ${kt.p1 ? "met" : "not met"}</td></tr>
@@ -179,19 +210,21 @@
       <tr><th>15-min persistence</th><td>${f2(kt.mae_p15)} ft (the camera does not beat this while the gauge is online)</td></tr>
       </table><p class="muted"><img src="sites/${encodeURIComponent(cam)}/frozen_test_ts.png" alt="Frozen test time series" style="width:100%" onerror="this.remove()"></p>`
       : "Not in the frozen test.";
-  } catch { document.getElementById("frozen").textContent = "—"; }
+  });
 
   // ---- agent decisions ----
-  const dec = (await Promise.all(RS.days(3).map((d) => RS.jsonl(`live/agent/${d}.jsonl`)))).flat()
-    .filter((d) => d.cam_id === cam).reverse().slice(0, 15);
-  document.getElementById("agent").innerHTML = dec.length ? dec.map((d) => `
-    <div class="decision ${d.decided_by === "llm" ? "llm" : ""}">
-      <b>${(d.actions || []).map((a) => RS.esc(a.type)).join(", ") || "NOOP"}</b>
-      <span class="muted">· ${RS.esc(d.decided_by)}${d.model ? " " + RS.esc(d.model) : ""} · ${RS.ago(d.t_frame)}</span><br>
-      ${RS.flags(d.flags)}<br>${RS.esc(d.rationale || "")}
-      ${(d.steps || []).length ? `<br><span class="muted">tools: ${d.steps.map((s) => RS.esc(s.tool)).join(" → ")}</span>` : ""}
-      ${d.approval_id ? `<br><a href="approvals.html#${RS.esc(d.approval_id)}">approval ${RS.esc(d.approval_id)}</a>` : ""}
-    </div>`).join("") : "No agent decisions for this site in the last 3 days (it is only called for flagged readings).";
+  await RS.panel("agent", async (el) => {
+    const dec = (await Promise.all(RS.days(3).map((d) => RS.jsonl(`live/agent/${d}.jsonl`)))).flat()
+      .filter((d) => d.cam_id === cam).reverse().slice(0, 15);
+    el.innerHTML = dec.length ? dec.map((d) => `
+      <div class="decision ${d.decided_by === "llm" ? "llm" : ""}">
+        <b>${(d.actions || []).map((a) => RS.esc(a.type)).join(", ") || "NOOP"}</b>
+        <span class="muted">· ${RS.esc(d.decided_by)}${d.model ? " " + RS.esc(d.model) : ""} · ${RS.ago(d.t_frame)}</span><br>
+        ${RS.flags(d.flags)}<br>${RS.esc(d.rationale || "")}
+        ${(d.steps || []).length ? `<br><span class="muted">tools: ${d.steps.map((s) => RS.esc(s.tool)).join(" → ")}</span>` : ""}
+        ${d.approval_id ? `<br><a href="approvals.html#${RS.esc(d.approval_id)}">approval ${RS.esc(d.approval_id)}</a>` : ""}
+      </div>`).join("") : "No agent decisions for this site in the last 3 days (it is only called for flagged readings).";
+  });
 })();
 </script>
 </body>

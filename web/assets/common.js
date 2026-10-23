@@ -43,13 +43,34 @@ const RS = (() => {
   }
 
   const LABEL = { ok: "OK", provisional: "provisional (gauge down)", quarantined: "quarantined", night: "night",
-    view_change: "view changed", no_frame: "no new frame", error: "error", pending: "pending" };
+    view_change: "view changed", no_frame: "no new frame", error: "error", pending: "pending", stale: "stale frame",
+    above_range: "above range — gauge trusted", above_range_provisional: "above range (gauge down)" };
+
+  // D-0009: featured first (demo quality), the rest alphabetically
+  const FEATURED = ["WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet", "IL_Salt_Creek_at_Wood_Dale",
+    "NY_East_Branch_Delaware_River_at_Hancock_Staff", "NY_Neversink_River_at_Godeffroy", "OH_Bean_Creek_at_Powers",
+    "NJ_Stony_Brook_at_Princeton", "TX_Buffalo_Bayou_at_State_HWY_6_near_Addicks"];
+  const featuredRank = (cam) => { const i = FEATURED.indexOf(cam); return i < 0 ? 99 : i; };
+
+  // camera stage text: never a number above the calibrated range (OUT_OF_RANGE)
+  function cam(r, withSigma = true) {
+    if (!r) return "—";
+    if (r.camera_at_least_ft != null) return `≥ ${Number(r.camera_at_least_ft).toFixed(2)} ft <span class="muted small">(above calibrated range)</span>`;
+    if (r.camera_stage_ft == null) return "—";
+    return `${Number(r.camera_stage_ft).toFixed(2)} ft` + (withSigma && r.camera_sigma_ft ? ` ± ${Number(r.camera_sigma_ft).toFixed(2)}` : "");
+  }
+
+  // run one panel; a failure shows in that panel only (D-0009 W1-3)
+  async function panel(id, fn) {
+    try { await fn(document.getElementById(id)); }
+    catch (e) { const el = document.getElementById(id); if (el) el.innerHTML = `<span class="err small">Could not render (${esc(e.message)}).</span>`; console.error(id, e); }
+  }
   const pill = (s) => `<span class="pill ${esc(s || "pending")}">${esc(LABEL[s] || s || "pending")}</span>`;
   const flags = (fs) => (fs || []).map((f) => `<span class="flag">${esc(f)}</span>`).join("");
 
   const qs = (k) => new URLSearchParams(location.search).get(k);
   const days = (n) => [...Array(n).keys()].map((i) => new Date(Date.now() - i * 86400000).toISOString().slice(0, 10)).reverse();
 
-  return { header, json, jsonl, esc, ft, nice, ago, pill, flags, qs, days };
+  return { header, json, jsonl, esc, ft, nice, ago, pill, flags, qs, days, cam, panel, FEATURED, featuredRank };
 })();
 document.addEventListener("DOMContentLoaded", RS.header);

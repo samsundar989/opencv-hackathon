@@ -57,7 +57,7 @@ VIEW_MAX_REPROJ_PX = 4.0
 GAUGE_STALE_MIN = 90
 DISAGREE_SIGMAS, DISAGREE_RUN = 2.5, 3
 RISE_FT, RISE_HOURS = 0.5, 3.0
-CADENCE_MIN, DENSE_CADENCE_MIN = 30, 15
+CADENCE_MIN, DENSE_CADENCE_MIN = 15, 15     # D-0009 W1-7: one cadence everywhere (timer is 15 min)
 FRAME_MAX_AGE_MIN = 24 * 60     # look back a day for the newest frame (status "stale" past FRAME_STALE_MIN)
 FRAME_STALE_MIN = 120
 RELEASE_RUN, RELEASE_SIGMAS = 3, 2.0
@@ -151,6 +151,8 @@ class Frame:
 def newest_frame(nims, cam: str, now: datetime, cache: Path) -> Frame | None:
     from riversight.data.nims import parse_filename
     files = nims.list_files(cam, after=now - timedelta(minutes=FRAME_MAX_AGE_MIN), before=now, limit=5, recent=True)
+    if not files:                    # camera offline for a day or more: its newest frame, whatever its age ("stale")
+        files = nims.list_files(cam, before=now, limit=5, recent=True)
     if not files:
         return None
     fn = max(files, key=lambda f: parse_filename(f)[1])
@@ -267,9 +269,16 @@ def clean_mask(wet_blocks: np.ndarray, min_blocks: int = 3) -> np.ndarray:
     return (keep[lab] * 255).astype(np.uint8)
 
 
-def blur(img: np.ndarray) -> np.ndarray:
+FACE_SCORE = 0.7     # D-0009 W1-5: a little stricter than the 0.6 default; detections are logged per reading
+
+
+def blur(img: np.ndarray, log: dict | None = None) -> np.ndarray:
+    """YuNet face blur (Gaussian, never a black fill) before any frame leaves the pipeline."""
     from riversight.vision.privacy import blur_faces
-    return blur_faces(img)[0]
+    out, n = blur_faces(img, score=FACE_SCORE)
+    if log is not None:
+        log["faces_blurred"] = log.get("faces_blurred", 0) + n
+    return out
 
 
 def jpg(img: np.ndarray, q: int = 85) -> bytes:
@@ -414,7 +423,8 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
                else "no overlay (" + ("night" if night else "not registered") + ")"]
     overlay = render_overlay(frame.img, model, H, stage_draw, caption)
     frame_key, overlay_key = f"live/frames/{cam}/{ts}.jpg", f"live/overlays/{cam}/{ts}.jpg"
-    store.put_bytes(frame_key, jpg(blur(frame.img)), "image/jpeg", "max-age=31536000")
+    privacy: dict = {}
+    store.put_bytes(frame_key, jpg(blur(frame.img, privacy)), "image/jpeg", "max-age=31536000")
     store.put_bytes(overlay_key, jpg(blur(overlay)), "image/jpeg", "max-age=31536000")
     frame_age = (pd.Timestamp(t_cycle) - pd.Timestamp(frame.time)).total_seconds() / 60
     reading = {
@@ -429,6 +439,7 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
         "gauge_stage_ft": _r(g_val), "gauge_time": iso(g_t), "gauge_age_min": _r(g_age, 0),
         "gauge_rise_3h_ft": _r(g_rise), "camera_rise_3h_ft": _r(cam_rise), "flood_state": fs, "flags": flags,
         "model_sha": meta["model_sha"][:12], "code_sha": code_sha(), "opencv": opencv_info(), "mode": mode,
+        "privacy": {"faces_blurred": privacy.get("faces_blurred", 0), "detector": "YuNet", "score": FACE_SCORE},
     }
     if not night and reg["ok"]:                     # D-0009 W1-2: remembered for night / stale display
         state["last_daylight"] = {k: reading[k] for k in (
@@ -612,7 +623,7 @@ def run_cycle(store, models: list[SiteModel], agent_fn=default_agent_fn, now: da
             if fr is None or (state and state.get("last_frame") == fr.filename):
                 old = prev.get(cam) or {"cam_id": cam}
                 sites.append({**old, "cam_id": cam, "status": old.get("status", "no_frame"),
-                              "note": "no frame in the last 24 h" if fr is None else "frame unchanged"})
+                              "note": "no frame from NIMS" if fr is None else "frame unchanged"})
                 continue
             r = run_site(m, fr, store, gauge, now, reg_cache, agent_fn)
             sites.append(slim_reading(r, m.meta))

@@ -57,7 +57,7 @@ p.lede { color: var(--muted); margin: 0 0 12px; max-width: 70ch; }
   display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600;
   background: var(--chip); color: var(--muted); vertical-align: middle; white-space: nowrap;
 }
-.pill.ok { color: var(--ok); } .pill.provisional, .pill.view_change { color: var(--warn); }
+.pill.ok { color: var(--ok); } .pill.provisional, .pill.view_change, .pill.above_range, .pill.above_range_provisional, .pill.stale { color: var(--warn); }
 .pill.quarantined, .pill.error { color: var(--bad); } .pill.night, .pill.no_frame, .pill.pending { color: var(--night); }
 .flag { display: inline-block; font-size: 11px; padding: 0 6px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); margin: 2px 2px 0 0; }
 table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
@@ -89,3 +89,5 @@ footer { max-width: 1200px; margin: 24px auto 32px; padding: 0 16px; color: var(
 .decision.llm { border-color: var(--accent); }
 .err { color: var(--bad); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.banner { padding: 8px 12px; border-radius: 8px; background: var(--chip); border: 1px solid var(--line); margin-bottom: 8px; font-size: 14px; }

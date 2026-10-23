@@ -11,9 +11,10 @@
 <main>
   <h1>For judges: a 60-second tour</h1>
   <ol class="panel" style="padding-left:32px">
-    <li><a href="index.html">Live</a>: 20 public USGS river cameras, re-read every 30 minutes by a Graviton worker. Camera stage ± σ sits next to the USGS gauge.</li>
-    <li>Open any site, e.g. <a href="site.html?cam=NY_East_Branch_Delaware_River_at_Hancock_Staff">Hancock, NY</a> or
-      <a href="site.html?cam=IL_Salt_Creek_at_Wood_Dale">Salt Creek, IL</a>. <b>Drag the stage slider</b> to see what goes under water at any stage,
+    <li><a href="index.html">Live</a>: 20 public USGS river cameras, re-read every 15 minutes by a Graviton worker. Camera stage ± σ sits next to the USGS gauge.</li>
+    <li>Open a featured site: <a href="site.html?cam=WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet">Pecatonica, WI</a>,
+      <a href="site.html?cam=IL_Salt_Creek_at_Wood_Dale">Salt Creek, IL</a> or <a href="site.html?cam=NY_East_Branch_Delaware_River_at_Hancock_Staff">Hancock, NY</a>
+      (then Neversink, Bean Creek, Stony Brook, Buffalo Bayou). <b>Drag the stage slider</b> to see what goes under water at any stage,
       drawn onto today's frame from a flood-height map the camera learned from its own gauge.</li>
     <li>Check the <b>agent decisions</b> on a flagged site, and the <a href="approvals.html">approvals</a> queue (alerts and tickets need a human).</li>
     <li><a href="proof.html">Proof</a>: which OpenCV build and instance produced the readings (Graviton, COOL or stock 5.0.0.93), with model hashes.</li>
@@ -41,10 +42,11 @@
   <h2>Failure cases (shown, not hidden)</h2>
   <div class="panel small" id="fails">
     <ul>
-      <li><b>View changes:</b> 7 of 20 cameras were re-aimed or moved within 12 months. Registration catches it (VIEW_CHANGE),
+      <li><b>View changes:</b> 8 of 20 cameras have periods that can't be registered to the current view. Registration catches it (VIEW_CHANGE),
         and the agent re-anchors or quarantines the site. Look for <span class="pill view_change">view changed</span> on the live page.</li>
-      <li><b>Out-of-range stages:</b> a live model cannot read above its calibrated range. Each site page shows that range, and DISAGREE fires
-        when the camera and the gauge part ways.</li>
+      <li><b>Out-of-range stages:</b> a live model cannot read above its calibrated range. Such readings are flagged OUT_OF_RANGE,
+        shown as "≥ X ft (above calibrated range)", and the gauge is trusted. At Hancock the July flood peaked at 18.1 ft against a
+        12.0 ft calibration ceiling, and the frozen-protocol model failed there (report §6.6).</li>
       <li><b>Night:</b> no camera reading at night (IR frames). Gaps are shown, not filled.</li>
       <li id="tierc"></li>
     </ul>
