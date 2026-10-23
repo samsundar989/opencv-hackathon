@@ -380,7 +380,8 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
         apply_decision(decision, reading, state, store, t_cycle)
         reading["agent"] = {"event_id": decision.get("event_id"), "decided_by": decision.get("decided_by"),
                             "actions": [a.get("type") for a in decision.get("actions", [])],
-                            "rationale": decision.get("rationale"), "approval_id": decision.get("approval_id")}
+                            "rationale": decision.get("rationale"), "approval_id": decision.get("approval_id"),
+                            "tokens_in": decision.get("tokens_in"), "tokens_out": decision.get("tokens_out")}
     reading["status"] = site_status(reading, state)
     reading["provisional"] = "GAUGE_STALE" in flags and cam_x is not None
     slim = {k: reading[k] for k in ("t_frame", "camera_stage_ft", "gauge_stage_ft", "flags")}
@@ -542,6 +543,12 @@ def run_cycle(store, models: list[SiteModel], agent_fn=default_agent_fn, now: da
            "n_errors": len(errors), "errors": errors, "code_sha": code_sha(), "opencv": opencv_info(), "sites": sites}
     store.put_json("live/index.json", idx)
     store.append_jsonl(f"live/cycles/{now:%Y-%m-%d}.jsonl", {k: v for k, v in idx.items() if k != "sites"})
+    from riversight.live.proof import proof, put_metrics
+    try:
+        store.put_json("live/proof.json", proof(models))
+    except Exception:
+        traceback.print_exc()
+    put_metrics(idx, [s["agent"] for s in sites if s.get("agent") and s.get("t_cycle") == iso(now)])
     return idx
 
 

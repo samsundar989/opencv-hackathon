@@ -109,7 +109,7 @@ class LiveStack(Stack):
             machine = ec2.MachineImage.from_ssm_parameter(
                 "/aws/service/canonical/ubuntu/server/24.04/stable/current/arm64/hvm/ebs-gp3/ami-id")
         user_data = ec2.UserData.for_linux()
-        script = (INFRA / "worker" / "bootstrap.sh").read_text(encoding="utf-8")
+        script = (INFRA / "worker" / "bootstrap.sh").read_bytes().decode("utf-8").replace("\r\n", "\n")
         user_data.add_commands(script.replace("__BUCKET__", bucket.bucket_name)
                                .replace("__REGION__", self.region)
                                .replace("__ALERTS__", alerts.topic_arn)
