@@ -9,7 +9,7 @@ non-default sampling parameters, so reproducibility comes from repeated runs (ev
 
 Model ids are Bedrock cross-region inference profiles (Haiku/Sonnet 5.5 are not callable in-region in
 us-east-2). Prices are estimates at Anthropic first-party list rates per MTok (Bedrock bills its own rates;
-override with RIVERSIGHT_PRICE_<HAIKU|SONNET>_<IN|OUT>).
+override with RIVERSIGHT_PRICE_<HAIKU_5_5|SONNET_5_5|HAIKU_4_5|SONNET_4>_<IN|OUT>).
 """
 from __future__ import annotations
 
@@ -26,14 +26,16 @@ REGION = os.environ.get("RIVERSIGHT_BEDROCK_REGION", "us-east-2")
 MAX_TOOL_CALLS = 8
 MAX_TURNS = 10
 DAILY_TOKENS = int(os.environ.get("RIVERSIGHT_AGENT_DAILY_TOKENS", "2000000"))
-PRICES = {"haiku": (0.10, 0.50), "sonnet": (2.00, 10.00)}       # USD per MTok in/out (estimate, see docstring)
+# USD per MTok in/out at Anthropic first-party list prices (estimate, see docstring); most specific key first
+PRICES = [("haiku-5-5", 0.10, 0.50), ("sonnet-5-5", 2.00, 10.00), ("haiku-4-5", 1.00, 5.00),
+          ("sonnet-4", 3.00, 15.00), ("haiku", 0.10, 0.50), ("sonnet", 2.00, 10.00)]
 
 
 def price(model: str) -> tuple[float, float]:
-    fam = "sonnet" if "sonnet" in model else "haiku"
-    pin, pout = PRICES[fam]
-    return (float(os.environ.get(f"RIVERSIGHT_PRICE_{fam.upper()}_IN", pin)),
-            float(os.environ.get(f"RIVERSIGHT_PRICE_{fam.upper()}_OUT", pout)))
+    key, pin, pout = next((p for p in PRICES if p[0] in model), PRICES[-1])
+    env = key.upper().replace("-", "_")
+    return (float(os.environ.get(f"RIVERSIGHT_PRICE_{env}_IN", pin)),
+            float(os.environ.get(f"RIVERSIGHT_PRICE_{env}_OUT", pout)))
 
 
 SYSTEM = """You are River Steward, the operations agent for RiverSight: public USGS river webcams turned into \
@@ -45,6 +47,7 @@ What the flags mean
 - GAUGE_STALE: the USGS gauge has not reported recently; the camera may need to fill the gap.
 - DISAGREE: the camera stage and the gauge stage differ by more than the camera's error band.
 - RISING: the river is rising; flood state may change.
+- OUT_OF_RANGE: the river is above the highest stage this camera was calibrated on.
 - LOW_QUALITY / NIGHT: image quality is poor / it is dark.
 
 Actions (submit_decision.actions[].type)
@@ -52,7 +55,8 @@ Actions (submit_decision.actions[].type)
 - SET_REFERENCE {ref}: re-anchor the camera to a banked reference it now matches. Only for a calibrated banked view.
 - QUARANTINE {reason}: exclude this camera's readings until cleared. Reversible.
 - DENSIFY {minutes, hours}: sample this camera more often for a while.
-- MARK_PROVISIONAL {source: camera|last_known, stage_ft, sigma_ft}: publish a provisional gap-fill value.
+- MARK_PROVISIONAL {source: camera|camera_lower_bound|last_known, stage_ft, sigma_ft}: publish a provisional \
+gap-fill value; camera_lower_bound means "at least stage_ft".
 - OPEN_TICKET {kind: recalibration|gauge_suspect|lens_check, detail}: ask a human to look. Needs approval.
 - DRAFT_ALERT {stage_ft, crest_ft, overlay_now, overlay_crest}: draft a flood alert for a human to approve.
 
@@ -68,6 +72,11 @@ within the calibrated range; otherwise hold the last known gauge value as provis
 - When camera and gauge disagree: an unusable or unregistered camera frame is a camera fault. A usable, \
 well-registered camera that disagrees with a gauge that jumped abruptly or has been stuck flat makes the \
 gauge suspect (ticket for human review). Otherwise trust the gauge.
+- A camera cannot measure above its calibrated range: its estimate stalls near or below the calibrated \
+maximum however high the water goes. That is saturation, not a fault. When the gauge is above the camera's \
+range, or the camera estimate is at its ceiling, trust a fresh gauge and do not quarantine the camera; if the \
+gauge is stale, publish only a lower bound (camera_lower_bound at the calibrated maximum), never a camera number.
+- During a rise, muddy water and flooded banks lower contrast and texture; that alone is not a camera fault.
 - When the river rises to a high stage for this site or rises fast, sample more often, render what will be \
 under water now and at the expected crest, and draft an alert. Alerts and tickets always go to a human; never \
 claim that one was sent.

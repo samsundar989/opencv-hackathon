@@ -133,9 +133,11 @@ class ToolCache:
 
 def make_ctx(ep: dict, evidence: str, sink: Sink) -> tools.ToolContext:
     c = ep["ctx"]
-    return tools.ToolContext(mode="eval", evidence=evidence, bundle_root=BUNDLES, sink=sink, now=pd.Timestamp(c["now"]),
+    root = Path(c["bundle_root"]) if c.get("bundle_root") else BUNDLES
+    root = root if root.is_absolute() else ROOT / root
+    return tools.ToolContext(mode="eval", evidence=evidence, bundle_root=root, sink=sink, now=pd.Timestamp(c["now"]),
                              gauge_fault=c.get("gauge_fault"), bank_exclude=tuple(c.get("bank_exclude") or ()),
-                             event=ep["event"])
+                             gauge_inline=c.get("gauge_inline"), event=ep["event"])
 
 
 def run_episode(ep, arm, rep, sink):

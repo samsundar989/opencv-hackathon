@@ -32,6 +32,11 @@ deterministic registration cascade as the agent's tool). v1 trusted the history 
 mislabelled 3 episodes (2 Salt Creek frames that match an earlier calibrated reference, 1 Mallard frame that
 registers to the main reference); the rules run exposed them. v1 + its rules run are kept in runs_v1/.
 
+v3 (2026-10-23, D-0009): + oor_gauge / oor_live (real floods above the camera's calibrated range: Hancock Jul 29
+and Pecatonica Apr 15 with pre-flood bundles, Animas live on Oct 23 with its gauge stored inline), oor_stale
+(synthetic gauge dropout during those floods -> lower bound only), muddy_rise / muddy_stale (real turbid rises
+within range whose only quality complaints are fog / texture loss).
+
   python scripts/agent_build_episodes.py        (light; reads cached frames, ~2 min)
 """
 from __future__ import annotations
@@ -62,9 +67,10 @@ ALL_BUT_NOOP = ["SET_REFERENCE", "QUARANTINE", "MARK_PROVISIONAL", "OPEN_TICKET"
 # ---- per-site data ----------------------------------------------------------------------------------
 
 class Site:
-    def __init__(self, cam: str):
+    def __init__(self, cam: str, bundles: Path = BUNDLES):
         self.cam = cam
-        self.meta = json.loads((BUNDLES / cam / "meta.json").read_text(encoding="utf-8"))
+        self.bundles = bundles
+        self.meta = json.loads((bundles / cam / "meta.json").read_text(encoding="utf-8"))
         d = DATA / "derived" / cam
         hf = pd.read_parquet(d / "history" / "frames.parquet")
         hr = pd.read_parquet(d / "history" / "registration.parquet")[["filename", "night", "ok", "n_inliers", "score", "method", "segment"]]
@@ -393,6 +399,118 @@ def build_synthetic(sites):
             break
 
 
+# ---- v3 (D-0009): out-of-range floods and muddy water during rises ---------------------------------
+
+REPLAY = DATA / "derived" / "agent_bundles_replay"
+AGENT_EVAL_RAW = DATA / "raw" / "agent_eval"
+OOR_FORBID = ["QUARANTINE", "OPEN_TICKET", "MARK_PROVISIONAL", "SET_REFERENCE"]
+
+
+def tool_ctx(site, now=None, fault=None, inline=None):
+    return tools.ToolContext(mode="eval", bundle_root=site.bundles, now=now, gauge_fault=fault, gauge_inline=inline,
+                             event={"cam_id": site.cam, "reading": {}})
+
+
+def history_row(site, when):
+    f = site.frames[~site.frames["night"]]
+    i = (f["time"] - pd.Timestamp(when, tz="UTC")).abs().idxmin()
+    return f.loc[i]
+
+
+def build_out_of_range():
+    """Real floods above the camera's calibrated range, with bundles cut before each flood (so the flood is truly
+    out of range for the model), plus Animas on 2026-10-23 (live frames, gauge fetched once and stored inline)."""
+    cases = [("NY_East_Branch_Delaware_River_at_Hancock_Staff", "2026-07-26", ["2026-07-29T12:00", "2026-07-29T18:00", "2026-07-30T12:00"]),
+             ("WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet", "2026-04-12", ["2026-04-15T13:00", "2026-04-15T19:00"])]
+    for cam, cut, times in cases:
+        site = Site(cam, REPLAY / cut)
+        for when in times:
+            r = history_row(site, when)
+            ctx = tool_ctx(site, now=r["time"])
+            e = tools.call(ctx, "estimate_stage", {"cam": cam, "frame_key": site.key(r["filename"])})
+            q = tools.call(ctx, "image_quality", {"frame_key": site.key(r["filename"])})
+            flags = ["OUT_OF_RANGE", "DISAGREE", "RISING"] + (["LOW_QUALITY"] if not q.get("usable") else [])
+            g = site.gauge_at(r["time"])[0]
+            add("oor_gauge", "real", site, r["time"], reading(site, r, flags, camera_ft=e.get("stage_ft")), recent(site, r["time"]),
+                ["DENSIFY", "DRAFT_ALERT"], OOR_FORBID, severity=5, ctx={"bundle_root": site.bundles.relative_to(ROOT).as_posix()},
+                note=f"gauge {g:.2f} ft vs calibrated max {site.meta['stage_max']} ft (bundle cut {cut}); camera {e.get('stage_ft')} ft")
+    # gauge goes stale during the flood: only a lower bound may be published (flags as W1 would raise them)
+    for cam, cut, when, hours in (("NY_East_Branch_Delaware_River_at_Hancock_Staff", "2026-07-26", "2026-07-29T18:00", 4),
+                                  ("WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet", "2026-04-12", "2026-04-15T19:00", 6)):
+        site = Site(cam, REPLAY / cut)
+        r = history_row(site, when)
+        fault = {"kind": "dropout", "hours": hours}
+        e = tools.call(tool_ctx(site, now=r["time"]), "estimate_stage", {"cam": cam, "frame_key": site.key(r["filename"])})
+        add("oor_stale", "synthetic", site, r["time"], reading(site, r, ["GAUGE_STALE"], camera_ft=e.get("stage_ft"), fault=fault),
+            recent(site, r["time"], fault=fault), ["MARK_PROVISIONAL"], ["QUARANTINE", "OPEN_TICKET", "SET_REFERENCE"],
+            args={"MARK_PROVISIONAL": {"source": "camera_lower_bound"}}, severity=4, injected={"gauge_fault": fault},
+            ctx={"bundle_root": site.bundles.relative_to(ROOT).as_posix(), "gauge_fault": fault},
+            note=f"real flood frame, gauge dropout {hours} h injected; last known gauge already above the calibrated max")
+    # Animas, live, 2026-10-23: gauge 8.3 ft vs calibrated max 4.57 ft
+    cam = "CO_Animas_River_at_Durango"
+    site = Site(cam)
+    iv = pd.read_parquet(AGENT_EVAL_RAW / f"{cam}_iv_20261023.parquet")
+    inline = [[pd.Timestamp(t).isoformat(), float(v)] for t, v in zip(iv["time"], iv["value"])]
+    site.gauge = pd.Series(iv["value"].to_numpy(float), index=pd.DatetimeIndex(iv["time"]))
+    for jpg in sorted(AGENT_EVAL_RAW.glob(f"{cam}___2026-10-23*.jpg")):
+        t = pd.Timestamp(jpg.stem.split("___")[1].replace("-", ":").replace("2026:10:23", "2026-10-23"))
+        key = f"data/raw/agent_eval/{jpg.name}"
+        row = {"time": t, "filename": jpg.name, "night": False, "ok": True, "n_inliers": 0, "score": 0, "method": "live"}
+        e = tools.call(tool_ctx(site, now=t, inline=inline), "estimate_stage", {"cam": cam, "frame_key": key})
+        for flags in (["OUT_OF_RANGE", "DISAGREE", "RISING"], ["RISING"]):
+            rd = reading(site, row, flags, frame_key=key, camera_ft=e.get("stage_ft"))
+            add("oor_live", "real", site, t, rd, [], ["DENSIFY", "DRAFT_ALERT"], OOR_FORBID, severity=5,
+                ctx={"gauge_inline": inline}, note=f"live 2026-10-23; flags {'+'.join(flags)} "
+                                                   f"({'as W1 will raise them' if len(flags) > 1 else 'as the live cycle raised them'})")
+
+
+def build_muddy_rises(n_fresh=6, n_stale=3):
+    """Real rises within the calibrated range where image_quality's only complaints are fog / texture loss
+    (turbid water, covered banks). LOW_QUALITY persisted 2 cycles, so the lens-ticket rule is tempted."""
+    cands = []
+    for cam in sorted(p.name for p in BUNDLES.iterdir() if (p / "meta.json").exists()):
+        site = Site(cam)
+        g, f = site.gauge, site.frames
+        f = f[~f["night"] & f["ok"] & f["stage_ft"].notna() & (f["stage_ft"] <= site.meta["stage_max"]) & ~f["filename"].isin(EXCLUDE)]
+        f = f[f["time"] < pd.Timestamp("2026-10-03", tz="UTC")]
+        rise = g.reindex(f["time"], method="ffill").values - g.reindex(f["time"] - pd.Timedelta("1h"), method="ffill").values
+        f = f[rise >= 0.1]
+        ctx = tool_ctx(site)
+        for _, r in f.iterrows():
+            iss = set(tools.call(ctx, "image_quality", {"frame_key": site.key(r["filename"])}).get("issues", []))
+            if iss and iss <= {"fog", "texture_loss"}:
+                cands.append((site, r))
+    by_cam: dict[str, list] = {}
+    for site, r in cands:
+        by_cam.setdefault(site.cam, []).append((site, r))
+    order = list(RNG.permutation(sorted(by_cam)))
+    picks = [by_cam[c][len(by_cam[c]) // 2] for c in order]
+    flag_lq = lambda rr: ["LOW_QUALITY", "RISING"]                                       # noqa: E731
+    for site, r in picks[:n_fresh]:
+        t = r["time"]
+        crest = site.gauge[(site.gauge.index >= t) & (site.gauge.index <= t + pd.Timedelta("6h"))].max()
+        alert = bool(crest >= site.meta["stage_p90"])
+        add("muddy_rise", "real", site, t, reading(site, r, ["RISING", "LOW_QUALITY"]), recent(site, t, flag_fn=flag_lq),
+            ["DENSIFY"] + (["DRAFT_ALERT"] if alert else []), ["QUARANTINE", "OPEN_TICKET", "SET_REFERENCE"],
+            severity=5 if alert else 1, note=f"turbid rise; gauge {r['stage_ft']:.2f} ft, 6 h crest {crest:.2f} vs p90 {site.meta['stage_p90']}")
+    n = 0
+    for site, r in picks[n_fresh:]:
+        if n >= n_stale:
+            break
+        t = r["time"]
+        fault = {"kind": "dropout", "hours": 6}
+        last = site.gauge_at(t, fault)[0]
+        e = tools.call(tool_ctx(site, now=t, fault=fault), "estimate_stage", {"cam": site.cam, "frame_key": site.key(r["filename"])})
+        if not e.get("ok") or not e.get("in_calibrated_range") or e.get("near_ceiling") or \
+                last is None or last >= site.meta["stage_max"] - site.sigma:
+            continue
+        add("muddy_stale", "synthetic", site, t, reading(site, r, ["RISING", "LOW_QUALITY", "GAUGE_STALE"], fault=fault),
+            recent(site, t, fault=fault, flag_fn=flag_lq), ["MARK_PROVISIONAL"], ["QUARANTINE", "OPEN_TICKET"],
+            args={"MARK_PROVISIONAL": {"source": "camera"}}, severity=3, injected={"gauge_fault": fault},
+            ctx={"gauge_fault": fault}, note="turbid rise, gauge dropout 6 h injected; camera registers and is in range")
+        n += 1
+
+
 # ---- fleet ------------------------------------------------------------------------------------------
 
 def build_fleet(n=12, size=4):
@@ -425,6 +543,8 @@ def main():
     build_rises(sites)
     build_controls(sites)
     build_synthetic(sites)
+    build_out_of_range()
+    build_muddy_rises()
     build_fleet()
     OUT.mkdir(parents=True, exist_ok=True)
     lines = [json.dumps(e, sort_keys=True, default=str) for e in EPISODES]

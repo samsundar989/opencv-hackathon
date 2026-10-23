@@ -133,6 +133,52 @@ def test_rising_low_stage_only_densifies(monkeypatch):
     assert acts(rules.decide(ev(["RISING"]), CTX())) == {"DENSIFY"}
 
 
+# ---- OUT_OF_RANGE and muddy water (D-0009) ----
+
+def canned_range(monkeypatch, **out):
+    calls = canned(monkeypatch, **out)
+    monkeypatch.setattr(tools, "bundle", lambda ctx, cam: type("B", (), {"meta": {
+        "stage_p50": 4.0, "stage_p90": 6.0, "stage_max": 11.18, "sigma_ft": 0.87}})())
+    return calls
+
+
+def test_out_of_range_fresh_gauge_trusts_gauge_never_quarantines(monkeypatch):
+    canned_range(monkeypatch, get_gauge={"latest_ft": 17.1, "age_min": 0.0, "above_camera_range": True, "change_1h_ft": 0.2},
+                 get_nws_forecast={"available": False}, render_wet_overlay={"overlay_key": "ov"})
+    d = rules.decide(ev(["OUT_OF_RANGE", "DISAGREE", "RISING"]), CTX())
+    assert "QUARANTINE" not in acts(d) and "DRAFT_ALERT" in acts(d) and d["camera_status"] == "saturated"
+
+
+def test_out_of_range_stale_gauge_publishes_lower_bound(monkeypatch):
+    canned_range(monkeypatch, get_gauge={"latest_ft": 16.9, "age_min": 240.0})
+    d = rules.decide(ev(["OUT_OF_RANGE", "GAUGE_STALE"]), CTX())
+    mp = next(a for a in d["actions"] if a["type"] == "MARK_PROVISIONAL")
+    assert mp["args"] == {"source": "camera_lower_bound", "stage_ft": 11.18, "bound": "lower"}
+
+
+def test_disagree_with_gauge_above_range_is_saturation_not_fault(monkeypatch):
+    canned_range(monkeypatch, get_gauge={"latest_ft": 17.1, "age_min": 5.0, "above_camera_range": True},
+                 image_quality={"usable": False, "issues": ["texture_loss"]})
+    d = rules.decide(ev(["DISAGREE"]), CTX())
+    assert acts(d) == {"NOOP"} and d["camera_status"] == "saturated"
+
+
+def test_gauge_stale_camera_at_ceiling_gives_lower_bound_not_number(monkeypatch):
+    canned_range(monkeypatch, image_quality=GOOD_Q, get_gauge={"latest_ft": 9.0, "age_min": 900.0},
+                 estimate_stage={"ok": True, "stage_ft": 10.6, "sigma_ft": 0.87, "in_calibrated_range": True,
+                                 "near_ceiling": True, "stage_max_ft": 11.18})
+    d = rules.decide(ev(["GAUGE_STALE"]), CTX())
+    assert next(a for a in d["actions"] if a["type"] == "MARK_PROVISIONAL")["args"]["source"] == "camera_lower_bound"
+
+
+def test_muddy_water_during_rise_is_not_a_camera_fault(monkeypatch):
+    canned_range(monkeypatch, image_quality={"usable": False, "issues": ["texture_loss", "fog"]},
+                 get_gauge={"latest_ft": 5.0, "age_min": 0.0, "change_1h_ft": 0.3, "max_step_ft": 0.05, "step_isolation": 1},
+                 estimate_stage={"ok": True, "stage_ft": 5.1, "sigma_ft": 0.3}, get_nws_forecast={"available": False})
+    d = rules.decide(ev(["RISING", "DISAGREE", "LOW_QUALITY"], recent_flags=[["LOW_QUALITY"], ["LOW_QUALITY"]]), CTX())
+    assert not acts(d) & {"QUARANTINE", "OPEN_TICKET"}
+
+
 # ---- guard rails ----
 
 def test_finalize_enforces_approval_and_drops_unknown_actions():

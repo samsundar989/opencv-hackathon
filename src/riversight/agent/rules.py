@@ -16,6 +16,12 @@ as the LLM agent and maps their numbers to actions with fixed, hand-written thre
   RISING       always DENSIFY; stage ≥ site p90, NWS crest ≥ action stage, or fast rise above median
                -> wet overlays (now + projected crest) + DRAFT_ALERT
   LOW_QUALITY  persistent 3 cycles -> OPEN_TICKET lens check, else NOOP
+  OUT_OF_RANGE (D-0009) the camera is saturated, not faulty: never a camera-only number
+               fresh gauge -> trust the gauge, camera_status "saturated" (no QUARANTINE)
+               stale gauge -> MARK_PROVISIONAL(camera_lower_bound, "≥ stage_max") + DENSIFY
+  Saturation is also inferred inside DISAGREE / GAUGE_STALE: fresh gauge above the calibrated max, raw estimate
+  within σ of the max, or the last known gauge (≤ 24 h) already at the max.
+  While RISING, fog / texture loss alone do not make a frame unusable (muddy, bank-covering water is not fog).
 """
 from __future__ import annotations
 
@@ -46,6 +52,53 @@ def _meta(ctx, cam) -> dict:
         return {}
 
 
+RISE_LENIENT = {"fog", "texture_loss"}
+
+
+def rising_now(ev) -> bool:
+    return "RISING" in (ev.get("reading", {}).get("flags") or [])
+
+
+def usable(q: dict, ev: dict) -> bool:
+    """image_quality verdict, except that during a rise turbid / bank-covering water (fog, texture loss) is not a fault."""
+    issues = set(q.get("issues", []))
+    if rising_now(ev):
+        issues -= RISE_LENIENT
+    return not issues
+
+
+def fresh(g: dict) -> bool:
+    return g.get("latest_ft") is not None and g.get("age_min") is not None and g["age_min"] <= 60
+
+
+def saturation(meta: dict, est: dict | None, g: dict | None) -> str | None:
+    """Why the camera is (or may be) above its calibrated range, or None."""
+    smax, sig = meta.get("stage_max"), float(meta.get("sigma_ft") or 0.3)
+    if smax is None:
+        return None
+    if g and fresh(g) and g["latest_ft"] > smax:
+        return f"gauge {g['latest_ft']} ft is above the camera's calibrated max {smax:.2f} ft"
+    if est and est.get("ok") and est.get("near_ceiling"):
+        return f"camera estimate {est['stage_ft']} ft is at its calibrated ceiling {smax:.2f} ft"
+    if g and g.get("latest_ft") is not None and g["latest_ft"] >= smax - sig:
+        return f"last known gauge {g['latest_ft']} ft was already at the camera's calibrated max {smax:.2f} ft"
+    return None
+
+
+def out_of_range(ctx, ev, d, why):
+    cam, key = ev["cam_id"], ev["reading"].get("frame_key")
+    meta = _meta(ctx, cam)
+    g = _run(ctx, d, "get_gauge", hours=24)
+    smax = meta.get("stage_max")
+    d["camera_status"] = "saturated"
+    if fresh(g) and "GAUGE_STALE" not in (ev["reading"].get("flags") or []):
+        why.append(f"camera above its calibrated range (max {smax} ft): saturated, not faulty; gauge {g['latest_ft']} ft trusted")
+        return [action("NOOP", reason="camera_saturated", trust="gauge", gauge_ft=g["latest_ft"], camera_floor_ft=smax)]
+    why.append(f"gauge stale and camera above its calibrated range: provisional lower bound >= {smax} ft")
+    return [action("MARK_PROVISIONAL", source="camera_lower_bound", stage_ft=smax, bound="lower"),
+            action("DENSIFY", minutes=15, hours=6)]
+
+
 def view_change(ctx, ev, d, why):
     cam, key = ev["cam_id"], ev["reading"].get("frame_key")
     q = _run(ctx, d, "image_quality", frame_key=key)
@@ -73,7 +126,16 @@ def gauge_stale(ctx, ev, d, why):
     cam, key, r = ev["cam_id"], ev["reading"].get("frame_key"), ev["reading"]
     q = _run(ctx, d, "image_quality", frame_key=key)
     est = _run(ctx, d, "estimate_stage", cam=cam, frame_key=key)
-    if q.get("usable") and est.get("ok") and est.get("in_calibrated_range"):
+    if est.get("ok"):
+        g = _run(ctx, d, "get_gauge", hours=24)
+        sat = saturation(_meta(ctx, cam), est, g)
+        if sat:
+            d["camera_status"] = "saturated"
+            smax = est.get("stage_max_ft")
+            why.append(f"gauge stale; {sat}: camera gives only a lower bound >= {smax} ft")
+            return [action("MARK_PROVISIONAL", source="camera_lower_bound", stage_ft=smax, bound="lower"),
+                    action("DENSIFY", minutes=15, hours=6)]
+    if usable(q, ev) and est.get("ok") and est.get("in_calibrated_range"):
         why.append(f"gauge stale; camera gap-fill {est['stage_ft']} ± {est['sigma_ft']} ft marked provisional")
         return [action("MARK_PROVISIONAL", source="camera", stage_ft=est["stage_ft"], sigma_ft=est["sigma_ft"]),
                 action("DENSIFY", minutes=15, hours=6)]
@@ -84,12 +146,20 @@ def gauge_stale(ctx, ev, d, why):
 
 def disagree(ctx, ev, d, why):
     cam, key = ev["cam_id"], ev["reading"].get("frame_key")
+    g = _run(ctx, d, "get_gauge", hours=24)
+    if fresh(g) and g.get("above_camera_range"):
+        d["camera_status"] = "saturated"
+        why.append(f"gauge {g['latest_ft']} ft is above the camera's calibrated range: camera saturated, not faulty; gauge trusted")
+        return [action("NOOP", reason="camera_saturated", trust="gauge", gauge_ft=g["latest_ft"])]
     q = _run(ctx, d, "image_quality", frame_key=key)
     est = _run(ctx, d, "estimate_stage", cam=cam, frame_key=key)
-    if not q.get("usable") or not est.get("ok"):
+    if not usable(q, ev) or not est.get("ok"):
         why.append("camera fault: " + (", ".join(q.get("issues", [])) or "frame does not register") + "; readings quarantined")
         return [action("QUARANTINE", reason="camera_fault")]
-    g = _run(ctx, d, "get_gauge", hours=24)
+    if est.get("near_ceiling"):
+        d["camera_status"] = "saturated"
+        why.append(f"camera estimate {est['stage_ft']} ft is at its calibrated ceiling: saturated, not faulty; gauge trusted")
+        return [action("NOOP", reason="camera_saturated", trust="gauge", gauge_ft=g.get("latest_ft"))]
     sig = max(est.get("sigma_ft") or 0.3, 0.1)
     if g.get("latest_ft") is None:
         why.append("no gauge data to disagree with")
@@ -141,6 +211,9 @@ def rising(ctx, ev, d, why):
 
 
 def low_quality(ctx, ev, d, why):
+    if rising_now(ev):
+        why.append("low image quality during a rise (turbid water, covered banks); frame kept, no lens ticket")
+        return [action("NOOP", reason="rising_turbidity")]
     if persisted(ev, "LOW_QUALITY"):
         q = _run(ctx, d, "image_quality", frame_key=ev["reading"].get("frame_key"))
         if not q.get("usable"):
@@ -151,7 +224,7 @@ def low_quality(ctx, ev, d, why):
 
 
 BEHAVIOURS = {"VIEW_CHANGE": view_change, "GAUGE_STALE": gauge_stale, "DISAGREE": disagree, "RISING": rising,
-              "LOW_QUALITY": low_quality}
+              "LOW_QUALITY": low_quality, "OUT_OF_RANGE": out_of_range}
 
 
 def decide(event: dict[str, Any], ctx: tools.ToolContext) -> dict[str, Any]:
@@ -160,6 +233,8 @@ def decide(event: dict[str, Any], ctx: tools.ToolContext) -> dict[str, Any]:
     why, acts = [], []
     if "VIEW_CHANGE" in flags:                       # a moved camera invalidates every other camera-based check
         flags -= {"DISAGREE", "LOW_QUALITY"}
+    if "OUT_OF_RANGE" in flags:                      # saturation explains the disagreement / bad gap-fill
+        flags -= {"DISAGREE", "LOW_QUALITY", "GAUGE_STALE"}
     for f in schema.BEHAVIOUR_ORDER:
         if f in flags and f in BEHAVIOURS:
             acts += BEHAVIOURS[f](ctx, event, d, why)

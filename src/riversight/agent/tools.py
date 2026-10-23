@@ -47,6 +47,7 @@ class ToolContext:
     now: pd.Timestamp | None = None            # replay/eval clock: gauge and frame lists are cut here
     gauge_fault: dict | None = None            # eval only: {"kind": dropout|offset|drift|flatline, ...}
     bank_exclude: tuple[str, ...] = ()         # eval only: reference files hidden from the bank
+    gauge_inline: list | None = None           # eval only: [[iso time, ft], ...] when the history cache lacks it
     event: dict | None = None
     write_overlays: bool = True
 
@@ -286,12 +287,18 @@ def estimate_stage(ctx: ToolContext, cam: str, frame_key: str, ref: str | None =
     wet = S.fhm.wet(F[None], S.fhm.reliable(float(S.a["min_acc"])))[0]
     lo, hi = S.meta.get("stage_min", S.meta.get("stage_p05")), S.meta.get("stage_max", S.meta.get("stage_p95"))
     in_range = lo is None or (lo - 0.5 <= raw <= hi + 0.5)
+    # D-0009: a raw estimate within σ of the calibrated ceiling may be saturated — the true stage can be far
+    # higher (Hancock Jul 29: camera ~10.1 ft at a 17-18 ft gauge, ceiling 11.18 ft). Report it as a lower bound.
+    near_ceiling = bool(hi is not None and np.isfinite(sigma) and raw >= hi - sigma)
     out = {"ok": True, "stage_ft": _r(raw), "sigma_ft": _r(sigma), "registration": reg,
            "wet_reliable_blocks": int(wet.sum()), "reliable_blocks": int(len(wet)),
            "calibrated_range_ft": [_r(lo), _r(hi)], "in_calibrated_range": bool(in_range),
+           "near_ceiling": near_ceiling, "stage_max_ft": _r(hi),
            "stage_p90_ft": _r(S.meta.get("stage_p90")), "summary": ""}
     out["summary"] = (f"camera stage {raw:.2f} ± {sigma:.2f} ft (registered to {reg['ref']}, {reg['inliers']} inliers)"
-                      + ("" if in_range else f"; OUTSIDE calibrated range {lo:.2f}–{hi:.2f} ft (extrapolation)"))
+                      + ("" if in_range else f"; OUTSIDE calibrated range {lo:.2f}–{hi:.2f} ft (extrapolation)")
+                      + (f"; NEAR the calibrated ceiling {hi:.2f} ft: may be saturated, true stage could be higher"
+                         if near_ceiling else ""))
     return out
 
 
@@ -399,7 +406,10 @@ def gauge_series(ctx: ToolContext, cam: str, hours: float) -> pd.Series:
             return pd.Series(dtype=float)
         return pd.Series(df["value"].to_numpy(float), index=pd.DatetimeIndex(df["time"])).sort_index()
     now = ctx.now
-    g = _history_gauge(cam)
+    if ctx.gauge_inline:
+        g = pd.Series([float(v) for _, v in ctx.gauge_inline], index=pd.DatetimeIndex([pd.Timestamp(t) for t, _ in ctx.gauge_inline]))
+    else:
+        g = _history_gauge(cam)
     g = g[(g.index <= now) & (g.index > now - pd.Timedelta(hours=hours))]
     return apply_gauge_fault(g, now, ctx.gauge_fault)
 
@@ -431,9 +441,16 @@ def get_gauge(ctx: ToolContext, nwis_id: str | None = None, hours: float = 24) -
            "change_1h_ft": chg(1), "change_6h_ft": chg(6), "change_24h_ft": chg(24), "min_ft": _r(g.min()), "max_ft": _r(g.max()),
            "max_step_ft": _r(d[big]) if len(d) else None, "max_step_time": g.index[big + 1].isoformat() if len(d) else None,
            "step_isolation": _r(isolation, 1), "flat_hours": _r(flat, 1), "hourly_last12": [_r(v, 2) for v in hourly.values]}
+    try:
+        smax = bundle(ctx, cam).meta.get("stage_max")
+    except KeyError:
+        smax = None
+    out["camera_calibrated_max_ft"] = _r(smax)
+    out["above_camera_range"] = bool(smax is not None and g.iloc[-1] > smax)
     out["summary"] = (f"gauge {out['latest_ft']} ft, {age:.0f} min old; 1h {out['change_1h_ft']}, 6h {out['change_6h_ft']} ft; "
                       f"largest single step {out['max_step_ft']} ft (isolation x{isolation:.1f} vs neighbouring steps); "
-                      f"flat for {flat:.1f} h")
+                      f"flat for {flat:.1f} h"
+                      + (f"; ABOVE the camera's calibrated range (max {smax:.2f} ft)" if out["above_camera_range"] else ""))
     return out
 
 
