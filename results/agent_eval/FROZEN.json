@@ -1,0 +1,20 @@
+{
+  "frozen_at_utc": "2026-10-23T19:07:12+00:00",
+  "git_head": "f634c69062b25df41a7c3dff6d384dce324335b0",
+  "n_episodes": 88,
+  "n_single": 76,
+  "n_real": 46,
+  "hashes": {
+    "episodes.jsonl": "336a7cc1fdf335ee4e7e12b16b838c7b98d620f850f7a34176ae1418a04ccedd",
+    "src/riversight/agent/llm.py": "bb8b31387d4df9cc15977853b77ddd7bd8201d3e9f195d290eb59fd84ace78be",
+    "src/riversight/agent/rules.py": "762733aa7540705c50fcff61f1eb5c4d748efc9970daf11678ee4f62ed2a07ab",
+    "src/riversight/agent/tools.py": "08e80996a2e0bb623f58567e8ecef4f123993555a50d5ac4d38e3ab1f977cbd1",
+    "src/riversight/agent/schema.py": "da2b9bc69f074f063efa9eb7b4d7a930063c90e94602c3a4b7dcf143873b0885",
+    "src/riversight/agent/fleet.py": "81a1bc71bc611ddfcbf156d1ad46cbef35e686c3a7cb25afbec02e019c017b18",
+    "scripts/agent_eval.py": "81e93dc698b85a5573cebfd40ad122195a60e4c152fa487cafbf723757dec072"
+  },
+  "models": {
+    "haiku": "us.anthropic.claude-haiku-5-5",
+    "sonnet": "us.anthropic.claude-sonnet-5-5"
+  }
+}
