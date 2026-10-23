@@ -17,7 +17,7 @@ Twenty cameras across the US (`data/sites/kill_test.yaml`). Test days Oct 4–14
 | **Gauge-outage gap-fill** | the camera beats the gauge's last-known value at **15/20** sites after a 72 h outage, **18/20** after 7 days | `results/kill_test_v2_summary.json` |
 | **Registration** | **95.7 %** of 9,000 daylight frames registered; ORB alone manages 39.6 %, ALIKED + LightGlue recovers 4,892 frames | `results/kill_test/registration_summary.csv` |
 
-Flood state (stage above the site's 90th percentile): median balanced accuracy **0.93**, vs 0.75 for a 24-hour-stale gauge, over the 9 sites with flood frames. Full table, per-site plots and caveats: [`results/kill_test_v2.md`](results/kill_test_v2.md).
+Flood state (stage above the site's 90th percentile): median balanced accuracy **0.93**, vs 0.75 for a 24-hour-stale gauge, over the 9 sites with flood frames. Coverage: the median camera gives a reading in **94.1 %** of daylight hours (47.5 % of all hours, since night is not scored), **219.4 camera-hours of stage per day** across the fleet. Day-block bootstrap: median MAE 95 % CI 0.148–0.22 ft; P1 interval 12–16 sites (`results/kill_test_v2_ci_summary.json`, per-site CIs in `results/kill_test_v2_ci.csv`). Full table, per-site plots and caveats: [`results/kill_test_v2.md`](results/kill_test_v2.md).
 
 ![Flood-height map, Pecatonica River WI](results/demo/floodheight_WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet.jpg)
 
