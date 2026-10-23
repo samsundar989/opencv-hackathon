@@ -1,0 +1,13 @@
+{
+  "note": "Numbers as reported by StageSight's public repository README (read 2026-10-22, docs/research/2026-10-22_rivals.md). Third-party claims, not reproduced by RiverSight.",
+  "source": "https://github.com/Waqar-msx9t/stagesight",
+  "camera": "USGS 01421500 East Branch Delaware River at Hancock NY (NIMS)",
+  "method": "staff-plate reading: HSV mask, connectedComponents, fitLine, DNN text recognition; no gauge calibration",
+  "jul29_rmse_ft": 0.26,
+  "jul29_rmse_ci95_ft": [0.20, 0.31],
+  "jul29_frames_within_0p5ft": "29/30",
+  "sep04_rmse_ft": 0.34,
+  "baseline_plate_fitted_to_gauge_rmse_ft": 0.37,
+  "baseline_linear_pixel_fit_rmse_ft": 6.31,
+  "coverage_pct_hourly_frames": 2.4
+}

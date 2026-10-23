@@ -134,7 +134,29 @@ The year-long CV is the honest long-run number. Its error is about twice the tes
 
 ### 6.6 Head-to-head at Hancock, NY
 
-_Pending (§4b of the sprint)._ A leave-event-out refit of our scene model on the two floods another entry reported for the same camera, with RMSE + bootstrap CI and coverage, under each system's own assumptions (a red-marked staff plate and no gauge history, vs gauge history and no plate).
+StageSight, another entry, reads the staff plate on the same USGS camera (Hancock NY, 01421500) and reports two floods. The two systems make different assumptions: StageSight needs a red-marked plate in view and no gauge history; RiverSight needs gauge history and no plate. To compare fairly we refit our scene model with the frozen setting on all calibration frames **except ±7 days around each event** (leave-event-out), and score the event's registered daylight frames against the gauge (`report/headtohead_hancock.py`, `results/headtohead_hancock/`). Our windows are the UTC days of each event; StageSight's exact frame sets may differ.
+
+<!-- BEGIN:hancock -->
+| | 29–30 Jul 2026 flood | 4–5 Sep 2026 |
+|---|---|---|
+| gauge range in window, ft | 9.56–18.08 | 10.87–11.97 |
+| our calibration max after leaving the event out, ft | 11.97 | 18.08 |
+| **RiverSight RMSE, ft [95 % CI]** | 4.32 [3.44–5.07] | 0.46 [0.36–0.54] |
+| RiverSight MAE / within 0.5 ft | 3.29 / 21.4 % | 0.39 / 61.5 % |
+| RiverSight flood-state recall (camera above calibration p90 when the gauge is) | 1.00 | 0.92 |
+| baseline: gauge value at window start held (outage at event start), RMSE | 5.53 | 0.41 |
+| baseline: calibration median, RMSE | 5.40 | 1.76 |
+| RiverSight coverage: hours of the window / listed daylight frames with a reading | 58.3 % / 93.3 % | 54.2 % / 100.0 % |
+| StageSight RMSE as reported, ft (not reproduced by us) | 0.26 [0.20–0.31] | 0.34 |
+| StageSight coverage as reported | 2.4 % of hourly frames (whole archive) | |
+<!-- END:hancock -->
+
+**Reading this honestly.**
+- On the moderate September event we are worse than StageSight's reported figure, and slightly worse than simply holding the gauge's value from the start of the event.
+- On the July flood we fail: with that flood left out, the calibration never saw a stage above 11.97 ft, and the scene model cannot extrapolate. It saturates near its calibrated ceiling while the river rises above it. Its Kalman σ stays small, so it is confidently wrong.
+- What survives is flood state: the camera put itself above the calibration p90 on every July frame where the gauge was there.
+- A plate reader measures stages it has never seen; a model calibrated from history does not. This is the main limitation of the approach (§7). The live system now has to flag readings at the edge of the calibrated range instead of reporting them as numbers.
+- Our advantage is elsewhere: 20 cameras without plates, and coverage of most daylight hours, against 2.4 % of hourly frames reported for the plate reader.
 
 ### 6.7 Agent evaluation
 
@@ -153,6 +175,7 @@ _Pending (Sat)._ `results/failures/`: night/IR, fog and wet lens, view changes, 
 - **Not a replacement for gauges or official warnings.** The camera beats 15-minute persistence at no site.
 - **Daylight only.** Night and IR frames are not scored, so the camera covers about half of all hours.
 - **Needs gauge history.** Calibration uses the co-located gauge, so it does not transfer to ungauged cameras yet.
+- **No extrapolation above the calibrated range.** A flood higher than anything in the calibration data is read as roughly the calibrated maximum, with an overconfident σ (§6.6). Flood state still fires.
 - **Seasonal drift.** See §6.5.
 - **Cameras move.** Several cameras have history periods taken from a different view (`results/kill_test_v2_summary.json`). The live system detects view changes and the agent re-anchors or quarantines.
 - **Quiet test windows.** Several P1 passes come from flat test windows where simple baselines are better still (Swan Creek, Sand Creek, Big Brook; Cowhouse vs 24 h persistence).

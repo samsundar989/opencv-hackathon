@@ -9,3 +9,4 @@
 880    approximate number of public HIVIS cameras next to a USGS gauge (docs/research/competition-briefing.md); fleet bench size
 2000   bootstrap replicates (report/bootstrap_coverage.py)
 100    AWS budget cap, USD (D-0004)
+01421500  USGS site number of the Hancock NY gauge (identifier, not a result)

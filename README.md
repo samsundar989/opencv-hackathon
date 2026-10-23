@@ -28,6 +28,7 @@ _Flood-height map: each patch is coloured by the stage at which it goes under wa
 - **Not a replacement for gauges or official warnings.** While the gauge is online, the camera beats a 15-minute-old gauge reading at **0/20** sites. The camera's value is when the gauge is down, stale or suspect, and in showing where the water is.
 - **Daylight only.** Night and IR frames are not scored.
 - **Needs gauge history.** Calibration uses months of the co-located gauge record, so it does not yet transfer to ungauged cameras.
+- **No extrapolation above the calibrated range.** At Hancock, with the 29 Jul 2026 flood left out of calibration, the camera read roughly its calibrated maximum while the river rose far above it, though it still flagged flood state (`results/headtohead_hancock/metrics.csv`, report §6.6). A staff-plate reader does not have this limit.
 - **Seasons drift.** Year-long forward-chaining CV gives median MAE **0.38 ft** (9/20 sites meet the accuracy bar), against 0.182 ft on the 10 test days (`results/scene/tune_cv_summary.csv`).
 - **Cameras move.** 8/20 cameras have history periods that cannot be registered to the current view (`results/kill_test_v2_summary.json`). That is why view-change detection and re-anchoring are agent jobs.
 - **Agent faults are partly synthetic.** Fault-injection episodes are labelled `real` or `synthetic` in `results/agent_eval/`.

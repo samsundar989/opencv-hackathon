@@ -87,7 +87,27 @@ def ablations() -> str:
     ])
 
 
-TABLES = {"headline": headline, "per_site": per_site, "baselines": baselines, "ablations": ablations}
+def hancock() -> str:
+    m = pd.read_csv(RES / "headtohead_hancock" / "metrics.csv").set_index("event")
+    ss = json.loads((RES / "headtohead_hancock" / "stagesight_reported.json").read_text(encoding="utf-8"))
+    rows = ["| | 29–30 Jul 2026 flood | 4–5 Sep 2026 |", "|---|---|---|"]
+    j, sp = m.loc["jul29"], m.loc["sep04"]
+    rows += [
+        f"| gauge range in window, ft | {_f(j.gauge_min_ft)}–{_f(j.gauge_max_ft)} | {_f(sp.gauge_min_ft)}–{_f(sp.gauge_max_ft)} |",
+        f"| our calibration max after leaving the event out, ft | {_f(j.cal_max_ft)} | {_f(sp.cal_max_ft)} |",
+        f"| **RiverSight RMSE, ft [95 % CI]** | {_f(j.rmse)} [{_f(j.rmse_lo)}–{_f(j.rmse_hi)}] | {_f(sp.rmse)} [{_f(sp.rmse_lo)}–{_f(sp.rmse_hi)}] |",
+        f"| RiverSight MAE / within 0.5 ft | {_f(j.mae)} / {100 * j.within_0p5ft:.1f} % | {_f(sp.mae)} / {100 * sp.within_0p5ft:.1f} % |",
+        f"| RiverSight flood-state recall (camera above calibration p90 when the gauge is) | {_f(j.flood_state_recall)} | {_f(sp.flood_state_recall)} |",
+        f"| baseline: gauge value at window start held (outage at event start), RMSE | {_f(j.rmse_gauge_held_from_start)} | {_f(sp.rmse_gauge_held_from_start)} |",
+        f"| baseline: calibration median, RMSE | {_f(j.rmse_const_median)} | {_f(sp.rmse_const_median)} |",
+        f"| RiverSight coverage: hours of the window / listed daylight frames with a reading | {_f(j.cov_pct_hours, 1)} % / {_f(j.cov_pct_listed_daylight, 1)} % | {_f(sp.cov_pct_hours, 1)} % / {_f(sp.cov_pct_listed_daylight, 1)} % |",
+        f"| StageSight RMSE as reported, ft (not reproduced by us) | {ss['jul29_rmse_ft']} [{ss['jul29_rmse_ci95_ft'][0]:.2f}–{ss['jul29_rmse_ci95_ft'][1]:.2f}] | {ss['sep04_rmse_ft']} |",
+        f"| StageSight coverage as reported | {ss['coverage_pct_hourly_frames']} % of hourly frames (whole archive) | |",
+    ]
+    return "\n".join(rows)
+
+
+TABLES = {"headline": headline, "per_site": per_site, "baselines": baselines, "ablations": ablations, "hancock": hancock}
 
 
 def main() -> None:
