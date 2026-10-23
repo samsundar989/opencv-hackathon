@@ -87,7 +87,13 @@ def tarball() -> bytes:
     with tarfile.open(fileobj=buf, mode="w:gz") as t:
         def add(p: Path, arc: str):
             t.add(p, arcname=arc, filter=lambda ti: None if "__pycache__" in ti.name or ti.name.endswith(".pyc") else ti)
-        add(ROOT / "src" / "riversight", "src/riversight")
+        # code from the committed HEAD, never the shared working tree (other workers' uncommitted edits)
+        code = subprocess.run(["git", "archive", "--format=tar", "HEAD", "src/riversight"], cwd=ROOT,
+                              capture_output=True, check=True).stdout
+        with tarfile.open(fileobj=io.BytesIO(code)) as src:
+            for m in src.getmembers():
+                if "__pycache__" not in m.name:
+                    t.addfile(m, src.extractfile(m) if m.isfile() else None)
         add(ROOT / "models" / "sites", "models/sites")
         for f in ONNX:
             add(ROOT / "models" / "onnx" / f, f"models/onnx/{f}")
