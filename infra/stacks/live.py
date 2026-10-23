@@ -119,7 +119,7 @@ class LiveStack(Stack):
             self, "Worker", instance_name="riversight-worker", vpc=vpc, security_group=sg, role=role,
             instance_type=ec2.InstanceType(instance_type), machine_image=machine, user_data=user_data,
             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC), associate_public_ip_address=True,
-            require_imdsv2=True, user_data_causes_replacement=True   # cloud-init runs user data on first boot only,
+            require_imdsv2=True, user_data_causes_replacement=True,   # cloud-init runs user data on first boot only
             # both images boot from /dev/sda1; the COOL AMI's snapshot is 80 GB, so its root volume cannot be smaller
             block_devices=[ec2.BlockDevice(device_name="/dev/sda1",
                                            volume=ec2.BlockDeviceVolume.ebs(80 if worker_ami == "cool" else 20,
