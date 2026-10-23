@@ -7,9 +7,9 @@ reading goes to `riversight.agent.handle`. The site bundle is cut three days bef
 that start after the replay clock are hidden from the agent.
 
 Outputs (results/agent_eval/replay/):
-  <cam>_<date>_timeline.csv   one row per replayed frame: gauge, camera ± σ, flags, decision, actions, rationale
-  <cam>_<date>_timeline.png   gauge vs camera with the agent's actions on a strip (drawn with OpenCV)
-  <cam>_<date>_alert.jpg      the first approved-for-review wet overlay the agent rendered (face-blurred)
+  <cam>_<date>_<llm|rules>_timeline.csv one row per replayed frame: gauge, camera ± σ, flags, decision, actions, rationale
+  <cam>_<date>_<llm|rules>_timeline.png gauge vs camera with the agent's actions on a strip (drawn with OpenCV)
+  <cam>_<date>_<llm|rules>_alert.jpg the first approved-for-review wet overlay the agent rendered (face-blurred)
 
   python scripts/agent_replay.py [--rules]      (heavy: ~240 registrations per event -> worker-q)
 """
@@ -97,10 +97,11 @@ def draw_timeline(df: pd.DataFrame, gauge: pd.Series, meta: dict, title: str, pa
 
 
 def replay_event(cam, cut, t0, t1, use_llm):
+    tag = "llm" if use_llm else "rules"
     from riversight.agent.tools import _history_gauge
     from riversight.live import cycle
     bundles = ROOT / "data" / "derived" / "agent_bundles_replay" / cut
-    store_dir = WORK / f"{cam}_{cut}"
+    store_dir = WORK / f"{cam}_{cut}_{tag}"
     shutil.rmtree(store_dir, ignore_errors=True)
     os.environ["RIVERSIGHT_LIVE_DIR"] = str(store_dir)          # the agent's tools read W1's frames from here
     rows = cycle.replay(cam, t0, t1, store_dir, make_agent_fn(cam, bundles, store_dir, use_llm), bundles)
@@ -113,7 +114,7 @@ def replay_event(cam, cut, t0, t1, use_llm):
                      "tokens": (a.get("tokens_in") or 0) + (a.get("tokens_out") or 0), "rationale": a.get("rationale") or ""})
     df = pd.DataFrame(recs)
     OUT.mkdir(parents=True, exist_ok=True)
-    stem = f"{cam}_{t0[:10]}"
+    stem = f"{cam}_{t0[:10]}_{tag}"
     df.to_csv(OUT / f"{stem}_timeline.csv", index=False)
     meta = json.loads((bundles / cam / "meta.json").read_text(encoding="utf-8"))
     who = "LLM agent" if use_llm else "rules policy"
