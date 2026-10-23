@@ -6,7 +6,7 @@
     "budget_usd": 100,
     "stop_at_pct": 90,
     "worker_ami": "ubuntu",
-    "worker_instance_type": "c8g.medium",
+    "worker_instance_type": "c8g.large",
     "bedrock_profile": "us.anthropic.claude-haiku-5-5*"
   }
 }

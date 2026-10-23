@@ -58,7 +58,9 @@ GAUGE_STALE_MIN = 90
 DISAGREE_SIGMAS, DISAGREE_RUN = 2.5, 3
 RISE_FT, RISE_HOURS = 0.5, 3.0
 CADENCE_MIN, DENSE_CADENCE_MIN = 30, 15
-FRAME_MAX_AGE_MIN = 120
+FRAME_MAX_AGE_MIN = 24 * 60     # look back a day for the newest frame (status "stale" past FRAME_STALE_MIN)
+FRAME_STALE_MIN = 120
+RELEASE_RUN, RELEASE_SIGMAS = 3, 2.0
 RECENT_N = 24
 
 
@@ -170,7 +172,6 @@ class SiteRegistrar:
         self.ref = model.reference()
         self.orb = Registrar(use_aliked=False, mask_rows_top=MASK_TOP)
         self.orb.set_reference(self.ref)
-        self._aliked = None
         self.bank = []
         for e in model.meta.get("extra_references", []):
             if e.get("linked") and e.get("H_to_main"):
@@ -178,12 +179,21 @@ class SiteRegistrar:
                 if img is not None and img.shape[:2] == self.ref.shape[:2]:
                     self.bank.append((e["file"], img, np.array(e["H_to_main"], float).reshape(3, 3)))
 
-    def _aliked_reg(self, ref: np.ndarray):
+    _shared = None                      # ONE ALIKED + LightGlue instance per process (~1.3 GB in the DNN engine)
+    _ref_feats: dict = {}               # (cam, ref name) → cached reference keypoints / descriptors
+
+    def _aliked_register(self, ref_name: str, ref: np.ndarray, img: np.ndarray):
         from riversight.killtest import ALIKED_ONNX, LIGHTGLUE_ONNX
         from riversight.vision.register import Registrar
-        R = Registrar(ALIKED_ONNX, LIGHTGLUE_ONNX, use_aliked=True, mask_rows_top=MASK_TOP)
-        R.set_reference(ref)
-        return R
+        cls = SiteRegistrar
+        if cls._shared is None:
+            cls._shared = Registrar(ALIKED_ONNX, LIGHTGLUE_ONNX, use_aliked=True, mask_rows_top=MASK_TOP)
+        R, key = cls._shared, (self.model.cam_id, ref_name)
+        if key not in cls._ref_feats:
+            R.set_reference(ref)
+            cls._ref_feats[key] = (R._ref_kp, R._ref_desc, R._ref_shape)
+        R._ref_kp, R._ref_desc, R._ref_shape = cls._ref_feats[key]
+        return R.register(img)
 
     @staticmethod
     def plausible(H: np.ndarray, shape) -> bool:
@@ -207,15 +217,12 @@ class SiteRegistrar:
         best = self._summ(self.orb.register(img), "reference.jpg")
         if best["ok"]:
             return best
-        if self._aliked is None:
-            self._aliked = self._aliked_reg(self.ref)
-        s = self._summ(self._aliked.register(img), "reference.jpg")
+        s = self._summ(self._aliked_register("reference.jpg", self.ref, img), "reference.jpg")
         if s["ok"]:
             return s
         best = s if (s["inliers"] or 0) >= (best["inliers"] or 0) else best
         for name, ref_img, H_link in self.bank:            # known alternate views (camera moved and came back)
-            R = self._aliked_reg(ref_img)
-            r = R.register(img)
+            r = self._aliked_register(name, ref_img, img)
             if r.ok and r.H is not None:
                 H = H_link @ r.H
                 s = self._summ(r, name, H)
@@ -290,9 +297,14 @@ def flood_state(stage: float | None, meta: dict) -> str:
 
 
 def site_status(reading: dict, state: dict) -> str:
-    """Dashboard pill: ok | provisional (gauge down, camera-only) | quarantined | night | view_change."""
+    """Dashboard pill: ok | provisional (gauge down, camera-only) | above_range | quarantined | night |
+    view_change | stale (newest frame older than 2 h)."""
     if state.get("quarantined"):
         return "quarantined"
+    if "OUT_OF_RANGE" in reading["flags"]:
+        return "above_range" if "GAUGE_STALE" not in reading["flags"] else "above_range_provisional"
+    if (reading.get("frame_age_min") or 0) > FRAME_STALE_MIN:
+        return "stale"
     if "NIGHT" in reading["flags"]:
         return "night"
     if "VIEW_CHANGE" in reading["flags"]:
@@ -300,6 +312,26 @@ def site_status(reading: dict, state: dict) -> str:
     if "GAUGE_STALE" in reading["flags"] or state.get("provisional"):
         return "provisional"
     return "ok"
+
+
+def release_quarantine(state: dict, model: SiteModel, frame: Frame, raw: float | None, g_fresh: float | None,
+                       sigma: float, store, t_cycle: datetime) -> bool:
+    """D-0009 W1-6: lift a quarantine after RELEASE_RUN consecutive cycles with registration OK and
+    |raw camera − gauge| ≤ 2σ. The Kalman filter restarts from the current raw estimate. Logged."""
+    good = raw is not None and g_fresh is not None and sigma and abs(raw - g_fresh) <= RELEASE_SIGMAS * sigma
+    state["release_run"] = state.get("release_run", 0) + 1 if good else 0
+    if state["release_run"] < RELEASE_RUN:
+        return False
+    q = state.pop("quarantined")
+    state["release_run"] = 0
+    ks, _, _ = model.kalman_step(KalmanState(), frame.time.timestamp(), raw)
+    state["kalman"] = ks.to_json()
+    store.append_jsonl(f"live/agent/{t_cycle:%Y-%m-%d}.jsonl", {
+        "event_id": f"{model.cam_id}:{iso(frame.time)}:release", "cam_id": model.cam_id, "t_frame": iso(frame.time),
+        "decided_by": "rules", "flags": [], "actions": [{"type": "QUARANTINE_RELEASED", "args": {"since": q.get("since")},
+                                                         "needs_approval": False}],
+        "rationale": f"{RELEASE_RUN} consecutive registered frames within {RELEASE_SIGMAS:g} sigma of the gauge."})
+    return True
 
 
 def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datetime, reg_cache: dict,
@@ -328,20 +360,36 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
         ql = meta.get("quality", {})
         if q["lap_var"] < ql.get("lap_var_p5", -1) or q["fog_score"] > ql.get("fog_p95", 9):
             flags.append("LOW_QUALITY")
-        if reg["ok"] and not state.get("quarantined"):
+        if reg["ok"]:
             img = frame.img
             if img.shape[:2] != tuple(meta["ref_shape"]):
                 img = cv2.resize(img, (meta["ref_shape"][1], meta["ref_shape"][0]), interpolation=cv2.INTER_AREA)
             raw = float(model.predict_raw(frame_features(img, H, tuple(meta["ref_shape"])))[0])
-            ks, cam_x, _ = model.kalman_step(KalmanState.from_json(state.get("kalman")), frame.time.timestamp(), raw)
-            state["kalman"] = ks.to_json()
+            if not state.get("quarantined"):
+                ks, cam_x, _ = model.kalman_step(KalmanState.from_json(state.get("kalman")), frame.time.timestamp(), raw)
+                state["kalman"] = ks.to_json()
     g_val, g_t, g_rise = gauge.at(meta["nwis_id"], t_cycle)
     g_age = None if g_t is None else (pd.Timestamp(t_cycle) - g_t).total_seconds() / 60
     if g_age is None or g_age > GAUGE_STALE_MIN:
         flags.append("GAUGE_STALE")
-    sigma = meta.get("sigma_ft")
-    if cam_x is not None and g_val is not None and "GAUGE_STALE" not in flags and sigma:
-        state["disagree_run"] = state.get("disagree_run", 0) + 1 if abs(cam_x - g_val) > DISAGREE_SIGMAS * sigma else 0
+    g_fresh = g_val if "GAUGE_STALE" not in flags else None
+    sigma = meta.get("sigma_ft") or 0.0
+    released = release_quarantine(state, model, frame, raw, g_fresh, sigma, store, t_cycle) if state.get("quarantined") else False
+    if released:
+        cam_x = raw
+    # D-0009 W1-1: the camera cannot read above (or the gauge is outside) the calibrated range
+    s_lo, s_hi = meta["stage_min"], meta["stage_max"]
+    cam_high = (raw is not None and raw >= s_hi - sigma) or (cam_x is not None and cam_x >= s_hi - sigma)
+    gauge_out = g_fresh is not None and (g_fresh > s_hi or g_fresh < s_lo - sigma)
+    at_least = None
+    if cam_high or gauge_out:
+        flags.append("OUT_OF_RANGE")
+        if cam_high or (g_fresh is not None and g_fresh > s_hi):
+            at_least = s_hi
+    if gauge_out:
+        flags.append("DISAGREE")                    # immediately: the camera cannot vouch for this stage
+    elif cam_x is not None and g_fresh is not None and sigma and not cam_high:
+        state["disagree_run"] = state.get("disagree_run", 0) + 1 if abs(cam_x - g_fresh) > DISAGREE_SIGMAS * sigma else 0
         if state["disagree_run"] >= DISAGREE_RUN:
             flags.append("DISAGREE")
     recent = state.get("recent", [])
@@ -351,30 +399,42 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
                (frame.time - pd.Timestamp(r["t_frame"]).to_pydatetime()).total_seconds() >= RISE_HOURS * 3600 * 0.9]
         if old:
             cam_rise = cam_x - old[-1]["camera_stage_ft"]
-    stage_for_state = g_val if "GAUGE_STALE" not in flags and g_val is not None else cam_x
+    cam_num = None if at_least is not None else cam_x          # never a camera number above the calibrated range
+    stage_for_state = g_fresh if g_fresh is not None else (at_least if at_least is not None else cam_x)
     fs = flood_state(stage_for_state, meta)
     if (g_rise is not None and g_rise >= RISE_FT) or (cam_rise is not None and cam_rise >= RISE_FT) \
             or fs in ("elevated", "flood"):
         flags.append("RISING")
-    stage_draw = cam_x if cam_x is not None else (g_val if "GAUGE_STALE" not in flags else None)
+    stage_draw = cam_num if cam_num is not None else (at_least if at_least is not None and cam_x is not None else g_fresh)
+    cam_txt = (f">= {at_least:.2f} ft (above calibrated range)" if at_least is not None and cam_x is not None
+               else f"{cam_num:.2f} ft +/- {sigma:.2f}" if cam_num is not None else "n/a")
     caption = [f"{cam[:48]}  {frame.time:%Y-%m-%d %H:%M}Z",
-               ("camera " + (f"{cam_x:.2f} ft +/- {sigma:.2f}" if cam_x is not None else "n/a") +
-                "   gauge " + (f"{g_val:.2f} ft" if g_val is not None else "n/a")),
+               "camera " + cam_txt + "   gauge " + (f"{g_val:.2f} ft" if g_val is not None else "n/a"),
                "blue = under water at this stage (RiverSight live model)" if stage_draw is not None and H is not None
                else "no overlay (" + ("night" if night else "not registered") + ")"]
     overlay = render_overlay(frame.img, model, H, stage_draw, caption)
     frame_key, overlay_key = f"live/frames/{cam}/{ts}.jpg", f"live/overlays/{cam}/{ts}.jpg"
     store.put_bytes(frame_key, jpg(blur(frame.img)), "image/jpeg", "max-age=31536000")
     store.put_bytes(overlay_key, jpg(blur(overlay)), "image/jpeg", "max-age=31536000")
+    frame_age = (pd.Timestamp(t_cycle) - pd.Timestamp(frame.time)).total_seconds() / 60
     reading = {
         "cam_id": cam, "t_frame": iso(frame.time), "t_cycle": iso(t_cycle), "daylight": not night,
+        "frame_age_min": _r(frame_age, 0),
         "sun_elev_deg": _r(elev, 1), "frame_key": frame_key, "overlay_key": overlay_key, "frame_name": frame.filename,
         "registration": reg, "quality": {k: v for k, v in q.items() if k != "night_img"},
-        "camera_raw_ft": _r(raw), "camera_stage_ft": _r(cam_x), "camera_sigma_ft": _r(sigma) if cam_x is not None else None,
+        "camera_raw_ft": _r(raw), "camera_stage_ft": _r(cam_num),
+        "camera_sigma_ft": _r(sigma) if cam_num is not None else None,
+        "camera_at_least_ft": _r(at_least) if at_least is not None and cam_x is not None else None,
+        "calibrated_range_ft": [_r(s_lo), _r(s_hi)],
         "gauge_stage_ft": _r(g_val), "gauge_time": iso(g_t), "gauge_age_min": _r(g_age, 0),
         "gauge_rise_3h_ft": _r(g_rise), "camera_rise_3h_ft": _r(cam_rise), "flood_state": fs, "flags": flags,
         "model_sha": meta["model_sha"][:12], "code_sha": code_sha(), "opencv": opencv_info(), "mode": mode,
     }
+    if not night and reg["ok"]:                     # D-0009 W1-2: remembered for night / stale display
+        state["last_daylight"] = {k: reading[k] for k in (
+            "t_frame", "frame_key", "overlay_key", "camera_stage_ft", "camera_sigma_ft", "camera_at_least_ft",
+            "gauge_stage_ft")} | {"H_frame_to_ref": reg.get("H_frame_to_ref")}
+    reading["last_daylight"] = state.get("last_daylight")
     decision = None
     if agent_fn is not None and [f for f in flags if f != "NIGHT"]:
         decision = call_agent(agent_fn, reading, recent, meta, mode)
@@ -384,7 +444,7 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
                             "rationale": decision.get("rationale"), "approval_id": decision.get("approval_id"),
                             "tokens_in": decision.get("tokens_in"), "tokens_out": decision.get("tokens_out")}
     reading["status"] = site_status(reading, state)
-    reading["provisional"] = "GAUGE_STALE" in flags and cam_x is not None
+    reading["provisional"] = "GAUGE_STALE" in flags and (cam_num is not None or reading["camera_at_least_ft"] is not None)
     slim = {k: reading[k] for k in ("t_frame", "camera_stage_ft", "gauge_stage_ft", "flags")}
     state["recent"] = (recent + [slim])[-RECENT_N:]
     state["last_frame"], state["last_t"] = frame.filename, iso(frame.time)
@@ -460,7 +520,9 @@ def apply_decision(d: dict, reading: dict, state: dict, store, t_cycle: datetime
             state["densify_until"] = iso(t_cycle + timedelta(hours=hours))
         elif typ == "SET_REFERENCE":
             state["reference_override"] = a.get("args")
-            state.pop("quarantined", None)
+            if state.pop("quarantined", None):
+                state["release_run"] = 0
+                state["quarantine_released"] = {"at": iso(t_cycle), "by": "SET_REFERENCE"}
     if "GAUGE_STALE" not in reading["flags"]:
         state.pop("provisional", None)
     if pending:
@@ -528,7 +590,7 @@ def run_cycle(store, models: list[SiteModel], agent_fn=default_agent_fn, now: da
             if fr is None or (state and state.get("last_frame") == fr.filename):
                 old = prev.get(cam) or {"cam_id": cam}
                 sites.append({**old, "cam_id": cam, "status": old.get("status", "no_frame"),
-                              "note": "no new frame in the last 2 h" if fr is None else "frame unchanged"})
+                              "note": "no frame in the last 24 h" if fr is None else "frame unchanged"})
                 continue
             r = run_site(m, fr, store, gauge, now, reg_cache, agent_fn)
             sites.append(slim_reading(r, m.meta))
@@ -555,10 +617,13 @@ def run_cycle(store, models: list[SiteModel], agent_fn=default_agent_fn, now: da
 
 def slim_reading(r: dict, meta: dict) -> dict:
     keep = ("cam_id", "t_frame", "t_cycle", "daylight", "overlay_key", "camera_stage_ft", "camera_sigma_ft",
-            "gauge_stage_ft", "gauge_age_min", "flood_state", "flags", "status", "provisional", "agent")
+            "camera_at_least_ft", "calibrated_range_ft", "gauge_stage_ft", "gauge_age_min", "flood_state", "flags",
+            "status", "provisional", "agent", "frame_age_min")
     out = {k: r.get(k) for k in keep}
     out.update(lat=meta["lat"], lon=meta["lon"], tier=meta["tier"], nwis_id=meta["nwis_id"],
-               reg_ok=r["registration"]["ok"])
+               reg_ok=r["registration"]["ok"],
+               last_daylight_overlay_key=(r.get("last_daylight") or {}).get("overlay_key"),
+               last_daylight_t=(r.get("last_daylight") or {}).get("t_frame"))
     return out
 
 
