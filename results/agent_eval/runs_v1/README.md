@@ -7,3 +7,4 @@
 
 No LLM arm had run when either was superseded.
 | `rules_v2set_prehysteresis.jsonl` | v2 | valid decisions (92.3%); superseded only because `tools.py` changed afterwards (display-only overlay cleanup), which changes the frozen hash. Re-run expected to be identical. |
+| `rules_v2set_final.jsonl`, `REPORT_v2set_final.md` | v2 | final rules run on v2 (92.3%); superseded by set v3 (D-0009 adds out-of-range and muddy-rise behaviour + 20 episodes). |
