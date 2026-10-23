@@ -52,3 +52,7 @@ _xfer/
 
 # near-raw USGS frames side by side (non-negotiable 7): keep local
 experiments/cowork_2026-10-14/floodheight_maps.jpg
+
+# live model bundles (INTERFACES §1): exported by scripts/export_site_models.py, uploaded to S3
+models/sites/
+live_local/
