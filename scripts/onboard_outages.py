@@ -258,7 +258,7 @@ def readme():
         sc = pd.read_csv(sp, parse_dates=["start", "end"])
         ok = sc[sc["status"] == "scored"] if "status" in sc else sc.iloc[0:0]
         L += ["## Camera through the outage (calibrated sites)", "",
-              "Frozen D-0007 setting. `excl7d` = refit without the outage ± 7 days; `causal` = refit on data before the "
+              "Frozen D-0007 setting. `excl7d` = refit without the outage ± 7 days (it may use data from after the outage, so it is hindsight reconstruction, not real time); `causal` = refit on data before the "
               "outage − 7 days only. Truth: USGS's later estimated backfill at frame time where it exists; otherwise the "
               "first reading after the gauge returned vs the camera's last reading in the outage's final 6 h. "
               "Baseline: last-known value before the outage. Outages overlapping the frozen test days are excluded "
