@@ -1,0 +1,38 @@
+{
+  "cam_id": "AK_Alsek_River_at_Dry_Bay_near_Yakutat",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 357,
+    "selected": 286,
+    "nims_calls": 37,
+    "downloads": 280,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 93.7,
+    "reference": 0.2,
+    "register_features": 113.8,
+    "cv": 0.0
+  },
+  "nwis_id": "15129120",
+  "state": "AK",
+  "name": "Alsek River at Dry Bay near Yakutat",
+  "status": "done",
+  "reference": "AK_Alsek_River_at_Dry_Bay_near_Yakutat___2026-09-15T18-01-21Z.jpg",
+  "registration": {
+    "frames": 286,
+    "daylight": 286,
+    "reg_rate_all": 0.5804,
+    "reg_rate_last30d": 0.6897,
+    "n_daylight_last30d": 29,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "C",
+    "tier_reason": "too little data for forward-chaining CV",
+    "n_oof": 0
+  },
+  "tier": "C",
+  "live_eligible": false
+}

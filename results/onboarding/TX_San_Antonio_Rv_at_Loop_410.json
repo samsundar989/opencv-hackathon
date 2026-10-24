@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 119.3
+    "fetch": 119.3,
+    "reference": 0.7,
+    "register_features": 2967.7,
+    "cv": 7.1,
+    "export": 2.9
   },
   "nwis_id": "08178565",
   "state": "TX",
   "name": "San Antonio Rv at Loop 410",
-  "status": "fetched"
+  "status": "done",
+  "reference": "TX_San_Antonio_Rv_at_Loop_410___2026-10-17T14-01-27Z.jpg",
+  "registration": {
+    "frames": 1241,
+    "daylight": 1241,
+    "reg_rate_all": 0.7607,
+    "reg_rate_last30d": 0.9663,
+    "n_daylight_last30d": 178,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "B",
+    "n": 754,
+    "n_pred": 754,
+    "reg_rate": 0.9663,
+    "calib_p5_p95_ft": 3.0685,
+    "test_range_ft": 14.95,
+    "mae": 0.5542,
+    "nmae": 0.1806,
+    "mae_p15": 0.0314,
+    "mae_p24": 0.6088,
+    "mae_const": 0.5173,
+    "n_ev": 190,
+    "mae_ev": 0.87,
+    "mae_p24_ev": 2.3066,
+    "spearman": 0.5447,
+    "bacc_flood": 0.9214,
+    "bacc_flood_p24": 0.5931,
+    "n_flood": 88,
+    "gap_6h_lkv": 0.372,
+    "gap_6h_cam": 0.5542,
+    "gap_24h_lkv": 0.6088,
+    "gap_24h_cam": 0.5542,
+    "gap_72h_lkv": 0.7291,
+    "gap_72h_cam": 0.5542,
+    "gap_7d_lkv": 0.7234,
+    "gap_7d_cam": 0.5542,
+    "p1": false,
+    "has_events": true,
+    "p2": true,
+    "median_ae": 0.4025,
+    "within_025": 0.321,
+    "cv_spearman": 0.5447,
+    "sigma_ft": 0.8925,
+    "n_oof": 754,
+    "n_folds": 7,
+    "cal_frames": 944,
+    "cal_days": 364.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\TX_San_Antonio_Rv_at_Loop_410",
+    "model_sha": "8c271dd0343cee141c357f5015e20c1d7e98424a61160dae9e8756ba2a452743",
+    "export_msg": "TX_San_Antonio_Rv_at_Loop_410: 944 frames, ROI 1830, sigma 0.8925, 0 extra refs"
+  },
+  "live_eligible": true
 }
