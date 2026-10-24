@@ -1,16 +1,23 @@
-# RiverSight video — draft script (Cowork, Oct 22; final version after Gate G2, Sat evening)
+# RiverSight video — draft script v2 (Cowork, Oct 23; W3 fixes applied; final after Gate G2, Sat evening)
 
-**Target length:** 3:15 (limit 5:00). The demo comes first. Samuel appears on camera at 0:00–0:12 and 2:55–3:15; screen capture with his voice-over in between. Numbers in `{braces}` get filled from committed results files only.
+**Target length:** 3:15 (limit 5:00). The demo comes first. Samuel appears on camera at 0:00–0:12 and 2:55–3:15; screen capture with his voice-over in between.
+
+Numbers in `{braces}` are filled only from committed files. The ones already safe come from W3's list in `docs/status/W3_brief_for_cowork.md`. Never say "first camera water-level system", "first on HIVIS", "replaces gauges", or that we beat StageSight. Never quote a COOL speedup that wasn't measured on AWS.
 
 | time | picture | words (Samuel) |
 |---|---|---|
-| 0:00–0:12 | Samuel on camera, then a cut to the live site | "I'm Samuel. America has about 900 public river webcams sitting next to USGS stream gauges. RiverSight turns every one of them into a second, independent water-level instrument, live, right now." |
-| 0:12–0:40 | Live dashboard: map → a site page. The latest frame with the blue wet-area overlay; drag the stage slider up and the water climbs the bank. | "This is the actual USGS camera on the Pecatonica River, minutes old. The camera reads {x.x} ft ± {σ}, and the gauge says {y.y}. Drag the slider and you see what goes under water at any stage. We learned that from a year of the gauge's own history, with no survey, no staff plate and no targets." |
-| 0:40–1:10 | Pipeline animation: frame → ALIKED+LightGlue registration (inlier lines) → block features → flood-height map → stage ± σ | "Each frame is registered with OpenCV 5's ALIKED and LightGlue with MAGSAC. Then each patch of the image has learned the water level at which it gets wet, a flood-height map. Those pixels vote, and a regressor turns them into feet." |
-| 1:10–1:40 | Kill-test table and gap-fill chart | "We froze the model, then scored 20 cameras once on ten unseen days. {14} of {20} were within a quarter foot or 10% of range. When the gauge goes dark, the camera beats a 72-hour-old reading at {15} of {20} sites. While the gauge is online the gauge wins, and we say so." |
-| 1:40–2:20 | River Steward agent: a real view-change episode (camera knocked → re-anchored), then a flood replay (rise → wet overlay at the forecast crest → drafted alert → Samuel taps Approve → email arrives) | "A fleet agent watches every camera. When OpenCV says the view moved, it re-registers against its reference bank and either re-anchors or quarantines. When the water rises, it samples faster, draws the NWS forecast crest into the image and drafts an alert. Nothing leaves the system without a human. On {N} fault-injected and real episodes it took the right action {a}% of the time, versus {b}% for fixed rules." |
-| 2:20–2:45 | Architecture diagram; `/proof` page; COOL chart | "It runs on AWS Graviton5 with OpenCV's COOL build: {speedup}× on our real pipeline, which is {$} per camera-month to watch the whole fleet. Everything is reproducible from the repo with one command." |
-| 2:45–2:55 | Failure gallery montage (night, fog, moved camera) | "It fails at night, in fog, and when a camera is re-aimed. Those cases are flagged, not hidden." |
-| 2:55–3:15 | Samuel on camera | "Gauges fail exactly when floods hit. Cameras are already there. RiverSight makes them count." |
+| 0:00–0:12 | Samuel on camera, then a cut to the live site home | "I'm Samuel. About 880 public USGS river webcams sit right next to stream gauges. RiverSight turns them into a second, independent water-level instrument. Twenty are live today." |
+| 0:12–0:40 | Pecatonica site page: the latest daylight frame with the blue overlay; drag the slider from 5 to 9 ft and the water climbs the bank | "This is the USGS camera on the Pecatonica River in Wisconsin. The camera reads {x.x} feet; the gauge says {y.y}. Drag the slider and you see what goes under water at any level. Each patch of the picture learned the level at which it gets wet from a year of the gauge's own history: no survey, no staff plate, no targets." |
+| 0:40–1:05 | Pipeline: frame → ALIKED+LightGlue inlier lines → reliable blocks highlighted → stage ± σ | "Every frame is registered with OpenCV 5's ALIKED and LightGlue with MAGSAC. Plain ORB registers only 40% of daylight frames; this gets 95.7%. A regression over the reliable patches turns the picture into feet, with an error bar." |
+| 1:05–1:35 | `/judge` tiles: 14/20, 0.18 ft, 15/20 and 18/20, 0/20 | "We froze the model, then scored 20 cameras once on ten unseen days: 14 of 20 within a quarter foot or 10% of their range, median error 0.18 feet. When a gauge goes dark, the camera beats its 72-hour-old reading at 15 of 20 sites and its week-old reading at 18. While the gauge is online the gauge wins, and we show that too." |
+| 1:35–2:15 | River Steward: Hancock flood replay timeline → wet overlay → drafted alert → the approvals page → Samuel taps Approve → email arrives | "A fleet agent, River Steward, watches every camera. When OpenCV loses registration it re-checks against a reference bank and re-anchors or quarantines. When water rises it samples faster, draws the forecast crest into the image and drafts an alert. Nothing goes out without a human. On {N} episodes, {48} of them real, it took the right action {a}% of the time, against {92.3}% for fixed rules, with zero false actions on clean controls." |
+| 2:15–2:40 | Architecture diagram → `/proof` → COOL per-kernel chart | "It runs on AWS Graviton with OpenCV's COOL build. Per kernel, {k}; end to end, {e}× with identical outputs, which works out to {$} per camera-month to watch the whole fleet. Fresh clone to all-green tests takes about 70 seconds." |
+| 2:40–2:55 | Failure gallery: night, hazy lens, re-aimed camera, the Hancock flood above range | "It doesn't see at night. Fog and muddy water look alike to it. Eight of twenty cameras had stretches it couldn't register to today's view. And a flood bigger than anything in the camera's history pins it at its ceiling. Then it says 'at least this high' and trusts the gauge." |
+| 2:55–3:15 | Samuel on camera | "Gauges go dark, drift and get damaged. Cameras are already there. RiverSight makes them a check, a backup, and a picture of where the water is." |
 
-**Recording checklist:** 1080p screen capture; mic test; dashboard in light mode; real data only (replays labelled "replay"); end card with the URL and repo link.
+**Recording checklist:**
+- 1080p screen capture; mic test.
+- Dashboard in light mode; record in daylight Central time so the frames are live, or use the "last daylight frame" view.
+- Replays labelled "replay".
+- End card with the URL, repo and team (Samuel).
+- Keep it under 3:30.

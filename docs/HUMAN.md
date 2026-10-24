@@ -89,3 +89,18 @@ D-0008 ruling 2 runs the live worker on the **COOL G5 AMI** (m9g). Launching it 
 **Cost:** D1 plan (Haiku 3×, Haiku-no-OpenCV 3×, Sonnet 1×) is estimated at ~$6–10 total at list prices; W2 measures it in a 5-episode pilot first and logs real $ in `docs/status/W2.md`.
 **If not done by Sat 10:00 CT:** W2 runs the same arms on Claude **Haiku 4.5** + **Sonnet 4.6**, which work today. Haiku 4.5 costs ~10× Haiku 5.5 per token (~$15–25 for the two Haiku arms, estimate), so W2 would run Sonnet 4.6 1× only and stay under the $100 cap; the report names the models actually used.
 Meanwhile W2 validates the agent loop on Haiku 4.5 with a 5-episode dev pilot (a few cents).
+
+## ANSWER 0008 / 0009 — Samuel via Cowork, 2026-10-23 15:59 CT
+- 0008: `aws login --profile riversight` done.
+- 0009: subscribed to COOL Graviton5 (`prodview-igdweaoo6prb6`) in AWS Marketplace.
+- 0010 (Bedrock Claude 5.5 model agreements): Cowork is asking Samuel now; W2 keeps the Haiku 4.5 dev pilot going in the meantime.
+
+## ANSWER 0010 — Samuel via Cowork, 2026-10-23 21:25 CT
+In the Bedrock playground (us-east-2), Claude Sonnet 5.5 returns `AccessDeniedException: anthropic.claude-sonnet-5-5 is not available for this account ... contact AWS Sales`. This is an account-level eligibility gate, not an unaccepted agreement, and it can't be cleared before the deadline.
+**Ruling (Cowork):**
+- Use the fallback: **Claude Haiku 4.5** for the agent and the main LLM arms, and **Claude Sonnet 4.6** for the second-opinion arm. Both work today through the `us.` cross-region profiles.
+- If Samuel reports that Haiku 5.5 works in the playground, use Haiku 5.5 for the Haiku arms instead.
+- Arms: Haiku 3×, Haiku-without-OpenCV 3×, Sonnet 4.6 1×.
+- Measure the cost in the 5-episode pilot first. Stop and file a Q- if the projected total Bedrock spend exceeds **$25**.
+- The report and the dashboard name the models actually used. No 5.5 claims.
+- Update 21:26 CT: Samuel confirms Haiku 5.5 is also blocked, and that **Claude Opus 4.5 works**. Same fallback: Haiku 4.5 for the main arms, Sonnet 4.6 for the second-opinion arm. W2 may add one Opus 4.5 pass on the full set, but only if the pilot shows the total Bedrock spend stays ≤ $25.

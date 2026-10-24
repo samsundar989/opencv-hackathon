@@ -83,3 +83,18 @@ Summary:
 - Product claim: gauge-outage gap-fill, flood state, camera QA, flood-height map. The camera does not beat 15-min persistence while the gauge is online; say so.
 - Q-0007.1: demo overlays stay committed with a "USGS HIVIS, public domain" credit. Q-0007.2: replaced by sprint contracts; D-0007 stays frozen for reported numbers; live models refit on all data are labelled "live models".
 - Repo goes public at submission only after a full-history secrets scan and Samuel's confirmation.
+
+## D-0009 — 2026-10-23 (Fri ~16:00 CT) — Cowork review of W1/W2/W3; must-fix list before Gate G2 (Cowork)
+Full ruling: `docs/decisions/D-0009_review_oct23.md`.
+Summary: Hancock head-to-head stays in report §6.6 (a disclosed loss reads as integrity); out-of-range safety flag accepted (W1-1, W2-1); corrected numbers everywhere ("8 of 20 cameras have periods that can't be registered to the current view", "9/19 on the fit window"); Bedrock arms in order pilot → Haiku 3× → Haiku-no-OpenCV 3× → Sonnet 1× (→ 2× more only if ≤ $10); secrets scan rerun Monday before going public; site-page must-fix items W1-1..W1-7 before Gate G2.
+
+## D-0010 — 2026-10-23 (Fri 16:15 CT) — Pre-registered prospective live evaluation; model v2 governance; fleet expansion (Cowork)
+Full ruling: `docs/decisions/D-0010_prospective_eval_and_v2_governance.md`. Pre-registered before the first live reading was served.
+Summary:
+- **Prospective eval (W1, reported by W3):** the live bundles as first deployed (`model_sha` per site in `results/live_prospective/frozen_models.json`) are scored from the first deployed cycle to Mon Oct 26 12:00 CT (scorer keeps running to Nov 9): every daylight reading with registration OK vs the nearest USGS reading within ±20 min; `OUT_OF_RANGE` counted separately. MAE, median AE, % within ±0.25 ft, coverage, flags/agent decisions; baseline = 24 h last-known gauge value. Reported whatever it shows.
+- **Model v2 (W4):** compared to v1 only by the D-0007 forward-chaining monthly CV and as a live shadow model. Frozen kill-test v2 numbers are never recomputed. v2 is served only if by Sun Oct 25 12:00 CT: year-long CV median MAE ≤ 0.323 ft (≥ 15 % better) with no site worse by > 0.1 ft, shadow live median AE no worse than v1, and the cycle stays < 5 min. Cowork decides, as a D-entry.
+- **Fleet expansion (W5):** new sites onboarded with the frozen D-0007 setting, no per-site tuning; scored by the same forward-chaining CV and the prospective stream; labelled "onboarded Oct 24–25, not part of the frozen test"; only tier A/B go live, tier C listed but not served.
+
+## D-0011 — 2026-10-23 (Fri 20:30 CT) — Cowork judge-eye audit of the live site; new must-fix items (Cowork)
+Full ruling: `docs/decisions/D-0011_live_audit_oct23_night.md`.
+Summary: Gate G1 met (live on COOL G5, m9g.large, budget guard live). New W1 must-fix items in order: (1) connected-inundation wet overlay (flood-fill from always-wet seed blocks over h* ≤ s, display only, shared with W2's `render_wet_overlay`); (2) `/judge` agent panel as a table, not raw JSON; (3) night cards show the last daylight camera reading next to the gauge then; (4) home strip counts every status; (5) featured order Salt Creek, Neversink, Hancock, Bean Creek, Stony Brook, Buffalo Bayou, then Pecatonica; (6) site-page image first paint < 1 s; (7) prospective scoring now, window starting at the first COOL cycle (Oct 23 ~16:28 CT) with the bundles served in that cycle frozen. Samuel: confirm SNS subscriptions, accept Bedrock agreements (Q-0010), start W4/W5.
