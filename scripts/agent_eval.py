@@ -44,7 +44,8 @@ WORK = ROOT / "runs" / "agent_eval"
 ARMS = {"rules": dict(use_llm=False, evidence="full", model=None),
         "haiku": dict(use_llm=True, evidence="full", model=llm.HAIKU),
         "haiku_noev": dict(use_llm=True, evidence="flags_only", model=llm.HAIKU),
-        "sonnet": dict(use_llm=True, evidence="full", model=llm.SONNET)}
+        "sonnet": dict(use_llm=True, evidence="full", model=llm.SONNET),
+        "opus": dict(use_llm=True, evidence="full", model=llm.OPUS)}
 CONTROL_KINDS = ("control_view", "control_disagree", "control_rise", "view_transient", "view_shift")
 FROZEN_FILES = ["src/riversight/agent/llm.py", "src/riversight/agent/rules.py", "src/riversight/agent/tools.py",
                 "src/riversight/agent/schema.py", "src/riversight/agent/fleet.py", "scripts/agent_eval.py"]
@@ -259,9 +260,10 @@ def report():
          f"episodes ({fz.get('n_real', '?')} real) + {len(set(fl['episode_id'])) if len(fl) else 0} fleet cycles. "
          "Expected actions were written by `scripts/agent_build_episodes.py` before any arm ran. Every number below is "
          "computed by `scripts/agent_eval.py report` from `results/agent_eval/runs/*.jsonl`.", "",
-         "Arms: **rules** = deterministic policy (`agent/rules.py`); **haiku** = Bedrock Claude Haiku 5.5 agent with the "
+         f"Arms: **rules** = deterministic policy (`agent/rules.py`); **haiku** = Bedrock {llm.model_name(llm.HAIKU)} agent with the "
          "OpenCV tools; **haiku_noev** = the same agent whose tools return only the reading's flags (no OpenCV evidence); "
-         "**sonnet** = the agent on Claude Sonnet 5.5. Each arm ran every episode "
+         f"**sonnet** = the agent on {llm.model_name(llm.SONNET)}; **opus** = the agent on {llm.model_name(llm.OPUS)} (if run). "
+         "Claude 5.5 models are not available to this AWS account (docs/HUMAN.md ANSWER 0010). Each arm ran every episode "
          f"{int(s.groupby('arm')['rep'].nunique().max())}×; cells show mean over repeats (min–max across repeats).", "",
          "## Headline", "", "| arm | task success | real episodes | synthetic | false-action rate on clean controls | "
          "unneeded escalations / episode | fleet top-1 | fleet Kendall τ | LLM fallbacks | p50 / p95 latency (s) | tokens / episode | $ / episode (est.) |",
@@ -318,9 +320,9 @@ def report():
                      (", wrong args" if not r["args_ok"] else "") + f". *{str(r['rationale'])[:220]}*")
         L.append("")
     L += ["## Notes", "",
-          "- Costs are estimates at Anthropic first-party list prices (Haiku 5.5 $0.10/$0.50, Sonnet 5.5 $2/$10 per MTok); "
+          "- Costs are estimates at Anthropic first-party list prices per MTok in/out (Haiku 4.5 $1/$5, Sonnet 4.6 $3/$15, Opus 4.5 $5/$25); "
           "Bedrock bills its own rates. Latency = model time + original (uncached) tool compute time.",
-          "- Temperature is not set: Claude 5.5 models reject non-default sampling parameters, so repeats show the spread.",
+          "- Temperature is not set (model default), so repeats show the spread.",
           "- Real episodes use cached USGS HIVIS frames and gauge records; synthetic faults are labelled `synthetic` "
           "(`agent/faults.py`, `tools.apply_gauge_fault`). No real gauge outage > 3 h exists in the 20 sites' history, so "
           "all gauge-stale episodes are synthetic dropouts on real frames.",

@@ -4,12 +4,13 @@ The model sees numbers and one-line summaries from the OpenCV tools, never image
 `submit_decision`; `schema.finalize` then enforces the human-control rules whatever it asked for.
 
 Budgets (SPRINT_W2): ≤ 8 tool calls per event, a daily token cap (`RIVERSIGHT_AGENT_DAILY_TOKENS`, default
-2,000,000), and an estimated cost per decision. Temperature is not sent: Claude Haiku/Sonnet 5.5 reject
-non-default sampling parameters, so reproducibility comes from repeated runs (eval arms run 3×), not from T=0.
+2,000,000), and an estimated cost per decision. Temperature is not sent (left at the model default), so
+reproducibility comes from repeated runs (eval arms run 3×), not from T=0.
 
-Model ids are Bedrock cross-region inference profiles (Haiku/Sonnet 5.5 are not callable in-region in
-us-east-2). Prices are estimates at Anthropic first-party list rates per MTok (Bedrock bills its own rates;
-override with RIVERSIGHT_PRICE_<HAIKU_5_5|SONNET_5_5|HAIKU_4_5|SONNET_4>_<IN|OUT>).
+Models (ANSWER 0010): Claude 5.5 is blocked for this AWS account, so the agent runs on **Claude Haiku 4.5** and the
+second-opinion / second-model arm on **Claude Sonnet 4.6**, with an optional **Claude Opus 4.5** arm — all through
+Bedrock `us.` cross-region inference profiles in us-east-2. Prices are estimates at Anthropic first-party list rates
+per MTok (Bedrock bills its own rates; override with RIVERSIGHT_PRICE_<KEY>_<IN|OUT>, KEY as in PRICES).
 """
 from __future__ import annotations
 
@@ -21,15 +22,26 @@ from typing import Any, Callable
 
 from riversight.agent import schema, tools
 
-HAIKU = os.environ.get("RIVERSIGHT_AGENT_MODEL", "us.anthropic.claude-haiku-5-5")
-SONNET = os.environ.get("RIVERSIGHT_AGENT_SONNET", "us.anthropic.claude-sonnet-5-5")
+HAIKU = os.environ.get("RIVERSIGHT_AGENT_MODEL", "us.anthropic.claude-haiku-4-5-20251001-v1:0")
+SONNET = os.environ.get("RIVERSIGHT_AGENT_SONNET", "us.anthropic.claude-sonnet-4-6")
+OPUS = os.environ.get("RIVERSIGHT_AGENT_OPUS", "us.anthropic.claude-opus-4-5-20251101-v1:0")
+MODEL_NAMES = {"haiku-4-5": "Claude Haiku 4.5", "sonnet-4-6": "Claude Sonnet 4.6", "opus-4-5": "Claude Opus 4.5",
+               "haiku-5-5": "Claude Haiku 5.5", "sonnet-5-5": "Claude Sonnet 5.5"}
+
+
+def model_name(model_id: str | None) -> str | None:
+    """Human-readable model name for reports and the dashboard (never a model that wasn't used)."""
+    if not model_id:
+        return None
+    return next((v for k, v in MODEL_NAMES.items() if k in model_id), model_id)
 REGION = os.environ.get("RIVERSIGHT_BEDROCK_REGION", "us-east-2")
 MAX_TOOL_CALLS = 8
 MAX_TURNS = 10
 DAILY_TOKENS = int(os.environ.get("RIVERSIGHT_AGENT_DAILY_TOKENS", "2000000"))
 # USD per MTok in/out at Anthropic first-party list prices (estimate, see docstring); most specific key first
 PRICES = [("haiku-5-5", 0.10, 0.50), ("sonnet-5-5", 2.00, 10.00), ("haiku-4-5", 1.00, 5.00),
-          ("sonnet-4", 3.00, 15.00), ("haiku", 0.10, 0.50), ("sonnet", 2.00, 10.00)]
+          ("sonnet-4", 3.00, 15.00), ("opus-4-5", 5.00, 25.00), ("haiku", 1.00, 5.00), ("sonnet", 3.00, 15.00),
+          ("opus", 5.00, 25.00)]
 
 
 def price(model: str) -> tuple[float, float]:
