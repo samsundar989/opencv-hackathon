@@ -4,7 +4,7 @@
 
 ## Question
 
-RiverSight's live worker reads one frame per camera every 30 minutes. Does the COOL build of OpenCV on Graviton make that cheaper or faster than the stock pip wheel, stage by stage and for the whole fleet, and does it give the same answers?
+RiverSight's live worker reads one frame per camera every 15 minutes (the original plan said 30; the cost tables give both). Does the COOL build of OpenCV on Graviton make that cheaper or faster than the stock pip wheel, stage by stage and for the whole fleet, and does it give the same answers?
 
 ## Arms
 
@@ -42,7 +42,7 @@ What the live worker actually runs, in `src/riversight/live/bundle.py` and `visi
 - 50 warm-up and 300 timed iterations per stage. The two ALIKED stages take seconds per call on CPU, so they use 10 warm-up and 100 timed iterations (`--dnn-iters`).
 - Per stage: mean, p50, p95, p99 latency, throughput, and CPU utilisation (process CPU time ÷ wall time).
 - **Equivalence:** every pixel stage's output on the 20 frames is saved per arm and compared: max |difference| and PSNR, plus the stage estimate in feet with fixed and with live registration.
-- **Cost:** $ per camera-month at one frame per camera every 30 minutes, counting day and night (conservative: the live worker skips night). EC2 on-demand price from the AWS Price List API at run time; COOL fee from the Marketplace listing. Also cameras per instance, the break-even speedup for COOL's fee, and a fleet-scaling table (cameras → cycle time, instances, $/month).
+- **Cost:** $ per camera-month at one frame per camera every 15 minutes (deployed) and every 30 minutes, counting day and night (conservative: the live worker skips night). EC2 on-demand price from the AWS Price List API at run time; COOL fee from the Marketplace listing. Also cameras per instance, the break-even speedup for COOL's fee, and a fleet-scaling table (cameras → cycle time, instances, $/month).
 - **Provenance:** `cv2.__file__`, version, `getBuildInformation()` sha256 and full text, CPU model, AMI id and the EC2 instance-identity document, in `results/cool_bench/<run>/<arm>/provenance.json`.
 - **Amdahl breakdown:** each stage's share of the per-frame time, so the end-to-end number can be read against the per-kernel ones.
 

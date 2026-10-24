@@ -15,7 +15,7 @@ def test_psnr_identical_is_inf_and_known_value():
     a = np.zeros((4, 4), np.uint8)
     assert ca.psnr(a, a, 255.0) == float("inf")
     b = a.copy()
-    b[0, 0] = 16                                   # mse = 256/16 = 16 → 10·log10(255²/16)
+    b[0, 0] = 16                                   # mse = 256/16 = 16
     assert abs(ca.psnr(a, b, 255.0) - 10 * math.log10(255 ** 2 / 16)) < 1e-9
 
 
@@ -27,11 +27,13 @@ def test_equivalence_flags_diff_and_nan_stages():
     assert e.loc["stage_pipeline", "max_abs_diff"] == 0.0     # both unregistered = equivalent
 
 
-def test_cost_tables_cool_fee_and_break_even():
+def test_cost_tables_cadences_cool_fee_and_break_even():
     fleet = pd.DataFrame({"arm": ["pip", "cool"], "threads": [2, 2], "fleet": [880, 880], "frames_per_s": [2.0, 2.5]})
     c, s = ca.cost_tables(fleet, ["pip", "cool"], {"ec2_usd_per_h": 0.1, "cool_usd_per_h": 0.005}, 2)
-    c = c.set_index("arm")
-    assert c.loc["pip", "cameras_per_instance_30min"] == 3600
-    assert abs(c.loc["cool", "break_even_speedup_vs_stock"] - 1.05) < 1e-9
-    assert abs(c.loc["pip", "usd_per_camera_month"] - 1440 / 2.0 / 3600 * 0.1) < 1e-12
-    assert (s[s.arm == "pip"].instances_30min == 1).all()
+    c = c.set_index(["arm", "cadence_min"])
+    assert c.loc[("pip", 30), "cameras_per_instance"] == 3600
+    assert c.loc[("pip", 15), "cameras_per_instance"] == 1800
+    assert abs(c.loc[("cool", 30), "break_even_speedup_vs_stock"] - 1.05) < 1e-9
+    assert abs(c.loc[("pip", 30), "usd_per_camera_month"] - 1440 / 2.0 / 3600 * 0.1) < 1e-12
+    assert abs(c.loc[("pip", 15), "usd_per_camera_month"] - 2 * c.loc[("pip", 30), "usd_per_camera_month"]) < 1e-12
+    assert (s[s.arm == "pip"].instances == 1).all()

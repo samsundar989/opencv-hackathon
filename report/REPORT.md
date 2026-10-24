@@ -33,7 +33,7 @@ Three people, each making a real decision with a camera they already have but ca
 
 ![System architecture](../docs/img/architecture.svg)
 
-Offline, each site is calibrated once from up to 12 months of frames and gauge readings. Live, one Graviton worker reads the newest frame of each of the 20 calibrated cameras every 30 minutes, produces a stage ± σ plus quality flags, and writes it to S3 behind CloudFront. Flagged readings go to the River Steward agent. Details: `docs/ARCHITECTURE.md`.
+Offline, each site is calibrated once from up to 12 months of frames and gauge readings. Live, one Graviton worker reads the newest frame of each of the 20 calibrated cameras every 15 minutes, produces a stage ± σ plus quality flags, and writes it to S3 behind CloudFront. Flagged readings go to the River Steward agent. Details: `docs/ARCHITECTURE.md`.
 
 ![Agent loop](../docs/img/agent_loop.svg)
 

@@ -7,7 +7,7 @@ and writes into <run>/:
   amdahl.csv            each stage's share of the per-frame pipeline time, per arm (largest-thread regime)
   compare_fleet.csv     fleet cycles: frames/s per arm, speedup
   equivalence.csv       per stage: max |diff| and PSNR vs baseline, worst over sites; stage diff in ft
-  cost.csv              $ per camera-month at a 30-min cadence, cameras per instance, break-even speedup
+  cost.csv              $ per camera-month at 15- and 30-min cadences, cameras per instance, break-even speedup
   scaling.csv           cameras → cycle wall time, instances, $/month (whole-HIVIS-fleet curve)
 
     python bench/compare_arms.py results/cool_bench/<run> --baseline pip-5.0.0.93
@@ -22,8 +22,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-FRAMES_PER_CAMERA_MONTH = 2 * 24 * 30          # every 30 min, day and night (conservative: live skips night)
-CYCLE_S = 30 * 60
+CADENCES_MIN = (15, 30)                         # 15 = deployed timer; 30 = the original plan. Day and night counted
+MONTH_H = 24 * 30                               # (conservative: the live worker skips night frames)
 SCALING_CAMERAS = (20, 100, 250, 500, 880)
 PIPE_STAGES = ["imdecode", "register_orb_magsac", "register_aliked_lightglue_magsac", "warpPerspective",
                "resize_area", "cvtColor_lab", "sobel_magnitude", "block_features", "ridge_predict"]
@@ -58,15 +58,17 @@ def cost_tables(fleet: pd.DataFrame, arms: list[str], prices: dict, nproc_thread
         cool = "cool" in arm.lower()
         usd_h = prices["ec2_usd_per_h"] + (prices.get("cool_usd_per_h", 0.0) if cool else 0.0)
         f = float(fps[arm])
-        inst_s = FRAMES_PER_CAMERA_MONTH / f
-        rows.append({"arm": arm, "instance": prices.get("instance"), "usd_per_h": usd_h, "fleet_frames_per_s": f,
-                     "cameras_per_instance_30min": math.floor(CYCLE_S * f),
-                     "usd_per_camera_month": inst_s / 3600 * usd_h,
-                     "break_even_speedup_vs_stock": (usd_h / prices["ec2_usd_per_h"]) if cool else 1.0})
-        for n in SCALING_CAMERAS:
-            inst = math.ceil(n / (CYCLE_S * f))
-            srows.append({"arm": arm, "cameras": n, "cycle_wall_s_one_instance": n / f, "instances_30min": inst,
-                          "usd_per_month": inst * 24 * 30 * usd_h})
+        for cad in CADENCES_MIN:
+            frames_month = MONTH_H * 60 / cad
+            rows.append({"arm": arm, "cadence_min": cad, "instance": prices.get("instance"), "usd_per_h": usd_h,
+                         "fleet_frames_per_s": f, "cameras_per_instance": math.floor(cad * 60 * f),
+                         # compute-time share of the instance per camera (what a packed fleet pays)
+                         "usd_per_camera_month": frames_month / f / 3600 * usd_h,
+                         "break_even_speedup_vs_stock": (usd_h / prices["ec2_usd_per_h"]) if cool else 1.0})
+            for n in SCALING_CAMERAS:
+                inst = math.ceil(n / (cad * 60 * f))
+                srows.append({"arm": arm, "cadence_min": cad, "cameras": n, "cycle_wall_s_one_instance": n / f,
+                              "instances": inst, "usd_per_month": inst * MONTH_H * usd_h})
     return pd.DataFrame(rows), pd.DataFrame(srows)
 
 

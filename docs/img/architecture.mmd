@@ -18,7 +18,7 @@ flowchart LR
   subgraph AWS["AWS us-east-2"]
     S3[("S3<br/>models · live JSON · overlays · approvals")]
     subgraph EC2["EC2 m9g.large Graviton5 · COOL OpenCV"]
-      CYCLE["live.cycle every 30 min<br/>register → features → stage ± σ<br/>quality · flags · wet overlay · YuNet blur"]
+      CYCLE["live.cycle every 15 min<br/>register → features → stage ± σ<br/>quality · flags · wet overlay · YuNet blur"]
       AGENT["River Steward agent<br/>OpenCV tools · rules fallback"]
     end
     BR["Amazon Bedrock<br/>Claude Haiku 5.5 (Converse tool use)"]
