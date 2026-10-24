@@ -59,6 +59,6 @@ def test_each_check_fires_on_its_fault_and_not_on_a_clean_camera(tmp_path):
     found = {s["cam_id"]: [i["check"] for i in s["issues"]] for s in h["sites"]}
     assert found["CLEAN"] == [] and found["SNOW"] == []          # snow is desaturated colour, not IR
     assert "offline" in found["OFFLINE"] and "view_changed" in found["MOVED"] and "ir_stuck_on" in found["IR"]
-    assert "lens_degradation" in found["DIRTY"] and "gauge_vs_camera" in found["DRIFT"]
+    assert "poor_visibility" in found["DIRTY"] and "gauge_vs_camera" in found["DRIFT"]
     tickets = [i["ticket_draft"] for s in h["sites"] for i in s["issues"]]
     assert tickets and all(t["needs_approval"] and not t["sent"] for t in tickets)

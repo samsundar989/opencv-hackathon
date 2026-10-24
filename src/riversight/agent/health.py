@@ -7,9 +7,9 @@ readings from the live store and reports, per camera, what an operator should fi
   view_changed      ≥ half of the last 24 h of daylight frames fail registration (re-aimed / moved / blocked)
   ir_stuck_on       ≥ half of the last 24 h of frames with the sun ≥ 10° up are NIGHT-flagged AND those frames are
                     monochrome (chroma < 1; snow and grey sky fool the saturation test, not this one)
-  lens_degradation  daily median sharpness < half the camera's own trailing 14-day baseline, or haze > baseline +
-                    0.12, on ≥ 2 of the last 3 days and not improving (dirt, spider web, condensation); silent until
-                    7 baseline days exist
+  poor_visibility   daily median sharpness < half the camera's own trailing 14-day baseline, or haze > baseline +
+                    0.12, on ≥ 2 of the last 3 days and not improving; silent until 7 baseline days exist. It cannot tell
+                    a dirty lens from fog or snow cover (history spot check), so it says so and ranks low
   gauge_vs_camera   over ≥ 6 daylight readings in 72 h the camera sits > 2.5 σ from the gauge on the same side
                     while the camera registers well — check the gauge (drift) or recalibrate the camera
 
@@ -139,7 +139,7 @@ def site_health(cam: str, latest: dict, rs: list[dict], meta: dict | None, now: 
                                      {"share_ir_in_daylight": round(float(ir), 2), "n": len(day), "median_chroma": round(float(np.median(chs)), 3)},
                                      imgs, f"Camera {cam} seems stuck in IR/night mode during the day. Check the IR-cut filter "
                                      "or the day/night setting."))
-    # lens degradation: daily medians vs the camera's OWN trailing 14-day baseline (calibration-season p-levels flag
+    # poor visibility: daily medians vs the camera's OWN trailing 14-day baseline (calibration-season p-levels flag
     # every leaf-off / snowy day: 2-3 of 12 flagged days were real in the history spot check of v1)
     by_day: dict[str, list] = {}
     for r in rs:
@@ -150,9 +150,10 @@ def site_health(cam: str, latest: dict, rs: list[dict], meta: dict | None, now: 
     fl = lens_flags(rows)
     if fl and fl[-1]["day"] == rows[-1][0]:
         f = fl[-1]
-        issues.append(_issue("lens_degradation", 2, f"sharpness/haze off this camera's own 14-day baseline on {f['bad_days']} of the last 3 days",
-                             f, imgs, f"Camera {cam}: image sharpness has dropped / haze has risen for days compared with its "
-                             "own recent baseline. Likely dirt, a spider web or condensation on the lens or housing; schedule a cleaning visit."))
+        issues.append(_issue("poor_visibility", 1, f"sharpness/haze off this camera's own 14-day baseline on {f['bad_days']} of the last 3 days",
+                             f, imgs, f"Camera {cam}: the picture has been poor for days compared with its own recent baseline. "
+                             "This is either weather (fog, snow cover, smoke) or the lens/housing (dirt, spider web, "
+                             "condensation). If it persists after the weather clears, schedule a cleaning visit."))
     # persistent camera vs gauge disagreement on registered, in-range daylight readings
     sig = float(meta.get("sigma_ft") or latest.get("camera_sigma_ft") or 0.0)
     pairs = [r for r in rs if r.get("camera_stage_ft") is not None and r.get("gauge_stage_ft") is not None
@@ -204,7 +205,7 @@ def build_health(store, now: datetime | None = None, days: int = 3) -> dict[str,
     return {"generated_utc": now.strftime("%Y-%m-%dT%H:%M:%SZ"), "window_days": days, "n_sites": len(sites),
             "n_sites_with_issues": sum(not x["ok"] for x in sites), "n_issues": n_issues,
             "note": "ticket drafts only; each needs operator approval before anything is sent",
-            "checks": ["offline", "view_changed", "ir_stuck_on", "lens_degradation", "gauge_vs_camera"], "sites": sites}
+            "checks": ["offline", "view_changed", "ir_stuck_on", "poor_visibility", "gauge_vs_camera"], "sites": sites}
 
 
 def write_health(store, now: datetime | None = None) -> dict[str, Any]:
