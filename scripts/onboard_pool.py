@@ -36,7 +36,7 @@ from riversight.data.nims import NimsClient  # noqa: E402
 from riversight.onboard import W_END, W_START  # noqa: E402
 
 DATA = Path(os.environ.get("RIVERSIGHT_DATA", ROOT / "data"))
-RES = ROOT / "results" / "onboarding"
+RES = Path(os.environ.get("RIVERSIGHT_RESULTS", ROOT / "results")) / "onboarding"   # absolute when run from a worker-q snapshot
 NAMED = ("Guadalupe_R", "Guadalupe_Rv_at_Comfort", "Blanco_R", "San_Antonio_R")
 PROBE_EVERY_D = 30
 

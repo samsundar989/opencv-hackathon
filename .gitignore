@@ -55,6 +55,7 @@ experiments/cowork_2026-10-14/floodheight_maps.jpg
 
 # live model bundles (INTERFACES §1): exported by scripts/export_site_models.py, uploaded to S3
 models/sites/
+models/onboard/
 live_local/
 
 # COOL bench equivalence dumps hold decoded USGS frames (non-negotiable 7)

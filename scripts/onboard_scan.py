@@ -110,11 +110,11 @@ def main():
                      "n_estimated_6h": sum(e["kind"] == "estimated" for e in ev),
                      "n_qualified_6h": sum(e["kind"] == "qualified" for e in ev),
                      "outage_hours": round(sum(e["hours"] for e in ev if e["kind"] == "gap"), 1)})
-    out = ROOT / "results" / "onboarding"
+    out = Path(os.environ.get("RIVERSIGHT_RESULTS", ROOT / "results")) / "onboarding"
     out.mkdir(parents=True, exist_ok=True)
     pool = pd.DataFrame(rows)
     pool.round(4).to_csv(out / "pool.csv", index=False)
-    ro = ROOT / "results" / "real_outages"
+    ro = Path(os.environ.get("RIVERSIGHT_RESULTS", ROOT / "results")) / "real_outages"
     ro.mkdir(parents=True, exist_ok=True)
     cat = pd.DataFrame(events, columns=["cam_id", "nwis_id", "state", "kind", "start", "end", "hours", "v_before", "v_after", "codes"])
     cat.round(3).to_csv(ro / "catalog_gauges.csv", index=False)

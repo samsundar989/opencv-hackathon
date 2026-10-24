@@ -39,7 +39,7 @@ from riversight.killtest import sun_elevation_deg  # noqa: E402
 from riversight.onboard import W_END, W_START  # noqa: E402
 
 DATA = Path(os.environ.get("RIVERSIGHT_DATA", ROOT / "data"))
-OUT = ROOT / "results" / "real_outages"
+OUT = Path(os.environ.get("RIVERSIGHT_RESULTS", ROOT / "results")) / "real_outages"
 TEST_DAYS = (pd.Timestamp("2026-10-04", tz="UTC"), pd.Timestamp("2026-10-14", tz="UTC"))
 KILL_CUT = pd.Timestamp("2026-10-03", tz="UTC")
 PAD = pd.Timedelta("7D")
@@ -54,7 +54,7 @@ def onboarded_sites() -> dict:
     out = {}
     if p.exists():
         for s in yaml.safe_load(p.read_text(encoding="utf-8"))["sites"]:
-            rec = ROOT / "results" / "onboarding" / f"{s['cam_id']}.json"
+            rec = OUT.parent / "onboarding" / f"{s['cam_id']}.json"
             if rec.exists() and json.loads(rec.read_text(encoding="utf-8")).get("status") == "done":
                 out[s["cam_id"]] = s
     return out
@@ -103,7 +103,7 @@ def catalog(max_calls: int, pace: float):
     import fetch_history as fh
     from riversight.data.nims import NimsClient
     raw = pd.read_csv(OUT / "catalog_gauges.csv", dtype={"nwis_id": str}, parse_dates=["start", "end"])
-    pool = pd.read_csv(ROOT / "results" / "onboarding" / "pool.csv", dtype={"nwis_id": str}).drop_duplicates("cam_id").set_index("cam_id")
+    pool = pd.read_csv(OUT.parent / "onboarding" / "pool.csv", dtype={"nwis_id": str}).drop_duplicates("cam_id").set_index("cam_id")
     ev = merge_events(raw)
     calibrated = set(kill_sites()) | set(onboarded_sites())
     nims = NimsClient(api_key=os.getenv("USGS_API_KEY"))

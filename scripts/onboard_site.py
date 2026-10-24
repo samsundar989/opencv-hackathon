@@ -25,6 +25,7 @@ import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import yaml
 
@@ -98,6 +99,7 @@ def summarise():
             "p1_sites_done": int(done["p1"].fillna(False).astype(bool).sum()),
             "errors": df.loc[df["status"] == "error", ["cam_id", "error"]].to_dict("records")}
     (pl.RES / "summary.json").write_text(json.dumps(summ, indent=2, default=str), encoding="utf-8")
+    cost(done)
     if FLEET.exists():
         doc = yaml.safe_load(FLEET.read_text(encoding="utf-8"))
         el = set(live["cam_id"])
@@ -107,6 +109,40 @@ def summarise():
             s["tier"] = tiers.get(s["cam_id"])
         FLEET.write_text(yaml.safe_dump(doc, sort_keys=False, allow_unicode=True), encoding="utf-8")
     print(json.dumps(summ, indent=2, default=str))
+
+
+VCPU_USD_H = 0.0978 / 2       # m9g.large on-demand, us-east-2 (docs/status/W1.md), per vCPU-hour
+HIVIS_GAUGED = 880             # gauged HIVIS cameras to cover (SPRINT_W5 A.5)
+
+
+def cost(done: pd.DataFrame):
+    """Measured cost to onboard one camera (medians over finished sites) and the projection to the gauged fleet.
+    CPU stages run single-threaded per site, so their wall seconds are CPU-seconds (measured on the x86 dev box;
+    the $ figure assumes the same CPU-seconds on Graviton, which W3's COOL benchmark can correct)."""
+    if done.empty:
+        return
+    cpu_cols = [c for c in ("s_reference", "s_register_features", "s_cv", "s_export") if c in done]
+    cpu_s = done[cpu_cols].fillna(0).sum(axis=1)
+    mb = [sum(f.stat().st_size for f in (DATA / "raw" / "720" / c).glob("*.jpg")) / 1e6 for c in done["cam_id"]]
+    per = {"sites_measured": int(len(done)),
+           "nims_listing_calls_median": float(done["nims_calls"].median()),
+           "usgs_iv_requests_per_site": round(1 / 8, 3),          # 8 gauges per legacy IV request in onboard_scan.py
+           "frames_downloaded_median": float(done["downloads"].median()),
+           "mb_downloaded_median": float(np.median(mb)),
+           "fetch_wall_s_median": float(done["s_fetch"].median()) if "s_fetch" in done else None,
+           "cpu_s_median": float(cpu_s.median()), "cpu_s_p90": float(cpu_s.quantile(0.9)),
+           "usd_per_site_median": float(cpu_s.median() / 3600 * VCPU_USD_H)}
+    proj = {"cameras": HIVIS_GAUGED,
+            "nims_listing_calls": per["nims_listing_calls_median"] * HIVIS_GAUGED,
+            "gb_downloaded": per["mb_downloaded_median"] * HIVIS_GAUGED / 1000,
+            "cpu_hours": per["cpu_s_median"] * HIVIS_GAUGED / 3600,
+            "usd_compute": per["usd_per_site_median"] * HIVIS_GAUGED,
+            "wall_hours_fetch_sequential": (per["fetch_wall_s_median"] or 0) * HIVIS_GAUGED / 3600,
+            "wall_hours_cpu_on_16_vcpu": per["cpu_s_median"] * HIVIS_GAUGED / 3600 / 16}
+    out = {"per_camera": per, "projection_all_gauged_hivis": proj, "price_basis": "m9g.large $0.0978/h on-demand (2 vCPU)",
+           "note": "CPU-seconds measured on the x86 dev box (sam-mega-pc), single thread per site."}
+    (pl.RES / "cost.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
+    print(json.dumps(out, indent=2))
 
 
 def main():
