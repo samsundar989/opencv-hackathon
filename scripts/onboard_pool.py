@@ -113,6 +113,8 @@ def main():
     ap.add_argument("--n", type=int, default=40)
     ap.add_argument("--per-state", type=int, default=6)
     ap.add_argument("--pace", type=float, default=1.5)
+    ap.add_argument("--diverse", action="store_true", help="batch 2 (D-0013): quotas by camera type, appended to fleet_v2.yaml")
+    ap.add_argument("--min-swing", type=float, default=0.4)
     a = ap.parse_args()
     from dotenv import load_dotenv
     load_dotenv(ROOT / ".env")
@@ -121,6 +123,8 @@ def main():
     P = fh.Paced(nims, a.pace, None)
     pool = pd.read_csv(RES / "pool.csv", dtype={"nwis_id": str})
     el = eligible(pool).sort_values("iv_swing_ft", ascending=False)
+    if a.diverse:
+        return diverse(a, P, nims, el)
     named = el[el["cam_id"].str.contains("|".join(NAMED))]
     short = pd.concat([named, el.head(a.shortlist)]).drop_duplicates("cam_id")
     print(f"{len(pool)} gauged cameras → {len(el)} eligible → shortlist {len(short)} ({len(named)} named TX)", flush=True)
@@ -165,6 +169,68 @@ def main():
                      for r in sc[sc["picked"]].itertuples()]}
     (DATA / "sites" / "fleet_v2.yaml").write_text(yaml.safe_dump(doc, sort_keys=False, allow_unicode=True), encoding="utf-8")
     print(f"picked {len(picked)}: {per}")
+
+
+TX_CREEKS = 6                                                                          # of the small-stream quota
+QUOTA = {"small_stream": 22, "cold_climate": 13, "large_river": 15, "tidal_coastal": 10}   # D-0013 W5-1: ~60, diverse
+
+
+def diverse(a, P, nims, el: pd.DataFrame):
+    """Batch 2 (D-0013 W5-1): quotas by camera type, sites already in fleet_v2.yaml excluded, appended to it.
+    Shortlist per type = the 2× quota largest stage swings with swing ≥ --min-swing; same probe and score as batch 1;
+    pick per type by score with ≤ --per-state per state across the whole batch."""
+    from riversight.onboard.types import camera_type
+    fleet_p = DATA / "sites" / "fleet_v2.yaml"
+    doc = yaml.safe_load(fleet_p.read_text(encoding="utf-8"))
+    have = {s["cam_id"] for s in doc["sites"]}
+    el = el[~el["cam_id"].isin(have) & (el["iv_swing_ft"] >= a.min_swing)].copy()
+    el["camera_type"] = [camera_type(c, s, la) for c, s, la in zip(el["cam_id"], el["state"], el["lat"])]
+    tx = el[(el["camera_type"] == "small_stream") & (el["state"] == "TX")].head(2 * TX_CREEKS)   # flash-flood creeks
+    short = pd.concat([tx] + [el[el["camera_type"] == t].head(2 * q) for t, q in QUOTA.items()]).drop_duplicates("cam_id")
+    print(f"{len(el)} eligible new cameras by type {el['camera_type'].value_counts().to_dict()} → shortlist {len(short)}", flush=True)
+    rows = []
+    for k, r in enumerate(short.itertuples(), 1):
+        t0 = time.time()
+        try:
+            pr = probe(P, nims, r.cam_id, r.lat, r.lng)
+        except Exception as e:
+            pr = {"probe_error": repr(e)[:200], "coverage": 0.0, "daylight": 0.0, "feas_ok": 0.0}
+        rows.append({"cam_id": r.cam_id, **pr})
+        print(f"[{k}/{len(short)}] {r.camera_type} {r.cam_id}: cov {pr.get('coverage', 0):.2f} day {pr.get('daylight', 0):.2f} "
+              f"feas {pr.get('feas_ok', 0):.2f}/{pr.get('feas_inliers', 0)} ({time.time() - t0:.0f}s)", flush=True)
+        p = os.environ.get("WORKERQ_PROGRESS")
+        if p:
+            Path(p).write_text(f"{k / len(short):.4f}")
+    sc = short.merge(pd.DataFrame(rows), on="cam_id")
+    sc["score"] = (sc["coverage"].fillna(0) * sc["daylight"].fillna(0) * sc["feas_ok"].fillna(0)
+                   * np.minimum(sc["iv_swing_ft"] / 2.0, 1.0))
+    sc["tx_creek"] = (sc["camera_type"] == "small_stream") & (sc["state"] == "TX")
+    sc = sc.sort_values("score", ascending=False)
+    sc = pd.concat([sc[sc["tx_creek"]].head(TX_CREEKS), sc])                # reserved first, then the rest by score
+    sc = sc[~sc.index.duplicated()]
+    per = {}
+    for s in doc["sites"]:
+        per[s["state"]] = per.get(s["state"], 0)            # batch-1 sites do not count against batch-2 state caps
+    picked, n_type = [], {t: 0 for t in QUOTA}
+    for r in sc.itertuples():
+        if r.score <= 0 or r.coverage < 0.5 or r.feas_ok < 0.5 or n_type[r.camera_type] >= QUOTA[r.camera_type]:
+            continue
+        if per.get(r.state, 0) >= a.per_state:
+            continue
+        picked.append(r.cam_id)
+        n_type[r.camera_type] += 1
+        per[r.state] = per.get(r.state, 0) + 1
+    sc["picked"] = sc["cam_id"].isin(picked)
+    sc.round(4).to_csv(RES / "candidates_ranked_b2.csv", index=False)
+    for s in doc["sites"]:
+        s.setdefault("batch", 1)
+    doc["sites"] += [{"cam_id": r.cam_id, "nwis_id": str(r.nwis_id).zfill(8), "state": r.state, "lat": float(r.lat),
+                      "lng": float(r.lng), "name": r.name, "swing_ft": round(float(r.iv_swing_ft), 3),
+                      "score": round(float(r.score), 4), "camera_type": r.camera_type, "batch": 2, "live": False}
+                     for r in sc[sc["picked"]].itertuples()]
+    doc["selection_b2"] = "scripts/onboard_pool.py --diverse → results/onboarding/candidates_ranked_b2.csv (D-0013 W5-1)"
+    fleet_p.write_text(yaml.safe_dump(doc, sort_keys=False, allow_unicode=True), encoding="utf-8")
+    print(f"picked {len(picked)} by type {n_type}; states {per}")
 
 
 if __name__ == "__main__":

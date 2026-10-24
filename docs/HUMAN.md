@@ -128,3 +128,21 @@ This is consistent with our claim (gap-fill and flood state, not gauge replaceme
 **W5 recommendation:** option 1 for honesty and scale ("self-onboarding: 25 of 39 qualified"), with the site cards showing ± σ. W1 decides whether the cycle can carry 45 sites.
 
 W5 continues meanwhile: it hands every tier-B bundle (`models/onboard/<cam>/`) and `data/sites/fleet_v2.yaml` (with `live` flags per the D-0010 rule) to W1, and serves nothing itself.
+
+## ANSWER 0011 / 0012 — Cowork, 2026-10-24 12:30 CT (full rulings: docs/decisions/D-0012_sat_midday_rulings.md; commit it with your next commit)
+- **0011 → (a) rules-first hybrid.** Rules act; Sonnet 4.6 does triage, the second opinion on anything that pages a human, gauge-drift review and alert text; a human approves anything external.
+  - W2: run the hybrid arm 3× on the frozen v3 episodes (pre-registered now), Bedrock ≤ $25 total.
+  - W1: set `RIVERSIGHT_AGENT_MODE=rules_first` and `RIVERSIGHT_AGENT_ESCALATE=1` on the worker, and show the second opinion on approval cards.
+  - Report the LLM-only numbers openly; the autonomy split was chosen by measurement.
+- **0012 → option 1.** Serve all tier-B onboarded sites in a separate "Onboarded this weekend" section with ± σ and CV nMAE (every 30 min is fine if the cycle needs it). Score them prospectively as a separate group. Featured sites and the `/judge` tour stay the original 20.
+- **v2 serving:** W1 deploys the shadow right after Samuel's `aws login`. Cowork decides Sun 12:00 CT on ≥ 40 paired daylight readings (D-0010 §2).
+
+## Cowork note — 2026-10-24 15:35 CT
+- The AWS session is still expired as of 14:14 CT. Samuel has been asked to run `aws login` now. W1 deploys right after: the v2 shadow, the rules_first hybrid env, onboarded tier-B sites (D-0012), and the deferred-JS change.
+- **W3 may fix W2's test** (cross-ownership approved by Cowork): add `pytest.importorskip("botocore")` at the top of `tests/w2/test_agent.py::test_bedrock_throttle_is_retried_not_fallen_back`, so a fresh clone's `pytest -q` is green. Re-time the fresh clone after.
+- **W2:** pick up D-0012 now: the hybrid arm (3×, Sonnet 4.6, Bedrock ≤ $25 total), then the env hand-off to W1.
+
+## Cowork → ALL WORKERS — 2026-10-24 15:45 CT: next work is in docs/decisions/D-0013_backlog_to_deadline.md (commit it with your next commit)
+- Samuel ran `aws login` at about 15:35 CT. **W1: deploy now**, per D-0012 (v2 shadow, rules_first env, tier-B onboarded sites, deferred JS).
+- Samuel approved a live DRAFT_ALERT at **First Mallard Branch (tidal)**. That is the first real approval round-trip, and also a false alert. **W2-1 fixes tidal handling first.**
+- Each worker: once your current item is done, take the next item from your D-0013 list. Keep going until the Mon 12:00 CT freeze. Report in `docs/status/W<n>.md` at every stopping point.
