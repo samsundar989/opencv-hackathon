@@ -150,6 +150,9 @@ def prospective() -> str:
     flags = ", ".join(f"{k} {v}" for k, v in fl["flags"].items())
     acts = ", ".join(f"{k} {v}" for k, v in fl["agent_actions"].items())
     rows += ["", f"Flags raised: {flags}. Agent actions: {acts}."]
+    if fl.get("shadow_n"):
+        rows += ["", f"Model v2 in shadow on the same live frames: median absolute error {fl['shadow_median_ae_ft']} ft vs "
+                 f"{fl['v1_median_ae_on_shadow_rows_ft']} ft for the served v1 on {fl['shadow_n']} paired readings (§6.11)."]
     return "\n".join(rows)
 
 
@@ -191,6 +194,29 @@ def agent() -> str:
              f"set frozen with sha256 (`results/agent_eval/FROZEN.json`). "
              f"OpenCV-evidence effect (same LLM with vs without OpenCV tools, paired): {e['points']:+} points "
              f"(95 % CI {e['ci95_points'][0]} to {e['ci95_points'][1]})."]
+    lfl = sm.get("like_for_like_v3")
+    if lfl:
+        names2 = {"rules": "deterministic rules", "hybrid": "**hybrid: rules act, Sonnet 4.6 advises**",
+                  "sonnet": "Sonnet 4.6 agent", "haiku": "Haiku 4.5 agent", "haiku_noev": "Haiku 4.5, flags only"}
+        rows += ["", f"Like-for-like, every arm on the same {lfl['arms']['rules']['episodes']} frozen v3 episodes (task success, min–max over repeats):", "",
+                 "| arm | task success |", "|---|---|"]
+        for k in ("hybrid", "rules", "sonnet", "haiku", "haiku_noev"):
+            a = lfl["arms"].get(k)
+            if a:
+                rows.append(f"| {names2[k]} | {a['task_success_pct']} % ({a['min']}–{a['max']}) |")
+    hy, hb = sm["arms"].get("hybrid"), sm.get("hybrid")
+    if hy and hb:
+        rows += ["", f"Hybrid on the extended v4 set (adds tidal episodes): {hy['task_success_pct']['mean']} % task success, "
+                 f"{hy['false_actions_on_clean_controls_pct']} % false actions on clean controls, fleet triage top-1 {hy['fleet_triage_top1_pct']} %, "
+                 f"p50 latency {hy['latency_s']['p50']} s, about ${hy['estimated_usd_total']} for the whole run. "
+                 f"Sonnet's gauge-drift reviews turned {hb['drift_reviews_turned_into_gauge_ticket']} of {hb['drift_reviews']} drift episodes into a "
+                 f"human-approved gauge-suspect ticket; its recorded second opinions agreed with the rules {hb['second_opinion_agreement_pct']} % of the time "
+                 f"({hb['second_opinions']} decisions) and never override them."]
+    td = sm.get("tidal")
+    if td:
+        r = td["results_runs"]["rules"]
+        rows += ["", f"Tidal sites (v4): ordinary tides correctly not alerted {r['tidal_tide']}; the replayed live false alert suppressed "
+                 f"{r['tidal_live_false_alert']}; record-high (king-tide) days alerted {r['tidal_flood']}."]
     return "\n".join(rows)
 
 
@@ -211,7 +237,50 @@ def model_v2() -> str:
     return "\n".join(rows)
 
 
-TABLES = {"headline": headline, "per_site": per_site, "baselines": baselines, "ablations": ablations, "hancock": hancock, "registration": registration, "prospective": prospective, "fewshot": fewshot, "agent": agent, "model_v2": model_v2}
+def fusion() -> str:
+    f = RES / "v2" / "fusion_summary.csv"
+    if not f.exists():
+        return "_No fusion results committed yet._"
+    d = pd.read_csv(f)
+    rows = ["| outage | last-known gauge | fused (primary, with bias) | fused | camera only | primary beats last-known | fused, river moving vs last-known moving |",
+            "|---|---|---|---|---|---|---|"]
+    for gap in ("6h", "24h", "72h", "7d"):
+        g = d[(d.model == "v1") & (d.gap == gap)].set_index("method")
+        rows.append(f"| {gap} | {_f(g.loc['lkv'].median_site_mae, 3)} | **{_f(g.loc['fused_bias'].median_site_mae, 3)}** | "
+                    f"{_f(g.loc['fused'].median_site_mae, 3)} | {_f(g.loc['camera'].median_site_mae, 3)} | "
+                    f"{int(g.loc['fused_bias'].sites_beating_lkv)}/{int(g.loc['fused_bias'].sites)} sites | "
+                    f"{_f(g.loc['fused'].median_site_mae_moving, 2)} vs {_f(g.loc['lkv'].median_site_mae_moving, 2)} |")
+    v2 = d[(d.model == "v2") & (d.method == "fused_bias")].set_index("gap")
+    rows += ["", "With the v2 candidate camera, the primary fused estimate is " + " / ".join(
+        f"{_f(v2.loc[g].median_site_mae, 3)}" for g in ("6h", "24h", "72h", "7d")) + " ft for 6 h / 24 h / 72 h / 7 d outages."]
+    return "\n".join(rows)
+
+
+def recal() -> str:
+    f = RES / "v2" / "recal_summary.csv"
+    if not f.exists():
+        return "_No recalibration results committed yet._"
+    d = pd.read_csv(f).set_index(["model", "method"])
+    rows = ["| refit schedule | v1 median MAE ft | v2 median MAE ft | MAE on frames above the static calibration range (v1 / v2) |",
+            "|---|---|---|---|"]
+    for m in ("static", "monthly", "weekly"):
+        a, b = d.loc[("v1", m)], d.loc[("v2", m)]
+        rows.append(f"| {m} | {_f(a.median_mae, 3)} | {_f(b.median_mae, 3)} | {_f(a.median_mae_above_static_range, 2)} / {_f(b.median_mae_above_static_range, 2)} |")
+    return "\n".join(rows)
+
+
+def shadow() -> str:
+    f = RES / "v2" / "shadow_decision.json"
+    if not f.exists():
+        return "_No shadow decision data committed yet._"
+    d = json.loads(f.read_text(encoding="utf-8"))
+    return (f"Live shadow, pre-registered (D-0010 §2): on {d['pairs']} paired daylight readings at {d['sites']} sites, v2's median absolute error was "
+            f"**{d['v2_median_ae_ft']} ft vs {d['v1_median_ae_ft']} ft** for the served v1 (difference {d['diff_v2_minus_v1_ft']} ft, site-bootstrap 95 % CI "
+            f"{d['diff_site_bootstrap_95ci'][0]} to {d['diff_site_bootstrap_95ci'][1]}); v2 was better at {d['sites_v2_better']} of {d['sites']} sites. "
+            f"Caveat: one calm day (median gauge range per site {d['median_gauge_range_ft_per_site']} ft).")
+
+
+TABLES = {"headline": headline, "per_site": per_site, "baselines": baselines, "ablations": ablations, "hancock": hancock, "registration": registration, "prospective": prospective, "fewshot": fewshot, "agent": agent, "model_v2": model_v2, "fusion": fusion, "recal": recal, "shadow": shadow}
 
 
 def main() -> None:

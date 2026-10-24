@@ -213,12 +213,26 @@ W2's frozen evaluation (`results/agent_eval/REPORT.md`, `LLM_ANALYSIS.md`): ever
 <!-- BEGIN:agent -->
 | arm | model | repeats | task success (min–max) | real / synthetic | false actions on clean controls | fleet triage top-1 | p50 latency s | est. $ total |
 |---|---|---|---|---|---|---|---|---|
-| deterministic rules | — | 3 | 93.9 % (93.9–93.9) | 98.4 % / 85.7 % | 0.0 % | 91.7 % | 1.3 | 0.0 |
+| deterministic rules | — | 3 | 92.6 % (92.6–92.6) | 95.9 % / 85.7 % | 0.0 % | 83.3 % | 0.8 | 0.0 |
 | LLM agent + OpenCV tools | Claude Sonnet 4.6 | 1 | 71.4 % (71.4–71.4) | 79.4 % / 57.1 % | 3.8 % | 100.0 % | 55.7 | 5.128 |
 | LLM agent + OpenCV tools | Claude Haiku 4.5 | 3 | 58.8 % (56.1–61.2) | 54.5 % / 66.7 % | 7.7 % | 44.4 % | 42.0 | 4.326 |
 | LLM agent, flags only (no OpenCV evidence) | Claude Haiku 4.5 | 3 | 51.4 % (49.0–55.1) | 47.6 % / 58.1 % | 15.4 % | 52.8 % | 41.2 | 4.126 |
 
-Episodes: 98 single-camera (63 real, 35 synthetic and labelled, 26 clean controls) + 12 fleet cycles; expected actions written before any arm ran; set frozen with sha256 (`results/agent_eval/FROZEN.json`). OpenCV-evidence effect (same LLM with vs without OpenCV tools, paired): +7.5 points (95 % CI -1.4 to 16.3).
+Episodes: 108 single-camera (73 real, 35 synthetic and labelled, 26 clean controls) + 12 fleet cycles; expected actions written before any arm ran; set frozen with sha256 (`results/agent_eval/FROZEN.json`). OpenCV-evidence effect (same LLM with vs without OpenCV tools, paired): +7.5 points (95 % CI -1.4 to 16.3).
+
+Like-for-like, every arm on the same 98 frozen v3 episodes (task success, min–max over repeats):
+
+| arm | task success |
+|---|---|
+| **hybrid: rules act, Sonnet 4.6 advises** | 94.6 % (93.9–94.9) |
+| deterministic rules | 93.9 % (93.9–93.9) |
+| Sonnet 4.6 agent | 71.4 % (71.4–71.4) |
+| Haiku 4.5 agent | 58.8 % (56.1–61.2) |
+| Haiku 4.5, flags only | 51.4 % (49.0–55.1) |
+
+Hybrid on the extended v4 set (adds tidal episodes): 93.2 % task success, 0.0 % false actions on clean controls, fleet triage top-1 86.1 %, p50 latency 0.8 s, about $3.124 for the whole run. Sonnet's gauge-drift reviews turned 2 of 9 drift episodes into a human-approved gauge-suspect ticket; its recorded second opinions agreed with the rules 94.4 % of the time (36 decisions) and never override them.
+
+Tidal sites (v4): ordinary tides correctly not alerted 21/21; the replayed live false alert suppressed 3/3; record-high (king-tide) days alerted 0/6.
 <!-- END:agent -->
 
 **Autonomy set by measurement (D-0012).** We tested whether an LLM should drive the fleet. On 98 frozen episodes it should not act alone: 71.4 % (Sonnet 4.6) and 58.8 % (Haiku 4.5) task success, against 93.9 % for the deterministic, OpenCV-grounded rules. It does add value where the rules are blind, notably on gauge drift and offset and on ranking the fleet for a human. So the live split is: **OpenCV-grounded rules act** (reversible actions, or paging a human); **the LLM advises** (Sonnet 4.6 ranks the fleet, records a second opinion on every human-facing decision, reviews gauge-drift suspicions and drafts the alert text); **a human approves** anything external. The hybrid policy was defined before it was evaluated on the same frozen episodes (W2).
@@ -227,6 +241,9 @@ Episodes: 98 single-camera (63 real, 35 synthetic and labelled, 26 clean control
 - The deterministic rules policy beats both LLM agents on this episode set. The rules were written by the same people who wrote the expected actions, so this partly measures agreement with the authors, but it is still the best policy we have: the live system decides with rules first.
 - The OpenCV evidence clearly matters where the decision depends on what the image shows. With the tools, the LLM re-anchors to a banked reference, recognises night frames and keeps muddy-water frames during a stale gauge. The overall effect is positive, but its confidence interval includes zero, and on gauge flatlines the evidence misleads the LLM.
 - The LLMs' main failure is under-escalation: missing `DRAFT_ALERT` on real rises. Out-of-range readings were the other common miss. The LLM is therefore used as a second opinion on hard cases, never as the only decider (Q-0011).
+- **The hybrid, defined before it was run, is the best arm:** OpenCV-grounded rules act and Claude Sonnet 4.6 advises. It turned some gauge-drift cases that the rules alone miss into human-approved tickets (2 of 9), and it never overrides the rules on its own. The margin over rules alone is small.
+- **A documented false alert.** On Oct 24 a live `DRAFT_ALERT` at First Mallard Branch, a tidal slough, was approved by a human: an ordinary tide had crossed the 3-hour rise rule. The fix marks tidal sites and judges a rise against the site's tidal envelope instead. Replayed, that false alert is now suppressed, and ordinary tides no longer alert. King tides that the harmonic model predicts also no longer alert. Whether a predicted king tide should page a human is a policy question (NWS issues coastal-flood advisories for them), and we left it open rather than guess. The approved alert stays in the log.
+- **Camera-health QA** (a daily fleet report: offline, view changed, lens degrading, IR stuck on, gauge suspect; every item a ticket draft that needs a human). Its first version was spot-checked against a year of history at 39 onboarded cameras (`results/agent_eval/health_eval_v1.json`). It found real offline periods at 24 sites, but its lens and IR detectors fired on leaf-off and snow days, and its view-change detector caught 43 % of the known view-change days. Version 2 compares each camera with its own trailing 14-day baseline and requires a monochrome frame before calling IR. It has not been re-scored yet, so no accuracy is claimed.
 - Flood replays through the live cycle drafted an alert in the first cycle above the site's p90 (`results/agent_eval/replay/`).
 - Limits (from W2): gauge-stale episodes are synthetic dropouts on real frames; re-anchoring is tested mostly on one camera (Pecatonica); costs are list-price estimates.
 
@@ -256,26 +273,31 @@ Honest reading: end to end, COOL is flat on this workload, because the cycle is 
 Pre-registered in D-0010 §1 before the first COOL cycle: the live bundles as first deployed (`results/live_prospective/frozen_models.json`) are scored on every daylight reading with registration OK, against the USGS reading closest in time, until the code freeze. Saturated (`OUT_OF_RANGE`) readings are counted, not scored. Baseline: the gauge's value 24 hours earlier. Forward in time, out of sample, reported whatever it shows; refreshed from `results/live_prospective/` (W1, `scripts/score_prospective.py`).
 
 <!-- BEGIN:prospective -->
-Window: 2026-10-23 21:28 UTC (first COOL cycle) to 2026-10-24 02:30 UTC so far; submission cut 2026-10-26 17:00 UTC. Models: frozen live models (results/live_prospective/frozen_models.json). Match: closest USGS IV reading within ±20 min of the frame. The camera beats a 24-hour-old gauge value at 0 of 13 scored sites so far. That matches the frozen test: in quiet conditions persistence is hard to beat; the camera's value is outages, flood state and QA.
+Window: 2026-10-23 21:28 UTC (first COOL cycle) to 2026-10-24 21:17 UTC so far; submission cut 2026-10-26 17:00 UTC. Models: frozen live models (results/live_prospective/frozen_models.json). Match: closest USGS IV reading within ±20 min of the frame. The camera beats a 24-hour-old gauge value at 0 of 16 scored sites so far. That matches the frozen test: in quiet conditions persistence is hard to beat; the camera's value is outages, flood state and QA.
 
 | | readings | daylight | scored | saturated (gauge trusted) | coverage | camera MAE ft | median AE ft | within ±0.25 ft | 24 h last-known MAE ft |
 |---|---|---|---|---|---|---|---|---|---|
-| **fleet** | 146 | 66 | 51 | 2 | 77.3 % | 0.274 | 0.221 | 51.0 % | 0.077 |
-| First Mallard Branch nr Fairfield (CA) | 18 | 17 | 15 | 2 | 88.2 % | 0.320 | 0.339 | 20.0 % | 0.179 |
-| Sand Creek at Mouth nr Commerce City (CO) | 14 | 12 | 12 | 0 | 100.0 % | 0.154 | 0.174 | 100.0 % | 0.023 |
-| Cowhouse Ck at Old Georgetown Rd nr Ft Hood (TX) | 17 | 7 | 7 | 0 | 100.0 % | 0.119 | 0.124 | 100.0 % | 0.006 |
-| Langham Creek at Addicks Reservoir Outflow near Addicks (TX) | 17 | 5 | 5 | 0 | 100.0 % | 0.566 | 0.507 | 0.0 % | 0.068 |
-| Salt Creek at Wood Dale (IL) | 5 | 2 | 2 | 0 | 100.0 % | 0.231 | 0.231 | 50.0 % | 0.070 |
-| Brandywine Creek at Chadds Ford (PA) | 17 | 2 | 2 | 0 | 100.0 % | 0.447 | 0.447 | 0.0 % | 0.045 |
-| Root River near Pilot Mound (MN) | 5 | 2 | 2 | 0 | 100.0 % | 0.413 | 0.413 | 0.0 % | 0.045 |
-| East Branch Delaware River at Hancock Staff (NY) | 4 | 1 | 1 | 0 | 100.0 % | 0.057 | 0.057 | 100.0 % | 0.040 |
-| Buffalo Bayou at State HWY 6 near Addicks (TX) | 4 | 1 | 1 | 0 | 100.0 % | 0.296 | 0.296 | 0.0 % | 0.080 |
-| Clear Fk Trinity Rv at Ft Worth (TX) | 4 | 1 | 1 | 0 | 100.0 % | 0.540 | 0.540 | 0.0 % | 0.080 |
-| Tenmile Ck at Parkinson Rd nr Ferris (TX) | 4 | 1 | 1 | 0 | 100.0 % | 0.044 | 0.044 | 100.0 % | 0.010 |
-| White Rk Ck at Greenville Ave Dallas (TX) | 4 | 1 | 1 | 0 | 100.0 % | 0.462 | 0.462 | 0.0 % | 0.040 |
-| Swan Creek at Lalor Road near Fitchburg (WI) | 4 | 1 | 1 | 0 | 100.0 % | 0.078 | 0.078 | 100.0 % | 0.010 |
+| **fleet** | 690 | 382 | 300 | 2 | 78.5 % | 0.241 | 0.19 | 57.0 % | 0.056 |
+| Sand Creek at Mouth nr Commerce City (CO) | 48 | 45 | 44 | 0 | 97.8 % | 0.056 | 0.023 | 100.0 % | 0.042 |
+| Cowhouse Ck at Old Georgetown Rd nr Ft Hood (TX) | 92 | 42 | 42 | 0 | 100.0 % | 0.115 | 0.116 | 97.6 % | 0.006 |
+| Brandywine Creek at Chadds Ford (PA) | 92 | 43 | 41 | 0 | 95.3 % | 0.351 | 0.351 | 9.8 % | 0.017 |
+| First Mallard Branch nr Fairfield (CA) | 48 | 46 | 41 | 2 | 89.1 % | 0.353 | 0.307 | 34.1 % | 0.183 |
+| Langham Creek at Addicks Reservoir Outflow near Addicks (TX) | 92 | 40 | 39 | 0 | 97.5 % | 0.494 | 0.476 | 2.6 % | 0.098 |
+| Buffalo Bayou at State HWY 6 near Addicks (TX) | 23 | 10 | 10 | 0 | 100.0 % | 0.290 | 0.298 | 30.0 % | 0.038 |
+| Salt Creek at Wood Dale (IL) | 24 | 11 | 10 | 0 | 90.9 % | 0.079 | 0.049 | 90.0 % | 0.048 |
+| Swan Creek at Lalor Road near Fitchburg (WI) | 23 | 10 | 10 | 0 | 100.0 % | 0.140 | 0.143 | 100.0 % | 0.008 |
+| Tenmile Ck at Parkinson Rd nr Ferris (TX) | 23 | 10 | 10 | 0 | 100.0 % | 0.113 | 0.095 | 80.0 % | 0.007 |
+| Stony Brook at Princeton (NJ) | 23 | 10 | 9 | 0 | 90.0 % | 0.220 | 0.241 | 55.6 % | 0.047 |
+| Clear Fk Trinity Rv at Ft Worth (TX) | 23 | 10 | 9 | 0 | 90.0 % | 0.218 | 0.179 | 77.8 % | 0.020 |
+| Neversink River at Godeffroy (NY) | 23 | 10 | 9 | 0 | 90.0 % | 0.061 | 0.061 | 100.0 % | 0.026 |
+| Bean Creek at Powers (OH) | 23 | 10 | 8 | 0 | 80.0 % | 0.384 | 0.351 | 37.5 % | 0.015 |
+| East Branch Delaware River at Hancock Staff (NY) | 20 | 9 | 8 | 0 | 88.9 % | 0.048 | 0.053 | 100.0 % | 0.027 |
+| Root River near Pilot Mound (MN) | 21 | 11 | 8 | 0 | 72.7 % | 0.209 | 0.157 | 62.5 % | 0.045 |
+| White Rk Ck at Greenville Ave Dallas (TX) | 23 | 10 | 2 | 0 | 20.0 % | 0.461 | 0.461 | 0.0 % | 0.025 |
 
-Flags raised: VIEW_CHANGE 13, LOW_QUALITY 8, GAUGE_STALE 0, DISAGREE 14, RISING 23, OUT_OF_RANGE 16. Agent actions: DENSIFY 23, QUARANTINE 13, OPEN_TICKET 13, NOOP 8, MARK_PROVISIONAL 6.
+Flags raised: VIEW_CHANGE 42, LOW_QUALITY 69, GAUGE_STALE 0, DISAGREE 47, RISING 77, OUT_OF_RANGE 49. Agent actions: DENSIFY 75, NOOP 58, QUARANTINE 39, OPEN_TICKET 18, MARK_PROVISIONAL 15, DRAFT_ALERT 4.
+
+Model v2 in shadow on the same live frames: median absolute error 0.084 ft vs 0.183 ft for the served v1 on 249 paired readings (§6.11).
 <!-- END:prospective -->
 
 ### 6.10 Onboarding new cameras and real gauge outages
@@ -285,6 +307,7 @@ Flags raised: VIEW_CHANGE 13, LOW_QUALITY 8, GAUGE_STALE 0, DISAGREE 14, RISING 
 - Tier B: median CV MAE 0.97 ft, median nMAE 0.140. These are mostly large rivers (Missouri, Illinois, Wabash) whose stage ranges are many feet, so the absolute error is larger and the relative error is about the frozen 20-site CV's (nMAE 0.145).
 - As with the first 20, the camera beats a 24-hour-old gauge value at only 3 of 30 tier-B sites. It is a gap-filler, not a replacement.
 - Cost per new camera (median of 40): 67 CPU-minutes and about 119 MB of frames, about $0.055 at m9g.large on-demand. Projected to all 880 gauged HIVIS cameras: about $48 of compute and 105 GB of frames.
+- Throughput: 0.88 cameras onboarded per CPU-hour. Qualifying rate by camera type: large rivers 74 % (20 of 27), cold-climate cameras 80 % (8 of 10); too few tidal and small-stream cameras yet to say (`results/onboarding/README.md`). A second batch of 50 more diverse cameras is running.
 - One onboarded camera, the Pee Dee River near Florence SC, sits beside a gauge that has been dark since 2026-06-30. It is served live as a real, ongoing gap-fill example (W5).
 
 **How much gauge history does a new camera need?** For each of 29 sites, refit on only the last N days before the same two test months:
@@ -297,7 +320,7 @@ Flags raised: VIEW_CHANGE 13, LOW_QUALITY 8, GAUGE_STALE 0, DISAGREE 14, RISING 
 | P1 sites (of 29) | 13 | 16 | 17 | 17 | 13 | 16 |
 <!-- END:fewshot -->
 
-About a month of overlap with the gauge is enough. More history does not help the frozen setting, which matches the drift in §6.12.
+About a month of overlap with the gauge is enough. More history does not help the frozen setting, which matches the drift in §6.13.
 
 **Real gauge outages** (W5, `results/real_outages/README.md`).
 - **How often:** over the last 12 months, 531 of the 875 gauges behind gauged HIVIS cameras had at least one outage of 6 h or more: 3,734 outages, median 15.0 h, 984 lasting a day or more and 303 a week or more. For 1,099 of the 1,735 outages checked, the camera kept posting daylight frames while the gauge was dark.
@@ -322,7 +345,40 @@ W4 (`results/v2/README.md`). v2 adds a second view of each registered frame: DIN
 
 v2 is better in every calendar month, most of all in the foliage months that drive v1's drift. The ablations show the DINOv2 features do the work; the seasonal tweaks (sun-position correction, recency weighting) add nothing or hurt. Limits: this is still CV inside one year, the frozen kill-test numbers are not recomputed, and the forward-in-time check is v2's shadow scoring on the live stream (D-0010 §2). Whether v2 is served is decided on Oct 25 (Cowork).
 
-### 6.12 Failure cases
+<!-- BEGIN:shadow -->
+Live shadow, pre-registered (D-0010 §2): on 249 paired daylight readings at 16 sites, v2's median absolute error was **0.084 ft vs 0.183 ft** for the served v1 (difference -0.099 ft, site-bootstrap 95 % CI -0.236 to -0.021); v2 was better at 12 of 16 sites. Caveat: one calm day (median gauge range per site 0.02 ft).
+<!-- END:shadow -->
+
+**Online recalibration** (W4, shadow only, `results/v2/recal_summary.csv`). The Hancock lesson (§6.6) is that a model calibrated on the past cannot read a flood above its calibrated range. Refitting on a schedule, inside the history, so each refit has seen the most recent floods:
+
+<!-- BEGIN:recal -->
+| refit schedule | v1 median MAE ft | v2 median MAE ft | MAE on frames above the static calibration range (v1 / v2) |
+|---|---|---|---|
+| static | 0.361 | 0.309 | 2.51 / 2.40 |
+| monthly | 0.305 | 0.195 | 2.00 / 1.77 |
+| weekly | 0.240 | 0.165 | 1.81 / 1.54 |
+<!-- END:recal -->
+
+Weekly refits cut the error for both models. On frames above the original calibrated range the error shrinks but stays large, so readings there are still shown as a lower bound. The served model is not changed before the deadline unless D-0010-style criteria are met.
+
+### 6.12 What a user gets: the fused RiverSight stage during an outage
+
+The product's headline number is a fusion: the gauge while it is fresh; during an outage, a Kalman filter that starts at the last gauge value and is updated by the camera, with σ that grows over time; above the calibrated range, a lower bound. W4 scored it on about 2,000 simulated outages per length across the calibration history, using out-of-fold camera predictions and only information available before each outage began (`results/v2/FUSION.md`, `fusion_summary.csv`). Median over sites of per-site MAE (ft), served camera model v1. The primary method (fused with a pre-outage bias correction) was declared before any result:
+
+<!-- BEGIN:fusion -->
+| outage | last-known gauge | fused (primary, with bias) | fused | camera only | primary beats last-known | fused, river moving vs last-known moving |
+|---|---|---|---|---|---|---|
+| 6h | 0.077 | **0.080** | 0.083 | 0.323 | 3/19 sites | 0.76 vs 0.94 |
+| 24h | 0.203 | **0.224** | 0.188 | 0.273 | 9/19 sites | 0.69 vs 0.94 |
+| 72h | 0.406 | **0.300** | 0.257 | 0.289 | 15/16 sites | 0.55 vs 1.14 |
+| 7d | 0.501 | **0.339** | 0.273 | 0.290 | 15/16 sites | 0.46 vs 1.19 |
+
+With the v2 candidate camera, the primary fused estimate is 0.080 / 0.190 / 0.253 / 0.284 ft for 6 h / 24 h / 72 h / 7 d outages.
+<!-- END:fusion -->
+
+For a few hours, the last gauge value is as good as anything; the camera does not beat persistence over short gaps. Over days, the fused estimate is clearly better, and most of all in the hours when the river actually moves. In those hours it cuts the error by about half at 72 h and 7 days. The bias correction we declared primary helps at 24 h but is worse than plain fusion at 72 h and 7 days; we report both rather than switch after seeing the result.
+
+### 6.13 Failure cases
 
 Nine concrete cases, each with an image, its numbers and a paragraph: [`results/failures/README.md`](../results/failures/README.md). Night/IR frames; a hazy lens on a high-flow day (the QA metric cannot separate lens haze from turbid water); a scene changed by a flood (White Rock); a re-aimed camera (Pecatonica); a model that learned the sun instead of the water (Tenmile); a far bank with almost no signal (Root River); tides (First Mallard); a flood above the calibrated range (Hancock); and month-to-month drift.
 
