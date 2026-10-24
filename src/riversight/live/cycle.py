@@ -648,6 +648,11 @@ def run_cycle(store, models: list[SiteModel], agent_fn=default_agent_fn, now: da
            "n_errors": len(errors), "errors": errors, "code_sha": code_sha(), "opencv": opencv_info(), "sites": sites}
     store.put_json("live/index.json", idx)
     store.append_jsonl(f"live/cycles/{now:%Y-%m-%d}.jsonl", {k: v for k, v in idx.items() if k != "sites"})
+    try:                                            # W2: ranked "needs a person" list for the dashboard
+        from riversight.agent.triage import write_triage
+        write_triage(store)
+    except Exception:
+        traceback.print_exc()
     from riversight.live.proof import proof, put_metrics
     try:
         store.put_json("live/proof.json", proof(models))

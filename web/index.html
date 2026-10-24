@@ -18,6 +18,8 @@
     Blue in the images shows what is under water at that stage. When a gauge goes offline, the camera keeps reading
     (marked <span class="pill provisional">provisional</span>).</p>
   <div class="panel strip" id="strip" aria-live="polite">Loading the latest cycle…</div>
+  <h2>Needs a person now</h2>
+  <div class="panel small" id="triage">Loading the agent's triage…</div>
   <h2>Map</h2>
   <div id="map" role="region" aria-label="Map of camera sites"></div>
   <h2>Sites</h2>
@@ -44,6 +46,17 @@
     <span><b>${flagged}</b> flagged</span>
     <span class="muted small">cycle took ${(idx.cycle_ms / 1000).toFixed(0)} s · OpenCV ${RS.esc(idx.opencv?.version)}${idx.opencv?.cool ? " (COOL)" : ""}</span>`;
 
+  await RS.panel("triage", async (el) => {
+    const t = await RS.json("live/agent/triage.json");
+    const need = (t.ranked || []).filter((e) => e.severity >= 1).slice(0, 6);
+    el.innerHTML = need.length ? `<p class="muted" style="margin-top:0">River Steward (the agent) ranks the cameras by what is waiting on a
+        person; ${t.n_need_human} of ${t.n_sites} need attention. <a href="approvals.html">Open approvals</a>.</p>
+      <ol style="margin:0;padding-left:20px">${need.map((e) => `<li style="margin-bottom:6px">
+        <a href="site.html?cam=${encodeURIComponent(e.cam_id)}"><b>${RS.esc(RS.nice(e.cam_id))}</b></a> — ${RS.esc(e.needs)}
+        ${(e.pending_approvals || []).map((a) => `<a class="flag" href="approvals.html#${RS.esc(a.approval_id)}">${RS.esc(a.action)}${a.count > 1 ? " ×" + a.count : ""}</a>`).join(" ")}
+        <div class="muted">${RS.esc((e.reason || "").replace(/\s*\[.*?\]\s*$/, ""))}</div></li>`).join("")}</ol>`
+      : `<p style="margin:0">Nothing is waiting on a person: every camera is either fine or handled by the agent on its own.</p>`;
+  });
   await RS.panel("map", async () => {
   const map = L.map("map", { scrollWheelZoom: false }).setView([39, -96], 4);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
