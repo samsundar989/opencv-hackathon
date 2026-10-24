@@ -100,9 +100,10 @@ class LiveStack(Stack):
         role.add_to_policy(iam.PolicyStatement(
             actions=["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream", "bedrock:Converse",
                      "bedrock:ConverseStream"],
+            # Anthropic Claude only: the US cross-region profiles the agent uses (Haiku 4.5 / Sonnet 4.6 today,
+            # 5.5 once its agreement is active) and the foundation models those profiles route to in us-* Regions
             resources=[f"arn:aws:bedrock:{self.region}:{self.account}:inference-profile/{bedrock_profile}",
-                       "arn:aws:bedrock:*::foundation-model/anthropic.claude-haiku-5-5*",
-                       "arn:aws:bedrock:*::foundation-model/anthropic.claude-sonnet-5-5*"]))
+                       "arn:aws:bedrock:*::foundation-model/anthropic.claude-*"]))
         alerts.grant_publish(role)
         role.add_to_policy(iam.PolicyStatement(          # spend on /proof: read the guard budget only
             actions=["budgets:ViewBudget"],

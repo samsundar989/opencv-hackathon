@@ -7,7 +7,7 @@
     "stop_at_pct": 90,
     "worker_ami": "cool",
     "worker_instance_type": "m9g.large",
-    "bedrock_profile": "us.anthropic.claude-haiku-5-5*",
+    "bedrock_profile": "us.anthropic.claude-*",
     "cool_ami_id": "ami-0d9a06f3c16d66f9e"
   }
 }
