@@ -241,7 +241,7 @@ def decide(event: dict[str, Any], ctx: tools.ToolContext) -> dict[str, Any]:
     if not acts:
         why.append("no actionable flag")
     d["actions"] = acts
-    d["rationale"] = " ".join(why)
+    d["rationale"] = "; ".join(w.rstrip(". ") for w in why) + "."
     return schema.finalize(event, d)
 
 
