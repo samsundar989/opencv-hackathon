@@ -66,7 +66,7 @@ cp .env.example .env                              # add USGS_API_KEY (free)
 python report/summarize_results.py                # recompute the fleet summary from committed results
 ```
 
-Fetching frames and refitting needs the local image cache. Full fresh-clone steps with timings: `docs/REPRODUCE.md` (in progress).
+Fetching frames and refitting needs the local image cache. Full fresh-clone steps with timings: `docs/REPRODUCE.md`.
 
 ## Repo map
 

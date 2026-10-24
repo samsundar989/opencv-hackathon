@@ -1,6 +1,6 @@
 # RiverSight: public river webcams as calibrated water-level instruments
 
-**Technical report, OpenCV AI Competition 2026 (powered by AWS).** Draft v2, 2026-10-24. Live: https://d2aes2r6og8aap.cloudfront.net. Sections marked _pending_ fill in as the sprint lands; every number here is generated from, or traceable to, a committed file in `results/` (`python scripts/check_report_numbers.py`).
+**Technical report, OpenCV AI Competition 2026 (powered by AWS).** Draft v2, 2026-10-24. Live: https://d2aes2r6og8aap.cloudfront.net. Every number here is generated from, or traceable to, a committed file in `results/` (`python scripts/check_report_numbers.py`).
 
 ## 1. Problem
 
@@ -332,4 +332,4 @@ _Draft; full version in `docs/RESPONSIBLE_USE.md`._
 
 ## Reproduce
 
-`docs/REPRODUCE.md` (_pending_): fresh clone → tests → summary and CIs from committed predictions → COOL bench → deploy.
+`docs/REPRODUCE.md`: fresh clone → tests → every reported number re-derived from committed results and checked (timed in `results/repro/fresh_clone_times.json`) → data cache → COOL bench → deploy (`docs/DEPLOY.md`). Operations: `docs/RUNBOOK.md`.
