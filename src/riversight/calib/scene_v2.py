@@ -114,3 +114,114 @@ def nuisance_fit(Z_tr: np.ndarray, loo: np.ndarray, Z_te: np.ndarray, lam: float
 def kalman_r(loo: np.ndarray) -> float:
     rho = np.corrcoef(loo[:-1], loo[1:])[0, 1]
     return max(float(np.var(loo)) * (1 - np.clip(rho, 0, 0.95)), 1e-6)
+
+
+# ---- live shadow bundle (primal form) -----------------------------------------------------------------
+
+def fit_bundle(X: np.ndarray, P: np.ndarray, t: pd.DatetimeIndex, h: np.ndarray, spec: dict, lat: float,
+               lng: float, q: float, thr: float = 0.80, lam: float = 1.0, min_roi: int = 50,
+               min_dino_roi: int = 10) -> dict:
+    """Fit one v2 configuration (`scripts/v2_cv.parse` spec) on time-ordered training data and return the
+    primal arrays of scene_model_v2.npz. X (n, 3600, 5) v1 block features, P (n, 448, k) projected tokens."""
+    from riversight.calib.flood_height_map import fit_thr
+    X = X.astype(np.float32, copy=False)
+    P = P.astype(np.float32, copy=False)
+    if spec["norm"]:
+        P = scene_mean_removed(P)
+    n, out, blocks = len(h), {}, []
+    M = fit_thr(X, h)
+    roi = M.acc >= thr
+    if roi.sum() < min_roi:
+        roi = np.ones_like(roi)
+    out.update(roi=roi, fhm_acc=M.acc, fhm_thr=M.thr, fhm_w=M.w, fhm_mid=M.mid, min_acc=np.float64(thr))
+    if spec["v1"] and spec["w"] < 1:
+        blocks.append(("v1", X[:, roi].reshape(n, -1), 1 - spec["w"]))
+    if spec["dino"] == "dino_roi":
+        Md = fit_thr(P, h)
+        droi = Md.acc >= thr
+        if droi.sum() < min_dino_roi:
+            droi = np.ones_like(droi)
+        out.update(dino_roi=droi, dino_acc=Md.acc, dino_thr=Md.thr)
+        blocks.append(("dino", P[:, droi].reshape(n, -1), spec["w"]))
+    elif spec["dino"] is not None:
+        raise ValueError(f"shadow bundle supports dino_roi only, got {spec['dino']}")
+    A_parts = []
+    for name, A, wt in blocks:
+        mu, sd = A.mean(0), A.std(0) + 1e-3
+        scale = np.sqrt(wt / A.shape[1])
+        out[f"mu_{name}"], out[f"sd_{name}"], out[f"scale_{name}"] = mu.astype(np.float32), sd.astype(np.float32), np.float64(scale)
+        A_parts.append(((A - mu) / sd * scale).astype(np.float32))
+    A = np.concatenate(A_parts, 1)
+    Kk = (A @ A.T).astype(np.float64)
+    sw = recency_weights(t, spec["tau"]) if spec["tau"] else None
+    c = lam * 0.05
+    if sw is None:
+        ym = float(h.mean())
+        Ainv = np.linalg.inv(Kk + c * np.eye(n))
+    else:
+        ym = float(np.sum(sw * h) / np.sum(sw))
+        Ainv = np.linalg.inv(Kk + np.diag(c / sw))
+    alpha = Ainv @ (h - ym)
+    loo = alpha / np.diag(Ainv)
+    out["w"] = (A.T.astype(np.float64) @ alpha)
+    out["ym"] = np.float64(ym)
+    if spec["sun"]:
+        Z = nuisance_matrix(t, lat, lng, spec["sun"] == "sundoy")
+        zmu, zsd = Z.mean(0), Z.std(0) + 1e-6
+        Az = (Z - zmu) / zsd
+        em = float(loo.mean())
+        beta = np.linalg.solve(Az.T @ Az + np.eye(Az.shape[1]), Az.T @ (loo - em))
+        out.update(z_mu=zmu, z_sd=zsd, z_beta=beta, z_em=np.float64(em), z_doy=np.bool_(spec["sun"] == "sundoy"))
+        loo = loo - (Az @ beta + em)
+    out["q"], out["r"] = np.float64(q), np.float64(kalman_r(loo))
+    out["norm"] = np.bool_(spec["norm"])
+    return out
+
+
+class ShadowV2:
+    """Load models/sites_v2/<cam>/ and predict one registered frame (v1 block features + DINO tokens)."""
+
+    def __init__(self, d):
+        import json
+        from pathlib import Path
+        self.dir = Path(d)
+        self.meta = json.loads((self.dir / "meta_v2.json").read_text(encoding="utf-8"))
+        z = np.load(self.dir / "scene_model_v2.npz")
+        self.a = {k: z[k] for k in z.files}
+        self.roi = self.a["roi"].astype(bool)
+        self.lat, self.lng = self.meta["lat"], self.meta["lon"]
+
+    def needs_dino(self) -> bool:
+        return "dino_roi" in self.a
+
+    def predict_raw(self, F: np.ndarray, P: np.ndarray | None, t_utc) -> float:
+        """F (3600, 5) v1 block features; P (448, k) projected DINO tokens (None if not needed); t_utc a
+        timezone-aware timestamp. Returns the raw (unsmoothed) stage in ft."""
+        a, parts = self.a, []
+        if "mu_v1" in a:
+            parts.append(((F[self.roi].reshape(-1) - a["mu_v1"]) / a["sd_v1"]) * float(a["scale_v1"]))
+        if "mu_dino" in a:
+            P = P.astype(np.float32)
+            if bool(a["norm"]):
+                P = P - P.mean(0, keepdims=True)
+            parts.append(((P[a["dino_roi"].astype(bool)].reshape(-1) - a["mu_dino"]) / a["sd_dino"]) * float(a["scale_dino"]))
+        y = float(np.concatenate(parts).astype(np.float64) @ a["w"] + float(a["ym"]))
+        if "z_beta" in a:
+            Z = nuisance_matrix(pd.DatetimeIndex([pd.Timestamp(t_utc)]), self.lat, self.lng, bool(a["z_doy"]))
+            y += float((((Z - a["z_mu"]) / a["z_sd"]) @ a["z_beta"])[0] + float(a["z_em"]))
+        return y
+
+    def kalman_step(self, s, t_unix: float, z: float):
+        """Same random-walk step as live.bundle.SiteModel.kalman_step, with this bundle's q and r."""
+        from riversight.live.bundle import KalmanState
+        x, Pv = s.x, s.P
+        if s.t is not None and np.isfinite(x):
+            Pv = Pv + float(self.a["q"]) * max((t_unix - s.t) / 3600.0, 0.0)
+        r = float(self.a["r"])
+        if np.isfinite(z):
+            if not np.isfinite(x):
+                x, Pv = z, r
+            else:
+                K = Pv / (Pv + r)
+                x, Pv = x + K * (z - x), (1 - K) * Pv
+        return KalmanState(x, Pv, t_unix), x, (np.sqrt(Pv) if np.isfinite(Pv) else float("nan"))

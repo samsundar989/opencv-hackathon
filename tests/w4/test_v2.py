@@ -111,3 +111,43 @@ def test_config_parse():
     p = parse("v1+dino_roi+norm@0.5+sun+rec120")
     assert p == {"v1": True, "dino": "dino_roi", "w": 0.5, "norm": True, "sun": "sun", "tau": 120.0}
     assert len(set(CONFIGS)) == len(CONFIGS) and CONFIGS[0] == "v1"
+
+
+@pytest.mark.parametrize("cfg", ["v1+dino_roi@0.5", "v1+dino_roi+norm@0.5+sun+rec120", "dino_roi+norm", "v1+sundoy"])
+def test_shadow_bundle_primal_equals_cv_dual(tmp_path, cfg):
+    """The live shadow bundle (primal) gives the same raw prediction as v2_cv's dual kernel ridge."""
+    import json
+    from riversight.calib.flood_height_map import fit_thr
+    from v2_cv import parse
+    rng = np.random.default_rng(7)
+    n, m = 80, 6
+    t = pd.date_range("2026-05-01 14:00", periods=n + m, freq="5h", tz="UTC")
+    h = np.cumsum(rng.normal(scale=0.1, size=n + m)) + 3
+    X = rng.normal(size=(n + m, 3600, 5)).astype(np.float32)
+    X[:, :400, 0] += h[:, None]                                   # 400 blocks respond to stage
+    P = rng.normal(size=(n + m, 448, 6)).astype(np.float32)
+    P[:, :60, 1] += 2 * h[:, None]
+    s = parse(cfg)
+    arr = S.fit_bundle(X[:n], P[:n], t[:n], h[:n], s, 32.8, -96.8, q=0.01)
+    np.savez(tmp_path / "scene_model_v2.npz", **arr)
+    (tmp_path / "meta_v2.json").write_text(json.dumps({"lat": 32.8, "lon": -96.8}))
+    sh = S.ShadowV2(tmp_path)
+    got = np.array([sh.predict_raw(X[n + i], P[n + i], t[n + i]) for i in range(m)])
+    # dual reference, written out the way scripts/v2_cv.run_site does it
+    roi = fit_thr(X[:n], h[:n]).acc >= 0.80
+    roi = roi if roi.sum() >= 50 else np.ones_like(roi)
+    PP = S.scene_mean_removed(P) if s["norm"] else P
+    Ktr, Kte = 0.0, 0.0
+    if s["v1"] and s["w"] < 1:
+        k = S.linear_kernel(X[:n][:, roi].reshape(n, -1), X[n:][:, roi].reshape(m, -1))
+        Ktr, Kte = Ktr + (1 - s["w"]) * k[0], Kte + (1 - s["w"]) * k[1]
+    if s["dino"]:
+        sel = fit_thr(PP[:n], h[:n]).acc >= 0.80
+        sel = sel if sel.sum() >= 10 else np.ones_like(sel)
+        k = S.linear_kernel(PP[:n][:, sel].reshape(n, -1), PP[n:][:, sel].reshape(m, -1))
+        Ktr, Kte = Ktr + s["w"] * k[0], Kte + s["w"] * k[1]
+    p, loo = S.ridge_dual(Ktr, Kte, h[:n], 1.0, S.recency_weights(t[:n], s["tau"]) if s["tau"] else None)
+    if s["sun"]:
+        Z = S.nuisance_matrix(t, 32.8, -96.8, s["sun"] == "sundoy")
+        p = p + S.nuisance_fit(Z[:n], loo, Z[n:])
+    assert np.allclose(got, p, atol=1e-4)
