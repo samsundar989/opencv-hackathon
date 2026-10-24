@@ -98,6 +98,7 @@ def tarball() -> bytes:
         add(ROOT / "models" / "sites", "models/sites")
         for f in ONNX:
             add(ROOT / "models" / "onnx" / f, f"models/onnx/{f}")
+        add(ROOT / "results" / "live_prospective" / "frozen_models.json", "results/live_prospective/frozen_models.json")
         sha = git_sha().encode()
         ti = tarfile.TarInfo("CODE_SHA")
         ti.size = len(sha)

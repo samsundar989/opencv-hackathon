@@ -1,0 +1,195 @@
+{
+  "decision": "D-0010 \u00a71; window per D-0011 W1-7",
+  "window_start_utc": "2026-10-23T21:28:10+00:00",
+  "first_cool_cycle": {
+    "cycle_started": "2026-10-23T21:28:10Z",
+    "code_sha": "f5927c4",
+    "instance": "i-07bb99b1b2140b900 (m9g.large, COOL G5 ami-0d9a06f3c16d66f9e)"
+  },
+  "pre_registration": "D-0010 committed ~16:15 CT Oct 23, before the first COOL cycle (16:28 CT)",
+  "served_check": "the model_sha prefix in every reading of the first COOL cycle matches these bundles (18 sites served; Pecatonica and E Fork Little Miami had no new frame)",
+  "bundles": "scripts/export_site_models.py, worker-q job 3710 (live models, D-0007 setting refit on all data)",
+  "frozen_utc": "2026-10-24T02:34:34+00:00",
+  "models": {
+    "CA_First_Mallard_Branch_nr_Fairfield": {
+      "model_sha": "3dd4203e0f5efdc2066d264bb659eb953cecc48d4d9683e8500eb9dcc1f7827c",
+      "nwis_id": "381142122015801",
+      "trained_at": "2026-10-23T18:50:23+00:00",
+      "n_calib_frames": 2138,
+      "calib_end": "2026-10-13T01:45:02+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "B"
+    },
+    "CO_Animas_River_at_Durango": {
+      "model_sha": "5998fd60522dd8337cb6b1bc9826011b1d906ec4f3c6caf257b7e284c6dc9dd9",
+      "nwis_id": "09361500",
+      "trained_at": "2026-10-23T18:50:04+00:00",
+      "n_calib_frames": 1321,
+      "calib_end": "2026-10-13T23:30:02+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "B"
+    },
+    "CO_Sand_Creek_at_Mouth_nr_Commerce_City": {
+      "model_sha": "56a138540b595f4018b077ce865ba50a4e2b7080c00f8d63b8476f654f215fea",
+      "nwis_id": "394839104570300",
+      "trained_at": "2026-10-23T18:50:07+00:00",
+      "n_calib_frames": 1046,
+      "calib_end": "2026-10-13T23:45:00+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "C"
+    },
+    "IL_Salt_Creek_at_Wood_Dale": {
+      "model_sha": "8223ff132b3a7219986223bf2a244a4bdc53e43e384d59575b54eee040247d32",
+      "nwis_id": "05531175",
+      "trained_at": "2026-10-23T18:50:16+00:00",
+      "n_calib_frames": 1462,
+      "calib_end": "2026-10-13T23:00:03+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "B"
+    },
+    "MN_Root_River_near_Pilot_Mound": {
+      "model_sha": "f5733bd10f5fca43d52a17229f3121a43cfe557fcc8ac14b302d0bebfe5a7ef9",
+      "nwis_id": "05383950",
+      "trained_at": "2026-10-23T18:49:35+00:00",
+      "n_calib_frames": 1564,
+      "calib_end": "2026-10-13T23:00:03+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "C"
+    },
+    "NJ_Big_Brook_near_Marlboro": {
+      "model_sha": "d39f4dbc2eea778704ccde5c4d74ed034d0094886588bc8e746cf7c5828cba2c",
+      "nwis_id": "01407290",
+      "trained_at": "2026-10-23T18:49:48+00:00",
+      "n_calib_frames": 581,
+      "calib_end": "2026-10-13T22:00:25+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "C"
+    },
+    "NJ_Stony_Brook_at_Princeton": {
+      "model_sha": "ccddafe31628312ed42578ac7a7841ace063e83bb0d48738617289a23440b6f5",
+      "nwis_id": "01401000",
+      "trained_at": "2026-10-23T18:49:49+00:00",
+      "n_calib_frames": 2426,
+      "calib_end": "2026-10-13T22:00:22+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "B"
+    },
+    "NY_East_Branch_Delaware_River_at_Hancock_Staff": {
+      "model_sha": "9a3d95e024d87345eb2103ad54047be5d24f60045052a86461a59d88072025fa",
+      "nwis_id": "01421500",
+      "trained_at": "2026-10-23T18:49:38+00:00",
+      "n_calib_frames": 1506,
+      "calib_end": "2026-10-13T22:00:22+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "A"
+    },
+    "NY_Neversink_River_at_Godeffroy": {
+      "model_sha": "70e80099ec40b87a0b53f87599a73a73f8d863c160187870e86eda834c4020ad",
+      "nwis_id": "01437500",
+      "trained_at": "2026-10-23T18:49:43+00:00",
+      "n_calib_frames": 1952,
+      "calib_end": "2026-10-13T22:00:21+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "B"
+    },
+    "OH_Bean_Creek_at_Powers": {
+      "model_sha": "9741ac0aac8e9a6c449356dccfd5faae59ee54d0bbbb11a6235a2137ac920e45",
+      "nwis_id": "04184500",
+      "trained_at": "2026-10-23T18:49:58+00:00",
+      "n_calib_frames": 1952,
+      "calib_end": "2026-10-13T23:00:03+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "B"
+    },
+    "OH_East_Fork_Little_Miami_River_at_Perintown": {
+      "model_sha": "e0aa7bb7b5593fc0801a13502dbe23b1c2d067d7480987b9a27d58ec75ce40cb",
+      "nwis_id": "03247500",
+      "trained_at": "2026-10-23T18:50:01+00:00",
+      "n_calib_frames": 2871,
+      "calib_end": "2026-10-13T23:00:03+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "B"
+    },
+    "PA_Brandywine_Creek_at_Chadds_Ford": {
+      "model_sha": "407de70d43a98273731dbc588477305a620d804f79651a0f9a2a0238c0ccc225",
+      "nwis_id": "01481000",
+      "trained_at": "2026-10-23T18:50:15+00:00",
+      "n_calib_frames": 1685,
+      "calib_end": "2026-10-13T21:45:03+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "C"
+    },
+    "TX_Buffalo_Bayou_at_State_HWY_6_near_Addicks": {
+      "model_sha": "43de045e92b245f63125f42660afb0cbc0018ed16cd7f66cc49a25b1d74bc80f",
+      "nwis_id": "08072600",
+      "trained_at": "2026-10-23T18:49:08+00:00",
+      "n_calib_frames": 2587,
+      "calib_end": "2026-10-13T23:00:15+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "B"
+    },
+    "TX_Clear_Fk_Trinity_Rv_at_Ft_Worth": {
+      "model_sha": "224ebea01243b54dc699def7bc2dc031501fd184596adbc608eda414ee66e15a",
+      "nwis_id": "08047500",
+      "trained_at": "2026-10-23T18:49:10+00:00",
+      "n_calib_frames": 2525,
+      "calib_end": "2026-10-13T23:00:02+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "B"
+    },
+    "TX_Cowhouse_Ck_at_Old_Georgetown_Rd_nr_Ft_Hood": {
+      "model_sha": "5892033506e178e1e09015190a3fc20e6cd06e3a68e344403c89540f737e9701",
+      "nwis_id": "08101200",
+      "trained_at": "2026-10-23T18:48:59+00:00",
+      "n_calib_frames": 1159,
+      "calib_end": "2026-10-13T23:45:03+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "C"
+    },
+    "TX_Langham_Creek_at_Addicks_Reservoir_Outflow_near_Addicks": {
+      "model_sha": "b4aa99b2e3c1f2afcb538a2a07744aaf7558d1661fcc05072bdaf408ce6d5502",
+      "nwis_id": "08073100",
+      "trained_at": "2026-10-23T18:49:19+00:00",
+      "n_calib_frames": 2873,
+      "calib_end": "2026-10-13T23:15:03+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "B"
+    },
+    "TX_Tenmile_Ck_at_Parkinson_Rd_nr_Ferris": {
+      "model_sha": "301e00000bc7af59bb65482fac7e447e0274965dadca17518848e7232c281aa8",
+      "nwis_id": "08057466",
+      "trained_at": "2026-10-23T18:49:02+00:00",
+      "n_calib_frames": 2564,
+      "calib_end": "2026-10-13T23:00:11+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "C"
+    },
+    "TX_White_Rk_Ck_at_Greenville_Ave_Dallas": {
+      "model_sha": "857ea1f57c8ca77f8a333faef75bbdc8fa888ed42d825e9fadf7fe3620e646e0",
+      "nwis_id": "08057200",
+      "trained_at": "2026-10-23T18:49:12+00:00",
+      "n_calib_frames": 1246,
+      "calib_end": "2026-10-13T23:00:11+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "C"
+    },
+    "WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet": {
+      "model_sha": "8d5056a7701eae068bf594a36a4f0e857602b4c5a7d020ec22cdd9e7b3a1471f",
+      "nwis_id": "05433000",
+      "trained_at": "2026-10-23T18:49:31+00:00",
+      "n_calib_frames": 1109,
+      "calib_end": "2026-10-13T23:00:03+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "A"
+    },
+    "WI_Swan_Creek_at_Lalor_Road_near_Fitchburg": {
+      "model_sha": "d8882b679d8db4d3bf586065132900483de74b8547e4f9a927d159e467fd677a",
+      "nwis_id": "05429369",
+      "trained_at": "2026-10-23T18:49:28+00:00",
+      "n_calib_frames": 2421,
+      "calib_end": "2026-10-13T23:00:02+00:00",
+      "frozen_config_sha": "35ebcc810f8f3db992b5015042824559e913aebc5a488f5529027ab4d7bb0007",
+      "tier": "C"
+    }
+  }
+}

@@ -708,6 +708,24 @@ def replay(cam: str, t0: str, t1: str, out: Path, agent_fn=default_agent_fn, bun
     return out_rows
 
 
+FROZEN_MODELS = Path(os.environ.get("RIVERSIGHT_FROZEN_MODELS",
+                                    ROOT / "results" / "live_prospective" / "frozen_models.json"))
+
+
+def score_prospective_hourly(store) -> None:
+    """D-0010 §1: refresh live/prospective/* at most once an hour (one batched NWIS IV request)."""
+    if not FROZEN_MODELS.exists():
+        return
+    last = (store.get_json("live/prospective/summary.json") or {}).get("generated_utc")
+    if last and (pd.Timestamp.now(tz="UTC") - pd.Timestamp(last)).total_seconds() < 55 * 60:
+        return
+    try:
+        from riversight.live import prospective
+        prospective.run(store, json.loads(FROZEN_MODELS.read_text(encoding="utf-8")))
+    except Exception:
+        traceback.print_exc()
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="python -m riversight.live.cycle")
     g = ap.add_mutually_exclusive_group(required=True)
@@ -728,6 +746,8 @@ def main(argv=None):
         return
     store = LocalStore(Path(a.local)) if a.local else S3Store(a.s3)
     idx = run_cycle(store, load_models(a.bundles, a.only), agent_fn, force=a.force)
+    if a.s3:
+        score_prospective_hourly(store)
     print(json.dumps({k: v for k, v in idx.items() if k != "sites"}, default=str))
     sys.exit(0 if idx["n_errors"] < idx["n_sites"] else 1)
 

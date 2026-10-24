@@ -22,6 +22,9 @@
     <li>The numbers below come from the <b>frozen test</b> (Oct 4–14, 2026). Constants were hashed before the test days were read, and the test was scored once.</li>
   </ol>
 
+  <h2>Live since Oct 23: forward-in-time evaluation</h2>
+  <div class="panel small" id="prosp">Loading…</div>
+
   <h2>Frozen test (protocol v2, scored once)</h2>
   <div class="kpis" id="kpis"><div class="panel kpi">Loading…</div></div>
   <p class="small muted" id="src"></p>
@@ -88,6 +91,23 @@ python scripts/deploy.py                      # the AWS stack (us-east-2), budge
     document.getElementById("src").innerHTML = `Sources: <code>results/kill_test_v2_summary.json</code>, <code>results/kill_test_v2_ci_summary.json</code> (bootstrap by UTC day),
       <code>results/kill_test_v2.csv</code>; constants hashed in <code>results/constants.sha256</code>. ${s.test_frames_scored} test frames scored.`;
   } catch (e) { document.getElementById("kpis").innerHTML = `<div class="panel err">${RS.esc(e.message)}</div>`; }
+  await RS.panel("prosp", async (el) => {
+    const p = await RS.json("live/prospective/summary.json");
+    const f = p.fleet || {};
+    const day = new Date(p.window_start_utc).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+    el.innerHTML = `<p style="font-size:16px"><b>Live since ${RS.esc(day)}: ${f.scored} scored readings at ${p.sites_scored} sites,
+        median absolute error ${RS.ft(f.median_ae_ft)}</b> (frozen live models; ${f.within_025_pct ?? "—"}% within ±0.25 ft;
+        coverage ${f.coverage_pct ?? "—"}% of daylight readings).</p>
+      <p>Same readings against the gauge's own value 24 h earlier: median ${RS.ft(f.lkv24_median_ae_ft)}.
+        ${f.lkv24_median_ae_ft != null && f.median_ae_ft != null && f.lkv24_median_ae_ft < f.median_ae_ft
+          ? "While rivers are steady, a day-old gauge reading is better than the camera; the camera's value is when the gauge goes down or the river moves." : ""}
+        ${f.saturated_gauge_trusted} readings were above a camera's calibrated range (counted, not scored).</p>
+      <p class="muted">Pre-registered in D-0010 before the first COOL cycle; the models are frozen in
+        <code>results/live_prospective/frozen_models.json</code>. Every daylight reading with registration OK is scored against the
+        closest USGS reading within ±20 min, and reported whatever it shows. Updated hourly by the worker
+        (<a href="live/prospective/per_site.csv">per site</a> · <a href="live/prospective/readings.csv">all readings</a>);
+        last update ${RS.ago(p.generated_utc)}.</p>`;
+  });
   try {
     const rows = await RS.json("data/kill_test_v2.json");
     document.querySelector("#tbl tbody").innerHTML = rows.map((r) => `<tr>
