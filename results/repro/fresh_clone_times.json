@@ -1,48 +1,48 @@
 {
- "date_utc": "2026-10-23T19:13:33Z",
- "commit": "ff5cfdb",
+ "date_utc": "2026-10-24T20:41:29Z",
+ "commit": "156db17",
  "python": "3.14.4",
  "platform": "Windows-11-10.0.26200-SP0",
- "total_seconds": 70.1,
+ "total_seconds": 79.6,
  "steps": [
   {
    "step": "git clone",
-   "cmd": "git clone -q git@github.com:samsundar989/opencv-hackathon.git C:\\Users\\samsu\\AppData\\Local\\Temp\\claude\\c--Users-samsu-Documents-opencv-hackathon\\07d0ad05-9d95-4ac1-b7da-f2b7ce60f693\\scratchpad\\fresh\\riversight",
-   "seconds": 1.5,
+   "cmd": "git clone -q git@github.com:samsundar989/opencv-hackathon.git C:\\Users\\samsu\\AppData\\Local\\Temp\\rsf\\riversight",
+   "seconds": 2.1,
    "ok": true,
    "tail": []
   },
   {
    "step": "venv",
    "cmd": "C:\\Users\\samsu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe -m venv .venv",
-   "seconds": 4.7,
+   "seconds": 4.6,
    "ok": true,
    "tail": []
   },
   {
    "step": "pip install -e .[dev]",
-   "cmd": "C:\\Users\\samsu\\AppData\\Local\\Temp\\claude\\c--Users-samsu-Documents-opencv-hackathon\\07d0ad05-9d95-4ac1-b7da-f2b7ce60f693\\scratchpad\\fresh\\riversight\\.venv\\Scripts\\python -m pip install -q -e .[dev]",
-   "seconds": 53.1,
+   "cmd": "C:\\Users\\samsu\\AppData\\Local\\Temp\\rsf\\riversight\\.venv\\Scripts\\python -m pip install -q -e .[dev]",
+   "seconds": 58.9,
    "ok": true,
    "tail": [
     "[notice] A new release of pip is available: 26.0.1 -> 26.2.2",
-    "[notice] To update, run: C:\\Users\\samsu\\AppData\\Local\\Temp\\claude\\c--Users-samsu-Documents-opencv-hackathon\\07d0ad05-9d95-4ac1-b7da-f2b7ce60f693\\scratchpad\\fresh\\riversight\\.venv\\Scripts\\python.exe -m pip install --upgrade pip"
+    "[notice] To update, run: C:\\Users\\samsu\\AppData\\Local\\Temp\\rsf\\riversight\\.venv\\Scripts\\python.exe -m pip install --upgrade pip"
    ]
   },
   {
    "step": "pytest -q",
-   "cmd": "C:\\Users\\samsu\\AppData\\Local\\Temp\\claude\\c--Users-samsu-Documents-opencv-hackathon\\07d0ad05-9d95-4ac1-b7da-f2b7ce60f693\\scratchpad\\fresh\\riversight\\.venv\\Scripts\\python -m pytest -q -p no:warnings",
-   "seconds": 8.9,
+   "cmd": "C:\\Users\\samsu\\AppData\\Local\\Temp\\rsf\\riversight\\.venv\\Scripts\\python -m pytest -q -p no:warnings",
+   "seconds": 11.2,
    "ok": true,
    "tail": [
-    "...........s....................................s..s.................... [ 82%]",
-    ".s.............                                                          [100%]"
+    "...........s.....................................s...ssss............... [ 57%]",
+    "...........s......s................s..................                   [100%]"
    ]
   },
   {
    "step": "summarize_results",
-   "cmd": "C:\\Users\\samsu\\AppData\\Local\\Temp\\claude\\c--Users-samsu-Documents-opencv-hackathon\\07d0ad05-9d95-4ac1-b7da-f2b7ce60f693\\scratchpad\\fresh\\riversight\\.venv\\Scripts\\python report/summarize_results.py",
-   "seconds": 0.6,
+   "cmd": "C:\\Users\\samsu\\AppData\\Local\\Temp\\rsf\\riversight\\.venv\\Scripts\\python report/summarize_results.py",
+   "seconds": 0.7,
    "ok": true,
    "tail": [
     "    }",
@@ -52,25 +52,25 @@
   },
   {
    "step": "build_report_tables",
-   "cmd": "C:\\Users\\samsu\\AppData\\Local\\Temp\\claude\\c--Users-samsu-Documents-opencv-hackathon\\07d0ad05-9d95-4ac1-b7da-f2b7ce60f693\\scratchpad\\fresh\\riversight\\.venv\\Scripts\\python report/build_report_tables.py",
+   "cmd": "C:\\Users\\samsu\\AppData\\Local\\Temp\\rsf\\riversight\\.venv\\Scripts\\python report/build_report_tables.py",
    "seconds": 0.6,
    "ok": true,
    "tail": [
-    "updated 5 tables in C:\\Users\\samsu\\AppData\\Local\\Temp\\claude\\c--Users-samsu-Documents-opencv-hackathon\\07d0ad05-9d95-4ac1-b7da-f2b7ce60f693\\scratchpad\\fresh\\riversight\\report\\REPORT.md"
+    "updated 10 tables in C:\\Users\\samsu\\AppData\\Local\\Temp\\rsf\\riversight\\report\\REPORT.md"
    ]
   },
   {
    "step": "check_report_numbers",
-   "cmd": "C:\\Users\\samsu\\AppData\\Local\\Temp\\claude\\c--Users-samsu-Documents-opencv-hackathon\\07d0ad05-9d95-4ac1-b7da-f2b7ce60f693\\scratchpad\\fresh\\riversight\\.venv\\Scripts\\python scripts/check_report_numbers.py",
-   "seconds": 0.3,
+   "cmd": "C:\\Users\\samsu\\AppData\\Local\\Temp\\rsf\\riversight\\.venv\\Scripts\\python scripts/check_report_numbers.py",
+   "seconds": 1.0,
    "ok": true,
    "tail": [
-    "0 untraced number(s)"
+    "0 untraced number(s), 0 stale claim(s)"
    ]
   },
   {
    "step": "verify_frozen",
-   "cmd": "C:\\Users\\samsu\\AppData\\Local\\Temp\\claude\\c--Users-samsu-Documents-opencv-hackathon\\07d0ad05-9d95-4ac1-b7da-f2b7ce60f693\\scratchpad\\fresh\\riversight\\.venv\\Scripts\\python report/verify_frozen.py",
+   "cmd": "C:\\Users\\samsu\\AppData\\Local\\Temp\\rsf\\riversight\\.venv\\Scripts\\python report/verify_frozen.py",
    "seconds": 0.3,
    "ok": true,
    "tail": [
@@ -82,7 +82,7 @@
   {
    "step": "results byte-identical",
    "cmd": "git diff --exit-code --stat results report",
-   "seconds": 0.1,
+   "seconds": 0.2,
    "ok": true,
    "tail": []
   }
