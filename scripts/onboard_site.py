@@ -184,13 +184,15 @@ def main():
                 continue
             t0 = time.time()
             try:
-                rec["fetch"] = pl.fetch(s, P, nims)
+                fe = pl.fetch(s, P, nims)
             except Exception as e:
                 rec["status"], rec["error"] = "error", f"fetch: {e!r}"[:500]
                 pl.save_record(s["cam_id"], rec)
                 print(f"[{i}/{len(sites)}] {s['cam_id']}: fetch ERROR {e!r}"[:300], flush=True)
                 continue
-            rec.setdefault("seconds", {})["fetch"] = round(time.time() - t0, 1)
+            if fe.get("nims_calls") or "fetch" not in rec:          # a cached rerun keeps the first run's measured cost
+                rec["fetch"] = fe
+                rec.setdefault("seconds", {})["fetch"] = round(time.time() - t0, 1)
             rec.update(nwis_id=s["nwis_id"], state=s.get("state"), name=s.get("name"), status="fetched")
             pl.save_record(s["cam_id"], rec)
             print(f"[{i}/{len(sites)}] {s['cam_id']}: fetched {rec['fetch']} ({rec['seconds']['fetch']:.0f}s)", flush=True)

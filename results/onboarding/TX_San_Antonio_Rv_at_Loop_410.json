@@ -1,0 +1,18 @@
+{
+  "cam_id": "TX_San_Antonio_Rv_at_Loop_410",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 13169,
+    "selected": 1241,
+    "nims_calls": 37,
+    "downloads": 1239,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 119.3
+  },
+  "nwis_id": "08178565",
+  "state": "TX",
+  "name": "San Antonio Rv at Loop 410",
+  "status": "fetched"
+}

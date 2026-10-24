@@ -1,0 +1,3 @@
+cam_id,status,tier,live_eligible,tier_reason,n_oof,n_folds,mae,median_ae,nmae,p1,within_025,spearman,mae_p24,mae_const,gap_24h_lkv,gap_24h_cam,gap_7d_lkv,gap_7d_cam,sigma_ft,cal_days,cal_frames,calib_p5_p95_ft,reg_rate_last30d,reg_rate_all,view_change_runs,listed,selected,nims_calls,downloads,s_fetch,s_reference,s_register_features,s_cv,s_export,error
+TX_Blanco_River_at_Wimberley,done,C,False,registration < 0.80 (last 30 d); CV Spearman < 0.5,67.0,1.0,0.0728,0.0675,0.2911,True,1.0,-0.0502,0.0373,0.0327,0.0373,0.0728,0.0595,0.0728,0.0722,302.0,266.0,0.25,0.7424,0.2168,16.0,10322,1227,37,1227,126.0,0.1,4941.0,21.9,1.2,
+TX_San_Antonio_Rv_at_Loop_410,fetched,,,,,,,,,,,,,,,,,,,,,,,,,13169,1241,37,1239,119.3,,,,,

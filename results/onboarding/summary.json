@@ -1,0 +1,14 @@
+{
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "sites_attempted": 2,
+  "sites_done": 1,
+  "tiers": {
+    "C": 1
+  },
+  "live_eligible": 0,
+  "cv_median_mae_ft_all_done": 0.0728,
+  "cv_median_mae_ft_live_eligible": null,
+  "cv_median_nmae_live_eligible": null,
+  "p1_sites_done": 1,
+  "errors": []
+}
