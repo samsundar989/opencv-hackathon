@@ -2,43 +2,48 @@
   "decision": "D-0010 \u00a71 (window D-0011 W1-7)",
   "window_start_utc": "2026-10-23T21:28:10+00:00",
   "submission_cut_utc": "2026-10-26T17:00:00+00:00",
-  "scored_until_utc": "2026-10-24T02:30:27+00:00",
-  "generated_utc": "2026-10-24T02:34:40+00:00",
+  "scored_until_utc": "2026-10-24T21:17:27+00:00",
+  "generated_utc": "2026-10-24T21:18:58+00:00",
   "models": "frozen live models (results/live_prospective/frozen_models.json)",
   "fleet": {
-    "readings": 146,
-    "daylight_readings": 66,
-    "scored": 51,
+    "readings": 690,
+    "daylight_readings": 382,
+    "scored": 300,
     "saturated_gauge_trusted": 2,
-    "coverage_pct": 77.3,
-    "mae_ft": 0.274,
-    "median_ae_ft": 0.221,
-    "within_025_pct": 51.0,
-    "lkv24_mae_ft": 0.077,
-    "lkv24_median_ae_ft": 0.04,
+    "coverage_pct": 78.5,
+    "mae_ft": 0.241,
+    "median_ae_ft": 0.19,
+    "within_025_pct": 57.0,
+    "lkv24_mae_ft": 0.056,
+    "lkv24_median_ae_ft": 0.03,
+    "shadow_n": 249,
+    "shadow_median_ae_ft": 0.084,
+    "v1_median_ae_on_shadow_rows_ft": 0.183,
     "flags": {
-      "VIEW_CHANGE": 13,
-      "LOW_QUALITY": 8,
+      "VIEW_CHANGE": 42,
+      "LOW_QUALITY": 69,
       "GAUGE_STALE": 0,
-      "DISAGREE": 14,
-      "RISING": 23,
-      "OUT_OF_RANGE": 16
+      "DISAGREE": 47,
+      "RISING": 77,
+      "OUT_OF_RANGE": 49
     },
     "agent_actions": {
-      "DENSIFY": 23,
-      "QUARANTINE": 13,
-      "OPEN_TICKET": 13,
-      "NOOP": 8,
-      "MARK_PROVISIONAL": 6
+      "DENSIFY": 75,
+      "NOOP": 58,
+      "QUARANTINE": 39,
+      "OPEN_TICKET": 18,
+      "MARK_PROVISIONAL": 15,
+      "DRAFT_ALERT": 4
     }
   },
-  "sites_scored": 13,
-  "median_of_site_mae_ft": 0.296,
+  "sites_scored": 16,
+  "median_of_site_mae_ft": 0.213,
   "sites_camera_beats_lkv24": 0,
   "rules": {
     "match": "closest USGS IV reading within \u00b120 min of the frame",
     "eligible": "daylight, registration OK, frozen model_sha",
     "saturated": "OUT_OF_RANGE: counted, not scored",
     "baseline": "gauge last-known value 24 h before the frame"
-  }
+  },
+  "group": "frozen20"
 }

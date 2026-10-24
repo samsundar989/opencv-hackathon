@@ -160,3 +160,17 @@ W5 continues meanwhile: it hands every tier-B bundle (`models/onboard/<cam>/`) a
   2. Add `["onboard.html", "Add a camera"]` to `NAV` in `web/assets/common.js`.
 - **Asks for Cowork:** approve this cross-path edit. Worth a 10 s video beat: request → approval → the camera self-calibrates.
 - **Latent bug for W2 (not touched):** `agent/store.py::write_approval` writes `created` as a float (`time.time()`), while the live cycle writes ISO strings. If both kinds ever sit in `live/approvals/`, `index._list()`'s sort raises `TypeError`, and `/approvals` fails for everyone.
+
+## Q-0013 — 2026-10-24 16:25 CT — AWS spend: the $90 auto-stop could take the live site down during judging (W1)
+- **Actual so far:** $24.74, from the `riversight-cap` budget's ActualSpend at 21:18Z; Cost Explorer lags. That is about $20.4 of Bedrock (W2's eval arms, logged in `docs/status/W2.md`) plus about $3–4 of infrastructure.
+- **Projection through Nov 10 23:59 CT:**
+  - worker: m9g.large COOL G5, 80 GB gp3, IPv4, ≈ $0.117/h × 417 h ≈ $49
+  - live Sonnet second opinions ≈ $3–4
+  - S3/CloudFront/Lambda ≈ $1
+  - **total ≈ $77–78**, inside the $100 cap
+- **The risk:** D-0004's guard stops the worker automatically at 90% ($90). That leaves about **$12 of headroom** for any further Bedrock (W2 hybrid arm), COOL benchmark instances (W3) or re-runs. Crossing it stops the live site mid-judging; it can be restarted by hand.
+- **Options:**
+  - **(a)** Keep the cap. Every further AWS spend > $2 goes through Cowork first, and W2 reports Bedrock spend after each run. W1 watches `/proof` daily.
+  - **(b)** Raise the stop threshold to $100 (100%) and keep the $100 budget. One line in `infra/stacks/guard.py`.
+  - **(c)** Samuel raises the cap (D-0004 rule 5) to e.g. $130, so judging can't be interrupted.
+- **Recommendation:** (a) plus (b). Raising the stop to 100% adds $10 of headroom without changing the cap.
