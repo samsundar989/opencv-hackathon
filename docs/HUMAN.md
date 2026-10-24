@@ -104,3 +104,9 @@ In the Bedrock playground (us-east-2), Claude Sonnet 5.5 returns `AccessDeniedEx
 - Measure the cost in the 5-episode pilot first. Stop and file a Q- if the projected total Bedrock spend exceeds **$25**.
 - The report and the dashboard name the models actually used. No 5.5 claims.
 - Update 21:26 CT: Samuel confirms Haiku 5.5 is also blocked, and that **Claude Opus 4.5 works**. Same fallback: Haiku 4.5 for the main arms, Sonnet 4.6 for the second-opinion arm. W2 may add one Opus 4.5 pass on the full set, but only if the pilot shows the total Bedrock spend stays ≤ $25.
+
+## Q-0011 — 2026-10-24 — Who should decide on the live site: the rules policy or Claude Haiku 4.5? (W2)
+The final agent evaluation (frozen v3, `results/agent_eval/LLM_ANALYSIS.md`) shows the deterministic, OpenCV-evidence rules policy at **93.9 %** task success with 0 false actions on clean controls, ahead of **Claude Sonnet 4.6 (71.4 %)** and **Claude Haiku 4.5 (58.8 %)**. Today the live worker lets Haiku 4.5 decide, with rules only as the fallback.
+Sonnet 4.6 is better than the rules at **fleet triage** (12/12 cycles), **gauge-drift** cases (67 % vs 0 %) and **rise alerts** (100 %).
+**Recommendation:** rules take the actions; Sonnet 4.6 ranks the fleet (`triage.json`), gives a second opinion on anything that would page a human (already built: `RIVERSIGHT_AGENT_ESCALATE=1`), and reviews gauge drift. W2 can ship this as a config switch (`RIVERSIGHT_AGENT_MODE=rules_first`) in about an hour.
+**Options:** (a) recommended hybrid; (b) keep Haiku 4.5 deciding; (c) Sonnet 4.6 deciding (~$0.05 per flagged reading, ~4× Haiku).
