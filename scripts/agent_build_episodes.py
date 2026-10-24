@@ -534,7 +534,7 @@ def build_tidal():
         f = site.frames[~site.frames["night"] & site.frames["ok"] & ~site.frames["filename"].isin(EXCLUDE)]
         day_max = site.gauge.resample("1D").max()
         f = f.assign(dmax=day_max.reindex(f["time"].dt.floor("D")).to_numpy())
-        tide = f[(f["dmax"] < dm["daily_max_p90"]) & [tidal_rising_flag(site, t) for t in f["time"]]]
+        tide = f[(f["dmax"] < dm["daily_max_p90"]).to_numpy() & np.array([tidal_rising_flag(site, t) for t in f["time"]], bool)]
         rel = site.bundles.relative_to(ROOT).as_posix()
         for _, r in pick(tide, n_tide, 3).iterrows():
             add("tidal_tide", "real", site, r["time"], reading(site, r, ["RISING"]), recent(site, r["time"]), [], no_alert,
