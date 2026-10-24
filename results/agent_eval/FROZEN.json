@@ -1,6 +1,6 @@
 {
-  "frozen_at_utc": "2026-10-24T02:29:20+00:00",
-  "git_head": "1113db1651c9f37ecdda2048f462264ad6f15841",
+  "frozen_at_utc": "2026-10-24T02:33:33+00:00",
+  "git_head": "bf78f41ff0afcb88fd94721cdf1f4e8a2d5c8385",
   "n_episodes": 110,
   "n_single": 98,
   "n_real": 63,
@@ -11,7 +11,7 @@
     "src/riversight/agent/tools.py": "744248d967b571289beb3caaa6e314ba2b970a50569c0decb268ac6c5dc07f8e",
     "src/riversight/agent/schema.py": "f09e0c1d7d3153dc7c45af590531fed6950bd65ba538f2fd77e26ecad346ff3f",
     "src/riversight/agent/fleet.py": "81a1bc71bc611ddfcbf156d1ad46cbef35e686c3a7cb25afbec02e019c017b18",
-    "scripts/agent_eval.py": "8710d0dcb6240fadd232760f4bb93df61679e313f5f964df359c54a16d9f5424"
+    "scripts/agent_eval.py": "77f99fc0c05d32fa9de68dd7b2e1518a176548a0c76ea03c9f41fe181ce7ba86"
   },
   "models": {
     "haiku": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
