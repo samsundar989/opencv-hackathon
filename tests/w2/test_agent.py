@@ -326,6 +326,28 @@ def test_sonnet_second_opinion_recorded_when_escalating(monkeypatch):
     assert "Sonnet second opinion disagrees" in d["rationale"]
 
 
+def test_rules_first_mode_rules_act_sonnet_reviews_only_paging_decisions(monkeypatch):
+    """Q-0011 option (a): rules decide; Claude is called only for a decision that would page a human."""
+    canned(monkeypatch, get_gauge={"latest_ft": 6.5, "age_min": 0.0, "change_1h_ft": 0.4},
+           get_nws_forecast={"available": False}, render_wet_overlay={"overlay_key": "ov"})
+    monkeypatch.setenv("RIVERSIGHT_AGENT_MODE", "rules_first")
+    monkeypatch.setenv("RIVERSIGHT_AGENT_ESCALATE", "1")
+    models = []
+
+    def conv(**kw):
+        models.append(kw["modelId"])
+        return {"output": {"message": {"role": "assistant", "content": [{"toolUse": {"toolUseId": "s", "name": "submit_decision",
+                "input": {"actions": [{"type": "DRAFT_ALERT"}], "rationale": "agree"}}}]}}, "stopReason": "tool_use",
+                "usage": {"inputTokens": 10, "outputTokens": 5}}
+    d = agent.handle(ev(["RISING"]), ctx=CTX(), converse=conv)
+    assert d["decided_by"] == "rules" and "DRAFT_ALERT" in schema.action_types(d)
+    assert models == [llm.SONNET] and d["second_opinion"]["agrees"] is True
+    canned(monkeypatch, get_gauge={"latest_ft": 4.2, "age_min": 0.0, "change_1h_ft": 0.1}, get_nws_forecast={"available": False})
+    models.clear()
+    d = agent.handle(ev(["RISING"]), ctx=CTX(), converse=conv)
+    assert d["decided_by"] == "rules" and models == []          # nothing pages a human -> no LLM call
+
+
 def test_flags_only_ablation_withholds_evidence():
     ctx = tools.ToolContext(evidence="flags_only", event=ev(["VIEW_CHANGE"]))
     r = tools.call(ctx, "estimate_stage", {"cam": "CAM", "frame_key": "k.jpg"})

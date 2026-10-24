@@ -95,8 +95,8 @@ def ticket_hysteresis(event: Event, d: Decision, sink: Sink) -> Decision:
 
 
 def second_opinion(event: Event, ctx: ToolContext, d: Decision, converse=None) -> Decision:
-    """Sonnet 4.6 re-decides an event whose Haiku 4.5 decision would page a human (RIVERSIGHT_AGENT_ESCALATE=1).
-    The Haiku decision stands; disagreement is recorded so the approver sees it."""
+    """Sonnet 4.6 re-decides an event whose decision (Haiku 4.5, or the rules in rules_first mode) would page a
+    human (RIVERSIGHT_AGENT_ESCALATE=1). The first decision stands; disagreement is recorded for the approver."""
     from riversight.agent import llm
     try:
         s = llm.run(event, ctx, model=llm.SONNET, converse=converse)
@@ -133,6 +133,12 @@ def handle(event: Event, ctx: ToolContext | None = None, model: str | None = Non
         d = _kill_decision(event)
     elif not use_llm:
         d = rules.handle(event, ctx)
+    elif os.environ.get("RIVERSIGHT_AGENT_MODE", "llm_first") == "rules_first":
+        # Q-0011 option (a): the deterministic OpenCV-evidence policy acts (93.9 % in the frozen eval vs 71.4 %
+        # Sonnet 4.6 / 58.8 % Haiku 4.5); Claude only reviews what would page a human, within the token cap.
+        d = rules.handle(event, ctx)
+        if d.get("approval_id") and os.environ.get("RIVERSIGHT_AGENT_ESCALATE") == "1" and not (record and ledger.exhausted()):
+            d = second_opinion(event, ctx, d, converse)
     elif record and ledger.exhausted():
         d = rules.handle(event, ctx)
         d["rationale"] += f" [daily token cap {ledger.cap} reached: rules policy]"
