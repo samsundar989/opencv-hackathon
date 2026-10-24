@@ -171,6 +171,13 @@ def run(arm: str, reps: int, final: bool, limit: int | None, jobs: int, only: li
         single = [e for e in single if any(o in e["episode_id"] for o in only)]
     if limit:
         single = single[:limit]
+    if final and ARMS[arm]["use_llm"]:
+        # preflight: a final LLM arm must not silently become a rules arm (job 3739 had no AWS credentials)
+        try:
+            llm.bedrock_converse(modelId=ARMS[arm]["model"], messages=[{"role": "user", "content": [{"text": "ok"}]}],
+                                 inferenceConfig={"maxTokens": 5})
+        except Exception as e:                                                    # noqa: BLE001
+            sys.exit(f"refusing --final {arm}: Bedrock preflight failed ({type(e).__name__}: {str(e)[:200]})")
     out_dir = RES / "runs" if final else WORK / "dev"
     out_dir.mkdir(parents=True, exist_ok=True)
     out = out_dir / f"{arm}.jsonl"
