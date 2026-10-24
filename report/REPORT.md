@@ -243,7 +243,11 @@ Tidal sites (v4): ordinary tides correctly not alerted 21/21; the replayed live 
 - The LLMs' main failure is under-escalation: missing `DRAFT_ALERT` on real rises. Out-of-range readings were the other common miss. The LLM is therefore used as a second opinion on hard cases, never as the only decider (Q-0011).
 - **The hybrid, defined before it was run, is the best arm:** OpenCV-grounded rules act and Claude Sonnet 4.6 advises. It turned some gauge-drift cases that the rules alone miss into human-approved tickets (2 of 9), and it never overrides the rules on its own. The margin over rules alone is small.
 - **A documented false alert.** On Oct 24 a live `DRAFT_ALERT` at First Mallard Branch, a tidal slough, was approved by a human: an ordinary tide had crossed the 3-hour rise rule. The fix marks tidal sites and judges a rise against the site's tidal envelope instead. Replayed, that false alert is now suppressed, and ordinary tides no longer alert. King tides that the harmonic model predicts also no longer alert. Whether a predicted king tide should page a human is a policy question (NWS issues coastal-flood advisories for them), and we left it open rather than guess. The approved alert stays in the log.
-- **Camera-health QA** (a daily fleet report: offline, view changed, lens degrading, IR stuck on, gauge suspect; every item a ticket draft that needs a human). Its first version was spot-checked against a year of history at 39 onboarded cameras (`results/agent_eval/health_eval_v1.json`). It found real offline periods at 24 sites, but its lens and IR detectors fired on leaf-off and snow days, and its view-change detector caught 43 % of the known view-change days. Version 2 compares each camera with its own trailing 14-day baseline and requires a monochrome frame before calling IR. It has not been re-scored yet, so no accuracy is claimed.
+- **Camera-health QA** (a daily fleet report, rendered at `/health`; every item is a ticket draft that needs a human, nothing is sent). Version 2 was evaluated over about a year of history at 59 cameras (`results/agent_eval/HEALTH_EVAL.md`):
+  - **Offline cameras:** 315 outages at 34 of 59 sites, counted from the upload record itself.
+  - **Lost view:** recall 0.715 against independent history segments. It also fires on bad-weather days.
+  - **Stuck in IR by day:** 16 days confirmed by a chroma test; 7 of 7 sampled were real faults. Version 1 was 0 of 12, every one a snowy day.
+  - **Poor visibility:** it cannot tell a dirty lens from fog or fresh snow, so it is reported as "weather or lens" at low severity. We do not claim dirty-lens detection.
 - Flood replays through the live cycle drafted an alert in the first cycle above the site's p90 (`results/agent_eval/replay/`).
 - Limits (from W2): gauge-stale episodes are synthetic dropouts on real frames; re-anchoring is tested mostly on one camera (Pecatonica); costs are list-price estimates.
 
@@ -359,7 +363,7 @@ Live shadow, pre-registered (D-0010 §2): on 249 paired daylight readings at 16 
 | weekly | 0.240 | 0.165 | 1.81 / 1.54 |
 <!-- END:recal -->
 
-Weekly refits cut the error for both models. On frames above the original calibrated range the error shrinks but stays large, so readings there are still shown as a lower bound. The served model is not changed before the deadline unless D-0010-style criteria are met.
+Weekly refits cut the error for both models. On frames above the original calibrated range the error shrinks but stays large, so readings there are still shown as a lower bound. The share of frames outside the model's own calibrated range falls from 7.9 % with a fit-once model to 1.7 % with weekly refits, but the first record flood at a site (Hancock's 29 July) is still unreadable until it has happened once. The served model is not changed before the deadline unless D-0010-style criteria are met.
 
 ### 6.12 What a user gets: the fused RiverSight stage during an outage
 

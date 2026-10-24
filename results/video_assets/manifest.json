@@ -117,13 +117,72 @@
   },
   "health": {
    "url": "https://d2aes2r6og8aap.cloudfront.net/health.html",
-   "what": "/health: fleet camera-health report (W2/W1)",
-   "status": "skipped: page not live yet"
+   "what": "/health: fleet camera-health report (W2/W1): offline, view changed, IR stuck on, poor visibility; ticket drafts needing approval",
+   "status": "captured",
+   "frames": 473,
+   "fps": 25.0,
+   "seconds": 18.9,
+   "captured_utc": "2026-10-24T22:52:12Z",
+   "files": {
+    "webm": {
+     "bytes": 2246737,
+     "sha256": "2a29c5a4161a26a4063756244c76b80e56bb35f83d996f881c8051989a251a5c"
+    },
+    "mp4": {
+     "bytes": 13746878,
+     "sha256": "586a4b4b9cb5d565082164391ea1861c3acafda550bc704ccf7be031dac0140b"
+    },
+    "gif": {
+     "bytes": 6596101,
+     "sha256": "5988ef18dec5c0c2d408633516cecad55b4ec408eb301c36d9ba64525d20f327"
+    }
+   }
   },
-  "replay": {
-   "url": "https://d2aes2r6og8aap.cloudfront.net/replay.html",
-   "what": "Flood replay (W1-2)",
-   "status": "skipped: page not live yet"
+  "replay_salt_creek": {
+   "url": "https://d2aes2r6og8aap.cloudfront.net/site.html?cam=IL_Salt_Creek_at_Wood_Dale",
+   "what": "Flood replay, Salt Creek 3 Jul 2026 (out of sample): overlay rising frame by frame, chart cursor, agent log and drafted alert in time",
+   "status": "captured",
+   "frames": 800,
+   "fps": 25.0,
+   "seconds": 32.0,
+   "captured_utc": "2026-10-24T22:52:53Z",
+   "files": {
+    "webm": {
+     "bytes": 3935199,
+     "sha256": "c8a281b07f0dc1f6a6b12825dbed697874787e6fdb9a34c585fecae5b7359fb6"
+    },
+    "mp4": {
+     "bytes": 27486744,
+     "sha256": "537bc9ba2aa3af0c03bcf66d3ffa2c19904aac832e80659ed872c13fa34c8add"
+    },
+    "gif": {
+     "bytes": 10369600,
+     "sha256": "a6e1ee7d50fcf51d0a96ec88b00f8c3cc8ec907ef9f809468c983c7fbd9d54b9"
+    }
+   }
+  },
+  "api": {
+   "url": "https://d2aes2r6og8aap.cloudfront.net/api.html",
+   "what": "/api.html: public JSON feed and Atom feed documentation",
+   "status": "captured",
+   "frames": 306,
+   "fps": 25.0,
+   "seconds": 12.2,
+   "captured_utc": "2026-10-24T22:53:09Z",
+   "files": {
+    "webm": {
+     "bytes": 1443037,
+     "sha256": "c3b05ae4fd70ffd3690aa6980d2ca89bee5ccb38edd6e353aa870e4ca0eaec83"
+    },
+    "mp4": {
+     "bytes": 8190434,
+     "sha256": "3c5ba1d684fba80679125615e8d8a04a02818da6657a88cdafca53531795c475"
+    },
+    "gif": {
+     "bytes": 4271967,
+     "sha256": "8ae3c7962ff1e6391bf1721ce7d256d388a57d01a92822d22cae6fc6a23d3e78"
+    }
+   }
   }
  },
  "viewport": "1920x1080",

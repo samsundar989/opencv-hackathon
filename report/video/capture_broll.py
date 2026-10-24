@@ -74,6 +74,15 @@ def clip_judge(page):
     time.sleep(2)
 
 
+def clip_replay(page):
+    page.goto(f"{BASE}/site.html?cam=IL_Salt_Creek_at_Wood_Dale", wait_until="networkidle")
+    page.wait_for_selector("#rp-play", state="visible", timeout=30000)
+    page.evaluate("() => { const e = document.getElementById('replay-sec'); window.scrollTo(0, e.getBoundingClientRect().top + window.scrollY - 70); }")
+    time.sleep(2)
+    page.click("#rp-play")
+    time.sleep(28)
+
+
 def clip_simple(path: str, scroll_s: float = 8):
     def f(page):
         page.goto(f"{BASE}/{path}", wait_until="networkidle")
@@ -90,8 +99,10 @@ CLIPS = {
     "judge": (clip_judge, "judge.html", "/judge: frozen-test numbers, agent eval, COOL, failure cases, reproduce"),
     "approvals": (clip_simple("approvals.html"), "approvals.html", "/approvals: pending and decided human approvals"),
     "proof": (clip_simple("proof.html"), "proof.html", "/proof: COOL build provenance, instance identity, AMI"),
-    "health": (clip_simple("health.html"), "health.html", "/health: fleet camera-health report (W2/W1)"),
-    "replay": (clip_simple("replay.html", 15), "replay.html", "Flood replay (W1-2)"),
+    "health": (clip_simple("health.html", 12), "health.html", "/health: fleet camera-health report (W2/W1): offline, view changed, IR stuck on, poor visibility; ticket drafts needing approval"),
+    "replay_salt_creek": (clip_replay, "site.html?cam=IL_Salt_Creek_at_Wood_Dale",
+                          "Flood replay, Salt Creek 3 Jul 2026 (out of sample): overlay rising frame by frame, chart cursor, agent log and drafted alert in time"),
+    "api": (clip_simple("api.html", 6), "api.html", "/api.html: public JSON feed and Atom feed documentation"),
 }
 
 
