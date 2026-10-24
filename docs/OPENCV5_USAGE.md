@@ -1,6 +1,6 @@
 # OpenCV 5 usage — every call that matters
 
-Pinned: `opencv-python-headless==5.0.0.93` (the only 5.x wheel on PyPI; `docs/research/opencv5.md`). The live Graviton worker runs the COOL build of OpenCV; `/proof.json` records its `cv2.__file__`, version and `getBuildInformation()` hash.
+Pinned: `opencv-python-headless==5.0.0.93` (the only 5.x wheel on PyPI; `docs/research/opencv5.md`). The live Graviton worker runs the COOL G5 build (`cv2 5.1.0-dev` from `/opt/cool`, KleidiCV HAL); `/proof.json` records its `cv2.__file__`, version and `getBuildInformation()` hash. The 5.1-dev build renames the DNN engine enums (`ENGINE_AUTO/OPENCV/ORT`); no RiverSight code uses them, which is why the same code runs on both builds.
 
 **5.0** marks APIs that are new in OpenCV 5.0 and do not exist in 4.x. Every number in the evidence column comes from the committed file named there.
 
@@ -40,6 +40,7 @@ These features feed the flood-height map and the kernel-ridge regressor (`calib/
 | call | where | what it does | what breaks without it |
 |---|---|---|---|
 | `cv2.applyColorMap(COLORMAP_JET / INFERNO)` + `findContours` / `drawContours` | `viz.py`, `scripts/scene_demo.py` | Draws the flood-height map (stage at which each patch floods) and the predicted wet area at a given stage, i.e. "what is under water at X ft". | No explainability layer, no flood-extent visual for the agent's alert. |
+| `cv2.connectedComponentsWithStats` (4-connected) on the 80 × 45 block grid | `live/bundle.py: inundation_seed, connected_inundation` | Connected inundation for display: a block is drawn wet at stage s only if h* ≤ s, it is reliable, and it is connected to the river through other such blocks. The seed is the low-h* part of the river corridor (largest reliable component, weighted towards the bottom of the frame). Used by the server overlay, the client slider and the agent's `render_wet_overlay`. Display only; never used for the stage estimate. | Sliding the stage up paints water on hillsides, trees and sky wherever a block happens to correlate with stage (D-0011). |
 | `cv2.Animation` + `cv2.imwriteanimation` | `scripts/scene_demo.py` | Writes the event GIFs (frames + wet overlay + stage needle) natively, with no Pillow or imageio. | Extra imaging dependency. |
 | `cv2.imencode` / `imdecode` | `agent/store.py` | JPEG round trip to and from S3 without temp files. | — |
 | `putText`, `polylines`, `line`, `circle`, `arrowedLine` | `viz.py`, `killtest.py` | Time-series figures and overlays for the report without matplotlib. | — (presentation) |
