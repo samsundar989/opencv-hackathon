@@ -26,7 +26,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ["README.md", "report/REPORT.md", "docs/COOL_BENCHMARK.md", "docs/OPENCV5_USAGE.md",
         "docs/RESPONSIBLE_USE.md", "docs/REPRODUCE.md", "docs/ARCHITECTURE.md", "docs/PRIOR_ART.md",
-        "results/failures/README.md", "web/judge.html"]
+        "results/failures/README.md", "web/judge.html", "docs/DEVPOST.md", "docs/ROADMAP.md"]
 ALLOW = ROOT / "report" / "number_allowlist.txt"
 STALE = ROOT / "report" / "stale_claims.txt"
 HTML_STRIP = [re.compile(r"<(script|style|pre)\b.*?</\1>", re.S | re.I), re.compile(r"<!--.*?-->", re.S),
