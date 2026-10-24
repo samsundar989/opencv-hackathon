@@ -1,0 +1,131 @@
+{
+ "clips": {
+  "home": {
+   "url": "https://d2aes2r6og8aap.cloudfront.net/index.html",
+   "what": "Home: fleet map, status pills, headline strip, featured cameras",
+   "status": "captured",
+   "frames": 428,
+   "fps": 25.0,
+   "seconds": 17.1,
+   "captured_utc": "2026-10-24T20:43:35Z",
+   "files": {
+    "webm": {
+     "bytes": 2196796,
+     "sha256": "39bfae2d4d68a564c64f8d244e56604d0714e0cf1e46a0033514947bff591c59"
+    },
+    "mp4": {
+     "bytes": 16279633,
+     "sha256": "d50b6a5ee8f1a3b276afea076dc92a64639599547aba46afd5b07fc31e0c0d46"
+    },
+    "gif": {
+     "bytes": 7525079,
+     "sha256": "9dee6d9febcd7ee6ae5f825cd1fa46d137c7e33e568eee8691ceb25afc67b085"
+    }
+   }
+  },
+  "salt_creek_slider": {
+   "url": "https://d2aes2r6og8aap.cloudfront.net/site.html?cam=IL_Salt_Creek_at_Wood_Dale",
+   "what": "Salt Creek site page: stage slider swept low\u2192high\u2192low, connected wet overlay filling the channel",
+   "status": "captured",
+   "frames": 430,
+   "fps": 25.0,
+   "seconds": 17.2,
+   "captured_utc": "2026-10-24T20:46:03Z",
+   "files": {
+    "webm": {
+     "bytes": 1677494,
+     "sha256": "1307becf5a016e3eb4a4e4708886d706fe96d8ef0393a2d9e43773c8698cc105"
+    },
+    "mp4": {
+     "bytes": 13276769,
+     "sha256": "86512389a30c0c65c3ff247f078a3dc5755b7b3bb70603637a2542312519f4b2"
+    },
+    "gif": {
+     "bytes": 6074156,
+     "sha256": "549f661b95687162b2b4e960271ca64508ce641970fd4e04c9a17fd5eb62f57c"
+    }
+   }
+  },
+  "judge": {
+   "url": "https://d2aes2r6og8aap.cloudfront.net/judge.html",
+   "what": "/judge: frozen-test numbers, agent eval, COOL, failure cases, reproduce",
+   "status": "captured",
+   "frames": 834,
+   "fps": 25.0,
+   "seconds": 33.4,
+   "captured_utc": "2026-10-24T20:44:41Z",
+   "files": {
+    "webm": {
+     "bytes": 4041716,
+     "sha256": "79ff6929a96e9651589a2a03481579183a10f898526f9f7ef732decbdfdf44cb"
+    },
+    "mp4": {
+     "bytes": 30440418,
+     "sha256": "1e30cc58bbc9372c3e2a25cc04e115bf201fbe581c35ecf938117c33bd31489b"
+    },
+    "gif": {
+     "bytes": 9274402,
+     "sha256": "d8e4015667ac2c701cb82f2e3195acc7a52011059a55d7d7e1137515f5c7d279"
+    }
+   }
+  },
+  "approvals": {
+   "url": "https://d2aes2r6og8aap.cloudfront.net/approvals.html",
+   "what": "/approvals: pending and decided human approvals",
+   "status": "captured",
+   "frames": 406,
+   "fps": 25.0,
+   "seconds": 16.2,
+   "captured_utc": "2026-10-24T20:45:04Z",
+   "files": {
+    "webm": {
+     "bytes": 3596279,
+     "sha256": "e2e1d3a8d7fce1152322e2a660cde1d4a6e7c2b972a122926e7777686df62d78"
+    },
+    "mp4": {
+     "bytes": 21260911,
+     "sha256": "a9d2db15697987abb7c5772f4ae0c3447e7ba7e81436beb656e8c7185a7c907b"
+    },
+    "gif": {
+     "bytes": 5961436,
+     "sha256": "2a9c36f33d38a4f48ad9c049adf506af407d2895891b64d6873138edb45813a9"
+    }
+   }
+  },
+  "proof": {
+   "url": "https://d2aes2r6og8aap.cloudfront.net/proof.html",
+   "what": "/proof: COOL build provenance, instance identity, AMI",
+   "status": "captured",
+   "frames": 350,
+   "fps": 25.0,
+   "seconds": 14.0,
+   "captured_utc": "2026-10-24T20:45:22Z",
+   "files": {
+    "webm": {
+     "bytes": 1666466,
+     "sha256": "ea5d40c72e87f65aee1c2b842a7b1c95024b8056b744574201695ce83ec40c1a"
+    },
+    "mp4": {
+     "bytes": 12357113,
+     "sha256": "8298573ee93841feb7e1c891e0a3362542071b2d961bc90fb2cdf7138ce602d1"
+    },
+    "gif": {
+     "bytes": 3847331,
+     "sha256": "921881c4d7a1147d16fa6be209068ee8aa37f1fbe1a414b0b4488473ab5d8088"
+    }
+   }
+  },
+  "health": {
+   "url": "https://d2aes2r6og8aap.cloudfront.net/health.html",
+   "what": "/health: fleet camera-health report (W2/W1)",
+   "status": "skipped: page not live yet"
+  },
+  "replay": {
+   "url": "https://d2aes2r6og8aap.cloudfront.net/replay.html",
+   "what": "Flood replay (W1-2)",
+   "status": "skipped: page not live yet"
+  }
+ },
+ "viewport": "1920x1080",
+ "note": "Videos are gitignored (size); regenerate with this script. Frames on the site are face-blurred upstream (YuNet)."
+}

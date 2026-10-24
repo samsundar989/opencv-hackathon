@@ -61,3 +61,9 @@ live_local/
 # COOL bench equivalence dumps hold decoded USGS frames (non-negotiable 7)
 results/cool_bench/**/outputs.npz
 infra/cdk-outputs.json
+
+# video B-roll (large; regenerate with report/video/capture_broll.py; manifest.json is committed)
+results/video_assets/*.webm
+results/video_assets/*.mp4
+results/video_assets/*.gif
+results/video_assets/_raw/
