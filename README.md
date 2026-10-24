@@ -23,6 +23,13 @@ Flood state (stage above the site's 90th percentile): median balanced accuracy *
 
 _Flood-height map: each patch is coloured by the stage at which it goes under water, learned from the gauge's history. Image: USGS HIVIS, public domain; faces blurred with YuNet._
 
+## Since then (forward in time and new evidence)
+
+- **Live, prospective:** the deployed models are scored on every live daylight reading against the gauge, pre-registered before the first cycle. Report §6.9 has the current table (`results/live_prospective/`). In quiet conditions a 24-hour-old gauge value beats the camera, as in the frozen test.
+- **Agent:** on 98 frozen episodes (63 real), the deterministic rules policy is right 93.9 % of the time with no false actions on clean controls. Claude Sonnet 4.6 with the OpenCV tools: 71.4 %. Claude Haiku 4.5: 58.8 %, or 51.4 % without the OpenCV evidence. So the live system decides with rules first, and the LLM is a second opinion (`results/agent_eval/`, report §6.7).
+- **Model v2 candidate:** DINOv2 features run in `cv2.dnn` cut the year-long CV median MAE from 0.380 to 0.252 ft and improve 19 of 20 sites (`results/v2/`, report §6.11). Not yet served.
+- **Gauges do go dark:** 531 of 875 gauges behind HIVIS cameras had an outage of 6 h or more in the past year, and cameras kept posting frames through 795 of the outages checked (`results/real_outages/`).
+
 ## Not claimed
 
 - **Not a replacement for gauges or official warnings.** While the gauge is online, the camera beats a 15-minute-old gauge reading at **0/20** sites. The camera's value is when the gauge is down, stale or suspect, and in showing where the water is.
