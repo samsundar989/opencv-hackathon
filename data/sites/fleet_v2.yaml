@@ -405,5 +405,5 @@ sites:
   name: Kansas River at De Soto
   swing_ft: 6.902
   score: 0.8148
-  live: false
-  tier: .nan
+  live: true
+  tier: B

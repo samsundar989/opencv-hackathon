@@ -1,15 +1,15 @@
 {
   "label": "onboarded Oct 24-25, not part of the frozen test",
   "sites_attempted": 40,
-  "sites_done": 39,
+  "sites_done": 40,
   "tiers": {
-    "B": 29,
+    "B": 30,
     "C": 10
   },
-  "live_eligible": 29,
-  "cv_median_mae_ft_all_done": 1.04555,
-  "cv_median_mae_ft_live_eligible": 0.9328,
-  "cv_median_nmae_live_eligible": 0.1363,
+  "live_eligible": 30,
+  "cv_median_mae_ft_all_done": 1.0556,
+  "cv_median_mae_ft_live_eligible": 0.96645,
+  "cv_median_nmae_live_eligible": 0.14005,
   "p1_sites_done": 8,
   "errors": []
 }

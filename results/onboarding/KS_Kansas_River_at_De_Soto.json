@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 152.8
+    "fetch": 152.8,
+    "reference": 0.7,
+    "register_features": 6446.1,
+    "cv": 14.3,
+    "export": 7.6
   },
   "nwis_id": "06892350",
   "state": "KS",
   "name": "Kansas River at De Soto",
-  "status": "fetched"
+  "status": "done",
+  "reference": "KS_Kansas_River_at_De_Soto___2026-10-05T21-00-11Z.jpg",
+  "registration": {
+    "frames": 2505,
+    "daylight": 2503,
+    "reg_rate_all": 0.7954,
+    "reg_rate_last30d": 1.0,
+    "n_daylight_last30d": 240,
+    "view_change_runs": 6,
+    "view_change_linked": 1
+  },
+  "cv": {
+    "tier": "B",
+    "n": 1780,
+    "n_pred": 1780,
+    "reg_rate": 1.0,
+    "calib_p5_p95_ft": 7.719,
+    "test_range_ft": 13.2,
+    "mae": 1.6324,
+    "nmae": 0.2115,
+    "mae_p15": 0.0164,
+    "mae_p24": 0.7636,
+    "mae_const": 2.1328,
+    "n_ev": 1087,
+    "mae_ev": 2.0184,
+    "mae_p24_ev": 1.187,
+    "spearman": 0.7116,
+    "bacc_flood": 0.5,
+    "bacc_flood_p24": 0.7306,
+    "n_flood": 195,
+    "gap_6h_lkv": 0.2518,
+    "gap_6h_cam": 1.6329,
+    "gap_24h_lkv": 0.7636,
+    "gap_24h_cam": 1.633,
+    "gap_72h_lkv": 1.2686,
+    "gap_72h_cam": 1.6344,
+    "gap_7d_lkv": 1.6041,
+    "gap_7d_cam": 1.633,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 1.0024,
+    "within_025": 0.182,
+    "cv_spearman": 0.7116,
+    "sigma_ft": 2.0807,
+    "n_oof": 1780,
+    "n_folds": 10,
+    "cal_frames": 1963,
+    "cal_days": 364.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\KS_Kansas_River_at_De_Soto",
+    "model_sha": "1798130a33f4ba721d5d708ec3a6f41c3d7ea248479b43a369e7255fc359a01c",
+    "export_msg": "KS_Kansas_River_at_De_Soto: 1963 frames, ROI 1049, sigma 2.0807, 6 extra refs"
+  },
+  "live_eligible": true
 }
