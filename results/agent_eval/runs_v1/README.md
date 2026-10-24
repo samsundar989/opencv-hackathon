@@ -9,3 +9,4 @@ No LLM arm had run when either was superseded.
 | `rules_v2set_prehysteresis.jsonl` | v2 | valid decisions (92.3%); superseded only because `tools.py` changed afterwards (display-only overlay cleanup), which changes the frozen hash. Re-run expected to be identical. |
 | `rules_v2set_final.jsonl`, `REPORT_v2set_final.md` | v2 | final rules run on v2 (92.3%); superseded by set v3 (D-0009 adds out-of-range and muddy-rise behaviour + 20 episodes). |
 | `rules_v3_prememfix.jsonl` | v3 | valid rules run (93.9%); re-run after the tools memory fix (shared ALIKED/LightGlue; 74/74 tool outputs identical, `memcheck.json`) so every final arm shares one freeze. |
+| `rules_v3_final.jsonl` (+ `FROZEN_v3.json`) | v3 | final rules run on v3 (93.9%); superseded by set v4 (D-0013 W2-1 tidal: +10 episodes, the 98 v3 episodes unchanged). The LLM-only arms (haiku, haiku_noev, sonnet) ran under FROZEN_v3 and are kept as final for the v3 episodes. |
