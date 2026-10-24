@@ -1,6 +1,6 @@
 # RiverSight: public river webcams as calibrated water-level instruments
 
-**Technical report, OpenCV AI Competition 2026 (powered by AWS).** Draft v1, 2026-10-23. Sections marked _pending_ fill in as the sprint lands; every number here is generated from, or traceable to, a committed file in `results/` (`python scripts/check_report_numbers.py`).
+**Technical report, OpenCV AI Competition 2026 (powered by AWS).** Draft v2, 2026-10-24. Live: https://d2aes2r6og8aap.cloudfront.net. Sections marked _pending_ fill in as the sprint lands; every number here is generated from, or traceable to, a committed file in `results/` (`python scripts/check_report_numbers.py`).
 
 ## 1. Problem
 
@@ -10,13 +10,24 @@ Existing camera water-level systems read a staff plate, need a surveyed site, or
 
 RiverSight reads stage from these cameras with no plate and no survey, by learning from the gauge's own history which parts of each scene go under water at which stage. It also checks itself: it notices when a camera has moved, when the lens is fogged, and when the camera and gauge disagree, and it hands those cases to an agent that a human supervises.
 
-## 2. Users
+## 2. Users and decisions
 
-- **Hydrographers and USGS field offices:** a provisional stage while a gauge is down, an early hint that a gauge is drifting, and a list of cameras that moved and need a new reference.
-- **Flood forecasters and emergency managers:** flood state at sites where the gauge is out, and an image that shows what will be under water at the forecast crest.
-- **The public and local media:** "what's under water at this stage" on a picture people recognise.
+Three people, each making a real decision with a camera they already have but cannot read. For each: what they see, the decision it supports, and what it does not replace.
 
-RiverSight is a supplement. It is not a replacement for gauges or official warnings (§7).
+**County emergency manager** (a flood-prone Texas county, say, with a USGS camera on a creek crossing).
+- *Sees:* the site page with the latest frame and the wet area drawn on it; a status pill (OK, provisional, above range, night); a slider showing what is under water at any stage; the NWS forecast crest drawn into today's picture where a forecast exists; a drafted alert waiting for approval when the water rises.
+- *Decision:* whether to close a low-water crossing or send a crew to look, especially when the gauge has gone silent or is hours old.
+- *Does not replace:* NWS warnings or the county's own gauges and spotters. Alerts are drafted, never sent without a person. Above the calibrated range the camera says "at least X ft", not a number.
+
+**NWS hydrologist or forecaster.**
+- *Sees:* flood state per camera (above or below the site's 90th percentile), with σ; which gauges are stale or disagree with their camera; the fleet triage list ranked by what needs a human.
+- *Decision:* whether a gauge reading feeding a forecast is trustworthy right now, and whether a site without a working gauge is rising.
+- *Does not replace:* the gauge record, the rating curve or the forecast model. A camera reading is a provisional, independent check.
+
+**USGS hydrographer at a water science center.**
+- *Sees:* cameras flagged for a view change, quarantined or re-anchored, with the registration evidence; tickets saying "gauge suspect" when a confident camera disagrees with a flat-lining or jumping gauge; provisional gap-fill during an outage, with σ.
+- *Decision:* which site to visit first; whether a gauge needs a check before its data is approved; which camera needs a new reference after a re-aim.
+- *Does not replace:* field measurements or the approval of official records. Gap-filled values are labelled provisional and never written into the USGS record.
 
 ## 3. Architecture
 
@@ -40,11 +51,19 @@ Full table, with what breaks without each call: `docs/OPENCV5_USAGE.md`.
 
 **QA and privacy.** Laplacian variance, glare and a dark-channel fog score flag bad frames; YuNet (`FaceDetectorYN`) blurs faces before any frame is published. `cv2.Animation` / `imwriteanimation` write the event GIFs.
 
+**Connected inundation (display).** The slider and the wet overlay should show water only where water can be. A block is drawn as wet at stage s only if h* ≤ s, it is reliable, **and** it is 4-connected to the river through other such blocks. The seed is the lowest decile of h* inside the river corridor: the reliable component with the largest area × (centroid height)², because water lies low in a river camera's view while stray reliable specks on foliage or sky are small and high. The fill uses `cv2.connectedComponentsWithStats` on the 80 × 45 block grid (`live/bundle.py: connected_inundation`). It is display only: the stage estimate and every reported number use the unconnected model.
+
 **Arm64.** The live path uses `INTER_AREA` only and pads with `copyMakeBorder` instead of `warpPerspective(BORDER_REPLICATE)`, avoiding two KleidiCV issues in the 5.0.0.93 arm64 wheels (#29794, #29816).
 
 ## 5. AWS deployment
 
-_Pending (W1, gate G1)._ Planned: us-east-2; one EC2 m9g.large (Graviton5) running the COOL OpenCV build; S3 for models, live readings and approvals; CloudFront for the dashboard; a Lambda Function URL for approvals; SNS e-mail; Amazon Bedrock (Claude Haiku 5.5, Converse tool use) for the agent; CloudWatch dashboard and alarms; an AWS Budget with a stop-EC2 action at 90 % of the $100 cap (D-0004). The worker publishes `/proof.json` with its OpenCV build provenance.
+Live at https://d2aes2r6og8aap.cloudfront.net since 2026-10-23, in us-east-2 (`docs/DEPLOY.md`, `infra/`).
+- **Worker:** one EC2 m9g.large (Graviton5) from the **COOL G5 AMI**. A systemd timer runs one cycle over all calibrated cameras every 15 minutes. `/proof` publishes the instance-identity document, AMI id, `cv2.__file__`, version and `getBuildInformation()` hash, so a judge can check which OpenCV produced the readings.
+- **Storage and front door:** a private S3 bucket (models, live readings, overlays, approvals) behind CloudFront with origin access control; the dashboard is static.
+- **Agent:** Amazon Bedrock (Claude Haiku 5.5 through the `us.` inference profile, Converse tool use) for flagged readings only; a deterministic rules policy as fallback.
+- **Human approval:** a Lambda Function URL behind a token; SNS e-mail to the operator.
+- **Guardrails:** an AWS Budget on the $100 cap (D-0004) whose 90 % action stops every instance tagged for the project, created before the first launch; IMDSv2; no SSH (SSM only); least-privilege roles.
+- **Operations:** `docs/RUNBOOK.md` (worker down, USGS down, Bedrock throttled, tear-down).
 
 ## 6. Evaluation
 
@@ -122,6 +141,34 @@ The camera never beats a 15-minute-old gauge reading. Its value appears when the
 
 ### 6.5 Ablations and harder settings
 
+**Registration, per site.** ORB alone fails on most cameras; ALIKED + LightGlue carries the cascade. Over the 12-month history, a bank of per-view references (one per run of frames the main reference could not register) adds little at fleet scale: it matters at the two cameras that were re-aimed most (Pecatonica, Sand Creek), which is why re-anchoring is an agent action and not a default (`report/registration_ablation.py`).
+
+<!-- BEGIN:registration -->
+| site | 30 d: ORB | + ALIKED+LightGlue | + chaining | 12 mo: main reference | + reference bank | usable for calibration |
+|---|---|---|---|---|---|---|
+| Cowhouse Ck at Old Georgetown Rd nr Ft Hood (TX) | 43.3 % | 99.7 % | 99.7 % | 97.2 % | 97.2 % | 97.2 % |
+| Tenmile Ck at Parkinson Rd nr Ferris (TX) | 45.7 % | 100.0 % | 100.0 % | 99.1 % | 99.1 % | 99.1 % |
+| Buffalo Bayou at State HWY 6 near Addicks (TX) | 28.0 % | 98.9 % | 98.9 % | 95.2 % | 95.2 % | 95.2 % |
+| Clear Fk Trinity Rv at Ft Worth (TX) | 35.3 % | 99.2 % | 99.2 % | 98.4 % | 98.4 % | 98.4 % |
+| White Rk Ck at Greenville Ave Dallas (TX) | 19.4 % | 72.9 % | 79.5 % | 49.8 % | 49.8 % | 42.5 % |
+| Langham Creek at Addicks Reservoir Outflow near Addicks (TX) | 10.5 % | 99.0 % | 99.0 % | 99.2 % | 99.2 % | 99.2 % |
+| East Branch Pecatonica River near Blanchardville Bullet (WI) | 4.5 % | 85.5 % | 85.5 % | 61.6 % | 75.5 % | 61.8 % |
+| Swan Creek at Lalor Road near Fitchburg (WI) | 36.4 % | 93.8 % | 93.8 % | 96.8 % | 96.8 % | 96.8 % |
+| Root River near Pilot Mound (MN) | 19.6 % | 89.9 % | 91.8 % | 75.6 % | 75.6 % | 73.9 % |
+| East Branch Delaware River at Hancock Staff (NY) | 100.0 % | 100.0 % | 100.0 % | 99.8 % | 99.8 % | 99.8 % |
+| Neversink River at Godeffroy (NY) | 78.7 % | 98.1 % | 98.1 % | 97.0 % | 97.0 % | 97.0 % |
+| Stony Brook at Princeton (NJ) | 40.3 % | 92.2 % | 92.2 % | 94.0 % | 94.0 % | 94.0 % |
+| Big Brook near Marlboro (NJ) | 3.5 % | 55.6 % | 71.3 % | 22.3 % | 22.3 % | 20.8 % |
+| East Fork Little Miami River at Perintown (OH) | 89.7 % | 100.0 % | 100.0 % | 99.4 % | 99.4 % | 99.4 % |
+| Bean Creek at Powers (OH) | 62.6 % | 93.3 % | 93.6 % | 94.1 % | 94.1 % | 94.1 % |
+| Animas River at Durango (CO) | 11.6 % | 98.5 % | 99.7 % | 99.5 % | 99.5 % | 99.5 % |
+| Sand Creek at Mouth nr Commerce City (CO) | 10.1 % | 92.6 % | 99.9 % | 26.3 % | 32.8 % | 26.3 % |
+| Salt Creek at Wood Dale (IL) | 41.6 % | 98.9 % | 98.9 % | 47.4 % | 47.4 % | 46.7 % |
+| Brandywine Creek at Chadds Ford (PA) | 99.6 % | 99.7 % | 99.7 % | 92.6 % | 92.6 % | 92.6 % |
+| First Mallard Branch nr Fairfield (CA) | 26.7 % | 93.0 % | 93.0 % | 83.9 % | 85.8 % | 80.9 % |
+| **fleet** (9000 / 38668 daylight frames) | **39.6 %** | **94.0 %** | **95.7 %** | **80.5 %** | **81.4 %** | **79.6 %** |
+<!-- END:registration -->
+
 <!-- BEGIN:ablations -->
 | ablation | result | source |
 |---|---|---|
@@ -167,7 +214,19 @@ _Pending (W2)._ Fault-injection episodes, real and synthetic (labelled), each wi
 
 _Pending._ COOL vs stock pip OpenCV 5.0.0.93 on the same m9g.large: per-kernel speedups, the whole per-frame pipeline, the fleet cycle, output equivalence, and $ per camera-month. Harness: `bench/`; method: `docs/COOL_BENCHMARK.md`.
 
-### 6.9 Failure cases
+### 6.9 Prospective live evaluation (W1)
+
+_Pending; scoring started with the first COOL cycle, 2026-10-23 ~16:28 CT._ Pre-registered in D-0010 §1 before that cycle: the live bundles as first deployed (`results/live_prospective/frozen_models.json`) are scored on every daylight reading with registration OK against the USGS reading closest in time (±20 min), until the code freeze. Saturated (`OUT_OF_RANGE`) readings are counted separately. Baseline: a 24-hour last-known gauge value. This is forward in time, out of sample, and reported whatever it shows (`results/live_prospective/`).
+
+### 6.10 Real gauge outages and onboarding new cameras (W5)
+
+_Pending._ (a) Real gauge outages in the history of our cameras, and what the camera read while the gauge was silent. (b) A self-onboarding pipeline for more gauged HIVIS cameras, and the accuracy-vs-days-of-calibration curve (`results/real_outages/`, `results/onboarding/`).
+
+### 6.11 Model v2 candidate (W4)
+
+_Pending._ DINOv2 features in `cv2.dnn` plus seasonal robustness. Per D-0010 §2, v2 can only be compared with v1 through the same forward-chaining monthly CV inside the history, and as a shadow model on the live stream. It replaces v1 only if it wins there; the frozen test days are never re-read.
+
+### 6.12 Failure cases
 
 Nine concrete cases, each with an image, its numbers and a paragraph: [`results/failures/README.md`](../results/failures/README.md). Night/IR frames; a hazy lens on a high-flow day (the QA metric cannot separate lens haze from turbid water); a scene changed by a flood (White Rock); a re-aimed camera (Pecatonica); a model that learned the sun instead of the water (Tenmile); a far bank with almost no signal (Root River); tides (First Mallard); a flood above the calibrated range (Hancock); and month-to-month drift.
 

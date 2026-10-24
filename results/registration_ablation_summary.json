@@ -1,0 +1,22 @@
+{
+  "source": "results/registration_ablation.csv (report/registration_ablation.py)",
+  "window_30d": {
+    "day_frames": 9000,
+    "orb_rate": 0.396,
+    "orb_aliked_rate": 0.94,
+    "cascade_rate": 0.957,
+    "sites_orb_below_50pct": 15,
+    "sites_cascade_at_least_90pct": 17
+  },
+  "history_12m": {
+    "sites": 20,
+    "day_frames": 38668,
+    "segment_frames": 3936,
+    "segments": 32,
+    "segments_linked": 5,
+    "main_only_rate": 0.805,
+    "with_bank_rate": 0.814,
+    "usable_rate": 0.796,
+    "sites_bank_gain_ge_5pts": 2
+  }
+}

@@ -107,7 +107,23 @@ def hancock() -> str:
     return "\n".join(rows)
 
 
-TABLES = {"headline": headline, "per_site": per_site, "baselines": baselines, "ablations": ablations, "hancock": hancock}
+def registration() -> str:
+    a = pd.read_csv(RES / "registration_ablation.csv").set_index("cam_id")
+    sm = json.loads((RES / "registration_ablation_summary.json").read_text(encoding="utf-8"))
+    pc = lambda v: "—" if pd.isna(v) else f"{100 * v:.1f} %"  # noqa: E731
+    rows = ["| site | 30 d: ORB | + ALIKED+LightGlue | + chaining | 12 mo: main reference | + reference bank | usable for calibration |",
+            "|---|---|---|---|---|---|---|"]
+    for cam, r in a.iterrows():
+        rows.append(f"| {short(cam)} | {pc(r.orb_rate_30d)} | {pc(r.orb_aliked_rate_30d)} | {pc(r.cascade_rate_30d)} | "
+                    f"{pc(r.get('hist_main_only_rate'))} | {pc(r.get('hist_with_bank_rate'))} | {pc(r.get('hist_usable_rate'))} |")
+    w, h = sm["window_30d"], sm.get("history_12m", {})
+    rows.append(f"| **fleet** ({w['day_frames']} / {h.get('day_frames', '—')} daylight frames) | **{pc(w['orb_rate'])}** | "
+                f"**{pc(w['orb_aliked_rate'])}** | **{pc(w['cascade_rate'])}** | **{pc(h.get('main_only_rate'))}** | "
+                f"**{pc(h.get('with_bank_rate'))}** | **{pc(h.get('usable_rate'))}** |")
+    return "\n".join(rows)
+
+
+TABLES = {"headline": headline, "per_site": per_site, "baselines": baselines, "ablations": ablations, "hancock": hancock, "registration": registration}
 
 
 def main() -> None:
