@@ -37,7 +37,7 @@ AK_Matanuska_River_at_Palmer,15284000,AK,2025-12-07 12:30:00+00:00,2026-01-20 03
 AK_Matanuska_River_at_Palmer,15284000,AK,2026-02-21 11:15:00+00:00,2026-04-05 17:45:00+00:00,gap,,6.47,6.44,1038.5,after_return_only,False,353.0,294.0,listing,False
 AK_Mendenhall_R_at_Brotherhood_Br_at_Auke_Bay,15052900,AK,2025-11-18 22:10:00+00:00,2025-11-20 19:20:00+00:00,gap,,13.38,12.37,45.167,after_return_only,False,0.0,0.0,listing,False
 AK_Mendenhall_R_at_Brotherhood_Br_at_Auke_Bay,15052900,AK,2025-11-20 21:10:00+00:00,2025-11-22 19:10:00+00:00,gap,,16.74,7.75,46.0,after_return_only,False,0.0,0.0,listing,False
-AK_Mendenhall_R_at_Brotherhood_Br_at_Auke_Bay,15052900,AK,2025-11-23 03:10:00+00:00,2025-11-23 20:30:00+00:00,gap,,7.32,9.72,17.333,after_return_only,False,,,not_checked (call budget),False
+AK_Mendenhall_R_at_Brotherhood_Br_at_Auke_Bay,15052900,AK,2025-11-23 03:10:00+00:00,2025-11-23 20:30:00+00:00,gap,,7.32,9.72,17.333,after_return_only,False,0.0,0.0,listing,False
 AK_Mendenhall_R_at_Brotherhood_Br_at_Auke_Bay,15052900,AK,2025-11-23 23:10:00+00:00,2025-11-24 21:10:00+00:00,gap,,15.06,9.51,22.0,after_return_only,False,0.0,0.0,listing,False
 AK_Mendenhall_R_at_Brotherhood_Br_at_Auke_Bay,15052900,AK,2025-11-24 22:10:00+00:00,2025-11-25 20:00:00+00:00,gap,,11.97,6.82,21.833,after_return_only,False,0.0,0.0,listing,False
 AK_Mendenhall_R_at_Brotherhood_Br_at_Auke_Bay,15052900,AK,2025-11-26 01:10:00+00:00,2025-11-26 20:55:00+00:00,gap,,13.25,6.71,19.75,after_return_only,False,0.0,0.0,listing,False
@@ -138,7 +138,7 @@ AK_Yukon_River_at_Eagle,15356000,AK,2026-02-05 05:00:00+00:00,2026-02-05 18:00:0
 AK_Yukon_River_at_Eagle,15356000,AK,2026-02-06 02:00:00+00:00,2026-02-11 18:15:00+00:00,gap,,9.38,9.31,136.25,after_return_only,False,0.0,0.0,listing,False
 AK_Yukon_River_at_Eagle,15356000,AK,2026-02-12 14:30:00+00:00,2026-02-23 23:45:00+00:00,gap,,9.2,8.76,273.25,after_return_only,False,0.0,0.0,listing,False
 AK_Yukon_River_at_Eagle,15356000,AK,2026-02-26 05:30:00+00:00,2026-03-04 21:45:00+00:00,gap,,8.6,8.34,160.25,after_return_only,False,0.0,0.0,listing,False
-AK_Yukon_River_at_Eagle,15356000,AK,2026-03-05 03:15:00+00:00,2026-03-05 20:45:00+00:00,gap,,8.32,8.28,17.5,after_return_only,False,,,not_checked (call budget),False
+AK_Yukon_River_at_Eagle,15356000,AK,2026-03-05 03:15:00+00:00,2026-03-05 20:45:00+00:00,gap,,8.32,8.28,17.5,after_return_only,False,0.0,0.0,listing,False
 AK_Yukon_River_at_Eagle,15356000,AK,2026-03-06 03:15:00+00:00,2026-03-06 21:30:00+00:00,gap,,8.27,8.24,18.25,after_return_only,False,0.0,0.0,listing,False
 AK_Yukon_River_at_Eagle,15356000,AK,2026-03-09 09:45:00+00:00,2026-03-09 20:45:00+00:00,gap,,8.19,8.17,11.0,after_return_only,False,,,not_checked (call budget),False
 AK_Yukon_River_at_Eagle,15356000,AK,2026-03-10 10:00:00+00:00,2026-03-10 21:00:00+00:00,gap,,8.16,8.13,11.0,after_return_only,False,,,not_checked (call budget),False
@@ -152,7 +152,7 @@ AK_Yukon_River_at_Eagle,15356000,AK,2026-03-26 07:15:00+00:00,2026-03-26 19:45:0
 AK_Yukon_River_at_Eagle,15356000,AK,2026-03-27 10:45:00+00:00,2026-03-27 18:45:00+00:00,gap,,7.99,7.99,8.0,after_return_only,False,,,not_checked (call budget),False
 AK_Yukon_River_at_Eagle,15356000,AK,2026-04-03 11:30:00+00:00,2026-04-03 18:15:00+00:00,gap,,7.96,7.97,6.75,after_return_only,False,,,not_checked (call budget),False
 AK_Yukon_River_at_Eagle,15356000,AK,2026-04-04 06:30:00+00:00,2026-04-04 21:15:00+00:00,gap,,7.98,7.99,14.75,after_return_only,False,,,not_checked (call budget),False
-AK_Yukon_River_at_Eagle,15356000,AK,2026-04-05 03:00:00+00:00,2026-04-05 20:30:00+00:00,gap,,7.99,8.02,17.5,after_return_only,False,,,not_checked (call budget),False
+AK_Yukon_River_at_Eagle,15356000,AK,2026-04-05 03:00:00+00:00,2026-04-05 20:30:00+00:00,gap,,7.99,8.02,17.5,after_return_only,False,0.0,0.0,listing,False
 AK_Yukon_River_at_Galena,15564860,AK,2026-05-16 20:15:00+00:00,2026-05-18 03:45:00+00:00,gap,,86.17,84.93,31.5,after_return_only,False,0.0,0.0,listing,False
 AK_Yukon_River_at_Galena,15564860,AK,2026-05-18 11:00:00+00:00,2026-05-18 17:00:00+00:00,gap,,84.61,84.25,6.0,after_return_only,False,,,not_checked (call budget),False
 AK_Yukon_River_at_Galena,15564860,AK,2026-05-18 19:00:00+00:00,2026-05-19 02:15:00+00:00,gap,,84.24,83.79,7.25,after_return_only,False,,,not_checked (call budget),False
@@ -217,7 +217,7 @@ AZ_Nogales_Wash_at_Nogales,09481000,AZ,2026-05-30 22:00:00+00:00,2026-06-01 08:0
 AZ_Nogales_Wash_at_Nogales,09481000,AZ,2026-06-01 16:00:00+00:00,2026-06-02 10:15:00+00:00,gap,,2.05,2.1,18.25,after_return_only,False,0.0,0.0,listing,False
 AZ_Nogales_Wash_at_Nogales,09481000,AZ,2026-06-02 20:54:00+00:00,2026-06-03 03:30:00+00:00,gap,,2.07,2.07,6.6,after_return_only,False,,,not_checked (call budget),False
 AZ_Nogales_Wash_at_Nogales,09481000,AZ,2026-06-03 03:45:00+00:00,2026-06-03 14:15:00+00:00,gap,,2.08,2.03,10.5,after_return_only,False,,,not_checked (call budget),False
-CA_Alamo_Pintado_C_nr_Solvang,11128250,CA,2026-06-08 17:15:00+00:00,2026-06-09 10:30:00+00:00,gap,,3.22,3.22,17.25,after_return_only,False,,,not_checked (call budget),False
+CA_Alamo_Pintado_C_nr_Solvang,11128250,CA,2026-06-08 17:15:00+00:00,2026-06-09 10:30:00+00:00,gap,,3.22,3.22,17.25,after_return_only,False,0.0,0.0,listing,False
 CA_Alamo_Pintado_C_nr_Solvang,11128250,CA,2026-06-10 05:15:00+00:00,2026-06-10 12:30:00+00:00,gap,,3.22,3.22,7.25,after_return_only,False,,,not_checked (call budget),False
 CA_Alamo_Pintado_C_nr_Solvang,11128250,CA,2026-06-15 02:15:00+00:00,2026-06-15 08:30:00+00:00,gap,,3.22,3.22,6.25,after_return_only,False,,,not_checked (call budget),False
 CA_Alamo_Pintado_C_nr_Solvang,11128250,CA,2026-07-27 20:15:00+00:00,2026-07-28 09:30:00+00:00,gap,,3.22,3.22,13.25,after_return_only,False,,,not_checked (call budget),False
@@ -272,7 +272,7 @@ CA_Eel_River_at_Fernbridge,11479560,CA,2026-06-03 13:15:00+00:00,2026-06-04 08:4
 CA_Eel_River_at_Fernbridge,11479560,CA,2026-06-04 13:30:00+00:00,2026-06-10 02:30:00+00:00,gap,,-0.5,-0.3,133.0,after_return_only,False,532.0,337.0,listing,False
 CA_Eel_River_at_Fernbridge,11479560,CA,2026-06-10 07:45:00+00:00,2026-06-11 02:45:00+00:00,gap,,-0.5,-0.2,19.0,after_return_only,False,76.0,54.0,listing,False
 CA_Eel_River_at_Fernbridge,11479560,CA,2026-06-11 09:00:00+00:00,2026-06-12 02:45:00+00:00,gap,,-0.51,-0.3,17.75,after_return_only,False,71.0,54.0,listing,False
-CA_Eel_River_at_Fernbridge,11479560,CA,2026-06-12 10:00:00+00:00,2026-06-13 03:15:00+00:00,gap,,-0.51,-0.09,17.25,after_return_only,False,,,not_checked (call budget),False
+CA_Eel_River_at_Fernbridge,11479560,CA,2026-06-12 10:00:00+00:00,2026-06-13 03:15:00+00:00,gap,,-0.51,-0.09,17.25,after_return_only,False,69.0,56.0,listing,False
 CA_Eel_River_at_Fernbridge,11479560,CA,2026-06-13 12:00:00+00:00,2026-06-14 03:30:00+00:00,gap,,-0.51,-0.22,15.5,after_return_only,False,,,not_checked (call budget),False
 CA_Eel_River_at_Fernbridge,11479560,CA,2026-06-14 13:15:00+00:00,2026-06-15 04:15:00+00:00,gap,,-0.5,-0.27,15.0,after_return_only,False,,,not_checked (call budget),False
 CA_Eel_River_at_Fernbridge,11479560,CA,2026-06-15 13:45:00+00:00,2026-06-16 05:15:00+00:00,gap,,-0.5,-0.26,15.5,after_return_only,False,,,not_checked (call budget),False
@@ -450,7 +450,7 @@ CA_Sisquoc_R_nr_Garey,11140000,CA,2026-04-09 23:30:00+00:00,2026-04-10 07:00:00+
 CA_Sisquoc_R_nr_Garey,11140000,CA,2026-04-17 23:15:00+00:00,2026-04-18 08:45:00+00:00,gap,,6.65,6.71,9.5,after_return_only,False,,,not_checked (call budget),False
 CA_Sisquoc_R_nr_Garey,11140000,CA,2026-04-18 23:00:00+00:00,2026-04-19 10:30:00+00:00,gap,,6.65,6.71,11.5,after_return_only,False,,,not_checked (call budget),False
 CA_Sisquoc_R_nr_Garey,11140000,CA,2026-04-19 22:15:00+00:00,2026-04-20 12:30:00+00:00,gap,,6.66,6.7,14.25,after_return_only,False,,,not_checked (call budget),False
-CA_Sisquoc_R_nr_Garey,11140000,CA,2026-04-20 21:45:00+00:00,2026-04-21 15:15:00+00:00,gap,,6.66,6.7,17.5,after_return_only,False,,,not_checked (call budget),False
+CA_Sisquoc_R_nr_Garey,11140000,CA,2026-04-20 21:45:00+00:00,2026-04-21 15:15:00+00:00,gap,,6.66,6.7,17.5,after_return_only,False,0.0,0.0,listing,False
 CA_Sisquoc_R_nr_Garey,11140000,CA,2026-04-24 00:15:00+00:00,2026-04-24 09:00:00+00:00,gap,,6.65,6.7,8.75,after_return_only,False,,,not_checked (call budget),False
 CA_Sisquoc_R_nr_Garey,11140000,CA,2026-04-24 22:45:00+00:00,2026-04-25 14:15:00+00:00,gap,,6.66,6.65,15.5,after_return_only,False,,,not_checked (call budget),False
 CA_Sisquoc_R_nr_Garey,11140000,CA,2026-04-25 20:30:00+00:00,2026-04-26 06:15:00+00:00,gap,,6.65,6.71,9.75,after_return_only,False,,,not_checked (call budget),False
@@ -557,7 +557,7 @@ FL_Loxahatchee_River_Dws_Lainhart_Dam_nr_Jupiter,02277602,FL,2025-12-12 20:15:00
 FL_Loxahatchee_River_Dws_Lainhart_Dam_nr_Jupiter,02277602,FL,2025-12-19 07:30:00+00:00,2026-02-19 18:00:00+00:00,gap,,9.07,8.73,1498.5,after_return_only,False,0.0,0.0,listing,False
 FL_Loxahatchee_River_Dws_Lainhart_Dam_nr_Jupiter,02277602,FL,2026-07-07 20:45:00+00:00,2026-07-13 16:00:00+00:00,gap,,8.99,8.78,139.25,after_return_only,False,102.0,56.0,listing,False
 FL_Loxahatchee_River_Dws_Lainhart_Dam_nr_Jupiter,02277602,FL,2026-07-13 16:30:00+00:00,2026-07-14 14:15:00+00:00,gap,,8.78,8.74,21.75,after_return_only,False,22.0,11.0,listing,False
-FL_Loxahatchee_River_Dws_Lainhart_Dam_nr_Jupiter,02277602,FL,2026-07-20 19:45:00+00:00,2026-07-21 13:15:00+00:00,gap,,8.65,8.7,17.5,after_return_only,False,,,not_checked (call budget),False
+FL_Loxahatchee_River_Dws_Lainhart_Dam_nr_Jupiter,02277602,FL,2026-07-20 19:45:00+00:00,2026-07-21 13:15:00+00:00,gap,,8.65,8.7,17.5,after_return_only,False,0.0,0.0,listing,False
 FL_Loxahatchee_River_Dws_Lainhart_Dam_nr_Jupiter,02277602,FL,2026-08-06 00:15:00+00:00,2026-08-10 13:45:00+00:00,gap,,8.55,8.64,109.5,after_return_only,False,0.0,0.0,listing,False
 FL_Loxahatchee_River_Dws_Lainhart_Dam_nr_Jupiter,02277602,FL,2026-10-17 16:45:00+00:00,2026-10-19 08:00:00+00:00,gap,,11.3,11.54,39.25,after_return_only,False,19.0,17.0,listing,False
 FL_Trout_Creek_at_Wesley_Chapel,02303348,FL,2025-12-07 01:45:00+00:00,2025-12-07 21:30:00+00:00,gap,,43.08,43.05,19.75,after_return_only,False,37.0,36.0,listing,False
@@ -601,7 +601,7 @@ ID_Big_Lost_River_below_Inlet_Diversion_near_Arco,13132520,ID,2026-09-01 07:00:0
 ID_Big_Lost_River_bl_Mackay_Res_nr_Mackay,13127000,ID,2025-11-09 00:45:00+00:00,2025-11-09 17:00:00+00:00,gap,,1.44,1.44,16.25,after_return_only,False,,,not_checked (call budget),False
 ID_Big_Lost_River_bl_Mackay_Res_nr_Mackay,13127000,ID,2025-11-09 21:45:00+00:00,2025-11-10 18:00:00+00:00,gap,,1.44,1.44,20.25,after_return_only,False,0.0,0.0,listing,False
 ID_Big_Lost_River_near_Arco,13132500,ID,2025-12-23 13:15:00+00:00,2025-12-23 20:15:00+00:00,gap,,2.03,2.03,7.0,after_return_only,False,,,not_checked (call budget),False
-ID_Big_Lost_River_near_Arco,13132500,ID,2025-12-24 20:15:00+00:00,2025-12-25 13:30:00+00:00,gap,,2.02,2.03,17.25,after_return_only,False,,,not_checked (call budget),False
+ID_Big_Lost_River_near_Arco,13132500,ID,2025-12-24 20:15:00+00:00,2025-12-25 13:30:00+00:00,gap,,2.02,2.03,17.25,after_return_only,False,1.0,1.0,listing,False
 ID_Big_Timber_Creek_above_Mouth_at_Leadore,13304050,ID,2026-01-26 17:00:00+00:00,2026-01-27 13:45:00+00:00,gap,,8.7,8.9,20.75,after_return_only,False,2.0,2.0,listing,False
 ID_Big_Timber_Creek_above_Mouth_at_Leadore,13304050,ID,2026-01-27 16:15:00+00:00,2026-02-10 04:30:00+00:00,gap,,8.7,9.85,324.25,after_return_only,False,27.0,27.0,listing,False
 ID_Big_Timber_Creek_above_Mouth_at_Leadore,13304050,ID,2026-02-10 23:30:00+00:00,2026-02-12 12:30:00+00:00,gap,,9.86,9.8,37.0,after_return_only,False,2.0,2.0,listing,False
@@ -629,14 +629,14 @@ IL_ILLINOIS_RIVER_AT_SENECA,05543010,IL,2026-06-30 11:45:00+00:00,2026-06-30 21:
 IL_ILLINOIS_RIVER_AT_SENECA,05543010,IL,2026-07-01 07:00:00+00:00,2026-07-01 15:15:00+00:00,gap,,21.11,21.15,8.25,after_return_only,False,,,not_checked (call budget),False
 IL_ILLINOIS_RIVER_AT_SENECA,05543010,IL,2026-07-08 14:45:00+00:00,2026-07-08 21:30:00+00:00,gap,,21.39,21.01,6.75,after_return_only,False,,,not_checked (call budget),False
 IL_ILLINOIS_RIVER_AT_SENECA,05543010,IL,2026-07-15 19:45:00+00:00,2026-07-16 12:00:00+00:00,gap,,20.87,20.51,16.25,after_return_only,False,,,not_checked (call budget),False
-IL_Illinois_River_at_Florence,05586300,IL,2026-01-24 02:00:00+00:00,2026-01-28 13:15:00+00:00,gap,,15.44,15.92,107.25,after_return_only,False,89.0,72.0,cached_listing,False
-IL_Illinois_River_at_Florence,05586300,IL,2026-01-29 14:15:00+00:00,2026-01-30 10:15:00+00:00,gap,,16.0,16.06,20.0,after_return_only,False,19.0,17.0,cached_listing,False
-IL_Illinois_River_at_Florence,05586300,IL,2026-02-01 07:30:00+00:00,2026-02-01 14:15:00+00:00,gap,,16.24,16.34,6.75,after_return_only,False,3.0,1.0,cached_listing,False
-IL_Illinois_River_at_Florence,05586300,IL,2026-02-02 02:00:00+00:00,2026-02-03 23:00:00+00:00,gap,,16.58,16.59,45.0,after_return_only,False,42.0,38.0,cached_listing,False
-IL_Illinois_River_at_Florence,05586300,IL,2026-02-05 21:45:00+00:00,2026-02-06 11:15:00+00:00,gap,,16.58,16.58,13.5,after_return_only,False,4.0,3.0,cached_listing,False
-IL_Illinois_River_at_Florence,05586300,IL,2026-02-07 11:15:00+00:00,2026-02-10 18:00:00+00:00,gap,,16.4,16.3,78.75,after_return_only,False,77.0,69.0,cached_listing,False
-IL_Illinois_River_at_Florence,05586300,IL,2026-02-11 08:00:00+00:00,2026-02-12 07:30:00+00:00,gap,,16.14,16.12,23.5,after_return_only,False,23.0,20.0,cached_listing,False
-IL_Illinois_River_at_Florence,05586300,IL,2026-02-13 05:00:00+00:00,2026-02-14 02:15:00+00:00,gap,,16.05,15.6,21.25,after_return_only,False,23.0,20.0,cached_listing,False
+IL_Illinois_River_at_Florence,05586300,IL,2026-01-24 02:00:00+00:00,2026-01-28 13:15:00+00:00,gap,,15.44,15.92,107.25,after_return_only,True,89.0,72.0,cached_listing,False
+IL_Illinois_River_at_Florence,05586300,IL,2026-01-29 14:15:00+00:00,2026-01-30 10:15:00+00:00,gap,,16.0,16.06,20.0,after_return_only,True,19.0,17.0,cached_listing,False
+IL_Illinois_River_at_Florence,05586300,IL,2026-02-01 07:30:00+00:00,2026-02-01 14:15:00+00:00,gap,,16.24,16.34,6.75,after_return_only,True,3.0,1.0,cached_listing,False
+IL_Illinois_River_at_Florence,05586300,IL,2026-02-02 02:00:00+00:00,2026-02-03 23:00:00+00:00,gap,,16.58,16.59,45.0,after_return_only,True,42.0,38.0,cached_listing,False
+IL_Illinois_River_at_Florence,05586300,IL,2026-02-05 21:45:00+00:00,2026-02-06 11:15:00+00:00,gap,,16.58,16.58,13.5,after_return_only,True,4.0,3.0,cached_listing,False
+IL_Illinois_River_at_Florence,05586300,IL,2026-02-07 11:15:00+00:00,2026-02-10 18:00:00+00:00,gap,,16.4,16.3,78.75,after_return_only,True,77.0,69.0,cached_listing,False
+IL_Illinois_River_at_Florence,05586300,IL,2026-02-11 08:00:00+00:00,2026-02-12 07:30:00+00:00,gap,,16.14,16.12,23.5,after_return_only,True,23.0,20.0,cached_listing,False
+IL_Illinois_River_at_Florence,05586300,IL,2026-02-13 05:00:00+00:00,2026-02-14 02:15:00+00:00,gap,,16.05,15.6,21.25,after_return_only,True,23.0,20.0,cached_listing,False
 IL_Illinois_River_at_Henry,05558300,IL,2025-12-25 20:45:00+00:00,2025-12-27 20:00:00+00:00,gap,,14.65,14.39,47.25,after_return_only,True,0.0,0.0,cached_listing,False
 IL_Illinois_River_at_Henry,05558300,IL,2026-07-15 19:45:00+00:00,2026-07-16 13:00:00+00:00,gap,,18.5,18.11,17.25,after_return_only,True,6.0,5.0,cached_listing,False
 IL_Mackinaw_River_near_Congerville,05567500,IL,2025-12-14 23:15:00+00:00,2025-12-15 19:45:00+00:00,gap,,0.86,0.83,20.5,after_return_only,False,0.0,0.0,listing,False
@@ -698,7 +698,7 @@ IN_White_River_at_Michigan_Street_at_Indianapolis,03352953,IN,2026-01-08 20:30:0
 IN_White_River_at_Michigan_Street_at_Indianapolis,03352953,IN,2026-01-20 20:15:00+00:00,2026-01-21 16:15:00+00:00,gap,,6.83,6.81,20.0,after_return_only,False,9.0,5.0,listing,False
 IN_White_River_at_Michigan_Street_at_Indianapolis,03352953,IN,2026-01-24 13:00:00+00:00,2026-02-14 18:00:00+00:00,gap|qualified,Eqp,6.91,7.54,509.0,after_return_only,False,269.0,191.0,listing,False
 IN_White_River_at_Michigan_Street_at_Indianapolis,03352953,IN,2026-03-06 01:30:00+00:00,2026-03-08 14:00:00+00:00,gap|qualified,Eqp,10.02,9.81,60.5,after_return_only,False,9.0,9.0,listing,False
-KA_Delaware_River_near_Muscotah,06890100,KS,2025-12-29 00:30:00+00:00,2025-12-29 17:45:00+00:00,gap,,2.66,2.45,17.25,after_return_only,False,,,not_checked (call budget),False
+KA_Delaware_River_near_Muscotah,06890100,KS,2025-12-29 00:30:00+00:00,2025-12-29 17:45:00+00:00,gap,,2.66,2.45,17.25,after_return_only,False,0.0,0.0,listing,False
 KA_Delaware_River_near_Muscotah,06890100,KS,2026-06-05 06:30:00+00:00,2026-06-05 20:30:00+00:00,estimated,e,19.8,29.72,14.0,usgs_estimated_backfill,False,,,not_checked (call budget),False
 KS_Big_Blue_R_nr_Manhattan,06887000,KS,2025-11-29 20:00:00+00:00,2025-11-30 14:15:00+00:00,gap,,1.03,1.01,18.25,after_return_only,True,16.0,11.0,cached_listing,False
 KS_Big_Blue_R_nr_Manhattan,06887000,KS,2025-11-30 22:00:00+00:00,2025-12-02 18:30:00+00:00,gap,,0.99,0.99,44.5,after_return_only,True,8.0,3.0,cached_listing,False
@@ -723,7 +723,7 @@ KS_Delaware_River_at_Perry,06890900,KS,2025-12-28 03:30:00+00:00,2025-12-29 14:3
 KS_Delaware_River_at_Perry,06890900,KS,2026-01-24 08:30:00+00:00,2026-01-25 14:45:00+00:00,gap,,27.9,27.77,30.25,after_return_only,False,0.0,0.0,listing,False
 KS_Delaware_River_at_Perry,06890900,KS,2026-05-28 19:15:00+00:00,2026-05-29 15:00:00+00:00,gap,,30.21,30.43,19.75,after_return_only,False,0.0,0.0,listing,False
 KS_Delaware_River_at_Perry,06890900,KS,2026-10-02 03:15:00+00:00,2026-10-02 14:00:00+00:00,gap|qualified,***,36.06,40.93,10.75,after_return_only,False,,,not_checked (call budget),False
-KS_Kansas_River_at_De_Soto,06892350,KS,2025-11-09 11:15:00+00:00,2025-11-09 17:15:00+00:00,gap,,4.68,4.67,6.0,after_return_only,False,5.0,4.0,cached_listing,False
+KS_Kansas_River_at_De_Soto,06892350,KS,2025-11-09 11:15:00+00:00,2025-11-09 17:15:00+00:00,gap,,4.68,4.67,6.0,after_return_only,True,5.0,4.0,cached_listing,False
 KS_Kansas_River_at_Wamego,06887500,KS,2026-01-23 14:15:00+00:00,2026-01-24 09:30:00+00:00,gap,,3.51,3.41,19.25,after_return_only,True,20.0,10.0,cached_listing,False
 KS_Kansas_River_at_Wamego,06887500,KS,2026-01-31 00:45:00+00:00,2026-02-01 19:00:00+00:00,gap,,4.55,4.17,42.25,after_return_only,True,44.0,17.0,cached_listing,False
 KS_Kansas_River_at_Wamego,06887500,KS,2026-03-12 17:30:00+00:00,2026-03-12 23:45:00+00:00,gap,,3.36,3.35,6.25,after_return_only,True,6.0,6.0,cached_listing,False
@@ -796,7 +796,7 @@ KY_ELKHORN_CREEK_AT_FREEDOM_LANE_AT_JENKINS,371016082381001,KY,2026-07-09 00:45:
 KY_ELKHORN_CREEK_AT_FREEDOM_LANE_AT_JENKINS,371016082381001,KY,2026-08-12 00:25:00+00:00,2026-08-13 10:00:00+00:00,gap,,2.72,2.9,33.583,after_return_only,False,33.0,13.0,listing,False
 KY_ELKHORN_CREEK_AT_FREEDOM_LANE_AT_JENKINS,371016082381001,KY,2026-08-17 04:55:00+00:00,2026-08-17 14:15:00+00:00,gap,,2.65,2.65,9.333,after_return_only,False,,,not_checked (call budget),False
 KY_ELKHORN_CREEK_AT_FREEDOM_LANE_AT_JENKINS,371016082381001,KY,2026-08-19 00:10:00+00:00,2026-09-23 22:15:00+00:00,gap,,2.65,2.67,862.083,after_return_only,False,822.0,408.0,listing,False
-KY_OHIO_R_US_OF_MCALPINE_DAM_AT_RRB_AT_LOUISVILLE,03293551,KY,2026-02-03 15:50:00+00:00,2026-02-04 09:00:00+00:00,gap,,12.99,12.5,17.167,after_return_only,False,,,not_checked (call budget),False
+KY_OHIO_R_US_OF_MCALPINE_DAM_AT_RRB_AT_LOUISVILLE,03293551,KY,2026-02-03 15:50:00+00:00,2026-02-04 09:00:00+00:00,gap,,12.99,12.5,17.167,after_return_only,False,68.0,28.0,listing,False
 KY_OHIO_R_US_OF_MCALPINE_DAM_AT_RRB_AT_LOUISVILLE,03293551,KY,2026-02-06 16:25:00+00:00,2026-02-07 08:15:00+00:00,gap,,13.17,13.12,15.833,after_return_only,False,,,not_checked (call budget),False
 KY_OHIO_R_US_OF_MCALPINE_DAM_AT_RRB_AT_LOUISVILLE,03293551,KY,2026-02-09 15:35:00+00:00,2026-02-10 15:00:00+00:00,gap,,12.86,12.8,23.417,after_return_only,False,93.0,37.0,listing,False
 KY_OHIO_R_US_OF_MCALPINE_DAM_AT_RRB_AT_LOUISVILLE,03293551,KY,2026-03-01 23:00:00+00:00,2026-03-02 11:05:00+00:00,gap,,12.73,12.65,12.083,after_return_only,False,,,not_checked (call budget),False
@@ -825,7 +825,7 @@ MD_Deer_Creek_at_Eden_Mill_Dam_near_Pylesville,01579905,MD,2026-02-08 01:00:00+0
 MD_Deer_Creek_at_Eden_Mill_Dam_near_Pylesville,01579905,MD,2026-02-13 17:15:00+00:00,2026-02-14 01:00:00+00:00,gap,,348.93,348.93,7.75,after_return_only,False,,,not_checked (call budget),False
 MD_Deer_Creek_at_Eden_Mill_Dam_near_Pylesville,01579905,MD,2026-07-15 20:15:00+00:00,2026-07-16 11:00:00+00:00,gap,,348.82,348.81,14.75,after_return_only,False,,,not_checked (call budget),False
 MD_East_Branch_Herbert_Run_at_Arbutus,01589100,MD,2026-01-25 17:40:00+00:00,2026-02-11 18:30:00+00:00,gap,,0.83,0.97,408.833,after_return_only,False,0.0,0.0,listing,False
-MD_East_Branch_Herbert_Run_at_Arbutus,01589100,MD,2026-07-24 23:50:00+00:00,2026-07-25 16:55:00+00:00,gap,,0.85,0.86,17.083,after_return_only,False,,,not_checked (call budget),False
+MD_East_Branch_Herbert_Run_at_Arbutus,01589100,MD,2026-07-24 23:50:00+00:00,2026-07-25 16:55:00+00:00,gap,,0.85,0.86,17.083,after_return_only,False,42.0,30.0,listing,False
 MD_Forster_Branch_near_Joppatowne,01585075,MD,2025-12-09 04:50:00+00:00,2025-12-11 11:05:00+00:00,gap,,1.83,1.83,54.25,after_return_only,False,22.0,18.0,listing,False
 MD_Forster_Branch_near_Joppatowne,01585075,MD,2025-12-12 06:00:00+00:00,2025-12-18 15:55:00+00:00,gap,,1.82,1.87,153.917,after_return_only,False,69.0,56.0,listing,False
 MD_Forster_Branch_near_Joppatowne,01585075,MD,2025-12-22 02:00:00+00:00,2025-12-23 01:10:00+00:00,gap,,1.9,1.87,23.167,after_return_only,False,11.0,9.0,listing,False
@@ -850,8 +850,8 @@ MD_Mattawoman_Creek_near_Pomonkey,01658000,MD,2026-07-15 19:50:00+00:00,2026-07-
 MD_Mattawoman_Creek_near_Pomonkey,01658000,MD,2026-07-18 14:20:00+00:00,2026-07-22 10:20:00+00:00,gap,,1.5,1.65,92.0,after_return_only,False,54.0,50.0,listing,False
 MD_Mattawoman_Creek_near_Pomonkey,01658000,MD,2026-09-03 06:10:00+00:00,2026-09-04 04:40:00+00:00,gap,,1.49,1.49,22.5,after_return_only,False,12.0,11.0,listing,False
 MD_Mattawoman_Creek_near_Pomonkey,01658000,MD,2026-09-20 05:20:00+00:00,2026-09-22 20:35:00+00:00,gap,,1.5,1.5,63.25,after_return_only,False,31.0,26.0,listing,False
-MD_Moores_Run_at_Radecke_Ave_at_Baltimore,01585230,MD,2026-07-15 20:17:00+00:00,2026-07-16 13:18:00+00:00,gap,,1.32,1.31,17.017,after_return_only,False,,,not_checked (call budget),False
-MD_Northeast_Branch_Anacostia_River_at_Riverdale,01649500,MD,2026-01-25 10:20:00+00:00,2026-01-26 03:20:00+00:00,gap,,0.32,0.34,17.0,after_return_only,False,,,not_checked (call budget),False
+MD_Moores_Run_at_Radecke_Ave_at_Baltimore,01585230,MD,2026-07-15 20:17:00+00:00,2026-07-16 13:18:00+00:00,gap,,1.32,1.31,17.017,after_return_only,False,97.0,83.0,listing,False
+MD_Northeast_Branch_Anacostia_River_at_Riverdale,01649500,MD,2026-01-25 10:20:00+00:00,2026-01-26 03:20:00+00:00,gap,,0.32,0.34,17.0,after_return_only,False,17.0,9.0,listing,False
 MD_Northeast_Branch_Anacostia_River_at_Riverdale,01649500,MD,2026-06-14 01:10:00+00:00,2026-06-14 11:25:00+00:00,gap,,0.47,0.39,10.25,after_return_only,False,,,not_checked (call budget),False
 MD_Northeast_Branch_Anacostia_River_at_Riverdale,01649500,MD,2026-06-26 02:50:00+00:00,2026-06-26 16:50:00+00:00,gap,,0.44,0.36,14.0,after_return_only,False,,,not_checked (call budget),False
 MD_Northwest_Branch_Anacostia_River_at_Brentwood,01651003,MD,2025-10-31 17:50:00+00:00,2025-11-04 14:10:00+00:00,gap,,1.45,1.04,92.333,after_return_only,False,0.0,0.0,listing,False
@@ -862,7 +862,7 @@ MD_Plumtree_Run_near_Bel_Air,01581752,MD,2025-12-16 04:35:00+00:00,2025-12-16 17
 MD_Plumtree_Run_near_Bel_Air,01581752,MD,2026-01-03 04:45:00+00:00,2026-01-03 15:25:00+00:00,gap,,1.07,1.08,10.667,after_return_only,False,,,not_checked (call budget),False
 MD_Plumtree_Run_near_Bel_Air,01581752,MD,2026-01-25 11:50:00+00:00,2026-02-15 22:40:00+00:00,gap,,0.97,1.32,514.833,after_return_only,False,0.0,0.0,listing,False
 MD_Plumtree_Run_near_Bel_Air,01581752,MD,2026-07-01 21:20:00+00:00,2026-07-06 17:45:00+00:00,gap,,0.97,1.36,116.417,after_return_only,False,0.0,0.0,listing,False
-MD_SWAN_CREEK_AT_SWAN_CREEK,01580700,MD,2026-07-15 19:15:00+00:00,2026-07-16 12:30:00+00:00,gap,,2.82,2.8,17.25,after_return_only,False,,,not_checked (call budget),False
+MD_SWAN_CREEK_AT_SWAN_CREEK,01580700,MD,2026-07-15 19:15:00+00:00,2026-07-16 12:30:00+00:00,gap,,2.82,2.8,17.25,after_return_only,False,17.0,17.0,listing,False
 MD_Sams_Creek_at_Mckinstrys_Mill,01640152,MD,2025-12-16 04:40:00+00:00,2025-12-17 00:05:00+00:00,gap,,1.47,1.46,19.417,after_return_only,False,9.0,8.0,listing,False
 MD_Sams_Creek_at_Mckinstrys_Mill,01640152,MD,2026-01-21 17:55:00+00:00,2026-01-22 01:30:00+00:00,gap,,1.46,1.45,7.583,after_return_only,False,,,not_checked (call budget),False
 MD_Sams_Creek_at_Mckinstrys_Mill,01640152,MD,2026-01-24 11:30:00+00:00,2026-01-25 04:05:00+00:00,gap,,1.47,1.43,16.583,after_return_only,False,,,not_checked (call budget),False
@@ -880,7 +880,7 @@ ME_St_John_River_at_Dickey,01010500,ME,2026-01-03 04:45:00+00:00,2026-01-04 01:4
 ME_St_John_River_at_Dickey,01010500,ME,2026-01-04 15:15:00+00:00,2026-01-05 02:15:00+00:00,gap,,6.29,6.24,11.0,after_return_only,False,,,not_checked (call budget),False
 ME_St_John_River_at_Dickey,01010500,ME,2026-01-05 15:30:00+00:00,2026-01-06 02:45:00+00:00,gap,,6.18,6.13,11.25,after_return_only,False,,,not_checked (call budget),False
 ME_St_John_River_at_Dickey,01010500,ME,2026-01-06 15:00:00+00:00,2026-01-07 03:15:00+00:00,gap,,6.08,6.03,12.25,after_return_only,False,,,not_checked (call budget),False
-ME_St_John_River_at_Dickey,01010500,ME,2026-01-07 15:00:00+00:00,2026-01-08 08:30:00+00:00,gap,,5.98,5.98,17.5,after_return_only,False,,,not_checked (call budget),False
+ME_St_John_River_at_Dickey,01010500,ME,2026-01-07 15:00:00+00:00,2026-01-08 08:30:00+00:00,gap,,5.98,5.98,17.5,after_return_only,False,0.0,0.0,listing,False
 ME_St_John_River_at_Dickey,01010500,ME,2026-01-14 08:00:00+00:00,2026-01-14 14:00:00+00:00,gap,,6.91,6.91,6.0,after_return_only,False,,,not_checked (call budget),False
 ME_St_John_River_at_Dickey,01010500,ME,2026-03-07 22:30:00+00:00,2026-03-08 19:30:00+00:00,gap,,5.3,5.35,21.0,after_return_only,False,1.0,1.0,listing,False
 ME_St_John_River_at_Dickey,01010500,ME,2026-03-10 22:30:00+00:00,2026-03-11 05:45:00+00:00,gap,,5.74,6.08,7.25,after_return_only,False,,,not_checked (call budget),False
@@ -918,7 +918,7 @@ MI_East_Branch_St_Joseph_River_at_Territorial_Road_near_Waldron,04177080,MI,2025
 MI_East_Branch_St_Joseph_River_at_Territorial_Road_near_Waldron,04177080,MI,2025-12-13 06:30:00+00:00,2025-12-16 17:45:00+00:00,gap,,3.47,3.41,83.25,after_return_only,False,78.0,28.0,listing,False
 MI_East_Branch_St_Joseph_River_at_Territorial_Road_near_Waldron,04177080,MI,2025-12-19 11:45:00+00:00,2025-12-20 16:45:00+00:00,gap,,3.68,3.82,29.0,after_return_only,False,28.0,10.0,listing,False
 MI_East_Branch_St_Joseph_River_at_Territorial_Road_near_Waldron,04177080,MI,2025-12-21 08:30:00+00:00,2025-12-22 14:00:00+00:00,gap,,3.68,3.63,29.5,after_return_only,False,29.0,8.0,listing,False
-MI_East_Branch_St_Joseph_River_at_Territorial_Road_near_Waldron,04177080,MI,2025-12-30 14:45:00+00:00,2025-12-31 07:45:00+00:00,gap,,4.67,4.0,17.0,after_return_only,False,,,not_checked (call budget),False
+MI_East_Branch_St_Joseph_River_at_Territorial_Road_near_Waldron,04177080,MI,2025-12-30 14:45:00+00:00,2025-12-31 07:45:00+00:00,gap,,4.67,4.0,17.0,after_return_only,False,17.0,7.0,listing,False
 MI_East_Branch_St_Joseph_River_at_Territorial_Road_near_Waldron,04177080,MI,2026-01-03 04:30:00+00:00,2026-01-03 14:30:00+00:00,gap,,3.51,3.6,10.0,after_return_only,False,,,not_checked (call budget),False
 MI_East_Branch_St_Joseph_River_at_Territorial_Road_near_Waldron,04177080,MI,2026-01-14 23:45:00+00:00,2026-01-27 16:00:00+00:00,gap,,3.49,3.71,304.25,after_return_only,False,253.0,100.0,listing,False
 MI_East_Branch_St_Joseph_River_at_Territorial_Road_near_Waldron,04177080,MI,2026-02-06 12:15:00+00:00,2026-02-07 00:15:00+00:00,gap,,3.83,3.84,12.0,after_return_only,False,,,not_checked (call budget),False
@@ -933,11 +933,11 @@ MI_Jordan_River_near_East_Jordan,04127800,MI,2026-10-17 09:00:00+00:00,2026-10-1
 MI_Jordan_River_near_East_Jordan,04127800,MI,2026-10-20 15:30:00+00:00,2026-10-21 07:15:00+00:00,gap,,3.47,3.47,15.75,after_return_only,False,,,not_checked (call budget),False
 MI_KALAMAZOO_RIVER_NEAR_ALLEGAN,04107850,MI,2026-01-03 21:55:00+00:00,2026-01-06 15:40:00+00:00,gap,,8.77,8.41,65.75,after_return_only,False,0.0,0.0,listing,False
 MI_KALAMAZOO_RIVER_NEAR_ALLEGAN,04107850,MI,2026-01-27 05:45:00+00:00,2026-01-28 16:30:00+00:00,gap,,7.61,7.79,34.75,after_return_only,False,0.0,0.0,listing,False
-MI_Lower_River_Rouge_at_Dearborn,04168400,MI,2025-11-07 22:30:00+00:00,2025-11-08 16:00:00+00:00,gap,,3.51,3.3,17.5,after_return_only,False,,,not_checked (call budget),False
+MI_Lower_River_Rouge_at_Dearborn,04168400,MI,2025-11-07 22:30:00+00:00,2025-11-08 16:00:00+00:00,gap,,3.51,3.3,17.5,after_return_only,False,17.0,3.0,listing,False
 MI_Lower_River_Rouge_at_Dearborn,04168400,MI,2025-11-09 10:00:00+00:00,2025-11-10 14:15:00+00:00,gap,,3.25,3.52,28.25,after_return_only,False,29.0,11.0,listing,False
 MI_Lower_River_Rouge_at_Dearborn,04168400,MI,2025-11-12 08:30:00+00:00,2025-11-12 15:30:00+00:00,gap,,3.32,3.32,7.0,after_return_only,False,,,not_checked (call budget),False
 MI_Lower_River_Rouge_at_Dearborn,04168400,MI,2025-11-13 05:00:00+00:00,2025-11-13 12:45:00+00:00,gap,,3.3,3.29,7.75,after_return_only,False,,,not_checked (call budget),False
-MI_Lower_River_Rouge_at_Dearborn_STANDPIPE,04168400,MI,2025-11-07 22:30:00+00:00,2025-11-08 16:00:00+00:00,gap,,3.51,3.3,17.5,after_return_only,False,,,not_checked (call budget),False
+MI_Lower_River_Rouge_at_Dearborn_STANDPIPE,04168400,MI,2025-11-07 22:30:00+00:00,2025-11-08 16:00:00+00:00,gap,,3.51,3.3,17.5,after_return_only,False,17.0,3.0,listing,False
 MI_Lower_River_Rouge_at_Dearborn_STANDPIPE,04168400,MI,2025-11-09 10:00:00+00:00,2025-11-10 14:15:00+00:00,gap,,3.25,3.52,28.25,after_return_only,False,29.0,11.0,listing,False
 MI_Lower_River_Rouge_at_Dearborn_STANDPIPE,04168400,MI,2025-11-12 08:30:00+00:00,2025-11-12 15:30:00+00:00,gap,,3.32,3.32,7.0,after_return_only,False,,,not_checked (call budget),False
 MI_Lower_River_Rouge_at_Dearborn_STANDPIPE,04168400,MI,2025-11-13 05:00:00+00:00,2025-11-13 12:45:00+00:00,gap,,3.3,3.29,7.75,after_return_only,False,,,not_checked (call budget),False
@@ -947,7 +947,7 @@ MI_Manistique_River_near_Manistique,04056500,MI,2025-12-12 04:15:00+00:00,2025-1
 MI_Manistique_River_near_Manistique,04056500,MI,2025-12-12 12:45:00+00:00,2025-12-12 21:30:00+00:00,gap,,6.57,6.41,8.75,after_return_only,False,,,not_checked (call budget),False
 MI_Manistique_River_near_Manistique,04056500,MI,2025-12-13 07:00:00+00:00,2025-12-13 19:15:00+00:00,gap,,6.39,6.57,12.25,after_return_only,False,,,not_checked (call budget),False
 MI_Manistique_River_near_Manistique,04056500,MI,2025-12-13 20:45:00+00:00,2025-12-14 06:30:00+00:00,gap,,6.62,6.43,9.75,after_return_only,False,,,not_checked (call budget),False
-MI_Manistique_River_near_Manistique,04056500,MI,2025-12-18 04:00:00+00:00,2025-12-18 21:30:00+00:00,gap,,5.72,5.83,17.5,after_return_only,False,,,not_checked (call budget),False
+MI_Manistique_River_near_Manistique,04056500,MI,2025-12-18 04:00:00+00:00,2025-12-18 21:30:00+00:00,gap,,5.72,5.83,17.5,after_return_only,False,0.0,0.0,listing,False
 MI_Manistique_River_near_Manistique,04056500,MI,2026-01-01 15:15:00+00:00,2026-01-02 12:15:00+00:00,gap,,5.93,5.94,21.0,after_return_only,False,0.0,0.0,listing,False
 MI_Manistique_River_near_Manistique,04056500,MI,2026-01-03 15:30:00+00:00,2026-01-03 22:00:00+00:00,gap,,6.0,6.01,6.5,after_return_only,False,,,not_checked (call budget),False
 MI_Manistique_River_near_Manistique,04056500,MI,2026-01-04 17:00:00+00:00,2026-01-05 12:00:00+00:00,gap,,6.14,6.19,19.0,after_return_only,False,0.0,0.0,listing,False
@@ -963,7 +963,7 @@ MI_Pine_River_at_Pine_River_Road_near_Standish,04143220,MI,2026-01-28 20:42:00+0
 MI_Saginaw_River_at_Midland_Street_at_Bay_City,04157060,MI,2026-01-27 08:42:00+00:00,2026-01-27 16:12:00+00:00,gap,,577.25,577.5,7.5,after_return_only,False,,,not_checked (call budget),False
 MI_Saginaw_River_at_Midland_Street_at_Bay_City,04157060,MI,2026-01-28 00:36:00+00:00,2026-01-28 16:36:00+00:00,gap,,577.58,577.47,16.0,after_return_only,False,,,not_checked (call budget),False
 MI_Saginaw_River_at_Midland_Street_at_Bay_City,04157060,MI,2026-01-29 01:36:00+00:00,2026-01-29 17:54:00+00:00,gap,,577.75,577.74,16.3,after_return_only,False,,,not_checked (call budget),False
-MI_Saginaw_River_at_Midland_Street_at_Bay_City,04157060,MI,2026-01-30 00:18:00+00:00,2026-01-30 17:54:00+00:00,gap,,577.54,577.55,17.6,after_return_only,False,,,not_checked (call budget),False
+MI_Saginaw_River_at_Midland_Street_at_Bay_City,04157060,MI,2026-01-30 00:18:00+00:00,2026-01-30 17:54:00+00:00,gap,,577.54,577.55,17.6,after_return_only,False,0.0,0.0,listing,False
 MI_Saginaw_River_at_Midland_Street_at_Bay_City,04157060,MI,2026-01-31 02:48:00+00:00,2026-01-31 16:18:00+00:00,gap,,577.75,577.66,13.5,after_return_only,False,,,not_checked (call budget),False
 MI_Saginaw_River_at_Midland_Street_at_Bay_City,04157060,MI,2026-02-01 02:36:00+00:00,2026-02-01 15:48:00+00:00,gap,,577.54,577.57,13.2,after_return_only,False,,,not_checked (call budget),False
 MI_Saginaw_River_at_Midland_Street_at_Bay_City,04157060,MI,2026-02-02 04:30:00+00:00,2026-02-02 14:48:00+00:00,gap,,577.52,577.58,10.3,after_return_only,False,,,not_checked (call budget),False
@@ -1011,7 +1011,7 @@ MN_Des_Moines_River_above_Windom,05475350,MN,2026-01-30 20:45:00+00:00,2026-02-0
 MN_Des_Moines_River_at_Jackson,05476000,MN,2025-11-10 06:15:00+00:00,2025-11-10 15:00:00+00:00,gap,,7.34,7.27,8.75,after_return_only,False,,,not_checked (call budget),False
 MN_Des_Moines_River_at_Jackson,05476000,MN,2026-01-01 03:30:00+00:00,2026-01-01 16:30:00+00:00,gap,,7.45,7.48,13.0,after_return_only,False,,,not_checked (call budget),False
 MN_Des_Moines_River_at_Jackson,05476000,MN,2026-01-07 09:45:00+00:00,2026-01-07 16:00:00+00:00,gap,,7.45,7.44,6.25,after_return_only,False,,,not_checked (call budget),False
-MN_Des_Moines_River_at_Jackson,05476000,MN,2026-01-11 00:00:00+00:00,2026-01-11 17:15:00+00:00,gap,,7.46,7.44,17.25,after_return_only,False,,,not_checked (call budget),False
+MN_Des_Moines_River_at_Jackson,05476000,MN,2026-01-11 00:00:00+00:00,2026-01-11 17:15:00+00:00,gap,,7.46,7.44,17.25,after_return_only,False,0.0,0.0,listing,False
 MN_Des_Moines_River_at_Jackson,05476000,MN,2026-01-14 20:45:00+00:00,2026-01-15 07:45:00+00:00,gap,,7.48,7.47,11.0,after_return_only,False,,,not_checked (call budget),False
 MN_Des_Moines_River_at_Jackson,05476000,MN,2026-01-20 06:15:00+00:00,2026-02-12 20:30:00+00:00,gap|qualified,Eqp,7.32,7.24,566.25,after_return_only,False,268.0,215.0,listing,False
 MN_Des_Moines_River_at_Jackson,05476000,MN,2026-02-25 10:30:00+00:00,2026-02-25 18:15:00+00:00,gap|qualified,Eqp,7.27,7.29,7.75,after_return_only,False,,,not_checked (call budget),False
@@ -1104,7 +1104,7 @@ MN_Redwood_River_near_Marshall,05315000,MN,2025-11-28 00:15:00+00:00,2025-11-28 
 MN_Redwood_River_near_Marshall,05315000,MN,2025-11-28 23:45:00+00:00,2025-11-29 19:00:00+00:00,gap,,6.98,7.07,19.25,after_return_only,False,5.0,4.0,listing,False
 MN_Redwood_River_near_Marshall,05315000,MN,2025-11-29 22:00:00+00:00,2025-11-30 18:15:00+00:00,gap,,7.1,7.17,20.25,after_return_only,False,7.0,5.0,listing,False
 MN_Redwood_River_near_Marshall,05315000,MN,2025-11-30 21:15:00+00:00,2025-12-01 18:30:00+00:00,gap,,7.16,7.21,21.25,after_return_only,False,7.0,5.0,listing,False
-MN_Redwood_River_near_Marshall,05315000,MN,2025-12-01 23:00:00+00:00,2025-12-02 16:30:00+00:00,gap,,7.2,7.15,17.5,after_return_only,False,,,not_checked (call budget),False
+MN_Redwood_River_near_Marshall,05315000,MN,2025-12-01 23:00:00+00:00,2025-12-02 16:30:00+00:00,gap,,7.2,7.15,17.5,after_return_only,False,4.0,2.0,listing,False
 MN_Redwood_River_near_Marshall,05315000,MN,2025-12-03 08:00:00+00:00,2025-12-05 10:15:00+00:00,gap,,7.21,7.23,50.25,after_return_only,False,20.0,16.0,listing,False
 MN_Redwood_River_near_Marshall,05315000,MN,2025-12-06 01:15:00+00:00,2025-12-06 17:30:00+00:00,gap,,7.24,7.31,16.25,after_return_only,False,,,not_checked (call budget),False
 MN_Redwood_River_near_Marshall,05315000,MN,2025-12-06 22:30:00+00:00,2025-12-08 20:30:00+00:00,gap,,7.34,7.31,46.0,after_return_only,False,18.0,14.0,listing,False
@@ -1116,7 +1116,7 @@ MN_Redwood_River_near_Marshall,05315000,MN,2025-12-17 07:45:00+00:00,2025-12-17 
 MN_Redwood_River_near_Marshall,05315000,MN,2025-12-18 15:00:00+00:00,2025-12-20 04:00:00+00:00,gap,,7.55,7.62,37.0,after_return_only,False,19.0,16.0,listing,False
 MN_Redwood_River_near_Marshall,05315000,MN,2025-12-20 21:45:00+00:00,2025-12-21 16:00:00+00:00,gap,,7.93,7.75,18.25,after_return_only,False,4.0,2.0,listing,False
 MN_Redwood_River_near_Marshall,05315000,MN,2025-12-23 02:30:00+00:00,2025-12-23 16:30:00+00:00,gap,,7.8,7.72,14.0,after_return_only,False,,,not_checked (call budget),False
-MN_Redwood_River_near_Marshall,05315000,MN,2025-12-23 23:00:00+00:00,2025-12-24 16:15:00+00:00,gap,,7.76,7.72,17.25,after_return_only,False,,,not_checked (call budget),False
+MN_Redwood_River_near_Marshall,05315000,MN,2025-12-23 23:00:00+00:00,2025-12-24 16:15:00+00:00,gap,,7.76,7.72,17.25,after_return_only,False,4.0,2.0,listing,False
 MN_Redwood_River_near_Marshall,05315000,MN,2025-12-28 10:15:00+00:00,2025-12-30 16:15:00+00:00,gap,,7.76,7.9,54.0,after_return_only,False,21.0,16.0,listing,False
 MN_Redwood_River_near_Marshall,05315000,MN,2025-12-31 21:00:00+00:00,2026-01-03 19:00:00+00:00,gap,,7.84,7.72,70.0,after_return_only,False,27.0,21.0,listing,False
 MN_Redwood_River_near_Marshall,05315000,MN,2026-01-04 00:15:00+00:00,2026-01-04 16:00:00+00:00,gap,,7.71,7.71,15.75,after_return_only,False,,,not_checked (call budget),False
@@ -1140,7 +1140,7 @@ MN_Snake_River_above_Warren,05085450,MN,2026-03-27 10:45:00+00:00,2026-03-28 07:
 MN_Snake_River_near_Pine_City,05338500,MN,2026-01-22 18:45:00+00:00,2026-01-30 20:15:00+00:00,gap,,2.87,2.8,193.5,after_return_only,False,74.0,66.0,listing,False
 MN_Snake_River_near_Pine_City,05338500,MN,2026-01-31 14:15:00+00:00,2026-02-01 21:15:00+00:00,gap,,2.8,2.84,31.0,after_return_only,False,17.0,16.0,listing,False
 MN_Sprague_Creek_near_Sprague_Manitoba_Canada,05106000,MN,2025-11-30 15:45:00+00:00,2026-03-20 22:30:00+00:00,gap,,4.34,2.72,2646.75,after_return_only,True,1266.0,953.0,cached_listing,False
-MN_St_Croix_River_at_Stillwater,05341550,MN,2026-06-01 20:00:00+00:00,2026-06-02 13:00:00+00:00,gap,,675.77,675.78,17.0,after_return_only,False,,,not_checked (call budget),False
+MN_St_Croix_River_at_Stillwater,05341550,MN,2026-06-01 20:00:00+00:00,2026-06-02 13:00:00+00:00,gap,,675.77,675.78,17.0,after_return_only,False,10.0,8.0,listing,False
 MN_St_Croix_River_at_Stillwater,05341550,MN,2026-06-02 15:00:00+00:00,2026-06-03 12:45:00+00:00,gap,,675.78,675.76,21.75,after_return_only,False,1.0,1.0,listing,False
 MN_WHETSTONE_RIVER_NEAR_BIG_STONE_CITY_SD,05291000,MN,2025-10-26 15:00:00+00:00,2025-10-26 23:30:00+00:00,gap,,2.0,2.0,8.5,after_return_only,False,,,not_checked (call budget),False
 MN_WHETSTONE_RIVER_NEAR_BIG_STONE_CITY_SD,05291000,MN,2025-11-29 08:00:00+00:00,2025-11-30 22:45:00+00:00,gap,,2.01,2.1,38.75,after_return_only,False,19.0,16.0,listing,False
@@ -1150,7 +1150,7 @@ MN_WHETSTONE_RIVER_NEAR_BIG_STONE_CITY_SD,05291000,MN,2025-12-09 18:45:00+00:00,
 MN_WHETSTONE_RIVER_NEAR_BIG_STONE_CITY_SD,05291000,MN,2025-12-13 07:00:00+00:00,2025-12-26 12:00:00+00:00,gap,,1.94,2.02,317.0,after_return_only,False,130.0,104.0,listing,False
 MN_WHETSTONE_RIVER_NEAR_BIG_STONE_CITY_SD,05291000,MN,2026-01-12 02:15:00+00:00,2026-01-12 12:15:00+00:00,gap,,1.96,2.0,10.0,after_return_only,False,,,not_checked (call budget),False
 MN_WHETSTONE_RIVER_NEAR_BIG_STONE_CITY_SD,05291000,MN,2026-01-15 16:15:00+00:00,2026-02-14 22:00:00+00:00,gap,,2.03,1.98,725.75,after_return_only,False,330.0,266.0,listing,False
-MN_WHETSTONE_RIVER_NEAR_BIG_STONE_CITY_SD,05291000,MN,2026-02-21 00:15:00+00:00,2026-02-21 17:30:00+00:00,gap,,2.26,1.96,17.25,after_return_only,False,,,not_checked (call budget),False
+MN_WHETSTONE_RIVER_NEAR_BIG_STONE_CITY_SD,05291000,MN,2026-02-21 00:15:00+00:00,2026-02-21 17:30:00+00:00,gap,,2.26,1.96,17.25,after_return_only,False,5.0,4.0,listing,False
 MN_WHETSTONE_RIVER_NEAR_BIG_STONE_CITY_SD,05291000,MN,2026-02-27 12:45:00+00:00,2026-03-03 03:15:00+00:00,gap,,1.9,1.88,86.5,after_return_only,False,48.0,40.0,listing,False
 MN_YELLOW_BANK_RIVER_NEAR_ODESSA_MN,05293000,MN,2025-11-07 13:30:00+00:00,2025-11-07 23:00:00+00:00,gap,,2.84,2.82,9.5,after_return_only,False,,,not_checked (call budget),False
 MN_YELLOW_BANK_RIVER_NEAR_ODESSA_MN,05293000,MN,2025-11-08 16:30:00+00:00,2025-11-10 05:45:00+00:00,gap,,2.81,2.78,37.25,after_return_only,False,18.0,15.0,listing,False
@@ -1205,7 +1205,7 @@ MT_Yellowstone_River_at_Miles_City,06309000,MT,2025-11-30 16:00:00+00:00,2025-12
 MT_Yellowstone_River_at_Miles_City,06309000,MT,2025-12-04 02:15:00+00:00,2025-12-04 20:30:00+00:00,gap,,3.18,3.23,18.25,after_return_only,False,18.0,6.0,listing,False
 MT_Yellowstone_River_at_Miles_City,06309000,MT,2026-01-23 08:15:00+00:00,2026-01-23 15:15:00+00:00,gap,,3.2,3.44,7.0,after_return_only,False,,,not_checked (call budget),False
 MT_Yellowstone_River_at_Miles_City,06309000,MT,2026-01-25 02:00:00+00:00,2026-01-26 11:45:00+00:00,gap,,2.41,1.93,33.75,after_return_only,False,34.0,10.0,listing,False
-MT_Yellowstone_River_at_Miles_City,06309000,MT,2026-01-31 01:30:00+00:00,2026-01-31 18:30:00+00:00,gap,,3.78,4.07,17.0,after_return_only,False,,,not_checked (call budget),False
+MT_Yellowstone_River_at_Miles_City,06309000,MT,2026-01-31 01:30:00+00:00,2026-01-31 18:30:00+00:00,gap,,3.78,4.07,17.0,after_return_only,False,17.0,4.0,listing,False
 MT_Yellowstone_River_at_Miles_City,06309000,MT,2026-10-18 01:15:00+00:00,2026-10-18 14:15:00+00:00,gap,,3.19,3.14,13.0,after_return_only,False,,,not_checked (call budget),False
 NC_French_Broad_River_at_Asheville,03451500,NC,2026-02-09 13:45:00+00:00,2026-03-18 19:15:00+00:00,gap,,1.28,1.72,893.5,after_return_only,False,1000.0,873.0,listing,False
 NC_McMullen_Creek_at_Lincrest_Place_at_Charlott,0214668150,NC,2025-11-11 13:00:00+00:00,2025-11-11 19:15:00+00:00,gap,,1.13,1.13,6.25,after_return_only,False,,,not_checked (call budget),False
@@ -1345,7 +1345,7 @@ NE_Missouri_River_at_Decatur,06601200,NE,2026-09-03 06:00:00+00:00,2026-09-03 14
 NE_Niobrara_River_bl_Soldier_Cr_nr_Niobrara_Nebr,06465520,NE,2026-09-28 12:00:00+00:00,2026-09-28 19:15:00+00:00,gap,,8.29,8.32,7.25,after_return_only,False,,,not_checked (call budget),False
 NE_Niobrara_River_bl_Soldier_Cr_nr_Niobrara_Nebr,06465520,NE,2026-09-29 00:00:00+00:00,2026-09-29 11:30:00+00:00,gap,,8.28,8.29,11.5,after_return_only,False,,,not_checked (call budget),False
 NE_Platte_River_at_Louisville,06805500,NE,2026-01-26 05:00:00+00:00,2026-01-26 20:15:00+00:00,gap,,4.45,4.44,15.25,after_return_only,False,,,not_checked (call budget),False
-NE_Platte_River_at_Louisville,06805500,NE,2026-01-27 03:45:00+00:00,2026-01-27 21:15:00+00:00,gap,,4.48,4.18,17.5,after_return_only,False,,,not_checked (call budget),False
+NE_Platte_River_at_Louisville,06805500,NE,2026-01-27 03:45:00+00:00,2026-01-27 21:15:00+00:00,gap,,4.48,4.18,17.5,after_return_only,False,28.0,28.0,listing,False
 NE_Platte_River_at_North_Bend,06796000,NE,2026-09-03 05:45:00+00:00,2026-09-03 18:30:00+00:00,gap,,2.39,2.54,12.75,after_return_only,False,,,not_checked (call budget),False
 NE_Platte_River_at_North_Bend,06796000,NE,2026-09-04 04:45:00+00:00,2026-09-04 11:30:00+00:00,gap,,2.42,2.45,6.75,after_return_only,False,,,not_checked (call budget),False
 NE_Platte_River_near_Ashland,06801000,NE,2026-01-17 17:30:00+00:00,2026-01-19 20:30:00+00:00,gap,,14.73,14.89,51.0,after_return_only,False,76.0,64.0,listing,False
@@ -1382,7 +1382,7 @@ NE_Platte_River_near_Venice_Nebr,06796550,NE,2026-02-20 12:15:00+00:00,2026-02-2
 NE_Platte_River_near_Venice_Nebr,06796550,NE,2026-02-21 13:30:00+00:00,2026-02-22 01:30:00+00:00,gap,,12.43,12.41,12.0,after_return_only,False,,,not_checked (call budget),False
 NE_Platte_River_near_Venice_Nebr,06796550,NE,2026-02-22 09:00:00+00:00,2026-02-25 01:45:00+00:00,gap,,12.47,12.41,64.75,after_return_only,False,0.0,0.0,listing,False
 NE_Platte_River_near_Venice_Nebr,06796550,NE,2026-06-24 15:15:00+00:00,2026-06-26 16:30:00+00:00,gap,,12.46,11.81,49.25,after_return_only,False,0.0,0.0,listing,False
-NJ_Assunpink_Creek_near_Clarksville,01463620,NJ,2026-07-15 20:15:00+00:00,2026-07-16 13:15:00+00:00,gap,,3.79,3.75,17.0,after_return_only,False,,,not_checked (call budget),False
+NJ_Assunpink_Creek_near_Clarksville,01463620,NJ,2026-07-15 20:15:00+00:00,2026-07-16 13:15:00+00:00,gap,,3.79,3.75,17.0,after_return_only,False,17.0,7.0,listing,False
 NJ_Big_Brook_near_Marlboro,01407290,NJ,2026-01-31 00:05:00+00:00,2026-02-04 15:15:00+00:00,gap,,9.77,9.78,111.167,after_return_only,True,107.0,39.0,cached_listing,False
 NJ_Big_Brook_near_Marlboro,01407290,NJ,2026-02-08 05:25:00+00:00,2026-02-09 05:00:00+00:00,gap,,9.89,9.68,23.583,after_return_only,True,22.0,10.0,cached_listing,False
 NJ_Big_Brook_near_Marlboro,01407290,NJ,2026-07-15 19:20:00+00:00,2026-07-16 13:25:00+00:00,gap,,9.47,9.5,18.083,after_return_only,True,17.0,7.0,cached_listing,False
@@ -1394,37 +1394,37 @@ NJ_Delaware_River_at_Riegelsville,01457500,NJ,2026-01-16 11:00:00+00:00,2026-02-
 NJ_Delaware_River_at_Riegelsville,01457500,NJ,2026-03-02 10:15:00+00:00,2026-03-02 16:15:00+00:00,gap,,3.81,3.84,6.0,after_return_only,False,,,not_checked (call budget),False
 NJ_Great_Egg_Harbor_River_at_Folsom,01411000,NJ,2026-01-31 11:00:00+00:00,2026-01-31 20:00:00+00:00,gap,,3.65,3.65,9.0,after_return_only,False,,,not_checked (call budget),False
 NJ_Great_Egg_Harbor_River_at_Folsom,01411000,NJ,2026-07-15 20:00:00+00:00,2026-07-16 12:15:00+00:00,gap,,3.69,3.64,16.25,after_return_only,False,,,not_checked (call budget),False
-NJ_Hackensack_River_at_New_Milford,01378500,NJ,2026-07-15 20:15:00+00:00,2026-07-16 13:30:00+00:00,gap,,1.46,1.45,17.25,after_return_only,False,,,not_checked (call budget),False
-NJ_Hohokus_Brook_at_HoHoKus,01391000,NJ,2026-07-15 19:30:00+00:00,2026-07-16 12:45:00+00:00,gap,,1.43,1.36,17.25,after_return_only,False,,,not_checked (call budget),False
+NJ_Hackensack_River_at_New_Milford,01378500,NJ,2026-07-15 20:15:00+00:00,2026-07-16 13:30:00+00:00,gap,,1.46,1.45,17.25,after_return_only,False,17.0,7.0,listing,False
+NJ_Hohokus_Brook_at_HoHoKus,01391000,NJ,2026-07-15 19:30:00+00:00,2026-07-16 12:45:00+00:00,gap,,1.43,1.36,17.25,after_return_only,False,17.0,7.0,listing,False
 NJ_Hohokus_Brook_at_HoHoKus,01391000,NJ,2026-08-29 09:30:00+00:00,2026-08-31 17:45:00+00:00,gap,,1.5,1.53,56.25,after_return_only,False,56.0,33.0,listing,False
-NJ_Lake_Hopatcong_at_Landing,01455400,NJ,2026-07-15 20:00:00+00:00,2026-07-16 13:15:00+00:00,gap,,9.05,9.05,17.25,after_return_only,False,,,not_checked (call budget),False
+NJ_Lake_Hopatcong_at_Landing,01455400,NJ,2026-07-15 20:00:00+00:00,2026-07-16 13:15:00+00:00,gap,,9.05,9.05,17.25,after_return_only,False,4.0,4.0,listing,False
 NJ_Lawrence_Brook_at_Westons_Mills,01405030,NJ,2026-07-15 19:30:00+00:00,2026-07-16 11:45:00+00:00,gap,,15.82,15.81,16.25,after_return_only,False,,,not_checked (call budget),False
 NJ_Manasquan_River_near_Allenwood,01408029,NJ,2026-04-14 15:15:00+00:00,2026-04-14 23:30:00+00:00,gap,,7.17,7.18,8.25,after_return_only,False,,,not_checked (call budget),False
 NJ_Manasquan_River_near_Allenwood,01408029,NJ,2026-04-15 12:15:00+00:00,2026-04-16 08:30:00+00:00,gap,,7.19,7.19,20.25,after_return_only,False,20.0,11.0,listing,False
 NJ_Manasquan_River_near_Allenwood,01408029,NJ,2026-07-15 19:15:00+00:00,2026-07-16 13:30:00+00:00,gap,,7.23,7.25,18.25,after_return_only,False,18.0,8.0,listing,False
 NJ_Manasquan_River_near_Allenwood,01408029,NJ,2026-09-23 17:15:00+00:00,2026-09-24 14:30:00+00:00,gap,,7.34,7.3,21.25,after_return_only,False,21.0,8.0,listing,False
 NJ_Middle_Brook_at_Burnt_Mills,01399100,NJ,2026-06-04 13:15:00+00:00,2026-06-08 20:00:00+00:00,gap,,5.58,5.56,102.75,after_return_only,False,102.0,66.0,listing,False
-NJ_Middle_Brook_at_Burnt_Mills,01399100,NJ,2026-07-15 20:00:00+00:00,2026-07-16 13:15:00+00:00,gap,,5.54,5.53,17.25,after_return_only,False,,,not_checked (call budget),False
+NJ_Middle_Brook_at_Burnt_Mills,01399100,NJ,2026-07-15 20:00:00+00:00,2026-07-16 13:15:00+00:00,gap,,5.54,5.53,17.25,after_return_only,False,18.0,8.0,listing,False
 NJ_North_Branch_Rancocas_Creek_at_Pemberton,01467000,NJ,2026-07-15 19:30:00+00:00,2026-07-16 11:45:00+00:00,gap,,1.49,1.49,16.25,after_return_only,False,,,not_checked (call budget),False
 NJ_North_Branch_Raritan_River_near_Raritan,01400000,NJ,2026-03-25 06:00:00+00:00,2026-03-25 14:30:00+00:00,gap,,3.27,3.23,8.5,after_return_only,False,,,not_checked (call budget),False
 NJ_North_Branch_Raritan_River_near_Raritan,01400000,NJ,2026-07-15 20:00:00+00:00,2026-07-16 12:15:00+00:00,gap,,2.98,2.99,16.25,after_return_only,False,,,not_checked (call budget),False
 NJ_Oswego_River_at_Harrisville,01410000,NJ,2026-07-15 19:30:00+00:00,2026-07-16 11:45:00+00:00,gap,,10.28,10.26,16.25,after_return_only,False,,,not_checked (call budget),False
-NJ_Pascack_Brook_at_Woodcliff_Lake_Outlet_at_Hillsdale,01377451,NJ,2026-07-15 20:10:00+00:00,2026-07-16 13:30:00+00:00,gap,,1.42,1.41,17.333,after_return_only,False,,,not_checked (call budget),False
+NJ_Pascack_Brook_at_Woodcliff_Lake_Outlet_at_Hillsdale,01377451,NJ,2026-07-15 20:10:00+00:00,2026-07-16 13:30:00+00:00,gap,,1.42,1.41,17.333,after_return_only,False,17.0,7.0,listing,False
 NJ_Passaic_River_near_Chatham,01379500,NJ,2026-02-25 04:30:00+00:00,2026-02-25 14:30:00+00:00,gap,,4.5,4.45,10.0,after_return_only,False,,,not_checked (call budget),False
 NJ_Passaic_River_near_Chatham,01379500,NJ,2026-07-02 17:45:00+00:00,2026-07-03 01:00:00+00:00,gap,,3.24,3.23,7.25,after_return_only,False,,,not_checked (call budget),False
 NJ_Passaic_River_near_Chatham,01379500,NJ,2026-07-04 17:30:00+00:00,2026-07-05 00:30:00+00:00,gap,,3.22,3.18,7.0,after_return_only,False,,,not_checked (call budget),False
 NJ_Pequest_River_at_Pequest,01445500,NJ,2026-07-15 19:15:00+00:00,2026-07-16 13:30:00+00:00,gap,,1.36,1.35,18.25,after_return_only,False,18.0,8.0,listing,False
 NJ_Pompton_River_at_Mountain_View,01388910,NJ,2026-07-15 19:15:00+00:00,2026-07-16 13:30:00+00:00,gap,,2.14,2.19,18.25,after_return_only,False,4.0,4.0,listing,False
-NJ_Rahway_River_at_Rahway,01395000,NJ,2026-07-15 19:30:00+00:00,2026-07-16 12:45:00+00:00,gap,,1.35,1.71,17.25,after_return_only,False,,,not_checked (call budget),False
-NJ_Ramapo_River_above_dam_at_Pompton_Lakes,01387998,NJ,2026-07-15 19:30:00+00:00,2026-07-16 12:45:00+00:00,gap,,10.22,10.2,17.25,after_return_only,False,,,not_checked (call budget),False
+NJ_Rahway_River_at_Rahway,01395000,NJ,2026-07-15 19:30:00+00:00,2026-07-16 12:45:00+00:00,gap,,1.35,1.71,17.25,after_return_only,False,5.0,5.0,listing,False
+NJ_Ramapo_River_above_dam_at_Pompton_Lakes,01387998,NJ,2026-07-15 19:30:00+00:00,2026-07-16 12:45:00+00:00,gap,,10.22,10.2,17.25,after_return_only,False,0.0,0.0,listing,False
 NJ_Ramapo_River_at_Dawes_Highway_at_Pompton,01388100,NJ,2025-12-25 17:35:00+00:00,2025-12-29 18:15:00+00:00,gap,,0.76,0.67,96.667,after_return_only,False,49.0,37.0,listing,False
 NJ_Ramapo_River_at_Pompton_Lakes,01388000,NJ,2026-01-24 13:25:00+00:00,2026-01-28 14:55:00+00:00,gap,,7.27,7.38,97.5,after_return_only,False,96.0,36.0,listing,False
 NJ_Ramapo_River_at_Pompton_Lakes,01388000,NJ,2026-02-08 18:50:00+00:00,2026-02-13 15:15:00+00:00,gap,,7.01,7.04,116.417,after_return_only,False,115.0,47.0,listing,False
 NJ_Raritan_River_at_Manville,01400500,NJ,2026-07-15 20:15:00+00:00,2026-07-16 02:30:00+00:00,gap,,4.22,4.22,6.25,after_return_only,False,,,not_checked (call budget),False
 NJ_Raritan_River_at_Manville,01400500,NJ,2026-07-16 03:15:00+00:00,2026-07-16 13:30:00+00:00,gap,,4.22,4.23,10.25,after_return_only,False,,,not_checked (call budget),False
 NJ_Rockaway_River_at_Main_Street_at_Boonton,01380450,NJ,2026-09-03 00:30:00+00:00,2026-09-04 16:45:00+00:00,gap,,1.32,1.51,40.25,after_return_only,False,15.0,15.0,listing,False
-NJ_Salem_River_at_Woodstown,01482500,NJ,2026-07-15 20:15:00+00:00,2026-07-16 13:30:00+00:00,gap,,11.09,11.08,17.25,after_return_only,False,,,not_checked (call budget),False
-NJ_Second_River_at_Belleville,01392500,NJ,2026-07-15 20:15:00+00:00,2026-07-16 13:20:00+00:00,gap,,1.34,1.36,17.083,after_return_only,False,,,not_checked (call budget),False
+NJ_Salem_River_at_Woodstown,01482500,NJ,2026-07-15 20:15:00+00:00,2026-07-16 13:30:00+00:00,gap,,11.09,11.08,17.25,after_return_only,False,6.0,6.0,listing,False
+NJ_Second_River_at_Belleville,01392500,NJ,2026-07-15 20:15:00+00:00,2026-07-16 13:20:00+00:00,gap,,1.34,1.36,17.083,after_return_only,False,6.0,6.0,listing,False
 NJ_Shabakunk_C_at_Sylva_Lake_Dam_at_Ewingville,01463740,NJ,2026-04-12 13:15:00+00:00,2026-04-25 22:00:00+00:00,gap,,2.78,2.83,320.75,after_return_only,False,176.0,176.0,listing,False
 NJ_Shabakunk_C_at_Sylva_Lake_Dam_at_Ewingville,01463740,NJ,2026-04-26 12:30:00+00:00,2026-05-20 22:15:00+00:00,gap,,2.86,3.02,585.75,after_return_only,False,322.0,322.0,listing,False
 NJ_Shabakunk_C_at_Sylva_Lake_Dam_at_Ewingville,01463740,NJ,2026-05-21 21:15:00+00:00,2026-05-23 19:00:00+00:00,gap,,2.88,2.89,45.75,after_return_only,False,23.0,23.0,listing,False
@@ -1435,7 +1435,7 @@ NJ_Shabakunk_C_at_Sylva_Lake_Dam_at_Ewingville,01463740,NJ,2026-07-06 21:00:00+0
 NJ_Shabakunk_C_at_Sylva_Lake_Dam_at_Ewingville,01463740,NJ,2026-07-10 04:45:00+00:00,2026-07-17 16:15:00+00:00,gap,,2.85,2.78,179.5,after_return_only,False,97.0,97.0,listing,False
 NJ_Shabakunk_C_at_Sylva_Lake_Dam_at_Ewingville,01463740,NJ,2026-10-03 19:30:00+00:00,2026-10-05 18:45:00+00:00,gap,,2.84,2.84,47.25,after_return_only,False,0.0,0.0,listing,False
 NJ_South_Branch_Pennsauken_Creek_at_Cherry_Hill,01467081,NJ,2026-07-15 19:15:00+00:00,2026-07-16 13:30:00+00:00,gap,,1.91,1.9,18.25,after_return_only,False,0.0,0.0,listing,False
-NJ_South_Branch_Pennsauken_Creek_at_Cherry_Hill,01467081,NJ,2026-09-22 21:15:00+00:00,2026-09-23 14:30:00+00:00,gap,,3.4,2.13,17.25,after_return_only,False,,,not_checked (call budget),False
+NJ_South_Branch_Pennsauken_Creek_at_Cherry_Hill,01467081,NJ,2026-09-22 21:15:00+00:00,2026-09-23 14:30:00+00:00,gap,,3.4,2.13,17.25,after_return_only,False,0.0,0.0,listing,False
 NJ_Whippany_River_at_Morristown,01381500,NJ,2026-02-09 00:05:00+00:00,2026-02-10 02:35:00+00:00,gap,,2.06,1.93,26.5,after_return_only,False,26.0,10.0,listing,False
 NM_Cedar_Creek_above_Ruidoso,08386850,NM,2025-12-04 07:30:00+00:00,2025-12-27 20:35:00+00:00,gap,,3.02,3.01,565.083,after_return_only,False,0.0,0.0,listing,False
 NM_Cedar_Creek_above_Ruidoso,08386850,NM,2025-12-27 20:45:00+00:00,2025-12-30 15:45:00+00:00,gap,,3.0,3.0,67.0,after_return_only,False,0.0,0.0,listing,False
@@ -1586,9 +1586,9 @@ NY_Owasco_Outlet_at_Genesee_St_Auburn_Staff,04235440,NY,2026-02-06 08:45:00+00:0
 NY_Owasco_Outlet_at_Genesee_St_Auburn_Staff,04235440,NY,2026-02-14 04:15:00+00:00,2026-02-14 15:45:00+00:00,gap,,2.06,2.03,11.5,after_return_only,False,,,not_checked (call budget),False
 NY_Pepacton_Res_Div_Outlet_nr_Grahamsville,01365080,NY,2026-08-05 22:00:00+00:00,2026-08-07 12:00:00+00:00,gap,,4.08,4.4,38.0,after_return_only,False,0.0,0.0,listing,False
 NY_Pepacton_Res_Div_Outlet_nr_Grahamsville,01365080,NY,2026-08-07 17:45:00+00:00,2026-08-08 12:00:00+00:00,gap,,4.39,4.41,18.25,after_return_only,False,0.0,0.0,listing,False
-NY_Pepacton_Res_Div_Outlet_nr_Grahamsville,01365080,NY,2026-08-08 18:45:00+00:00,2026-08-09 12:00:00+00:00,gap,,4.41,4.42,17.25,after_return_only,False,,,not_checked (call budget),False
+NY_Pepacton_Res_Div_Outlet_nr_Grahamsville,01365080,NY,2026-08-08 18:45:00+00:00,2026-08-09 12:00:00+00:00,gap,,4.41,4.42,17.25,after_return_only,False,0.0,0.0,listing,False
 NY_Pepacton_Res_Div_Outlet_nr_Grahamsville,01365080,NY,2026-08-09 21:45:00+00:00,2026-08-10 13:00:00+00:00,gap,,4.4,4.42,15.25,after_return_only,False,,,not_checked (call budget),False
-NY_Pepacton_Res_Div_Outlet_nr_Grahamsville,01365080,NY,2026-08-10 17:45:00+00:00,2026-08-11 11:00:00+00:00,gap,,4.42,4.42,17.25,after_return_only,False,,,not_checked (call budget),False
+NY_Pepacton_Res_Div_Outlet_nr_Grahamsville,01365080,NY,2026-08-10 17:45:00+00:00,2026-08-11 11:00:00+00:00,gap,,4.42,4.42,17.25,after_return_only,False,0.0,0.0,listing,False
 NY_Platte_Kill_at_Dunraven,01414000,NY,2026-07-15 19:45:00+00:00,2026-07-16 12:00:00+00:00,gap,,3.11,3.09,16.25,after_return_only,False,,,not_checked (call budget),False
 NY_Platte_Kill_at_Dunraven,01414000,NY,2026-09-11 19:30:00+00:00,2026-09-14 13:45:00+00:00,gap,,3.13,3.46,66.25,after_return_only,False,36.0,30.0,listing,False
 NY_Platte_Kill_at_Dunraven,01414000,NY,2026-09-20 19:30:00+00:00,2026-09-21 11:15:00+00:00,gap,,3.42,3.38,15.75,after_return_only,False,,,not_checked (call budget),False
@@ -1681,17 +1681,17 @@ OH_Olentangy_River_at_J_H_Herrick_Dr_at_Columbus,03227107,OH,2026-06-17 21:15:00
 OH_Ottawa_River_near_Kalida,04188100,OH,2026-04-27 15:00:00+00:00,2026-05-14 18:30:00+00:00,gap|qualified,Eqp,4.47,4.77,411.5,after_return_only,True,267.0,242.0,cached_listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-10-23 16:45:00+00:00,2025-10-24 15:00:00+00:00,gap,,0.02,0.03,22.25,after_return_only,False,13.0,8.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-10-24 18:00:00+00:00,2025-10-25 14:15:00+00:00,gap,,0.02,0.06,20.25,after_return_only,False,12.0,7.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-10-25 21:00:00+00:00,2025-10-26 14:15:00+00:00,gap,,0.02,0.04,17.25,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-10-25 21:00:00+00:00,2025-10-26 14:15:00+00:00,gap,,0.02,0.04,17.25,after_return_only,False,9.0,4.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-10-26 20:15:00+00:00,2025-10-27 14:15:00+00:00,gap,,0.01,0.05,18.0,after_return_only,False,9.0,4.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-10-27 21:00:00+00:00,2025-10-28 14:15:00+00:00,gap,,0.02,0.04,17.25,after_return_only,False,,,not_checked (call budget),False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-10-28 20:30:00+00:00,2025-10-29 14:00:00+00:00,gap,,0.02,0.03,17.5,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-10-27 21:00:00+00:00,2025-10-28 14:15:00+00:00,gap,,0.02,0.04,17.25,after_return_only,False,9.0,4.0,listing,False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-10-28 20:30:00+00:00,2025-10-29 14:00:00+00:00,gap,,0.02,0.03,17.5,after_return_only,False,8.0,3.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-10-29 19:45:00+00:00,2025-10-30 18:45:00+00:00,gap,,0.0,0.01,23.0,after_return_only,False,14.0,9.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-10-30 19:45:00+00:00,2025-10-31 14:00:00+00:00,gap,,0.0,0.01,18.25,after_return_only,False,9.0,4.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-10-31 17:00:00+00:00,2025-11-01 15:30:00+00:00,gap,,0.03,0.01,22.5,after_return_only,False,14.0,9.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-11-01 21:00:00+00:00,2025-11-02 14:45:00+00:00,gap,,0.0,0.04,17.75,after_return_only,False,9.0,4.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-11-02 19:30:00+00:00,2025-11-03 14:30:00+00:00,gap,,0.04,0.02,19.0,after_return_only,False,10.0,5.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-11-03 20:30:00+00:00,2025-11-04 14:45:00+00:00,gap,,0.03,0.04,18.25,after_return_only,False,9.0,4.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-11-04 20:00:00+00:00,2025-11-05 13:30:00+00:00,gap,,0.01,0.01,17.5,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-11-04 20:00:00+00:00,2025-11-05 13:30:00+00:00,gap,,0.01,0.01,17.5,after_return_only,False,9.0,4.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-11-05 18:15:00+00:00,2025-11-06 14:00:00+00:00,gap,,0.01,0.03,19.75,after_return_only,False,10.0,5.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-11-06 20:15:00+00:00,2025-11-07 17:00:00+00:00,gap,,0.01,0.01,20.75,after_return_only,False,11.0,6.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2025-11-07 21:45:00+00:00,2025-11-10 18:30:00+00:00,gap,,0.0,0.0,68.75,after_return_only,False,42.0,27.0,listing,False
@@ -1738,10 +1738,10 @@ OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,202
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-01-01 21:15:00+00:00,2026-01-02 15:45:00+00:00,gap,,0.0,0.0,18.5,after_return_only,False,9.0,2.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-01-02 21:00:00+00:00,2026-01-03 14:45:00+00:00,gap,,0.01,0.0,17.75,after_return_only,False,5.0,1.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-01-03 21:15:00+00:00,2026-01-04 16:15:00+00:00,gap,,0.01,0.01,19.0,after_return_only,False,10.0,3.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-01-04 21:30:00+00:00,2026-01-05 14:30:00+00:00,gap,,0.01,0.0,17.0,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-01-04 21:30:00+00:00,2026-01-05 14:30:00+00:00,gap,,0.01,0.0,17.0,after_return_only,False,8.0,1.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-01-05 21:00:00+00:00,2026-01-06 09:30:00+00:00,gap,,0.0,0.0,12.5,after_return_only,False,,,not_checked (call budget),False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-01-06 21:45:00+00:00,2026-01-07 17:45:00+00:00,gap,,0.01,0.01,20.0,after_return_only,False,11.0,5.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-01-07 21:30:00+00:00,2026-01-08 14:30:00+00:00,gap,,0.0,0.01,17.0,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-01-07 21:30:00+00:00,2026-01-08 14:30:00+00:00,gap,,0.0,0.01,17.0,after_return_only,False,8.0,2.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-01-09 11:30:00+00:00,2026-01-10 15:15:00+00:00,gap,,0.01,0.0,27.75,after_return_only,False,19.0,11.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-01-10 19:30:00+00:00,2026-01-11 18:15:00+00:00,gap,,0.01,0.0,22.75,after_return_only,False,14.0,8.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-01-11 21:00:00+00:00,2026-01-12 15:00:00+00:00,gap,,0.01,0.01,18.0,after_return_only,False,9.0,3.0,listing,False
@@ -1772,7 +1772,7 @@ OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,202
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-02-08 21:45:00+00:00,2026-02-09 14:00:00+00:00,gap,,0.01,0.0,16.25,after_return_only,False,,,not_checked (call budget),False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-02-09 22:30:00+00:00,2026-02-10 14:00:00+00:00,gap,,0.01,0.01,15.5,after_return_only,False,,,not_checked (call budget),False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-02-10 20:15:00+00:00,2026-02-11 16:00:00+00:00,gap,,0.0,0.01,19.75,after_return_only,False,10.0,5.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-02-11 21:00:00+00:00,2026-02-12 14:15:00+00:00,gap,,0.01,0.04,17.25,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-02-11 21:00:00+00:00,2026-02-12 14:15:00+00:00,gap,,0.01,0.04,17.25,after_return_only,False,9.0,4.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-02-12 22:15:00+00:00,2026-02-13 13:15:00+00:00,gap,,0.01,0.01,15.0,after_return_only,False,,,not_checked (call budget),False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-02-13 23:00:00+00:00,2026-02-14 07:15:00+00:00,gap,,0.0,0.0,8.25,after_return_only,False,,,not_checked (call budget),False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-02-14 22:15:00+00:00,2026-02-15 06:15:00+00:00,gap,,0.03,0.0,8.0,after_return_only,False,,,not_checked (call budget),False
@@ -1973,17 +1973,17 @@ OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,202
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_BIOREACTOR,411815084393702,OH,2026-10-21 22:30:00+00:00,2026-10-22 13:00:00+00:00,gap,,0.04,0.03,14.5,after_return_only,False,,,not_checked (call budget),False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-10-23 16:45:00+00:00,2025-10-24 15:00:00+00:00,gap,,0.02,0.03,22.25,after_return_only,False,14.0,8.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-10-24 18:00:00+00:00,2025-10-25 14:15:00+00:00,gap,,0.02,0.06,20.25,after_return_only,False,12.0,7.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-10-25 21:00:00+00:00,2025-10-26 14:15:00+00:00,gap,,0.02,0.04,17.25,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-10-25 21:00:00+00:00,2025-10-26 14:15:00+00:00,gap,,0.02,0.04,17.25,after_return_only,False,9.0,4.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-10-26 20:15:00+00:00,2025-10-27 14:15:00+00:00,gap,,0.01,0.05,18.0,after_return_only,False,9.0,4.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-10-27 21:00:00+00:00,2025-10-28 14:15:00+00:00,gap,,0.02,0.04,17.25,after_return_only,False,,,not_checked (call budget),False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-10-28 20:30:00+00:00,2025-10-29 14:00:00+00:00,gap,,0.02,0.03,17.5,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-10-27 21:00:00+00:00,2025-10-28 14:15:00+00:00,gap,,0.02,0.04,17.25,after_return_only,False,9.0,4.0,listing,False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-10-28 20:30:00+00:00,2025-10-29 14:00:00+00:00,gap,,0.02,0.03,17.5,after_return_only,False,8.0,3.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-10-29 19:45:00+00:00,2025-10-30 18:45:00+00:00,gap,,0.0,0.01,23.0,after_return_only,False,14.0,9.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-10-30 19:45:00+00:00,2025-10-31 14:00:00+00:00,gap,,0.0,0.01,18.25,after_return_only,False,9.0,4.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-10-31 17:00:00+00:00,2025-11-01 15:30:00+00:00,gap,,0.03,0.01,22.5,after_return_only,False,14.0,9.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-11-01 21:00:00+00:00,2025-11-02 14:45:00+00:00,gap,,0.0,0.04,17.75,after_return_only,False,9.0,4.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-11-02 19:30:00+00:00,2025-11-03 14:30:00+00:00,gap,,0.04,0.02,19.0,after_return_only,False,11.0,5.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-11-03 20:30:00+00:00,2025-11-04 14:45:00+00:00,gap,,0.03,0.04,18.25,after_return_only,False,9.0,4.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-11-04 20:00:00+00:00,2025-11-05 13:30:00+00:00,gap,,0.01,0.01,17.5,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-11-04 20:00:00+00:00,2025-11-05 13:30:00+00:00,gap,,0.01,0.01,17.5,after_return_only,False,10.0,5.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-11-05 18:15:00+00:00,2025-11-06 14:00:00+00:00,gap,,0.01,0.03,19.75,after_return_only,False,10.0,5.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-11-06 20:15:00+00:00,2025-11-07 17:00:00+00:00,gap,,0.01,0.01,20.75,after_return_only,False,11.0,6.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-11-07 21:45:00+00:00,2025-11-10 18:30:00+00:00,gap,,0.0,0.0,68.75,after_return_only,False,42.0,27.0,listing,False
@@ -2030,10 +2030,10 @@ OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2025-12-
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-01-01 21:15:00+00:00,2026-01-02 15:45:00+00:00,gap,,0.0,0.0,18.5,after_return_only,False,9.0,2.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-01-02 21:00:00+00:00,2026-01-03 14:45:00+00:00,gap,,0.01,0.0,17.75,after_return_only,False,5.0,1.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-01-03 21:15:00+00:00,2026-01-04 16:15:00+00:00,gap,,0.01,0.01,19.0,after_return_only,False,10.0,3.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-01-04 21:30:00+00:00,2026-01-05 14:30:00+00:00,gap,,0.01,0.0,17.0,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-01-04 21:30:00+00:00,2026-01-05 14:30:00+00:00,gap,,0.01,0.0,17.0,after_return_only,False,8.0,1.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-01-05 21:00:00+00:00,2026-01-06 09:30:00+00:00,gap,,0.0,0.0,12.5,after_return_only,False,,,not_checked (call budget),False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-01-06 21:45:00+00:00,2026-01-07 17:45:00+00:00,gap,,0.01,0.01,20.0,after_return_only,False,11.0,5.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-01-07 21:30:00+00:00,2026-01-08 14:30:00+00:00,gap,,0.0,0.01,17.0,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-01-07 21:30:00+00:00,2026-01-08 14:30:00+00:00,gap,,0.0,0.01,17.0,after_return_only,False,8.0,2.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-01-09 11:30:00+00:00,2026-01-10 15:15:00+00:00,gap,,0.01,0.0,27.75,after_return_only,False,19.0,11.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-01-10 19:30:00+00:00,2026-01-11 18:15:00+00:00,gap,,0.01,0.0,22.75,after_return_only,False,14.0,8.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-01-11 21:00:00+00:00,2026-01-12 15:00:00+00:00,gap,,0.01,0.01,18.0,after_return_only,False,9.0,3.0,listing,False
@@ -2064,7 +2064,7 @@ OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-02-
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-02-08 21:45:00+00:00,2026-02-09 14:00:00+00:00,gap,,0.01,0.0,16.25,after_return_only,False,,,not_checked (call budget),False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-02-09 22:30:00+00:00,2026-02-10 14:00:00+00:00,gap,,0.01,0.01,15.5,after_return_only,False,,,not_checked (call budget),False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-02-10 20:15:00+00:00,2026-02-11 16:00:00+00:00,gap,,0.0,0.01,19.75,after_return_only,False,10.0,4.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-02-11 21:00:00+00:00,2026-02-12 14:15:00+00:00,gap,,0.01,0.04,17.25,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-02-11 21:00:00+00:00,2026-02-12 14:15:00+00:00,gap,,0.01,0.04,17.25,after_return_only,False,9.0,4.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-02-12 22:15:00+00:00,2026-02-13 13:15:00+00:00,gap,,0.01,0.01,15.0,after_return_only,False,,,not_checked (call budget),False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-02-13 23:00:00+00:00,2026-02-14 07:15:00+00:00,gap,,0.0,0.0,8.25,after_return_only,False,,,not_checked (call budget),False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-02-14 22:15:00+00:00,2026-02-15 06:15:00+00:00,gap,,0.03,0.0,8.0,after_return_only,False,,,not_checked (call budget),False
@@ -2265,17 +2265,17 @@ OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-10-
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_FIELD,411815084393702,OH,2026-10-21 22:30:00+00:00,2026-10-22 13:00:00+00:00,gap,,0.04,0.03,14.5,after_return_only,False,,,not_checked (call budget),False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-10-23 16:45:00+00:00,2025-10-24 15:00:00+00:00,gap,,0.02,0.03,22.25,after_return_only,False,14.0,8.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-10-24 18:00:00+00:00,2025-10-25 14:15:00+00:00,gap,,0.02,0.06,20.25,after_return_only,False,12.0,7.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-10-25 21:00:00+00:00,2025-10-26 14:15:00+00:00,gap,,0.02,0.04,17.25,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-10-25 21:00:00+00:00,2025-10-26 14:15:00+00:00,gap,,0.02,0.04,17.25,after_return_only,False,9.0,4.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-10-26 20:15:00+00:00,2025-10-27 14:15:00+00:00,gap,,0.01,0.05,18.0,after_return_only,False,9.0,4.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-10-27 21:00:00+00:00,2025-10-28 14:15:00+00:00,gap,,0.02,0.04,17.25,after_return_only,False,,,not_checked (call budget),False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-10-28 20:30:00+00:00,2025-10-29 14:00:00+00:00,gap,,0.02,0.03,17.5,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-10-27 21:00:00+00:00,2025-10-28 14:15:00+00:00,gap,,0.02,0.04,17.25,after_return_only,False,9.0,4.0,listing,False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-10-28 20:30:00+00:00,2025-10-29 14:00:00+00:00,gap,,0.02,0.03,17.5,after_return_only,False,8.0,3.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-10-29 19:45:00+00:00,2025-10-30 18:45:00+00:00,gap,,0.0,0.01,23.0,after_return_only,False,14.0,9.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-10-30 19:45:00+00:00,2025-10-31 14:00:00+00:00,gap,,0.0,0.01,18.25,after_return_only,False,9.0,4.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-10-31 17:00:00+00:00,2025-11-01 15:30:00+00:00,gap,,0.03,0.01,22.5,after_return_only,False,15.0,10.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-11-01 21:00:00+00:00,2025-11-02 14:45:00+00:00,gap,,0.0,0.04,17.75,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-11-01 21:00:00+00:00,2025-11-02 14:45:00+00:00,gap,,0.0,0.04,17.75,after_return_only,False,9.0,4.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-11-02 19:30:00+00:00,2025-11-03 14:30:00+00:00,gap,,0.04,0.02,19.0,after_return_only,False,10.0,5.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-11-03 20:30:00+00:00,2025-11-04 14:45:00+00:00,gap,,0.03,0.04,18.25,after_return_only,False,9.0,4.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-11-04 20:00:00+00:00,2025-11-05 13:30:00+00:00,gap,,0.01,0.01,17.5,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-11-04 20:00:00+00:00,2025-11-05 13:30:00+00:00,gap,,0.01,0.01,17.5,after_return_only,False,10.0,5.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-11-05 18:15:00+00:00,2025-11-06 14:00:00+00:00,gap,,0.01,0.03,19.75,after_return_only,False,10.0,5.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-11-06 20:15:00+00:00,2025-11-07 17:00:00+00:00,gap,,0.01,0.01,20.75,after_return_only,False,12.0,6.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-11-07 21:45:00+00:00,2025-11-10 18:30:00+00:00,gap,,0.0,0.0,68.75,after_return_only,False,48.0,31.0,listing,False
@@ -2320,12 +2320,12 @@ OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-12
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-12-30 20:00:00+00:00,2025-12-31 17:00:00+00:00,gap,,0.01,0.0,21.0,after_return_only,False,13.0,5.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2025-12-31 19:30:00+00:00,2026-01-01 15:00:00+00:00,gap,,0.0,0.0,19.5,after_return_only,False,6.0,2.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-01-01 21:15:00+00:00,2026-01-02 15:45:00+00:00,gap,,0.0,0.0,18.5,after_return_only,False,9.0,2.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-01-02 21:00:00+00:00,2026-01-03 14:45:00+00:00,gap,,0.01,0.0,17.75,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-01-02 21:00:00+00:00,2026-01-03 14:45:00+00:00,gap,,0.01,0.0,17.75,after_return_only,False,5.0,1.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-01-03 21:15:00+00:00,2026-01-04 16:15:00+00:00,gap,,0.01,0.01,19.0,after_return_only,False,11.0,4.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-01-04 21:30:00+00:00,2026-01-05 14:30:00+00:00,gap,,0.01,0.0,17.0,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-01-04 21:30:00+00:00,2026-01-05 14:30:00+00:00,gap,,0.01,0.0,17.0,after_return_only,False,8.0,1.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-01-05 21:00:00+00:00,2026-01-06 09:30:00+00:00,gap,,0.0,0.0,12.5,after_return_only,False,,,not_checked (call budget),False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-01-06 21:45:00+00:00,2026-01-07 17:45:00+00:00,gap,,0.01,0.01,20.0,after_return_only,False,11.0,5.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-01-07 21:30:00+00:00,2026-01-08 14:30:00+00:00,gap,,0.0,0.01,17.0,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-01-07 21:30:00+00:00,2026-01-08 14:30:00+00:00,gap,,0.0,0.01,17.0,after_return_only,False,9.0,2.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-01-09 11:30:00+00:00,2026-01-10 15:15:00+00:00,gap,,0.01,0.0,27.75,after_return_only,False,19.0,11.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-01-10 19:30:00+00:00,2026-01-11 18:15:00+00:00,gap,,0.01,0.0,22.75,after_return_only,False,14.0,8.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-01-11 21:00:00+00:00,2026-01-12 15:00:00+00:00,gap,,0.01,0.01,18.0,after_return_only,False,9.0,3.0,listing,False
@@ -2356,7 +2356,7 @@ OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-02
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-02-08 21:45:00+00:00,2026-02-09 14:00:00+00:00,gap,,0.01,0.0,16.25,after_return_only,False,,,not_checked (call budget),False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-02-09 22:30:00+00:00,2026-02-10 14:00:00+00:00,gap,,0.01,0.01,15.5,after_return_only,False,,,not_checked (call budget),False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-02-10 20:15:00+00:00,2026-02-11 16:00:00+00:00,gap,,0.0,0.01,19.75,after_return_only,False,10.0,5.0,listing,False
-OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-02-11 21:00:00+00:00,2026-02-12 14:15:00+00:00,gap,,0.01,0.04,17.25,after_return_only,False,,,not_checked (call budget),False
+OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-02-11 21:00:00+00:00,2026-02-12 14:15:00+00:00,gap,,0.01,0.04,17.25,after_return_only,False,11.0,5.0,listing,False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-02-12 22:15:00+00:00,2026-02-13 13:15:00+00:00,gap,,0.01,0.01,15.0,after_return_only,False,,,not_checked (call budget),False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-02-13 23:00:00+00:00,2026-02-14 07:15:00+00:00,gap,,0.0,0.0,8.25,after_return_only,False,,,not_checked (call budget),False
 OH_Outflow_tile_to_bioreactor_near_Mark_Center_STREAM,411815084393702,OH,2026-02-14 22:15:00+00:00,2026-02-15 06:15:00+00:00,gap,,0.03,0.0,8.0,after_return_only,False,,,not_checked (call budget),False
@@ -2642,7 +2642,7 @@ OK_Cimarron_River_near_Ripley_OK,07161450,OK,2026-02-26 14:00:00+00:00,2026-02-2
 OK_Cimarron_River_near_Ripley_OK,07161450,OK,2026-02-28 16:00:00+00:00,2026-02-28 22:30:00+00:00,gap,,7.49,7.46,6.5,after_return_only,False,,,not_checked (call budget),False
 OK_Cimarron_River_near_Ripley_OK,07161450,OK,2026-03-03 13:30:00+00:00,2026-03-03 23:00:00+00:00,gap,,7.48,7.46,9.5,after_return_only,False,,,not_checked (call budget),False
 OK_Cimarron_River_near_Ripley_OK,07161450,OK,2026-03-08 16:30:00+00:00,2026-03-09 01:00:00+00:00,gap,,7.5,7.48,8.5,after_return_only,False,,,not_checked (call budget),False
-OK_Cimarron_River_near_Ripley_OK,07161450,OK,2026-03-12 15:30:00+00:00,2026-03-13 08:30:00+00:00,gap,,7.71,7.67,17.0,after_return_only,False,,,not_checked (call budget),False
+OK_Cimarron_River_near_Ripley_OK,07161450,OK,2026-03-12 15:30:00+00:00,2026-03-13 08:30:00+00:00,gap,,7.71,7.67,17.0,after_return_only,False,0.0,0.0,listing,False
 OK_Cimarron_River_near_Ripley_OK,07161450,OK,2026-03-14 14:30:00+00:00,2026-03-15 13:00:00+00:00,gap,,7.65,7.52,22.5,after_return_only,False,0.0,0.0,listing,False
 OK_Cimarron_River_near_Ripley_OK,07161450,OK,2026-03-20 17:30:00+00:00,2026-03-21 00:00:00+00:00,gap,,7.36,7.35,6.5,after_return_only,False,,,not_checked (call budget),False
 OK_Cimarron_River_near_Ripley_OK,07161450,OK,2026-05-01 17:30:00+00:00,2026-05-01 23:30:00+00:00,gap,,7.26,7.25,6.0,after_return_only,False,,,not_checked (call budget),False
@@ -2664,7 +2664,7 @@ OK_Illinois_River_near_Moodys,07196320,OK,2025-12-09 14:00:00+00:00,2025-12-09 2
 OK_Illinois_River_near_Moodys,07196320,OK,2025-12-10 12:45:00+00:00,2025-12-10 22:00:00+00:00,gap,,4.03,4.02,9.25,after_return_only,False,,,not_checked (call budget),False
 OK_Illinois_River_near_Moodys,07196320,OK,2025-12-11 15:15:00+00:00,2025-12-11 23:00:00+00:00,gap,,4.02,4.02,7.75,after_return_only,False,,,not_checked (call budget),False
 OK_Illinois_River_near_Moodys,07196320,OK,2025-12-15 16:45:00+00:00,2025-12-15 23:30:00+00:00,gap,,3.94,3.94,6.75,after_return_only,False,,,not_checked (call budget),False
-OK_Illinois_River_near_Moodys,07196320,OK,2025-12-27 17:15:00+00:00,2025-12-28 11:00:00+00:00,gap,,3.93,3.9,17.75,after_return_only,False,,,not_checked (call budget),False
+OK_Illinois_River_near_Moodys,07196320,OK,2025-12-27 17:15:00+00:00,2025-12-28 11:00:00+00:00,gap,,3.93,3.9,17.75,after_return_only,False,26.0,23.0,listing,False
 OK_Illinois_River_near_Moodys,07196320,OK,2025-12-28 11:15:00+00:00,2025-12-28 17:15:00+00:00,gap,,3.91,3.9,6.0,after_return_only,False,,,not_checked (call budget),False
 OK_Illinois_River_near_Moodys,07196320,OK,2025-12-28 19:00:00+00:00,2025-12-29 08:15:00+00:00,gap,,3.91,3.89,13.25,after_return_only,False,,,not_checked (call budget),False
 OK_Illinois_River_near_Moodys,07196320,OK,2026-01-13 16:00:00+00:00,2026-01-13 23:00:00+00:00,gap,,3.91,3.9,7.0,after_return_only,False,,,not_checked (call budget),False
@@ -2744,24 +2744,24 @@ OR_Sandy_River_near_Marmot,14137000,OR,2026-01-26 20:30:00+00:00,2026-01-28 18:0
 OR_Sandy_River_near_Marmot,14137000,OR,2026-06-24 22:15:00+00:00,2026-06-25 13:30:00+00:00,gap,,690.05,690.06,15.25,after_return_only,False,,,not_checked (call budget),False
 OR_Willamette_River_below_Falls_at_Oregon_City,14207770,OR,2026-06-06 23:00:00+00:00,2026-06-11 19:30:00+00:00,gap,,6.28,5.48,116.5,after_return_only,False,0.0,0.0,listing,False
 PA_01480870_RS485,01480870,PA,2026-02-06 01:00:00+00:00,2026-02-06 17:15:00+00:00,gap,,2.92,2.89,16.25,after_return_only,False,,,not_checked (call budget),False
-PA_01480870_RS485,01480870,PA,2026-07-15 20:00:00+00:00,2026-07-16 13:00:00+00:00,gap,,3.0,2.93,17.0,after_return_only,False,,,not_checked (call budget),False
+PA_01480870_RS485,01480870,PA,2026-07-15 20:00:00+00:00,2026-07-16 13:00:00+00:00,gap,,3.0,2.93,17.0,after_return_only,False,0.0,0.0,listing,False
 PA_Brandywine_Creek_RISE,01480870,PA,2026-02-06 01:00:00+00:00,2026-02-06 17:15:00+00:00,gap,,2.92,2.89,16.25,after_return_only,False,,,not_checked (call budget),False
-PA_Brandywine_Creek_RISE,01480870,PA,2026-07-15 20:00:00+00:00,2026-07-16 13:00:00+00:00,gap,,3.0,2.93,17.0,after_return_only,False,,,not_checked (call budget),False
+PA_Brandywine_Creek_RISE,01480870,PA,2026-07-15 20:00:00+00:00,2026-07-16 13:00:00+00:00,gap,,3.0,2.93,17.0,after_return_only,False,0.0,0.0,listing,False
 PA_Brandywine_Creek_at_Chadds_Ford,01481000,PA,2026-06-27 22:15:00+00:00,2026-06-28 14:30:00+00:00,gap,,1.68,1.69,16.25,after_return_only,True,65.0,26.0,cached_listing,False
 PA_Brandywine_Creek_at_Chadds_Ford,01481000,PA,2026-07-10 17:04:00+00:00,2026-07-13 14:00:00+00:00,gap,,1.84,1.58,68.933,after_return_only,True,0.0,0.0,cached_listing,False
 PA_Brandywine_Creek_at_Chadds_Ford,01481000,PA,2026-07-14 18:39:00+00:00,2026-07-15 16:04:00+00:00,gap,,1.56,1.56,21.417,after_return_only,True,86.0,46.0,cached_listing,False
 PA_Brandywine_Creek_at_Chadds_Ford,01481000,PA,2026-10-13 21:45:00+00:00,2026-10-14 05:15:00+00:00,gap,,2.37,2.31,7.5,after_return_only,True,30.0,2.0,listing,True
 PA_Chartiers_Creek_at_Carnegie,03085500,PA,2026-07-15 19:30:00+00:00,2026-07-16 10:45:00+00:00,gap,,1.17,1.17,15.25,after_return_only,False,,,not_checked (call budget),False
 PA_EB_Brandywine_RS485_ott_test,01480870,PA,2026-02-06 01:00:00+00:00,2026-02-06 17:15:00+00:00,gap,,2.92,2.89,16.25,after_return_only,False,,,not_checked (call budget),False
-PA_EB_Brandywine_RS485_ott_test,01480870,PA,2026-07-15 20:00:00+00:00,2026-07-16 13:00:00+00:00,gap,,3.0,2.93,17.0,after_return_only,False,,,not_checked (call budget),False
+PA_EB_Brandywine_RS485_ott_test,01480870,PA,2026-07-15 20:00:00+00:00,2026-07-16 13:00:00+00:00,gap,,3.0,2.93,17.0,after_return_only,False,0.0,0.0,listing,False
 PA_East_Branch_Brandywine_Creek_below_Downingtown,01480870,PA,2026-02-06 01:00:00+00:00,2026-02-06 17:15:00+00:00,gap,,2.92,2.89,16.25,after_return_only,False,,,not_checked (call budget),False
-PA_East_Branch_Brandywine_Creek_below_Downingtown,01480870,PA,2026-07-15 20:00:00+00:00,2026-07-16 13:00:00+00:00,gap,,3.0,2.93,17.0,after_return_only,False,,,not_checked (call budget),False
+PA_East_Branch_Brandywine_Creek_below_Downingtown,01480870,PA,2026-07-15 20:00:00+00:00,2026-07-16 13:00:00+00:00,gap,,3.0,2.93,17.0,after_return_only,False,17.0,7.0,listing,False
 PA_East_Branch_Brandywine_Creek_below_Downingtown_NAU_Test,01480870,PA,2026-02-06 01:00:00+00:00,2026-02-06 17:15:00+00:00,gap,,2.92,2.89,16.25,after_return_only,False,,,not_checked (call budget),False
-PA_East_Branch_Brandywine_Creek_below_Downingtown_NAU_Test,01480870,PA,2026-07-15 20:00:00+00:00,2026-07-16 13:00:00+00:00,gap,,3.0,2.93,17.0,after_return_only,False,,,not_checked (call budget),False
+PA_East_Branch_Brandywine_Creek_below_Downingtown_NAU_Test,01480870,PA,2026-07-15 20:00:00+00:00,2026-07-16 13:00:00+00:00,gap,,3.0,2.93,17.0,after_return_only,False,0.0,0.0,listing,False
 PA_East_Branch_Brandywine_Creek_below_Downingtown_RS485_CAMERA,01480870,PA,2026-02-06 01:00:00+00:00,2026-02-06 17:15:00+00:00,gap,,2.92,2.89,16.25,after_return_only,False,,,not_checked (call budget),False
-PA_East_Branch_Brandywine_Creek_below_Downingtown_RS485_CAMERA,01480870,PA,2026-07-15 20:00:00+00:00,2026-07-16 13:00:00+00:00,gap,,3.0,2.93,17.0,after_return_only,False,,,not_checked (call budget),False
+PA_East_Branch_Brandywine_Creek_below_Downingtown_RS485_CAMERA,01480870,PA,2026-07-15 20:00:00+00:00,2026-07-16 13:00:00+00:00,gap,,3.0,2.93,17.0,after_return_only,False,0.0,0.0,listing,False
 PA_East_Branch_Brandywine_Creek_below_Downingtown_RS485_CAMERA_,01480870,PA,2026-02-06 01:00:00+00:00,2026-02-06 17:15:00+00:00,gap,,2.92,2.89,16.25,after_return_only,False,,,not_checked (call budget),False
-PA_East_Branch_Brandywine_Creek_below_Downingtown_RS485_CAMERA_,01480870,PA,2026-07-15 20:00:00+00:00,2026-07-16 13:00:00+00:00,gap,,3.0,2.93,17.0,after_return_only,False,,,not_checked (call budget),False
+PA_East_Branch_Brandywine_Creek_below_Downingtown_RS485_CAMERA_,01480870,PA,2026-07-15 20:00:00+00:00,2026-07-16 13:00:00+00:00,gap,,3.0,2.93,17.0,after_return_only,False,0.0,0.0,listing,False
 PA_Lackawaxen_River_at_Hawley,01431500,PA,2026-04-08 20:00:00+00:00,2026-04-10 12:00:00+00:00,gap,,3.24,2.96,40.0,after_return_only,False,0.0,0.0,listing,False
 PA_Lehigh_River_at_Stoddartsville,01447500,PA,2026-06-07 03:15:00+00:00,2026-06-08 19:15:00+00:00,gap|qualified,Eqp,0.82,0.69,40.0,after_return_only,False,0.0,0.0,listing,False
 PA_Lehigh_River_at_Stoddartsville,01447500,PA,2026-07-15 19:15:00+00:00,2026-07-16 11:30:00+00:00,gap,,0.63,0.59,16.25,after_return_only,False,,,not_checked (call budget),False
@@ -2780,7 +2780,7 @@ PA_Neshaminy_Creek_near_Langhorne,01465500,PA,2026-02-14 09:00:00+00:00,2026-02-
 PA_Neshaminy_Creek_near_Langhorne,01465500,PA,2026-07-08 15:30:00+00:00,2026-07-09 14:15:00+00:00,gap,,1.15,1.02,22.75,after_return_only,False,0.0,0.0,listing,False
 PA_Oil_Creek_at_Rouseville,03020500,PA,2026-07-15 19:45:00+00:00,2026-07-16 11:00:00+00:00,gap,,2.02,2.01,15.25,after_return_only,False,,,not_checked (call budget),False
 PA_PEKOSOFT_East_Branch_Brandywine_Creek_below_Downingtown,01480870,PA,2026-02-06 01:00:00+00:00,2026-02-06 17:15:00+00:00,gap,,2.92,2.89,16.25,after_return_only,False,,,not_checked (call budget),False
-PA_PEKOSOFT_East_Branch_Brandywine_Creek_below_Downingtown,01480870,PA,2026-07-15 20:00:00+00:00,2026-07-16 13:00:00+00:00,gap,,3.0,2.93,17.0,after_return_only,False,,,not_checked (call budget),False
+PA_PEKOSOFT_East_Branch_Brandywine_Creek_below_Downingtown,01480870,PA,2026-07-15 20:00:00+00:00,2026-07-16 13:00:00+00:00,gap,,3.0,2.93,17.0,after_return_only,False,0.0,0.0,listing,False
 PA_Right_Bank_Schuylkill_River_at_Conshohocken,01473730,PA,2026-01-25 20:00:00+00:00,2026-01-26 12:45:00+00:00,gap,,6.68,6.6,16.75,after_return_only,False,,,not_checked (call budget),False
 PA_Right_Bank_Schuylkill_River_at_Conshohocken,01473730,PA,2026-01-28 04:45:00+00:00,2026-01-28 11:45:00+00:00,gap,,6.83,6.86,7.0,after_return_only,False,,,not_checked (call budget),False
 PA_Right_Bank_Schuylkill_River_at_Conshohocken,01473730,PA,2026-01-28 21:45:00+00:00,2026-01-29 03:45:00+00:00,gap,,6.95,7.09,6.0,after_return_only,False,,,not_checked (call budget),False
@@ -2808,14 +2808,14 @@ SC_CROOKED_CREEK_BELOW_N_MARLBORO_ST_AT_BENNETTSVILLE,021305805,SC,2025-12-05 11
 SC_CROOKED_CREEK_BELOW_N_MARLBORO_ST_AT_BENNETTSVILLE,021305805,SC,2026-01-25 05:15:00+00:00,2026-01-26 16:20:00+00:00,gap,,14.09,14.35,35.083,after_return_only,False,0.0,0.0,listing,False
 SC_CROOKED_CREEK_BELOW_N_MARLBORO_ST_AT_BENNETTSVILLE,021305805,SC,2026-02-01 07:45:00+00:00,2026-02-01 15:00:00+00:00,gap,,14.11,14.11,7.25,after_return_only,False,,,not_checked (call budget),False
 SC_CROOKED_CREEK_BELOW_N_MARLBORO_ST_AT_BENNETTSVILLE,021305805,SC,2026-02-05 23:00:00+00:00,2026-02-06 11:50:00+00:00,gap,,14.84,14.87,12.833,after_return_only,False,,,not_checked (call budget),False
-SC_CROOKED_CREEK_BELOW_N_MARLBORO_ST_AT_BENNETTSVILLE,021305805,SC,2026-02-27 22:00:00+00:00,2026-02-28 15:20:00+00:00,gap,,14.66,14.92,17.333,after_return_only,False,,,not_checked (call budget),False
+SC_CROOKED_CREEK_BELOW_N_MARLBORO_ST_AT_BENNETTSVILLE,021305805,SC,2026-02-27 22:00:00+00:00,2026-02-28 15:20:00+00:00,gap,,14.66,14.92,17.333,after_return_only,False,1.0,1.0,listing,False
 SC_CROOKED_CREEK_BELOW_N_MARLBORO_ST_AT_BENNETTSVILLE,021305805,SC,2026-02-28 22:30:00+00:00,2026-03-01 12:50:00+00:00,gap,,14.93,14.95,14.333,after_return_only,False,,,not_checked (call budget),False
 SC_CROOKED_CREEK_BELOW_N_MARLBORO_ST_AT_BENNETTSVILLE,021305805,SC,2026-07-15 20:15:00+00:00,2026-07-16 12:15:00+00:00,gap,,14.31,14.51,16.0,after_return_only,False,,,not_checked (call budget),False
 SC_Wando_River_above_Mt_Pleasant,021720698,SC,2026-01-08 06:00:00+00:00,2026-01-08 16:00:00+00:00,gap,,19.55,20.36,10.0,after_return_only,False,,,not_checked (call budget),False
 SC_Wando_River_above_Mt_Pleasant,021720698,SC,2026-05-30 22:45:00+00:00,2026-06-02 17:00:00+00:00,gap,,20.54,19.01,66.25,after_return_only,False,121.0,115.0,listing,False
 SC_Wando_River_above_Mt_Pleasant,021720698,SC,2026-07-11 03:30:00+00:00,2026-07-11 18:00:00+00:00,gap,,15.02,16.86,14.5,after_return_only,False,,,not_checked (call budget),False
 SC_Wando_River_above_Mt_Pleasant,021720698,SC,2026-07-13 03:45:00+00:00,2026-07-13 16:30:00+00:00,gap,,16.37,15.98,12.75,after_return_only,False,,,not_checked (call budget),False
-SC_Wando_River_above_Mt_Pleasant,021720698,SC,2026-07-13 20:00:00+00:00,2026-07-14 13:45:00+00:00,gap,,17.54,22.97,17.75,after_return_only,False,,,not_checked (call budget),False
+SC_Wando_River_above_Mt_Pleasant,021720698,SC,2026-07-13 20:00:00+00:00,2026-07-14 13:45:00+00:00,gap,,17.54,22.97,17.75,after_return_only,False,23.0,21.0,listing,False
 SD_Antelope_Cr_near_Mission,06463900,SD,2026-10-19 21:00:00+00:00,2026-10-20 13:45:00+00:00,gap,,1.38,1.38,16.75,after_return_only,False,,,not_checked (call budget),False
 SD_Big_Sioux_River_near_Hawarden,06483950,SD,2025-11-29 04:15:00+00:00,2025-11-30 11:30:00+00:00,gap,,12.92,12.72,31.25,after_return_only,False,0.0,0.0,listing,False
 SD_Big_Sioux_River_near_Hawarden,06483950,SD,2025-11-30 15:15:00+00:00,2025-12-01 17:30:00+00:00,gap,,12.82,12.53,26.25,after_return_only,False,0.0,0.0,listing,False
@@ -2830,7 +2830,7 @@ SD_Big_Sioux_River_near_Hawarden,06483950,SD,2026-02-01 16:45:00+00:00,2026-02-0
 SD_Big_Sioux_River_near_Hawarden,06483950,SD,2026-02-20 10:15:00+00:00,2026-02-23 19:15:00+00:00,gap,,12.34,12.54,81.0,after_return_only,False,0.0,0.0,listing,False
 SD_Big_Sioux_River_near_Hawarden,06483950,SD,2026-02-25 06:30:00+00:00,2026-02-25 23:15:00+00:00,gap,,12.66,12.63,16.75,after_return_only,False,,,not_checked (call budget),False
 SD_Big_Sioux_River_near_Hawarden,06483950,SD,2026-02-26 15:30:00+00:00,2026-02-27 00:30:00+00:00,gap,,12.43,12.61,9.0,after_return_only,False,,,not_checked (call budget),False
-SD_Big_Sioux_River_near_Jefferson,06485910,SD,2026-01-18 22:15:00+00:00,2026-01-19 15:15:00+00:00,gap,,10.07,9.93,17.0,after_return_only,False,,,not_checked (call budget),False
+SD_Big_Sioux_River_near_Jefferson,06485910,SD,2026-01-18 22:15:00+00:00,2026-01-19 15:15:00+00:00,gap,,10.07,9.93,17.0,after_return_only,False,0.0,0.0,listing,False
 SD_Big_Sioux_River_near_Jefferson,06485910,SD,2026-01-19 23:30:00+00:00,2026-01-20 15:15:00+00:00,gap,,10.24,10.51,15.75,after_return_only,False,,,not_checked (call budget),False
 SD_Big_Sioux_River_near_Jefferson,06485910,SD,2026-01-22 00:15:00+00:00,2026-01-22 14:30:00+00:00,gap,,10.24,10.37,14.25,after_return_only,False,,,not_checked (call budget),False
 SD_Big_Sioux_River_near_Jefferson,06485910,SD,2026-01-23 00:45:00+00:00,2026-01-23 11:45:00+00:00,gap,,10.41,10.5,11.0,after_return_only,False,,,not_checked (call budget),False
@@ -2940,7 +2940,7 @@ SD_Stagebarn_Canyon_CR_abv_Elk_CR_nr_Summerset,06425050,SD,2026-01-24 11:00:00+0
 SD_Stagebarn_Canyon_CR_abv_Elk_CR_nr_Summerset,06425050,SD,2026-01-24 22:20:00+00:00,2026-01-27 02:45:00+00:00,gap,,1.89,1.97,52.417,after_return_only,False,52.0,19.0,listing,False
 SD_Stagebarn_Canyon_CR_abv_Elk_CR_nr_Summerset,06425050,SD,2026-06-01 20:00:00+00:00,2026-06-02 10:00:00+00:00,gap,,1.42,1.54,14.0,after_return_only,False,,,not_checked (call budget),False
 SD_Stagebarn_Canyon_CR_abv_Elk_CR_nr_Summerset,06425050,SD,2026-07-05 18:45:00+00:00,2026-07-06 00:45:00+00:00,gap,,1.26,1.28,6.0,after_return_only,False,,,not_checked (call budget),False
-SD_Stagebarn_Canyon_CR_abv_Elk_CR_nr_Summerset,06425050,SD,2026-07-16 14:05:00+00:00,2026-07-17 07:45:00+00:00,gap,,1.4,1.38,17.667,after_return_only,False,,,not_checked (call budget),False
+SD_Stagebarn_Canyon_CR_abv_Elk_CR_nr_Summerset,06425050,SD,2026-07-16 14:05:00+00:00,2026-07-17 07:45:00+00:00,gap,,1.4,1.38,17.667,after_return_only,False,17.0,12.0,listing,False
 SD_Stagebarn_Canyon_CR_abv_Elk_CR_nr_Summerset,06425050,SD,2026-07-17 11:45:00+00:00,2026-07-17 17:45:00+00:00,gap,,1.45,1.3,6.0,after_return_only,False,,,not_checked (call budget),False
 SD_Stagebarn_Canyon_CR_abv_Elk_CR_nr_Summerset,06425050,SD,2026-10-19 21:55:00+00:00,2026-10-20 08:15:00+00:00,gap,,1.57,1.57,10.333,after_return_only,False,,,not_checked (call budget),False
 SD_Stagebarn_Canyon_CR_abv_Elk_CR_nr_Summerset,06425050,SD,2026-10-20 22:30:00+00:00,2026-10-21 08:05:00+00:00,gap,,1.56,1.59,9.583,after_return_only,False,,,not_checked (call budget),False
@@ -2953,7 +2953,7 @@ SD_White_River_near_White_River,06447450,SD,2025-12-11 11:15:00+00:00,2025-12-11
 SD_White_River_near_White_River,06447450,SD,2025-12-11 21:15:00+00:00,2025-12-12 11:45:00+00:00,gap,,3.35,3.38,14.5,after_return_only,False,,,not_checked (call budget),False
 SD_White_River_near_White_River,06447450,SD,2025-12-12 21:45:00+00:00,2025-12-13 04:45:00+00:00,gap,,3.35,3.48,7.0,after_return_only,False,,,not_checked (call budget),False
 SD_White_River_near_White_River,06447450,SD,2025-12-13 23:15:00+00:00,2025-12-14 15:30:00+00:00,gap,,3.43,3.26,16.25,after_return_only,False,,,not_checked (call budget),False
-SD_White_River_near_White_River,06447450,SD,2026-01-27 01:30:00+00:00,2026-01-27 18:45:00+00:00,gap,,3.41,3.43,17.25,after_return_only,False,,,not_checked (call budget),False
+SD_White_River_near_White_River,06447450,SD,2026-01-27 01:30:00+00:00,2026-01-27 18:45:00+00:00,gap,,3.41,3.43,17.25,after_return_only,False,5.0,4.0,listing,False
 SD_White_River_near_White_River,06447450,SD,2026-01-28 08:30:00+00:00,2026-01-28 15:30:00+00:00,gap,,3.43,3.44,7.0,after_return_only,False,,,not_checked (call budget),False
 SD_White_River_near_White_River,06447450,SD,2026-01-29 02:45:00+00:00,2026-01-29 10:30:00+00:00,gap,,3.41,3.38,7.75,after_return_only,False,,,not_checked (call budget),False
 SD_White_River_near_White_River,06447450,SD,2026-01-31 17:30:00+00:00,2026-01-31 23:30:00+00:00,gap,,3.38,3.4,6.0,after_return_only,False,,,not_checked (call budget),False
@@ -3151,17 +3151,17 @@ TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2025-12-29 06:45:00+
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2025-12-30 23:05:00+00:00,2025-12-31 15:30:00+00:00,gap,,52.01,52.01,16.417,after_return_only,False,,,not_checked (call budget),False
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2025-12-31 23:45:00+00:00,2026-01-01 14:55:00+00:00,gap,,52.01,52.01,15.167,after_return_only,False,,,not_checked (call budget),False
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-04 00:30:00+00:00,2026-01-04 16:30:00+00:00,gap,,52.01,52.01,16.0,after_return_only,False,,,not_checked (call budget),False
-TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-04 23:40:00+00:00,2026-01-05 17:15:00+00:00,gap,,52.01,52.01,17.583,after_return_only,False,,,not_checked (call budget),False
+TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-04 23:40:00+00:00,2026-01-05 17:15:00+00:00,gap,,52.01,52.01,17.583,after_return_only,False,17.0,3.0,listing,False
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-06 23:50:00+00:00,2026-01-07 14:45:00+00:00,gap,,52.02,52.01,14.917,after_return_only,False,,,not_checked (call budget),False
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-09 07:20:00+00:00,2026-01-09 15:10:00+00:00,gap,,52.01,52.01,7.833,after_return_only,False,,,not_checked (call budget),False
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-10 10:10:00+00:00,2026-01-10 16:10:00+00:00,gap,,52.01,52.02,6.0,after_return_only,False,,,not_checked (call budget),False
-TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-10 23:10:00+00:00,2026-01-11 16:20:00+00:00,gap,,52.02,52.01,17.167,after_return_only,False,,,not_checked (call budget),False
-TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-11 23:10:00+00:00,2026-01-12 16:45:00+00:00,gap,,52.01,52.05,17.583,after_return_only,False,,,not_checked (call budget),False
+TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-10 23:10:00+00:00,2026-01-11 16:20:00+00:00,gap,,52.02,52.01,17.167,after_return_only,False,16.0,3.0,listing,False
+TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-11 23:10:00+00:00,2026-01-12 16:45:00+00:00,gap,,52.01,52.05,17.583,after_return_only,False,17.0,3.0,listing,False
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-12 23:55:00+00:00,2026-01-13 18:35:00+00:00,gap,,52.01,52.02,18.667,after_return_only,False,19.0,5.0,listing,False
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-13 23:35:00+00:00,2026-01-14 13:35:00+00:00,gap,,52.01,52.03,14.0,after_return_only,False,,,not_checked (call budget),False
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-15 00:05:00+00:00,2026-01-15 15:55:00+00:00,gap,,52.01,52.01,15.833,after_return_only,False,,,not_checked (call budget),False
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-15 23:45:00+00:00,2026-01-16 14:55:00+00:00,gap,,52.01,52.01,15.167,after_return_only,False,,,not_checked (call budget),False
-TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-16 23:35:00+00:00,2026-01-17 16:50:00+00:00,gap,,52.01,52.01,17.25,after_return_only,False,,,not_checked (call budget),False
+TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-16 23:35:00+00:00,2026-01-17 16:50:00+00:00,gap,,52.01,52.01,17.25,after_return_only,False,17.0,3.0,listing,False
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-17 22:30:00+00:00,2026-01-18 16:20:00+00:00,gap,,52.01,52.01,17.833,after_return_only,False,18.0,4.0,listing,False
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-18 23:30:00+00:00,2026-01-19 15:25:00+00:00,gap,,52.01,52.01,15.917,after_return_only,False,,,not_checked (call budget),False
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-19 23:55:00+00:00,2026-01-20 16:45:00+00:00,gap,,52.01,52.01,16.833,after_return_only,False,,,not_checked (call budget),False
@@ -3170,7 +3170,7 @@ TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-22 05:55:00+
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-23 00:20:00+00:00,2026-01-23 11:00:00+00:00,gap,,52.01,52.01,10.667,after_return_only,False,,,not_checked (call budget),False
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-24 08:35:00+00:00,2026-01-26 15:00:00+00:00,gap,,52.02,52.01,54.417,after_return_only,False,54.0,21.0,listing,False
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-26 23:25:00+00:00,2026-01-27 15:05:00+00:00,gap,,52.02,52.01,15.667,after_return_only,False,,,not_checked (call budget),False
-TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-27 22:00:00+00:00,2026-01-28 15:05:00+00:00,gap,,52.02,52.01,17.083,after_return_only,False,,,not_checked (call budget),False
+TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-27 22:00:00+00:00,2026-01-28 15:05:00+00:00,gap,,52.02,52.01,17.083,after_return_only,False,18.0,4.0,listing,False
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-28 23:50:00+00:00,2026-01-29 15:15:00+00:00,gap,,52.01,52.01,15.417,after_return_only,False,,,not_checked (call budget),False
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-30 04:05:00+00:00,2026-01-30 17:00:00+00:00,gap,,52.01,52.01,12.917,after_return_only,False,,,not_checked (call budget),False
 TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,08158823,TX,2026-01-30 23:25:00+00:00,2026-01-31 19:40:00+00:00,gap,,52.01,52.01,20.25,after_return_only,False,20.0,6.0,listing,False
@@ -3210,7 +3210,7 @@ TX_W_Fk_Trinity_Rvr_nr_Grand_Prairie_TX,08049500,TX,2026-08-02 23:45:00+00:00,20
 TX_W_Fk_Trinity_Rvr_nr_Grand_Prairie_TX,08049500,TX,2026-09-15 00:15:00+00:00,2026-09-15 14:45:00+00:00,gap|qualified,Eqp,2.31,2.4,14.5,after_return_only,False,,,not_checked (call budget),False
 TX_Zacate_Ck_at_Laredo,08458995,TX,2026-07-30 19:30:00+00:00,2026-07-31 17:00:00+00:00,gap,,1.2,1.25,21.5,after_return_only,False,84.0,39.0,listing,False
 TX_Zacate_Ck_at_Laredo,08458995,TX,2026-10-07 04:15:00+00:00,2026-10-07 15:15:00+00:00,gap,,1.22,1.2,11.0,after_return_only,False,,,not_checked (call budget),False
-TX_Zacate_Ck_at_Laredo,08458995,TX,2026-10-07 23:00:00+00:00,2026-10-08 16:15:00+00:00,gap,,1.21,1.23,17.25,after_return_only,False,,,not_checked (call budget),False
+TX_Zacate_Ck_at_Laredo,08458995,TX,2026-10-07 23:00:00+00:00,2026-10-08 16:15:00+00:00,gap,,1.21,1.23,17.25,after_return_only,False,69.0,17.0,listing,False
 UT_Beaver_River_near_Beaver,10234500,UT,2025-12-04 11:15:00+00:00,2025-12-06 21:15:00+00:00,gap,,0.47,0.43,58.0,after_return_only,False,0.0,0.0,listing,False
 UT_Beaver_River_near_Beaver,10234500,UT,2026-01-18 11:15:00+00:00,2026-01-18 20:45:00+00:00,gap,,0.59,0.47,9.5,after_return_only,False,,,not_checked (call budget),False
 UT_Beaver_River_near_Beaver,10234500,UT,2026-01-21 11:45:00+00:00,2026-01-21 22:30:00+00:00,gap,,0.63,0.57,10.75,after_return_only,False,,,not_checked (call budget),False
@@ -3298,7 +3298,7 @@ VA_DEAD_RUN_AT_WHANN_AVENUE_NEAR_MCLEAN,01646305,VA,2026-10-14 12:55:00+00:00,20
 VA_DIFFICULT_RUN_ABOVE_FOX_LAKE_NEAR_FAIRFAX,01645704,VA,2026-10-06 12:20:00+00:00,2026-10-07 15:35:00+00:00,gap,,0.94,0.93,27.25,after_return_only,False,109.0,56.0,listing,False
 VA_FLATLICK_BRANCH_ABOVE_FROG_BRANCH_AT_CHANTILLY,01656903,VA,2026-08-11 02:00:00+00:00,2026-08-11 16:45:00+00:00,gap,,1.51,1.3,14.75,after_return_only,False,,,not_checked (call budget),False
 VA_FLATLICK_BRANCH_ABOVE_FROG_BRANCH_AT_CHANTILLY,01656903,VA,2026-08-23 03:00:00+00:00,2026-08-25 17:55:00+00:00,gap,,1.17,1.06,62.917,after_return_only,False,22.0,17.0,listing,False
-VA_James_River_at_Buchanan,02019500,VA,2026-07-15 20:00:00+00:00,2026-07-16 13:15:00+00:00,gap,,2.85,3.97,17.25,after_return_only,False,,,not_checked (call budget),False
+VA_James_River_at_Buchanan,02019500,VA,2026-07-15 20:00:00+00:00,2026-07-16 13:15:00+00:00,gap,,2.85,3.97,17.25,after_return_only,False,21.0,21.0,listing,False
 VA_LONG_BRANCH_AT_OLLEY_LANE_NR_FAIRFAX_VA,01654107,VA,2025-11-04 00:50:00+00:00,2025-11-04 13:15:00+00:00,gap,,2.09,2.09,12.417,after_return_only,False,,,not_checked (call budget),False
 VA_LONG_BRANCH_AT_OLLEY_LANE_NR_FAIRFAX_VA,01654107,VA,2025-11-04 22:30:00+00:00,2025-11-05 14:45:00+00:00,gap,,2.1,2.1,16.25,after_return_only,False,,,not_checked (call budget),False
 VA_LONG_BRANCH_AT_OLLEY_LANE_NR_FAIRFAX_VA,01654107,VA,2025-11-05 23:50:00+00:00,2025-11-06 14:40:00+00:00,gap,,2.1,2.11,14.833,after_return_only,False,,,not_checked (call budget),False
@@ -3311,7 +3311,7 @@ VA_LONG_BRANCH_AT_OLLEY_LANE_NR_FAIRFAX_VA,01654107,VA,2025-11-12 05:35:00+00:00
 VA_LONG_BRANCH_AT_OLLEY_LANE_NR_FAIRFAX_VA,01654107,VA,2025-11-13 05:40:00+00:00,2025-11-13 14:30:00+00:00,gap,,2.17,2.18,8.833,after_return_only,False,,,not_checked (call budget),False
 VA_LONG_BRANCH_AT_OLLEY_LANE_NR_FAIRFAX_VA,01654107,VA,2025-11-14 03:00:00+00:00,2025-11-14 14:30:00+00:00,gap,,2.18,2.19,11.5,after_return_only,False,,,not_checked (call budget),False
 VA_LONG_BRANCH_AT_OLLEY_LANE_NR_FAIRFAX_VA,01654107,VA,2025-11-15 08:05:00+00:00,2025-11-15 16:10:00+00:00,gap,,2.18,2.2,8.083,after_return_only,False,,,not_checked (call budget),False
-VA_LONG_BRANCH_AT_OLLEY_LANE_NR_FAIRFAX_VA,01654107,VA,2025-11-15 21:25:00+00:00,2025-11-16 14:35:00+00:00,gap,,2.2,2.2,17.167,after_return_only,False,,,not_checked (call budget),False
+VA_LONG_BRANCH_AT_OLLEY_LANE_NR_FAIRFAX_VA,01654107,VA,2025-11-15 21:25:00+00:00,2025-11-16 14:35:00+00:00,gap,,2.2,2.2,17.167,after_return_only,False,0.0,0.0,listing,False
 VA_LONG_BRANCH_AT_OLLEY_LANE_NR_FAIRFAX_VA,01654107,VA,2025-11-17 03:55:00+00:00,2025-11-17 13:55:00+00:00,gap,,2.2,2.21,10.0,after_return_only,False,,,not_checked (call budget),False
 VA_Lick_Run_above_Patton_Avenue_at_Roanoke,0205551460,VA,2026-06-07 20:20:00+00:00,2026-06-08 02:25:00+00:00,gap,,2.79,2.77,6.083,after_return_only,False,,,not_checked (call budget),False
 VA_Long_Branch_at_Olley_Lane_near_Fairfax,01654107,VA,2025-11-04 00:50:00+00:00,2025-11-04 13:15:00+00:00,gap,,2.09,2.09,12.417,after_return_only,False,,,not_checked (call budget),False
@@ -3326,11 +3326,11 @@ VA_Long_Branch_at_Olley_Lane_near_Fairfax,01654107,VA,2025-11-12 05:35:00+00:00,
 VA_Long_Branch_at_Olley_Lane_near_Fairfax,01654107,VA,2025-11-13 05:40:00+00:00,2025-11-13 14:30:00+00:00,gap,,2.17,2.18,8.833,after_return_only,False,,,not_checked (call budget),False
 VA_Long_Branch_at_Olley_Lane_near_Fairfax,01654107,VA,2025-11-14 03:00:00+00:00,2025-11-14 14:30:00+00:00,gap,,2.18,2.19,11.5,after_return_only,False,,,not_checked (call budget),False
 VA_Long_Branch_at_Olley_Lane_near_Fairfax,01654107,VA,2025-11-15 08:05:00+00:00,2025-11-15 16:10:00+00:00,gap,,2.18,2.2,8.083,after_return_only,False,,,not_checked (call budget),False
-VA_Long_Branch_at_Olley_Lane_near_Fairfax,01654107,VA,2025-11-15 21:25:00+00:00,2025-11-16 14:35:00+00:00,gap,,2.2,2.2,17.167,after_return_only,False,,,not_checked (call budget),False
+VA_Long_Branch_at_Olley_Lane_near_Fairfax,01654107,VA,2025-11-15 21:25:00+00:00,2025-11-16 14:35:00+00:00,gap,,2.2,2.2,17.167,after_return_only,False,2.0,1.0,listing,False
 VA_Long_Branch_at_Olley_Lane_near_Fairfax,01654107,VA,2025-11-17 03:55:00+00:00,2025-11-17 13:55:00+00:00,gap,,2.2,2.21,10.0,after_return_only,False,,,not_checked (call budget),False
 VA_New_River_near_Galax,03164000,VA,2026-01-25 19:00:00+00:00,2026-02-11 11:30:00+00:00,gap,,0.94,1.67,400.5,after_return_only,False,743.0,639.0,listing,False
 VA_North_Fork_Shenandoah_River_near_Strasburg,01634000,VA,2026-01-26 20:45:00+00:00,2026-02-02 16:00:00+00:00,gap,,1.93,2.04,163.25,after_return_only,False,0.0,0.0,listing,False
-VA_North_Fork_Shenandoah_River_near_Strasburg,01634000,VA,2026-06-10 22:00:00+00:00,2026-06-11 15:30:00+00:00,gap,,2.13,2.09,17.5,after_return_only,False,,,not_checked (call budget),False
+VA_North_Fork_Shenandoah_River_near_Strasburg,01634000,VA,2026-06-10 22:00:00+00:00,2026-06-11 15:30:00+00:00,gap,,2.13,2.09,17.5,after_return_only,False,3.0,2.0,listing,False
 VA_North_Fork_Shenandoah_River_near_Strasburg,01634000,VA,2026-07-04 04:30:00+00:00,2026-07-04 19:45:00+00:00,gap,,1.84,1.85,15.25,after_return_only,False,,,not_checked (call budget),False
 VA_North_Fork_Shenandoah_River_near_Strasburg,01634000,VA,2026-07-05 01:30:00+00:00,2026-07-05 15:45:00+00:00,gap,,1.86,1.88,14.25,after_return_only,False,,,not_checked (call budget),False
 VA_North_Fork_Shenandoah_River_near_Strasburg,01634000,VA,2026-07-05 19:45:00+00:00,2026-07-06 14:45:00+00:00,gap,,1.86,1.94,19.0,after_return_only,False,1.0,1.0,listing,False
@@ -3357,7 +3357,7 @@ VA_Snakeden_Branch_above_Audubon_at_Reston,0164578734,VA,2025-12-01 17:10:00+00:
 VA_Snakeden_Branch_above_Audubon_at_Reston,0164578734,VA,2026-01-25 13:45:00+00:00,2026-01-26 19:00:00+00:00,gap,,1.3,1.32,29.25,after_return_only,False,117.0,59.0,listing,False
 VA_Snakeden_Branch_above_Audubon_at_Reston,0164578734,VA,2026-02-05 08:50:00+00:00,2026-02-05 15:40:00+00:00,gap,,1.32,1.31,6.833,after_return_only,False,,,not_checked (call budget),False
 VA_Snakeden_Branch_above_Audubon_at_Reston,0164578734,VA,2026-02-05 22:35:00+00:00,2026-02-06 19:40:00+00:00,gap,,1.31,1.31,21.083,after_return_only,False,84.0,28.0,listing,False
-VA_Snakeden_Branch_above_Audubon_at_Reston,0164578734,VA,2026-02-06 19:45:00+00:00,2026-02-07 12:55:00+00:00,gap,,1.31,1.31,17.167,after_return_only,False,,,not_checked (call budget),False
+VA_Snakeden_Branch_above_Audubon_at_Reston,0164578734,VA,2026-02-06 19:45:00+00:00,2026-02-07 12:55:00+00:00,gap,,1.31,1.31,17.167,after_return_only,False,69.0,12.0,listing,False
 VA_Snakeden_Branch_above_Audubon_at_Reston,0164578734,VA,2026-02-08 03:10:00+00:00,2026-02-08 10:55:00+00:00,gap,,1.3,1.31,7.75,after_return_only,False,,,not_checked (call budget),False
 VA_Snakeden_Branch_above_Audubon_at_Reston,0164578734,VA,2026-02-08 11:45:00+00:00,2026-02-09 08:35:00+00:00,gap,,1.31,1.31,20.833,after_return_only,False,84.0,40.0,listing,False
 VA_Snakeden_Branch_above_Audubon_at_Reston,0164578734,VA,2026-02-09 09:25:00+00:00,2026-02-09 16:55:00+00:00,gap,,1.31,1.31,7.5,after_return_only,False,,,not_checked (call budget),False
@@ -3435,7 +3435,7 @@ WI_East_Branch_Pecatonica_River_near_Blanchardville,05433000,WI,2026-07-09 09:00
 WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet,05433000,WI,2026-07-09 09:00:00+00:00,2026-07-09 18:30:00+00:00,gap,,4.92,4.92,9.5,after_return_only,True,9.0,8.0,cached_listing,False
 WI_East_Branch_Pecatonica_River_near_Blanchardville_Thermal,05433000,WI,2026-07-09 09:00:00+00:00,2026-07-09 18:30:00+00:00,gap,,4.92,4.92,9.5,after_return_only,False,,,not_checked (call budget),False
 WI_East_Branch_Pecatonica_River_nr_Blanchardville_Reconyx,05433000,WI,2026-07-09 09:00:00+00:00,2026-07-09 18:30:00+00:00,gap,,4.92,4.92,9.5,after_return_only,False,,,not_checked (call budget),False
-WI_East_River_at_HWY_ZZ_near_Greenleaf,04085108,WI,2026-07-16 22:05:00+00:00,2026-07-17 15:15:00+00:00,gap,,4.46,4.46,17.167,after_return_only,False,,,not_checked (call budget),False
+WI_East_River_at_HWY_ZZ_near_Greenleaf,04085108,WI,2026-07-16 22:05:00+00:00,2026-07-17 15:15:00+00:00,gap,,4.46,4.46,17.167,after_return_only,False,0.0,0.0,listing,False
 WI_East_River_at_N_Baird_Street_at_Green_Bay,04085138,WI,2025-12-04 04:35:00+00:00,2025-12-04 17:15:00+00:00,gap,,6.4,6.38,12.667,after_return_only,False,,,not_checked (call budget),False
 WI_East_River_at_N_Baird_Street_at_Green_Bay,04085138,WI,2025-12-05 01:05:00+00:00,2025-12-05 12:05:00+00:00,gap,,6.39,6.42,11.0,after_return_only,False,,,not_checked (call budget),False
 WI_East_River_at_N_Baird_Street_at_Green_Bay,04085138,WI,2025-12-13 10:20:00+00:00,2025-12-13 16:55:00+00:00,gap,,6.42,6.41,6.583,after_return_only,False,,,not_checked (call budget),False
@@ -3459,12 +3459,12 @@ WI_GLRI_Bioreactor_inlet_near_Duvall_INLET_ARGIDRAIN,444049087424302,WI,2026-01-
 WI_GLRI_Bioreactor_inlet_near_Duvall_INLET_ARGIDRAIN,444049087424302,WI,2026-01-23 07:30:00+00:00,2026-01-29 20:00:00+00:00,estimated,e,1.04,0.66,156.5,usgs_estimated_backfill,False,312.0,120.0,listing,False
 WI_GLRI_Bioreactor_outlet_near_Duvall_DITCH,444049087424303,WI,2025-12-15 18:15:00+00:00,2025-12-17 15:00:00+00:00,estimated,e,0.0,-0.0,44.75,usgs_estimated_backfill,False,88.0,24.0,listing,False
 WI_GLRI_Bioreactor_outlet_near_Duvall_DITCH,444049087424303,WI,2025-12-29 23:45:00+00:00,2025-12-31 04:15:00+00:00,estimated,e,0.18,0.0,28.5,usgs_estimated_backfill,False,58.0,16.0,listing,False
-WI_GLRI_Bioreactor_outlet_near_Duvall_DITCH,444049087424303,WI,2026-07-07 21:15:00+00:00,2026-07-08 15:00:00+00:00,estimated,e,0.26,0.0,17.75,usgs_estimated_backfill,False,,,not_checked (call budget),False
+WI_GLRI_Bioreactor_outlet_near_Duvall_DITCH,444049087424303,WI,2026-07-07 21:15:00+00:00,2026-07-08 15:00:00+00:00,estimated,e,0.26,0.0,17.75,usgs_estimated_backfill,False,34.0,16.0,listing,False
 WI_GLRI_Bioreactor_outlet_near_Duvall_DITCH,444049087424303,WI,2026-07-27 16:45:00+00:00,2026-07-28 17:00:00+00:00,estimated,e,0.0,-0.0,24.25,usgs_estimated_backfill,False,48.0,28.0,listing,False
 WI_GLRI_Bioreactor_outlet_near_Duvall_DITCH,444049087424303,WI,2026-09-03 16:12:00+00:00,2026-09-05 02:45:00+00:00,estimated,e,0.0,0.0,34.55,usgs_estimated_backfill,False,67.0,40.0,listing,False
 WI_GLRI_Bioreactor_outlet_near_Duvall_OUTLET_AGRIDRAIN,444049087424303,WI,2025-12-15 18:15:00+00:00,2025-12-17 15:00:00+00:00,estimated,e,0.0,-0.0,44.75,usgs_estimated_backfill,False,87.0,24.0,listing,False
 WI_GLRI_Bioreactor_outlet_near_Duvall_OUTLET_AGRIDRAIN,444049087424303,WI,2025-12-29 23:45:00+00:00,2025-12-31 04:15:00+00:00,estimated,e,0.18,0.0,28.5,usgs_estimated_backfill,False,58.0,16.0,listing,False
-WI_GLRI_Bioreactor_outlet_near_Duvall_OUTLET_AGRIDRAIN,444049087424303,WI,2026-07-07 21:15:00+00:00,2026-07-08 15:00:00+00:00,estimated,e,0.26,0.0,17.75,usgs_estimated_backfill,False,,,not_checked (call budget),False
+WI_GLRI_Bioreactor_outlet_near_Duvall_OUTLET_AGRIDRAIN,444049087424303,WI,2026-07-07 21:15:00+00:00,2026-07-08 15:00:00+00:00,estimated,e,0.26,0.0,17.75,usgs_estimated_backfill,False,34.0,16.0,listing,False
 WI_GLRI_Bioreactor_outlet_near_Duvall_OUTLET_AGRIDRAIN,444049087424303,WI,2026-07-27 16:45:00+00:00,2026-07-28 17:00:00+00:00,estimated,e,0.0,-0.0,24.25,usgs_estimated_backfill,False,48.0,28.0,listing,False
 WI_GLRI_Bioreactor_outlet_near_Duvall_OUTLET_AGRIDRAIN,444049087424303,WI,2026-09-03 16:12:00+00:00,2026-09-05 02:45:00+00:00,estimated,e,0.0,0.0,34.55,usgs_estimated_backfill,False,68.0,39.0,listing,False
 WI_GLRI_East_River_Waterway_SW3_FIELD,441520088045001,WI,2026-02-14 18:45:00+00:00,2026-02-15 01:15:00+00:00,estimated,e,0.0,-0.0,6.5,usgs_estimated_backfill,False,,,not_checked (call budget),False
@@ -3497,7 +3497,7 @@ WI_GLRI_Waterway_Number_4_near_Wrightstown_FIELD,442119088085501,WI,2026-03-08 0
 WI_GLRI_Waterway_Number_4_near_Wrightstown_FIELD,442119088085501,WI,2026-03-13 14:00:00+00:00,2026-03-13 22:15:00+00:00,estimated,e,0.0,-0.0,8.25,usgs_estimated_backfill,False,,,not_checked (call budget),False
 WI_GLRI_Waterway_Number_4_near_Wrightstown_FIELD,442119088085501,WI,2026-03-21 00:30:00+00:00,2026-03-21 14:00:00+00:00,estimated,e,0.0,0.01,13.5,usgs_estimated_backfill,False,,,not_checked (call budget),False
 WI_GLRI_Waterway_Number_4_near_Wrightstown_FIELD,442119088085501,WI,2026-03-23 00:15:00+00:00,2026-03-23 19:00:00+00:00,estimated,e,0.13,0.18,18.75,usgs_estimated_backfill,False,7.0,6.0,listing,False
-WI_GLRI_Waterway_Number_4_near_Wrightstown_FIELD,442119088085501,WI,2026-03-23 23:55:00+00:00,2026-03-24 17:18:00+00:00,estimated,e,0.13,0.08,17.383,usgs_estimated_backfill,False,,,not_checked (call budget),False
+WI_GLRI_Waterway_Number_4_near_Wrightstown_FIELD,442119088085501,WI,2026-03-23 23:55:00+00:00,2026-03-24 17:18:00+00:00,estimated,e,0.13,0.08,17.383,usgs_estimated_backfill,False,7.0,5.0,listing,False
 WI_GLRI_Waterway_Number_4_near_Wrightstown_FIELD,442119088085501,WI,2026-03-25 03:15:00+00:00,2026-03-25 12:15:00+00:00,estimated,e,0.05,0.0,9.0,usgs_estimated_backfill,False,,,not_checked (call budget),False
 WI_GLRI_Waterway_Number_4_near_Wrightstown_FIELD,442119088085501,WI,2026-04-04 18:15:00+00:00,2026-04-05 02:00:00+00:00,estimated,e,0.04,-0.0,7.75,usgs_estimated_backfill,False,,,not_checked (call budget),False
 WI_GLRI_Waterway_Number_4_near_Wrightstown_FIELD,442119088085501,WI,2026-04-18 01:01:00+00:00,2026-04-18 08:15:00+00:00,estimated,e,0.11,-0.0,7.233,usgs_estimated_backfill,False,,,not_checked (call budget),False
@@ -3510,7 +3510,7 @@ WI_GLRI_Waterway_Number_4_near_Wrightstown_FLUME,442119088085501,WI,2026-03-08 0
 WI_GLRI_Waterway_Number_4_near_Wrightstown_FLUME,442119088085501,WI,2026-03-13 14:00:00+00:00,2026-03-13 22:15:00+00:00,estimated,e,0.0,-0.0,8.25,usgs_estimated_backfill,False,,,not_checked (call budget),False
 WI_GLRI_Waterway_Number_4_near_Wrightstown_FLUME,442119088085501,WI,2026-03-21 00:30:00+00:00,2026-03-21 14:00:00+00:00,estimated,e,0.0,0.01,13.5,usgs_estimated_backfill,False,,,not_checked (call budget),False
 WI_GLRI_Waterway_Number_4_near_Wrightstown_FLUME,442119088085501,WI,2026-03-23 00:15:00+00:00,2026-03-23 19:00:00+00:00,estimated,e,0.13,0.18,18.75,usgs_estimated_backfill,False,75.0,27.0,listing,False
-WI_GLRI_Waterway_Number_4_near_Wrightstown_FLUME,442119088085501,WI,2026-03-23 23:55:00+00:00,2026-03-24 17:18:00+00:00,estimated,e,0.13,0.08,17.383,usgs_estimated_backfill,False,,,not_checked (call budget),False
+WI_GLRI_Waterway_Number_4_near_Wrightstown_FLUME,442119088085501,WI,2026-03-23 23:55:00+00:00,2026-03-24 17:18:00+00:00,estimated,e,0.13,0.08,17.383,usgs_estimated_backfill,False,70.0,21.0,listing,False
 WI_GLRI_Waterway_Number_4_near_Wrightstown_FLUME,442119088085501,WI,2026-03-25 03:15:00+00:00,2026-03-25 12:15:00+00:00,estimated,e,0.05,0.0,9.0,usgs_estimated_backfill,False,,,not_checked (call budget),False
 WI_GLRI_Waterway_Number_4_near_Wrightstown_FLUME,442119088085501,WI,2026-04-04 18:15:00+00:00,2026-04-05 02:00:00+00:00,estimated,e,0.04,-0.0,7.75,usgs_estimated_backfill,False,,,not_checked (call budget),False
 WI_GLRI_Waterway_Number_4_near_Wrightstown_FLUME,442119088085501,WI,2026-04-18 01:01:00+00:00,2026-04-18 08:15:00+00:00,estimated,e,0.11,-0.0,7.233,usgs_estimated_backfill,False,,,not_checked (call budget),False
@@ -3523,13 +3523,13 @@ WI_GLRI_Waterway_Number_4_near_Wrightstown_STAFF,442119088085501,WI,2026-03-08 0
 WI_GLRI_Waterway_Number_4_near_Wrightstown_STAFF,442119088085501,WI,2026-03-13 14:00:00+00:00,2026-03-13 22:15:00+00:00,estimated,e,0.0,-0.0,8.25,usgs_estimated_backfill,False,,,not_checked (call budget),False
 WI_GLRI_Waterway_Number_4_near_Wrightstown_STAFF,442119088085501,WI,2026-03-21 00:30:00+00:00,2026-03-21 14:00:00+00:00,estimated,e,0.0,0.01,13.5,usgs_estimated_backfill,False,,,not_checked (call budget),False
 WI_GLRI_Waterway_Number_4_near_Wrightstown_STAFF,442119088085501,WI,2026-03-23 00:15:00+00:00,2026-03-23 19:00:00+00:00,estimated,e,0.13,0.18,18.75,usgs_estimated_backfill,False,75.0,27.0,listing,False
-WI_GLRI_Waterway_Number_4_near_Wrightstown_STAFF,442119088085501,WI,2026-03-23 23:55:00+00:00,2026-03-24 17:18:00+00:00,estimated,e,0.13,0.08,17.383,usgs_estimated_backfill,False,,,not_checked (call budget),False
+WI_GLRI_Waterway_Number_4_near_Wrightstown_STAFF,442119088085501,WI,2026-03-23 23:55:00+00:00,2026-03-24 17:18:00+00:00,estimated,e,0.13,0.08,17.383,usgs_estimated_backfill,False,70.0,21.0,listing,False
 WI_GLRI_Waterway_Number_4_near_Wrightstown_STAFF,442119088085501,WI,2026-03-25 03:15:00+00:00,2026-03-25 12:15:00+00:00,estimated,e,0.05,0.0,9.0,usgs_estimated_backfill,False,,,not_checked (call budget),False
 WI_GLRI_Waterway_Number_4_near_Wrightstown_STAFF,442119088085501,WI,2026-04-04 18:15:00+00:00,2026-04-05 02:00:00+00:00,estimated,e,0.04,-0.0,7.75,usgs_estimated_backfill,False,,,not_checked (call budget),False
 WI_GLRI_Waterway_Number_4_near_Wrightstown_STAFF,442119088085501,WI,2026-04-18 01:01:00+00:00,2026-04-18 08:15:00+00:00,estimated,e,0.11,-0.0,7.233,usgs_estimated_backfill,False,,,not_checked (call budget),False
 WI_Geneva_Lake_at_Lake_Geneva_New,423525088260400,WI,2025-12-01 13:15:00+00:00,2025-12-09 18:00:00+00:00,gap|qualified,Eqp,1.84,1.81,196.75,after_return_only,False,0.0,0.0,listing,False
 WI_Geneva_Lake_at_Lake_Geneva_New,423525088260400,WI,2025-12-28 12:30:00+00:00,2025-12-28 20:15:00+00:00,gap,,1.97,1.99,7.75,after_return_only,False,,,not_checked (call budget),False
-WI_Geneva_Lake_at_Lake_Geneva_New,423525088260400,WI,2025-12-28 21:45:00+00:00,2025-12-29 15:15:00+00:00,gap,,2.09,1.99,17.5,after_return_only,False,,,not_checked (call budget),False
+WI_Geneva_Lake_at_Lake_Geneva_New,423525088260400,WI,2025-12-28 21:45:00+00:00,2025-12-29 15:15:00+00:00,gap,,2.09,1.99,17.5,after_return_only,False,0.0,0.0,listing,False
 WI_Geneva_Lake_at_Lake_Geneva_New,423525088260400,WI,2025-12-29 21:45:00+00:00,2026-01-07 16:45:00+00:00,gap|qualified,Eqp,2.03,2.07,211.0,after_return_only,False,0.0,0.0,listing,False
 WI_Geneva_Lake_at_Lake_Geneva_New,423525088260400,WI,2026-07-03 01:15:00+00:00,2026-07-05 17:30:00+00:00,gap,,2.62,2.61,64.25,after_return_only,False,64.0,37.0,listing,False
 WI_Geneva_Lake_at_Lake_Geneva_New,423525088260400,WI,2026-07-06 01:45:00+00:00,2026-07-06 15:45:00+00:00,gap,,2.59,2.62,14.0,after_return_only,False,,,not_checked (call budget),False
@@ -3572,7 +3572,7 @@ WI_La_Crosse_River_at_HWY_BB_near_Tomah,05382267,WI,2026-01-29 10:00:00+00:00,20
 WI_La_Crosse_River_at_Sparta,05382325,WI,2026-09-13 01:00:00+00:00,2026-09-14 16:15:00+00:00,gap|qualified,Eqp,3.6,3.63,39.25,after_return_only,False,18.0,15.0,listing,False
 WI_Lake_Geneva_2,423525088260400,WI,2025-12-01 13:15:00+00:00,2025-12-09 18:00:00+00:00,gap|qualified,Eqp,1.84,1.81,196.75,after_return_only,False,0.0,0.0,listing,False
 WI_Lake_Geneva_2,423525088260400,WI,2025-12-28 12:30:00+00:00,2025-12-28 20:15:00+00:00,gap,,1.97,1.99,7.75,after_return_only,False,,,not_checked (call budget),False
-WI_Lake_Geneva_2,423525088260400,WI,2025-12-28 21:45:00+00:00,2025-12-29 15:15:00+00:00,gap,,2.09,1.99,17.5,after_return_only,False,,,not_checked (call budget),False
+WI_Lake_Geneva_2,423525088260400,WI,2025-12-28 21:45:00+00:00,2025-12-29 15:15:00+00:00,gap,,2.09,1.99,17.5,after_return_only,False,0.0,0.0,listing,False
 WI_Lake_Geneva_2,423525088260400,WI,2025-12-29 21:45:00+00:00,2026-01-07 16:45:00+00:00,gap|qualified,Eqp,2.03,2.07,211.0,after_return_only,False,0.0,0.0,listing,False
 WI_Lake_Geneva_2,423525088260400,WI,2026-07-03 01:15:00+00:00,2026-07-05 17:30:00+00:00,gap,,2.62,2.61,64.25,after_return_only,False,0.0,0.0,listing,False
 WI_Lake_Geneva_2,423525088260400,WI,2026-07-06 01:45:00+00:00,2026-07-06 15:45:00+00:00,gap,,2.59,2.62,14.0,after_return_only,False,,,not_checked (call budget),False
@@ -3591,7 +3591,7 @@ WI_Namekagon_River_at_Leonards,05331833,WI,2025-12-08 03:15:00+00:00,2025-12-08 
 WI_Namekagon_River_at_Leonards,05331833,WI,2025-12-13 05:30:00+00:00,2025-12-13 20:30:00+00:00,gap,,1.68,1.7,15.0,after_return_only,False,,,not_checked (call budget),False
 WI_Namekagon_River_at_Leonards,05331833,WI,2025-12-14 00:15:00+00:00,2025-12-14 18:15:00+00:00,gap,,1.68,1.72,18.0,after_return_only,False,0.0,0.0,listing,False
 WI_Namekagon_River_at_Leonards,05331833,WI,2026-01-19 08:30:00+00:00,2026-01-19 21:15:00+00:00,gap,,1.71,1.74,12.75,after_return_only,False,,,not_checked (call budget),False
-WI_Namekagon_River_at_Leonards,05331833,WI,2026-01-20 00:00:00+00:00,2026-01-20 17:45:00+00:00,gap,,1.78,1.85,17.75,after_return_only,False,,,not_checked (call budget),False
+WI_Namekagon_River_at_Leonards,05331833,WI,2026-01-20 00:00:00+00:00,2026-01-20 17:45:00+00:00,gap,,1.78,1.85,17.75,after_return_only,False,0.0,0.0,listing,False
 WI_Namekagon_River_at_Leonards,05331833,WI,2026-01-22 21:15:00+00:00,2026-01-26 20:15:00+00:00,gap,,1.74,1.87,95.0,after_return_only,False,0.0,0.0,listing,False
 WI_Oconto_River_near_Gillett,04071000,WI,2026-02-10 20:30:00+00:00,2026-02-11 03:45:00+00:00,gap,,2.06,2.07,7.25,after_return_only,False,,,not_checked (call budget),False
 WI_Pecatonica_River_at_Martintown,05434500,WI,2026-01-08 20:45:00+00:00,2026-01-09 11:45:00+00:00,gap|qualified,Eqp,5.91,6.13,15.0,after_return_only,False,,,not_checked (call budget),False
@@ -3687,7 +3687,7 @@ WI_St_Croix_River_near_Danbury,05333500,WI,2026-02-03 07:30:00+00:00,2026-02-03 
 WI_St_Croix_River_near_Danbury,05333500,WI,2026-02-04 01:45:00+00:00,2026-02-04 17:00:00+00:00,gap,,1.73,1.74,15.25,after_return_only,False,,,not_checked (call budget),False
 WI_St_Croix_River_near_Danbury,05333500,WI,2026-02-06 23:15:00+00:00,2026-02-07 20:00:00+00:00,gap,,1.78,1.78,20.75,after_return_only,False,7.0,6.0,listing,False
 WI_St_Croix_River_near_Danbury,05333500,WI,2026-02-11 00:30:00+00:00,2026-02-11 17:30:00+00:00,gap,,1.87,1.85,17.0,after_return_only,False,,,not_checked (call budget),False
-WI_St_Croix_River_near_Danbury,05333500,WI,2026-02-12 00:00:00+00:00,2026-02-12 17:45:00+00:00,gap,,1.86,1.88,17.75,after_return_only,False,,,not_checked (call budget),False
+WI_St_Croix_River_near_Danbury,05333500,WI,2026-02-12 00:00:00+00:00,2026-02-12 17:45:00+00:00,gap,,1.86,1.88,17.75,after_return_only,False,6.0,4.0,listing,False
 WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,05429369,WI,2026-06-15 16:45:00+00:00,2026-06-17 16:30:00+00:00,gap|qualified,Eqp,6.95,6.97,47.75,after_return_only,True,48.0,30.0,cached_listing,False
 WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,05429369,WI,2026-06-25 14:55:00+00:00,2026-06-25 23:15:00+00:00,gap,,5.97,5.87,8.333,after_return_only,True,9.0,9.0,cached_listing,False
 WI_Tenmile_Creek_near_Nekoosa,05401050,WI,2026-01-19 18:30:00+00:00,2026-01-29 19:30:00+00:00,gap,,4.62,4.73,241.0,after_return_only,False,109.0,89.0,listing,False
@@ -3715,7 +3715,7 @@ WI_White_Creek_at_Spring_Grove_Road_near_Green_Lake,04073462,WI,2026-02-23 08:45
 WI_White_Creek_at_Spring_Grove_Road_near_Green_Lake,04073462,WI,2026-02-24 10:45:00+00:00,2026-02-24 19:00:00+00:00,gap,,3.98,3.98,8.25,after_return_only,False,,,not_checked (call budget),False
 WI_White_Creek_at_Spring_Grove_Road_near_Green_Lake,04073462,WI,2026-02-26 09:45:00+00:00,2026-02-26 17:45:00+00:00,gap,,3.96,3.98,8.0,after_return_only,False,,,not_checked (call budget),False
 WI_White_Creek_at_Spring_Grove_Road_near_Green_Lake,04073462,WI,2026-03-02 10:00:00+00:00,2026-03-02 17:30:00+00:00,gap,,3.95,3.96,7.5,after_return_only,False,,,not_checked (call budget),False
-WI_Wisconsin_River_at_Muscoda,05407000,WI,2026-05-21 15:00:00+00:00,2026-05-22 17:00:00+00:00,gap,,2.75,3.02,26.0,after_return_only,False,17.0,17.0,cached_listing,False
+WI_Wisconsin_River_at_Muscoda,05407000,WI,2026-05-21 15:00:00+00:00,2026-05-22 17:00:00+00:00,gap,,2.75,3.02,26.0,after_return_only,True,17.0,17.0,cached_listing,False
 WI_Wisconsin_River_at_Rainbow_Lake_nr_Lake_Tomahawk,05391000,WI,2025-12-29 09:15:00+00:00,2026-01-05 20:15:00+00:00,gap,,1.89,2.26,179.0,after_return_only,False,3.0,3.0,listing,False
 WI_Wisconsin_River_at_Wisconsin_Rapids,05400760,WI,2026-07-15 19:30:00+00:00,2026-07-16 11:35:00+00:00,gap,,2.97,3.06,16.083,after_return_only,False,,,not_checked (call budget),False
 WI_Wisconsin_River_at_Wisconsin_Rapids,05400760,WI,2026-10-11 01:35:00+00:00,2026-10-14 17:00:00+00:00,gap,,1.87,0.94,87.417,after_return_only,False,55.0,34.0,listing,False
@@ -3728,7 +3728,7 @@ WV_Big_Sandy_Creek_at_Rockville,03070500,WV,2026-02-05 12:15:00+00:00,2026-02-06
 WV_Big_Sandy_Creek_at_Rockville,03070500,WV,2026-02-08 00:45:00+00:00,2026-02-09 00:15:00+00:00,gap,,4.34,4.34,23.5,after_return_only,False,0.0,0.0,listing,False
 WV_WAITES_RUN_NEAR_WARDENSVILLE,01610400,WV,2026-01-25 18:45:00+00:00,2026-02-10 16:10:00+00:00,gap,,3.63,3.51,381.417,after_return_only,False,0.0,0.0,listing,False
 WY_Bear_River_above_Reservoir_near_Woodruff,10020100,WY,2026-05-22 16:45:00+00:00,2026-05-27 16:45:00+00:00,gap,,1.68,1.82,120.0,after_return_only,False,0.0,0.0,listing,False
-WY_Laramie_River_at_Laramie,06660000,WY,2026-03-26 22:00:00+00:00,2026-03-27 15:30:00+00:00,gap,,3.51,3.71,17.5,after_return_only,False,,,not_checked (call budget),False
+WY_Laramie_River_at_Laramie,06660000,WY,2026-03-26 22:00:00+00:00,2026-03-27 15:30:00+00:00,gap,,3.51,3.71,17.5,after_return_only,False,0.0,0.0,listing,False
 WY_Laramie_River_at_Laramie,06660000,WY,2026-03-30 23:15:00+00:00,2026-03-31 11:30:00+00:00,gap,,3.68,3.67,12.25,after_return_only,False,,,not_checked (call budget),False
 WY_Laramie_River_at_Laramie,06660000,WY,2026-05-27 03:30:00+00:00,2026-05-27 17:15:00+00:00,gap,,4.46,4.41,13.75,after_return_only,False,,,not_checked (call budget),False
 WY_Laramie_River_at_Laramie,06660000,WY,2026-05-27 23:15:00+00:00,2026-05-28 22:45:00+00:00,gap,,4.41,4.48,23.5,after_return_only,False,0.0,0.0,listing,False

@@ -173,3 +173,5 @@ WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,2026-06-15 16:45:00+00:00,2026-06-17 
 WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,2026-06-15 16:45:00+00:00,2026-06-17 16:30:00+00:00,causal,scored,47.75,gap|qualified,Eqp,after_return_only,13.0,0.0,1355.0,6.95,6.97,,,,,,0.0715,0.02,0.4994
 WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,2026-06-25 14:55:00+00:00,2026-06-25 23:15:00+00:00,excl7d,scored,8.333,gap,,after_return_only,8.0,0.0,2186.0,5.97,5.87,,,,,,0.271,0.1,0.2494
 WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,2026-06-25 14:55:00+00:00,2026-06-25 23:15:00+00:00,causal,scored,8.333,gap,,after_return_only,8.0,0.0,1426.0,5.97,5.87,,,,,,0.7984,0.1,0.2494
+WI_Wisconsin_River_at_Muscoda,2026-05-21 15:00:00+00:00,2026-05-22 17:00:00+00:00,excl7d,scored,26.0,gap,,after_return_only,8.0,0.0,1957.0,2.75,3.02,,,,,,0.0742,0.27,0.9975
+WI_Wisconsin_River_at_Muscoda,2026-05-21 15:00:00+00:00,2026-05-22 17:00:00+00:00,causal,scored,26.0,gap,,after_return_only,8.0,0.0,1030.0,2.75,3.02,,,,,,1.1549,0.27,0.9975
