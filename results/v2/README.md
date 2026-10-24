@@ -44,3 +44,9 @@ Change in median MAE relative to v1:
 - Still CV inside one year of history. The live shadow run (D-0010 §2, criterion 2) is the forward-in-time check.
 - Serving v2 is Cowork's call on Sun Oct 25 12:00 CT.
 - Cost: about 160 ms/frame on 2 CPU threads (this box). Expected 0.2–0.3 s/frame on the m9g.large worker, about 5 s per 20-site cycle.
+
+## Failure cases (from `cv_folds.csv`)
+v2 is worse than v1 in **18 of 139** site-month folds, and worse by more than 0.1 ft in two:
+- **Root River, May 2026:** 0.52 → 0.70 ft. The site is still the worst overall, at 0.76 ft against 0.89 ft for v1. Its error is dominated by July (2.00 → 1.75 ft) and by ice/flat-gauge periods, a known gap (W5's outage catalogue lists a Root ice gap that also defeats the camera).
+- **Bean Creek, Jul–Aug 2026:** +0.07 and +0.11 ft, in low summer flow. In its other nine months v2 is better, including March (1.94 → 1.72 ft) and May (0.51 → 0.19 ft).
+- **Other high-error months:** Cowhouse Ck October (1.15 → 1.23 ft), Pecatonica May (1.40 → 1.24 ft) and Animas (0.65 ft over 2 folds) remain hard for both models. These are flashy or short-history sites, where the early folds train on 1–2 months.
