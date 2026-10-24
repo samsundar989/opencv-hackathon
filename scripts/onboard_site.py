@@ -150,6 +150,7 @@ def main():
     ap.add_argument("cams", nargs="*")
     ap.add_argument("--batch", type=Path)
     ap.add_argument("--only", nargs="*")
+    ap.add_argument("--skip", nargs="*", default=[])
     ap.add_argument("--limit", type=int)
     ap.add_argument("--jobs", type=int, default=4)
     ap.add_argument("--pace", type=float, default=2.4)
@@ -163,6 +164,7 @@ def main():
         sites = yaml.safe_load(a.batch.read_text(encoding="utf-8"))["sites"]
         if a.only:
             sites = [s for s in sites if s["cam_id"] in a.only]
+        sites = [s for s in sites if s["cam_id"] not in a.skip]
     else:
         sites = sites_for(a.cams)
     sites = sites[: a.limit] if a.limit else sites
