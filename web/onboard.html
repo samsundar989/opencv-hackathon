@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Request that RiverSight calibrates another USGS HIVIS camera from its gauge's history.">
+<title>RiverSight — add a camera</title>
+<link rel="stylesheet" href="assets/app.css">
+<script src="assets/common.js"></script>
+</head>
+<body>
+<main>
+  <h1>Add a camera</h1>
+  <p class="lede">Any USGS HIVIS camera that sits next to a stream gauge can calibrate itself from the gauge's past year: no staff
+    plate, no survey, no per-site tuning. Pick a camera and request it. An operator approves the request on the
+    <a href="approvals.html">approvals page</a>; only then does the onboarding pipeline run, once, on the RiverSight compute box.
+    The camera goes live only if its forward-chaining test reaches tier B.</p>
+  <div class="panel small" id="cost">Loading the camera list…</div>
+  <div class="panel" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px">
+    <label for="q">Search</label>
+    <input id="q" type="search" placeholder="river, town or state, e.g. TX Guadalupe" style="min-width:260px" autocomplete="off">
+    <label class="small"><input type="checkbox" id="elig" checked> eligible only</label>
+    <span class="small muted" id="count"></span>
+  </div>
+  <h2>Requests</h2>
+  <div id="reqs" class="small">Loading…</div>
+  <h2>Cameras</h2>
+  <div id="list" style="overflow-x:auto">Loading…</div>
+</main>
+<script>
+(() => {
+  let cams = [], reqs = {};
+  const TYPE = { small_stream: "creek", large_river: "large river", cold_climate: "cold climate", tidal_coastal: "coastal / tidal", not_a_river: "not a river" };
+
+  async function loadReqs() {
+    const el = document.getElementById("reqs");
+    try {
+      const idx = await RS.json("live/onboard_requests/index.json");
+      reqs = Object.fromEntries((idx.requests || []).map((r) => [r.cam_id, r]));
+      el.innerHTML = (idx.requests || []).length
+        ? `<ul>${idx.requests.map((r) => `<li><b>${RS.esc(RS.nice(r.cam_id))}</b>: ${RS.esc(r.status)}${r.tier ? ` · CV nMAE ${Number(r.cv_nmae).toFixed(3)}` : ""} <span class="muted">(updated ${RS.ago(r.updated)})</span></li>`).join("")}</ul>`
+        : `<p class="muted">No requests yet.</p>`;
+    } catch { el.innerHTML = `<p class="muted">No requests yet.</p>`; }
+  }
+
+  function render() {
+    const q = document.getElementById("q").value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const elig = document.getElementById("elig").checked;
+    const rows = cams.filter((c) => (!elig || c.eligible) && q.every((w) => (c.cam_id + " " + c.name + " " + c.state).toLowerCase().includes(w)));
+    document.getElementById("count").textContent = `${rows.length} of ${cams.length} gauged cameras`;
+    const shown = rows.slice(0, 150);
+    document.getElementById("list").innerHTML = `<table class="small"><thead><tr><th>camera</th><th>type</th><th>gauge swing (p95−p5)</th><th>status</th><th></th></tr></thead><tbody>` +
+      shown.map((c) => {
+        const r = reqs[c.cam_id];
+        const can = c.eligible && c.status === "not onboarded" && !r;
+        return `<tr><td>${RS.esc(RS.nice(c.cam_id))}<div class="muted">USGS ${RS.esc(c.nwis_id)}</div></td><td>${RS.esc(TYPE[c.type] || c.type)}</td>
+          <td>${c.swing_ft == null ? "—" : RS.esc(c.swing_ft.toFixed(2)) + " ft"}</td>
+          <td>${RS.esc(r ? r.status : c.eligible ? c.status : "not eligible: " + c.why_not)}</td>
+          <td>${can ? `<button class="primary" data-cam="${RS.esc(c.cam_id)}">Request</button>` : ""}</td></tr>`;
+      }).join("") + `</tbody></table>` + (rows.length > shown.length ? `<p class="small muted">Showing 150; narrow the search to see more.</p>` : "");
+    document.querySelectorAll("button[data-cam]").forEach((b) => b.addEventListener("click", async () => {
+      b.disabled = true;
+      const r = await fetch("api/onboard_requests", { method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({ cam_id: b.dataset.cam }) });
+      const out = await r.json().catch(() => ({}));
+      b.insertAdjacentHTML("afterend", r.ok
+        ? ` <span class="small">requested — waiting for the operator (<a href="approvals.html#${RS.esc(out.approval_id)}">approval</a>)</span>`
+        : ` <span class="err small">${RS.esc(out.error || "failed (" + r.status + ")")}</span>`);
+      if (r.ok) b.remove(); else b.disabled = false;
+    }));
+  }
+
+  async function load() {
+    try {
+      const cat = await RS.json("live/onboard/catalogue.json");
+      cams = cat.cameras || [];
+      const c = cat.cost_per_camera || {};
+      document.getElementById("cost").innerHTML = c.sites_measured
+        ? `Measured over the ${c.sites_measured} cameras onboarded so far (medians): <b>${Math.round(c.cpu_s_median / 60)} CPU-minutes</b>,
+           <b>$${Number(c.usd_per_site_median).toFixed(3)}</b> of compute, ${Math.round(c.mb_downloaded_median)} MB of USGS frames and
+           ${Math.round(c.nims_listing_calls_median)} polite NIMS listing calls per camera. Camera activity and gauge coverage are as of the last fleet scan (${RS.esc(String(cat.generated || "").slice(0, 10))}).`
+        : "";
+    } catch (e) { document.getElementById("list").innerHTML = `<p class="err">Could not load the camera list (${RS.esc(e.message)}).</p>`; return; }
+    await loadReqs();
+    render();
+  }
+  document.getElementById("q").addEventListener("input", render);
+  document.getElementById("elig").addEventListener("change", render);
+  load();
+})();
+</script>
+</body>
+</html>

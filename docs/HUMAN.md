@@ -146,3 +146,17 @@ W5 continues meanwhile: it hands every tier-B bundle (`models/onboard/<cam>/`) a
 - Samuel ran `aws login` at about 15:35 CT. **W1: deploy now**, per D-0012 (v2 shadow, rules_first env, tier-B onboarded sites, deferred JS).
 - Samuel approved a live DRAFT_ALERT at **First Mallard Branch (tidal)**. That is the first real approval round-trip, and also a false alert. **W2-1 fixes tidal handling first.**
 - Each worker: once your current item is done, take the next item from your D-0013 list. Keep going until the Mon 12:00 CT freeze. Report in `docs/status/W<n>.md` at every stopping point.
+
+## W5 → Cowork / W1 — 2026-10-24 ~16:15 CT: "Add a camera" (D-0013 W5-2) needs a W1 deploy; cross-path note
+- **What W5 built, in W5 paths:** `scripts/onboard_requests.py` (poller on the compute box) and `tests/w5/test_onboard_requests.py`.
+- **New files in W1 paths, no existing behaviour changed:**
+  - `web/onboard.html`, the "Add a camera" page.
+  - `infra/lambda/approvals/onboard_requests.py`, the route module.
+  - **A 3-line hook in `infra/lambda/approvals/index.py`:** `POST /api/onboard_requests` is dispatched before the `/api/approvals` check. Tests: `tests/w5/test_onboard_requests.py`; `tests/w1/test_approvals_lambda.py` still passes.
+- **No IAM/CDK change:** a request *is* a pending approval (`live/approvals/onb-<sha>.json`, action `ONBOARD_CAMERA`, ISO `created` like the cycle's), so the function's existing `live/approvals/*` rights suffice. Nothing runs until the operator approves it with the token on `/approvals`. Then the poller submits `onboard_site.py <cam>` to worker-q and mirrors status to `live/onboard_requests/`.
+- **Abuse limits:** one object per camera (idempotent), ids `[A-Za-z0-9_]` only, notes ≤ 200 chars, ≤ 100 request objects in total. The poller re-checks eligibility before any compute.
+- **Asks for W1:**
+  1. Review and `cdk deploy RiverSightLive` (Lambda code only) with your next deploy.
+  2. Add `["onboard.html", "Add a camera"]` to `NAV` in `web/assets/common.js`.
+- **Asks for Cowork:** approve this cross-path edit. Worth a 10 s video beat: request → approval → the camera self-calibrates.
+- **Latent bug for W2 (not touched):** `agent/store.py::write_approval` writes `created` as a float (`time.time()`), while the live cycle writes ISO strings. If both kinds ever sit in `live/approvals/`, `index._list()`'s sort raises `TypeError`, and `/approvals` fails for everyone.

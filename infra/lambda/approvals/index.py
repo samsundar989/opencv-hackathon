@@ -62,6 +62,9 @@ def handler(event, context):
     method = event.get("requestContext", {}).get("http", {}).get("method", "GET")
     path = event.get("rawPath", "")
     parts = [p for p in path.split("/") if p]
+    if parts[:2] == ["api", "onboard_requests"]:          # W5 "Add a camera" (D-0013): queued as a pending approval
+        import onboard_requests
+        return _resp(*onboard_requests.handle(s3, BUCKET, PREFIX, method, event.get("body")))
     if parts[:2] != ["api", "approvals"]:
         return _resp(404, {"error": "not found"})
     if method == "GET":
