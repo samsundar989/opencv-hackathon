@@ -271,6 +271,21 @@ def readme():
                 L.append(f"| {r.cam_id} | {r.start:%Y-%m-%d %H:%M} | {r.hours:.0f} | {r.kinds} | {r.variant} | {r.n_frames} | "
                          f"{r.n_truth} | {f(getattr(r, 'cam_mae', np.nan))} | {f(getattr(r, 'lkv_mae', np.nan))} | "
                          f"{f(getattr(r, 'cam_end_err', np.nan))} / {f(getattr(r, 'lkv_end_err', np.nan))} |")
+            end = ok.dropna(subset=["cam_end_err", "lkv_end_err"]).copy()
+            end["moved"] = (end["v_after"] - end["v_before"]).abs()
+            for v in ("excl7d", "causal"):
+                d = end[end["variant"] == v]
+                if not len(d):
+                    continue
+                m = d[d["moved"] >= 0.25]
+                L += ["", f"- `{v}`, hard gaps scored at the gauge's return: camera closer than last-known value in "
+                          f"**{int((d['cam_end_err'] < d['lkv_end_err']).sum())}/{len(d)}**. In {len(d) - len(m)} of them the "
+                          f"river moved < 0.25 ft during the gap, where holding the last reading is nearly exact. "
+                          f"Gaps where it moved ≥ 0.25 ft: {len(m)}, camera closer in "
+                          f"**{int((m['cam_end_err'] < m['lkv_end_err']).sum())}/{len(m)}**"
+                          + (": " + "; ".join(f"{r.cam_id} ({r.hours:.0f} h, moved {r.moved:.2f} ft): camera "
+                                               f"{r.cam_end_err:.2f} vs last-known {r.lkv_end_err:.2f} ft"
+                                               for r in m.itertuples()) if len(m) else "") + "."]
             dense = ok[ok["n_truth"] > 0] if "n_truth" in ok else ok.iloc[0:0]
             for v in ("excl7d", "causal"):
                 d = dense[dense["variant"] == v]
@@ -282,7 +297,7 @@ def readme():
         else:
             L.append("No outage at a calibrated site had ≥ 3 registered daylight frames with features. Catalogue only.")
     (OUT / "README.md").write_text("\n".join(L) + "\n", encoding="utf-8")
-    print("\n".join(L))
+    print(f"wrote {OUT / 'README.md'} ({len(L)} lines)")
 
 
 def main():

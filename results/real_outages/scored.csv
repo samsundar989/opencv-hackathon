@@ -1,0 +1,37 @@
+cam_id,start,end,hours,kinds,codes,truth,variant,status,n_frames,n_truth,n_train,v_before,v_after,stage_range_in_outage,cam_end_err,lkv_end_err,end_frame_age_h
+MN_Root_River_near_Pilot_Mound,2025-12-04 02:00:00+00:00,2025-12-26 22:15:00+00:00,548.25,gap,,after_return_only,excl7d,scored,3.0,0.0,1455.0,7.97,8.23,,,,
+MN_Root_River_near_Pilot_Mound,2025-12-04 02:00:00+00:00,2025-12-26 22:15:00+00:00,,,,,causal,too little training (0),,,,,,,,,
+MN_Root_River_near_Pilot_Mound,2026-01-15 09:45:00+00:00,2026-02-15 23:45:00+00:00,758.0,gap,,after_return_only,excl7d,scored,38.0,0.0,1428.0,8.54,8.19,,1.3423,0.35,1.7467
+MN_Root_River_near_Pilot_Mound,2026-01-15 09:45:00+00:00,2026-02-15 23:45:00+00:00,,,,,causal,too little training (9),,,,,,,,,
+MN_Root_River_near_Pilot_Mound,2026-02-22 15:00:00+00:00,2026-02-26 21:15:00+00:00,102.25,gap,,after_return_only,excl7d,scored,5.0,0.0,1434.0,8.09,8.26,,1.1076,0.17,1.2489
+MN_Root_River_near_Pilot_Mound,2026-02-22 15:00:00+00:00,2026-02-26 21:15:00+00:00,,,,,causal,too little training (27),,,,,,,,,
+NJ_Big_Brook_near_Marlboro,2026-07-15 19:20:00+00:00,2026-07-16 13:25:00+00:00,18.083,gap,,after_return_only,excl7d,scored,3.0,0.0,473.0,9.47,9.5,,0.0891,0.03,1.4108
+NJ_Big_Brook_near_Marlboro,2026-07-15 19:20:00+00:00,2026-07-16 13:25:00+00:00,,,,,causal,too little training (27),,,,,,,,,
+NY_East_Branch_Delaware_River_at_Hancock_Staff,2026-07-15 19:15:00+00:00,2026-07-16 11:30:00+00:00,16.25,gap,,after_return_only,excl7d,scored,3.0,0.0,1272.0,9.3,9.28,,,,
+NY_East_Branch_Delaware_River_at_Hancock_Staff,2026-07-15 19:15:00+00:00,2026-07-16 11:30:00+00:00,16.25,gap,,after_return_only,causal,scored,3.0,0.0,630.0,9.3,9.28,,,,
+OH_Bean_Creek_at_Powers,2026-05-01 06:00:00+00:00,2026-05-02 05:15:00+00:00,23.25,gap,,after_return_only,excl7d,scored,7.0,0.0,1709.0,11.22,11.4,,0.7339,0.18,5.2483
+OH_Bean_Creek_at_Powers,2026-05-01 06:00:00+00:00,2026-05-02 05:15:00+00:00,23.25,gap,,after_return_only,causal,scored,7.0,0.0,1101.0,11.22,11.4,,0.4571,0.18,5.2483
+OH_East_Fork_Little_Miami_River_at_Perintown,2025-10-23 14:30:00+00:00,2025-10-23 21:15:00+00:00,6.75,gap,,after_return_only,excl7d,scored,3.0,0.0,2668.0,2.13,2.13,,0.5028,0.0,1.2492
+OH_East_Fork_Little_Miami_River_at_Perintown,2025-10-23 14:30:00+00:00,2025-10-23 21:15:00+00:00,,,,,causal,too little training (87),,,,,,,,,
+OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-09 23:30:00+00:00,2025-11-10 21:45:00+00:00,22.25,gap,,after_return_only,excl7d,scored,4.0,0.0,2679.0,2.5,2.46,,0.6219,0.04,1.7492
+OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-09 23:30:00+00:00,2025-11-10 21:45:00+00:00,,,,,causal,too little training (179),,,,,,,,,
+OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-12 15:45:00+00:00,2025-11-12 22:15:00+00:00,6.5,gap,,after_return_only,excl7d,scored,4.0,0.0,2672.0,2.42,2.42,,0.0616,0.0,0.2492
+OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-12 15:45:00+00:00,2025-11-12 22:15:00+00:00,,,,,causal,too little training (190),,,,,,,,,
+OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-16 13:00:00+00:00,2025-11-16 22:30:00+00:00,9.5,gap,,after_return_only,excl7d,scored,4.0,0.0,2665.0,2.42,2.42,,1.1413,0.0,2.4992
+OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-16 13:00:00+00:00,2025-11-16 22:30:00+00:00,9.5,gap,,after_return_only,causal,scored,4.0,0.0,209.0,2.42,2.42,,0.1767,0.0,2.4992
+OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-30 12:00:00+00:00,2025-11-30 22:00:00+00:00,10.0,gap,,after_return_only,excl7d,scored,4.0,0.0,2663.0,2.96,2.96,,0.3052,0.0,1.9978
+OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-30 12:00:00+00:00,2025-11-30 22:00:00+00:00,10.0,gap,,after_return_only,causal,scored,4.0,0.0,279.0,2.96,2.96,,0.5041,0.0,1.9978
+OH_East_Fork_Little_Miami_River_at_Perintown,2026-01-25 06:00:00+00:00,2026-02-11 01:15:00+00:00,403.25,gap,,after_return_only,excl7d,scored,74.0,0.0,2641.0,2.19,2.33,,1.042,0.14,3.2489
+OH_East_Fork_Little_Miami_River_at_Perintown,2026-01-25 06:00:00+00:00,2026-02-11 01:15:00+00:00,403.25,gap,,after_return_only,causal,scored,74.0,0.0,569.0,2.19,2.33,,2.0026,0.14,3.2489
+PA_Brandywine_Creek_at_Chadds_Ford,2026-06-27 22:15:00+00:00,2026-06-28 14:30:00+00:00,16.25,gap,,after_return_only,excl7d,scored,4.0,0.0,1327.0,1.68,1.69,,0.169,0.01,0.4992
+PA_Brandywine_Creek_at_Chadds_Ford,2026-06-27 22:15:00+00:00,2026-06-28 14:30:00+00:00,16.25,gap,,after_return_only,causal,scored,4.0,0.0,297.0,1.68,1.69,,0.0325,0.01,0.4992
+PA_Brandywine_Creek_at_Chadds_Ford,2026-07-14 18:39:00+00:00,2026-07-15 16:04:00+00:00,21.417,gap,,after_return_only,excl7d,scored,6.0,0.0,1352.0,1.56,1.56,,0.5362,0.0,0.0661
+PA_Brandywine_Creek_at_Chadds_Ford,2026-07-14 18:39:00+00:00,2026-07-15 16:04:00+00:00,21.417,gap,,after_return_only,causal,scored,6.0,0.0,421.0,1.56,1.56,,2.3731,0.0,0.0661
+TX_Clear_Fk_Trinity_Rv_at_Ft_Worth,2026-06-24 08:15:00+00:00,2026-06-26 16:45:00+00:00,56.5,gap,,after_return_only,excl7d,scored,17.0,0.0,2296.0,8.47,8.81,,0.1075,0.34,0.7492
+TX_Clear_Fk_Trinity_Rv_at_Ft_Worth,2026-06-24 08:15:00+00:00,2026-06-26 16:45:00+00:00,56.5,gap,,after_return_only,causal,scored,17.0,0.0,1584.0,8.47,8.81,,0.165,0.34,0.7492
+WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet,2026-07-09 09:00:00+00:00,2026-07-09 18:30:00+00:00,9.5,gap,,after_return_only,excl7d,scored,4.0,0.0,913.0,4.92,4.92,,0.11,0.0,0.4992
+WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet,2026-07-09 09:00:00+00:00,2026-07-09 18:30:00+00:00,9.5,gap,,after_return_only,causal,scored,4.0,0.0,542.0,4.92,4.92,,0.1141,0.0,0.4992
+WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,2026-06-15 16:45:00+00:00,2026-06-17 16:30:00+00:00,47.75,gap|qualified,Eqp,after_return_only,excl7d,scored,13.0,0.0,2176.0,6.95,6.97,,0.1575,0.02,0.4994
+WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,2026-06-15 16:45:00+00:00,2026-06-17 16:30:00+00:00,47.75,gap|qualified,Eqp,after_return_only,causal,scored,13.0,0.0,1355.0,6.95,6.97,,0.0715,0.02,0.4994
+WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,2026-06-25 14:55:00+00:00,2026-06-25 23:15:00+00:00,8.333,gap,,after_return_only,excl7d,scored,8.0,0.0,2186.0,5.97,5.87,,0.271,0.1,0.2494
+WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,2026-06-25 14:55:00+00:00,2026-06-25 23:15:00+00:00,8.333,gap,,after_return_only,causal,scored,8.0,0.0,1426.0,5.97,5.87,,0.7984,0.1,0.2494
