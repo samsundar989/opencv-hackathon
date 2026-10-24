@@ -2,3 +2,6 @@
 \b7\s*(?:of|/)\s*20\b(?=[^.\n]{0,60}(?:camera|view|re-aim|moved))	view-change count is 8/20 sites with unlinked history segments (results/kill_test_v2_summary.json; D-0009)
 \b9\s*/\s*17\b	fit-window scene-model count is 9/19 (results/scene/gate_fit20.csv; D-0009)
 \bpixels vote\b	the estimator is ridge regression over reliable blocks, not a vote (D-0009)
+\b29 (?:of 39 )?(?:new cameras )?(?:qualified )?\(?tier B	onboarding final is 30 tier B of 40 (results/onboarding/README.md, W5 final)
+\b5 of 10 gaps\b	real-outage final: causal 5 of 11, hindsight 7 of 17 (results/real_outages/README.md)
+\b6 of 16\b	real-outage final: hindsight 7 of 17

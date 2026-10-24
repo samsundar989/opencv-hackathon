@@ -26,10 +26,10 @@ _Flood-height map: each patch is coloured by the stage at which it goes under wa
 ## Since then (forward in time and new evidence)
 
 - **Live, prospective:** the deployed models are scored on every live daylight reading against the gauge, pre-registered before the first cycle. Report §6.9 has the current table (`results/live_prospective/`). In quiet conditions a 24-hour-old gauge value beats the camera, as in the frozen test.
-- **Agent:** on 98 frozen episodes (63 real), the deterministic rules policy is right 93.9 % of the time with no false actions on clean controls. Claude Sonnet 4.6 with the OpenCV tools: 71.4 %. Claude Haiku 4.5: 58.8 %, or 51.4 % without the OpenCV evidence. So the live system decides with rules first, and the LLM is a second opinion (`results/agent_eval/`, report §6.7).
+- **Agent, autonomy chosen by measurement:** on 98 frozen episodes (63 real), OpenCV-grounded rules are right 93.9 % of the time with no false actions on clean controls. Claude Sonnet 4.6 with the OpenCV tools gets 71.4 %, and Claude Haiku 4.5 58.8 % (51.4 % without the OpenCV evidence). So live, the rules act, the LLM advises (fleet triage, second opinions, gauge-drift review, alert drafts), and a human approves anything external (`results/agent_eval/`, report §6.7).
 - **Model v2 candidate:** DINOv2 features run in `cv2.dnn` cut the year-long CV median MAE from 0.380 to 0.252 ft and improve 19 of 20 sites (`results/v2/`, report §6.11). Not yet served.
-- **Gauges do go dark:** 531 of 875 gauges behind HIVIS cameras had an outage of 6 h or more in the past year, and cameras kept posting frames through 1,042 of the 1,635 outages checked. Where the river moved while the gauge was dark, the camera beat the last known value in 5 of 10 gaps with a causal refit (`results/real_outages/`).
-- **Onboarding:** 39 more cameras were onboarded with one command each and the frozen setting (29 tier B, median nMAE 0.136), for about $0.054 of compute per camera (`results/onboarding/`).
+- **Gauges do go dark:** 531 of 875 gauges behind HIVIS cameras had an outage of 6 h or more in the past year, and cameras kept posting frames through 1,099 of the 1,735 outages checked. Where the river moved while the gauge was dark, the camera beat the last known value in 5 of 11 gaps with a causal refit (`results/real_outages/`).
+- **Self-onboarding:** 30 of 40 new cameras qualified (tier B) at about $0.055 each in compute, with one command each and the frozen setting. Median nMAE is 0.140; absolute error scales with river size. They are served in a separate "onboarded this weekend" section, not mixed into the frozen test (`results/onboarding/`).
 
 ## Not claimed
 
@@ -54,7 +54,7 @@ USGS NIMS frame ─► register (ALIKED + LightGlue + USAC_MAGSAC) ─► warpPe
 
 ![RiverSight architecture](docs/img/architecture.svg)
 
-Agent loop and component details: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Every OpenCV 5 call that carries weight, and what breaks without it: [`docs/OPENCV5_USAGE.md`](docs/OPENCV5_USAGE.md). COOL vs stock OpenCV on Graviton5, same instance: flat end to end (1.0067× over 880 frames) because the learned matcher dominates; 1.21× on ORB registration; bit-identical outputs; one m9g.large covers ~880 cameras at a 15-minute cadence (`docs/COOL_BENCHMARK.md`).
+Agent loop and component details: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Every OpenCV 5 call that carries weight, and what breaks without it: [`docs/OPENCV5_USAGE.md`](docs/OPENCV5_USAGE.md). COOL on Graviton5: one m9g.large covers all ~880 gauged HIVIS cameras at a 15-minute cadence for about $0.06 per camera-month, with bit-identical outputs and full build provenance. It is flat end to end (1.0067×), because about 98 % of a frame's time is the learned matcher, and 1.16–1.21× faster on the classical registration path (`docs/COOL_BENCHMARK.md`).
 
 ## Quick start
 

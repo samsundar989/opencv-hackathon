@@ -102,6 +102,12 @@ Windows 11 workstation shared with other jobs, run through the local job queue w
 
 One command: `python bench/run_cool_bench.py --bucket <bucket> --ami ami-0d9a06f3c16d66f9e --cool-price 0.005`. Both arms ran on one m9g.large instance from the COOL G5 AMI, one after the other, on the same Python 3.14 interpreter with the same numpy (COOL's 2.5.3), so OpenCV is the only difference. The instance cost about $0.16 (`spend.json`); the COOL fee used in the cost tables is the Marketplace listing's approximate rate (`prices.json`).
 
+**Bottom line.** One m9g.large running COOL covers **all ~880 gauged HIVIS cameras at a 15-minute cadence for about $0.06 per camera-month** ($0.0586 including COOL's fee; one cycle over 880 frames takes about 627 s of the 900 s budget). Provenance for every number: the instance-identity document, AMI id, `cv2.__file__`, version and `getBuildInformation()` hash of each arm, in `provenance.json` and `build_info.txt`. COOL gives bit-identical outputs. End to end it is flat on our workload, because about 98 % of a frame's time is the learned matcher (DNN), which COOL does not accelerate. On the classical registration path it is 1.16–1.21× faster.
+
+![Where a frame's time goes](../results/cool_bench/cool_g5_m9g_2026-10-24/amdahl.png)
+
+_`bench/plot_amdahl.py`, from `amdahl.csv`: per-call means of each stage, both cores. The DNN stage runs only on frames ORB cannot register, so per frame the classical share is larger than shown; the end-to-end fleet numbers below include that mix._
+
 **What we found** (all figures from the generated tables below):
 
 - **End to end, COOL is flat.** Fleet throughput over 880 frames is within 1 % of stock: 1.0019× on one thread and 1.0067× on both cores. That matches what other competitors reported (`docs/research/2026-10-22_rivals.md`).
@@ -292,5 +298,6 @@ One command: `python bench/run_cool_bench.py --bucket <bucket> --ami ami-0d9a06f
 python bench/make_pack.py                     # builds data/bench_pack (local frame cache; private, never committed)
 python bench/cool_bench.py --out results/cool_bench/<run> --arm <label>     # one arm, this interpreter's cv2
 python bench/compare_arms.py results/cool_bench/<run> --baseline pip-5.0.0.93
+python bench/plot_amdahl.py results/cool_bench/<run>          # Amdahl chart
 python bench/run_cool_bench.py --bucket <private bucket> --ami <COOL G5 AMI> --cool-price <USD/h>   # all of it on AWS
 ```

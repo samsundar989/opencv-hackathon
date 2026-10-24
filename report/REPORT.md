@@ -221,6 +221,8 @@ W2's frozen evaluation (`results/agent_eval/REPORT.md`, `LLM_ANALYSIS.md`): ever
 Episodes: 98 single-camera (63 real, 35 synthetic and labelled, 26 clean controls) + 12 fleet cycles; expected actions written before any arm ran; set frozen with sha256 (`results/agent_eval/FROZEN.json`). OpenCV-evidence effect (same LLM with vs without OpenCV tools, paired): +7.5 points (95 % CI -1.4 to 16.3).
 <!-- END:agent -->
 
+**Autonomy set by measurement (D-0012).** We tested whether an LLM should drive the fleet. On 98 frozen episodes it should not act alone: 71.4 % (Sonnet 4.6) and 58.8 % (Haiku 4.5) task success, against 93.9 % for the deterministic, OpenCV-grounded rules. It does add value where the rules are blind, notably on gauge drift and offset and on ranking the fleet for a human. So the live split is: **OpenCV-grounded rules act** (reversible actions, or paging a human); **the LLM advises** (Sonnet 4.6 ranks the fleet, records a second opinion on every human-facing decision, reviews gauge-drift suspicions and drafts the alert text); **a human approves** anything external. The hybrid policy was defined before it was evaluated on the same frozen episodes (W2).
+
 **Reading this honestly.**
 - The deterministic rules policy beats both LLM agents on this episode set. The rules were written by the same people who wrote the expected actions, so this partly measures agreement with the authors, but it is still the best policy we have: the live system decides with rules first.
 - The OpenCV evidence clearly matters where the decision depends on what the image shows. With the tools, the LLM re-anchors to a banked reference, recognises night frames and keeps muddy-water frames during a stale gauge. The overall effect is positive, but its confidence interval includes zero, and on gauge flatlines the evidence misleads the LLM.
@@ -229,6 +231,10 @@ Episodes: 98 single-camera (63 real, 35 synthetic and labelled, 26 clean control
 - Limits (from W2): gauge-stale episodes are synthetic dropouts on real frames; re-anchoring is tested mostly on one camera (Pecatonica); costs are list-price estimates.
 
 ### 6.8 COOL on Graviton
+
+**Fleet cost first:** one Graviton5 m9g.large running COOL covers all ~880 gauged HIVIS cameras at a 15-minute cadence for about **$0.06 per camera-month**, with provenance recorded for every number (instance identity, AMI, `cv2.__file__`, build hash).
+
+![Where a frame's time goes](../results/cool_bench/cool_g5_m9g_2026-10-24/amdahl.png)
 
 COOL G5 vs stock pip OpenCV 5.0.0.93 on the same m9g.large, same Python and numpy, the live per-frame path stage by stage plus the fleet cycle (`results/cool_bench/cool_g5_m9g_2026-10-24/`; full tables and method: `docs/COOL_BENCHMARK.md`).
 
@@ -275,10 +281,11 @@ Flags raised: VIEW_CHANGE 13, LOW_QUALITY 8, GAUGE_STALE 0, DISAGREE 14, RISING 
 ### 6.10 Onboarding new cameras and real gauge outages
 
 **Onboarding beyond the 20 (W5, `results/onboarding/README.md`).** One command per camera (`scripts/onboard_site.py`) fetches 12 months of frames and gauge data, builds a reference, registers, extracts features, runs the same forward-chaining CV and assigns a tier with the frozen D-0007 setting, with no per-site tuning. These cameras were onboarded on Oct 24–25 and are not part of the frozen test.
-- 40 cameras attempted, 39 finished: 29 tier B (eligible to serve), 10 tier C (registration under 80 % or weak correlation).
-- Tier B: median CV MAE 0.93 ft, median nMAE 0.136. These are mostly large rivers (Missouri, Illinois, Wabash) whose stage ranges are many feet, so the absolute error is larger and the relative error is about the frozen 20-site CV's (nMAE 0.145).
-- As with the first 20, the camera beats a 24-hour-old gauge value at only 3 of 29 tier-B sites. It is a gap-filler, not a replacement.
-- Cost per new camera (median of 39): 66 CPU-minutes and about 116 MB of frames, about $0.054 at m9g.large on-demand. Projected to all 880 gauged HIVIS cameras: about $48 of compute and 102 GB of frames.
+- 40 cameras attempted, 40 finished: 30 tier B (eligible to serve), 10 tier C (registration under 80 % or weak correlation).
+- Tier B: median CV MAE 0.97 ft, median nMAE 0.140. These are mostly large rivers (Missouri, Illinois, Wabash) whose stage ranges are many feet, so the absolute error is larger and the relative error is about the frozen 20-site CV's (nMAE 0.145).
+- As with the first 20, the camera beats a 24-hour-old gauge value at only 3 of 30 tier-B sites. It is a gap-filler, not a replacement.
+- Cost per new camera (median of 40): 67 CPU-minutes and about 119 MB of frames, about $0.055 at m9g.large on-demand. Projected to all 880 gauged HIVIS cameras: about $48 of compute and 105 GB of frames.
+- One onboarded camera, the Pee Dee River near Florence SC, sits beside a gauge that has been dark since 2026-06-30. It is served live as a real, ongoing gap-fill example (W5).
 
 **How much gauge history does a new camera need?** For each of 29 sites, refit on only the last N days before the same two test months:
 
@@ -293,11 +300,11 @@ Flags raised: VIEW_CHANGE 13, LOW_QUALITY 8, GAUGE_STALE 0, DISAGREE 14, RISING 
 About a month of overlap with the gauge is enough. More history does not help the frozen setting, which matches the drift in §6.12.
 
 **Real gauge outages** (W5, `results/real_outages/README.md`).
-- **How often:** over the last 12 months, 531 of the 875 gauges behind gauged HIVIS cameras had at least one outage of 6 h or more: 3,734 outages, median 15.0 h, 984 lasting a day or more and 303 a week or more. For 1,042 of the 1,635 outages checked, the camera kept posting daylight frames while the gauge was dark.
+- **How often:** over the last 12 months, 531 of the 875 gauges behind gauged HIVIS cameras had at least one outage of 6 h or more: 3,734 outages, median 15.0 h, 984 lasting a day or more and 303 a week or more. For 1,099 of the 1,735 outages checked, the camera kept posting daylight frames while the gauge was dark.
 - **How the camera did**, scored at the moment the gauge came back, against holding the last known value. Two variants: *causal* (refit only on data before the outage, which is what a live system could do) and a *hindsight reconstruction* that excludes the outage ± 7 days but uses data after it.
-  - Most outages are on a quiet river. In 44 of 60 hindsight-scored gaps the river moved less than 0.25 ft, and holding the last reading is nearly exact.
-  - Where the river moved 0.25 ft or more, the camera was closer in **5 of 10** gaps (causal) and **6 of 16** (hindsight). The clearest win: during a 44-day estimated outage on the Clearwater River at Spalding, the camera's MAE was 0.98 ft against 1.80 ft for the last known value (hindsight refit). Losses include Missouri River at Hermann and a winter ice gap on the Root River.
-  - So the camera helps when the river moves while the gauge is dark, which is when a fill-in matters. It wins about half those cases, not all of them.
+  - Most outages are on a quiet river. In 44 of 61 hindsight-scored gaps the river moved less than 0.25 ft, and holding the last reading is nearly exact.
+  - Where the river moved 0.25 ft or more, the camera was closer in **5 of 11** gaps (causal) and **7 of 17** (hindsight). The clearest win: during a 44-day estimated outage on the Clearwater River at Spalding, the camera's MAE was 0.98 ft against 1.80 ft for the last known value (hindsight refit). Losses include Missouri River at Hermann and a winter ice gap on the Root River.
+  - So the camera helps when the river moves while the gauge is dark, which is when a fill-in matters. It wins roughly 4 to 5 in 10 of those cases, not all of them.
 
 ### 6.11 Model v2 candidate: DINOv2 features in `cv2.dnn`
 
