@@ -5,9 +5,11 @@ readings from the live store and reports, per camera, what an operator should fi
 
   offline           no new frame for > 6 h while the sun is up (Pecatonica has uploaded nothing since Oct 20)
   view_changed      ≥ half of the last 24 h of daylight frames fail registration (re-aimed / moved / blocked)
-  ir_stuck_on       ≥ half of the last 24 h of frames with the sun ≥ 10° up are IR/night frames
-  lens_degradation  daily median sharpness below the site's calibration p5, or daily median haze above its p95,
-                    on ≥ 2 of the last 3 days and getting worse (dirt, spider web, condensation, fogged housing)
+  ir_stuck_on       ≥ half of the last 24 h of frames with the sun ≥ 10° up are NIGHT-flagged AND those frames are
+                    monochrome (chroma < 1; snow and grey sky fool the saturation test, not this one)
+  lens_degradation  daily median sharpness < half the camera's own trailing 14-day baseline, or haze > baseline +
+                    0.12, on ≥ 2 of the last 3 days and not improving (dirt, spider web, condensation); silent until
+                    7 baseline days exist
   gauge_vs_camera   over ≥ 6 daylight readings in 72 h the camera sits > 2.5 σ from the gauge on the same side
                     while the camera registers well — check the gauge (drift) or recalibrate the camera
 
@@ -33,6 +35,45 @@ DAY_SUN_DEG = 10.0
 VIEW_SHARE = 0.5
 IR_SHARE = 0.5
 DISAGREE_SIGMAS, DISAGREE_MIN_N = 2.5, 6
+IR_CHROMA = 1.0          # mean |R-G| + |G-B| below this = a monochrome (IR) frame
+LENS_BASELINE_DAYS, LENS_MIN_BASELINE = 14, 7
+LENS_LAP_RATIO, LENS_FOG_RISE = 0.5, 0.12
+
+
+def chroma(img) -> float:
+    """Mean |R-G| + |G-B| below the USGS overlay band: exactly 0 for a monochrome IR frame."""
+    im = img[56:].astype(np.int16)
+    return float(np.mean(np.abs(im[..., 2] - im[..., 1])) + np.mean(np.abs(im[..., 1] - im[..., 0])))
+
+
+def frame_chroma(fetch, key: str | None) -> float | None:
+    if not key or fetch is None:
+        return None
+    import cv2
+    b = fetch(key)
+    img = cv2.imdecode(np.frombuffer(b, np.uint8), cv2.IMREAD_COLOR) if b else None
+    return None if img is None else chroma(img)
+
+
+def lens_flags(rows: list[tuple[str, float, float]]) -> list[dict]:
+    """rows: (day, median sharpness, median haze) in day order. A day is bad when sharpness < LENS_LAP_RATIO × the
+    trailing baseline median or haze > baseline + LENS_FOG_RISE; flagged when >= 2 of the last 3 days are bad, the
+    latest is bad, and it is not improving. Needs >= LENS_MIN_BASELINE baseline days (silent before that)."""
+    out = []
+    for i in range(len(rows)):
+        base = rows[max(0, i - 2 - LENS_BASELINE_DAYS):max(0, i - 2)]
+        if len(base) < LENS_MIN_BASELINE:
+            continue
+        bl, bf = float(np.median([r[1] for r in base])), float(np.median([r[2] for r in base]))
+        w = rows[i - 2:i + 1] if i >= 2 else []
+        if len(w) < 3:
+            continue
+        bad = [(lv < LENS_LAP_RATIO * bl) or (fg > bf + LENS_FOG_RISE) for _, lv, fg in w]
+        worse = w[-1][1] <= w[0][1] or w[-1][2] >= w[0][2]
+        if sum(bad) >= 2 and bad[-1] and worse:
+            out.append({"day": w[-1][0], "bad_days": int(sum(bad)), "median_lap_var": [round(r[1]) for r in w],
+                        "median_fog": [round(r[2], 3) for r in w], "baseline_lap_var": round(bl), "baseline_fog": round(bf, 3)})
+    return out
 
 
 def _ts(s: str | None) -> datetime | None:
@@ -66,10 +107,9 @@ def _issue(check: str, severity: int, summary: str, evidence: dict, images: list
             "ticket_draft": {"kind": check, "text": ticket, "needs_approval": True, "sent": False}}
 
 
-def site_health(cam: str, latest: dict, rs: list[dict], meta: dict | None, now: datetime) -> list[dict]:
+def site_health(cam: str, latest: dict, rs: list[dict], meta: dict | None, now: datetime, fetch=None) -> list[dict]:
     issues = []
     meta = meta or {}
-    q_lv = (meta.get("quality") or {})
     imgs = [latest.get("frame_key"), latest.get("overlay_key") or latest.get("last_daylight_overlay_key")]
     # offline: sun is up now and the newest frame is old
     age_h = (latest.get("frame_age_min") or 0) / 60
@@ -87,30 +127,32 @@ def site_health(cam: str, latest: dict, rs: list[dict], meta: dict | None, now: 
                                  {"share_unregistered": round(float(vc), 2), "n": len(day)}, imgs,
                                  f"Camera {cam} appears re-aimed, moved or blocked: {vc:.0%} of today's frames fail "
                                  "registration. Confirm the view; re-anchor or recalibrate."))
-        ir = np.mean(["NIGHT" in (r.get("flags") or []) for r in day])
+        cand = [r for r in day if "NIGHT" in (r.get("flags") or [])]
+        ir = len(cand) / len(day)
         if ir >= IR_SHARE:
-            issues.append(_issue("ir_stuck_on", 2, f"{ir:.0%} of {len(day)} frames with the sun >= {DAY_SUN_DEG:.0f} deg are IR/night frames",
-                                 {"share_ir_in_daylight": round(float(ir), 2), "n": len(day)}, imgs,
-                                 f"Camera {cam} seems stuck in IR/night mode during the day. Check the IR-cut filter "
-                                 "or the day/night setting."))
-    # lens degradation: daily medians over the last 3 days vs the site's own calibration levels
+            # the NIGHT pixel test also fires on snow / grey sky; a real IR frame is monochrome in the sensor (chroma
+            # exactly 0 on all 6 live cameras checked at 05Z vs 10-38 by day and 3.5-5.7 on snow), so confirm on pixels
+            chs = [c for c in (frame_chroma(fetch, r.get("frame_key")) for r in cand[-3:]) if c is not None]
+            if chs and float(np.median(chs)) < IR_CHROMA:
+                issues.append(_issue("ir_stuck_on", 2, f"{ir:.0%} of {len(day)} frames with the sun >= {DAY_SUN_DEG:.0f} deg are "
+                                     f"monochrome IR frames (chroma {float(np.median(chs)):.2f})",
+                                     {"share_ir_in_daylight": round(float(ir), 2), "n": len(day), "median_chroma": round(float(np.median(chs)), 3)},
+                                     imgs, f"Camera {cam} seems stuck in IR/night mode during the day. Check the IR-cut filter "
+                                     "or the day/night setting."))
+    # lens degradation: daily medians vs the camera's OWN trailing 14-day baseline (calibration-season p-levels flag
+    # every leaf-off / snowy day: 2-3 of 12 flagged days were real in the history spot check of v1)
     by_day: dict[str, list] = {}
     for r in rs:
         if (r.get("sun_elev_deg") or -90) >= DAY_SUN_DEG and r.get("quality"):
             by_day.setdefault(r["t_frame"][:10], []).append(r["quality"])
-    days = sorted(by_day)[-3:]
-    if len(days) >= 2 and q_lv:
-        lap = [float(np.median([q["lap_var"] for q in by_day[d]])) for d in days]
-        fog = [float(np.median([q["fog_score"] for q in by_day[d]])) for d in days]
-        bad = [(lv < q_lv.get("lap_var_p5", -1)) or (fg > q_lv.get("fog_p95", 9)) for lv, fg in zip(lap, fog)]
-        worse = lap[-1] <= lap[0] or fog[-1] >= fog[0]
-        if sum(bad) >= 2 and bad[-1] and worse:
-            issues.append(_issue("lens_degradation", 2,
-                                 f"sharpness/haze outside this camera's normal range on {sum(bad)} of the last {len(days)} days",
-                                 {"days": days, "median_lap_var": [round(v) for v in lap], "median_fog": [round(v, 3) for v in fog],
-                                  "site_lap_var_p5": q_lv.get("lap_var_p5"), "site_fog_p95": q_lv.get("fog_p95")}, imgs,
-                                 f"Camera {cam}: image sharpness has dropped / haze has risen for days. Likely dirt, a "
-                                 "spider web or condensation on the lens or housing; schedule a cleaning visit."))
+    rows = [(d, float(np.median([q["lap_var"] for q in by_day[d]])), float(np.median([q["fog_score"] for q in by_day[d]])))
+            for d in sorted(by_day)]
+    fl = lens_flags(rows)
+    if fl and fl[-1]["day"] == rows[-1][0]:
+        f = fl[-1]
+        issues.append(_issue("lens_degradation", 2, f"sharpness/haze off this camera's own 14-day baseline on {f['bad_days']} of the last 3 days",
+                             f, imgs, f"Camera {cam}: image sharpness has dropped / haze has risen for days compared with its "
+                             "own recent baseline. Likely dirt, a spider web or condensation on the lens or housing; schedule a cleaning visit."))
     # persistent camera vs gauge disagreement on registered, in-range daylight readings
     sig = float(meta.get("sigma_ft") or latest.get("camera_sigma_ft") or 0.0)
     pairs = [r for r in rs if r.get("camera_stage_ft") is not None and r.get("gauge_stage_ft") is not None
@@ -154,7 +196,8 @@ def build_health(store, now: datetime | None = None, days: int = 3) -> dict[str,
         cam = s.get("cam_id")
         latest = store.get_json(f"live/sites/{cam}/latest.json") or s
         meta = site_meta(store, cam)
-        iss = site_health(cam, latest, _readings(store, cam, now, days), meta, now)
+        iss = site_health(cam, latest, _readings(store, cam, now, max(days, LENS_BASELINE_DAYS + 3)), meta, now,
+                          fetch=store.get_bytes)
         n_issues += len(iss)
         sites.append({"cam_id": cam, "ok": not iss, "issues": iss, "last_frame": latest.get("t_frame")})
     sites.sort(key=lambda x: (-max([i["severity"] for i in x["issues"]] or [0]), x["cam_id"]))

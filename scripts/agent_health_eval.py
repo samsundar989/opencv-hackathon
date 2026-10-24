@@ -3,12 +3,12 @@
 For every site with a history (20 frozen + onboarded), day by day over ~12 months:
   offline       a daylight gap > 6 h between consecutive NIMS uploads (sun >= 10 deg at the gap midpoint)
   view_changed  >= 50 % of the day's daylight frames fail registration to the main reference (>= 4 frames)
-  ir_stuck_on   >= 50 % of frames with sun >= 10 deg are IR/night frames (pixel test)
-  lens          daily median sharpness < site p5 or haze > site p95 on >= 2 of 3 consecutive days, getting worse
-                (image quality sampled on 3 daylight frames per day)
+  ir_stuck_on   >= 50 % of frames with sun >= 10 deg are NIGHT-flagged, confirmed monochrome (chroma < 1) on up to 3
+  lens          agent/health.lens_flags: vs the camera's own trailing 14-day baseline (3 sampled frames per day)
 
 Agreement: view_changed days vs the independent day-level failure-run analysis of SLICE_01B
-(`history/segments.csv`: runs of days with < 30 % registration success, >= 3 days long). Offline is counted, not scored
+(`history/segments.csv`: runs of days with < 30 % registration success, >= 3 days long; unlinked runs only — a
+linked run registers through the reference bank). Offline is counted, not scored
 (the upload record is the ground truth). Lens and IR have no labels: the flagged days are written to a local contact
 sheet (runs/agent_health_eval/, not committed: raw frames) for a by-eye spot check.
 
@@ -28,7 +28,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from riversight.agent.health import DAY_SUN_DEG, IR_SHARE, OFFLINE_H, VIEW_SHARE  # noqa: E402
+from riversight.agent.health import DAY_SUN_DEG, IR_CHROMA, IR_SHARE, OFFLINE_H, VIEW_SHARE, chroma, lens_flags  # noqa: E402
 from riversight.live.quality import image_quality  # noqa: E402
 
 DATA = ROOT / "data"
@@ -76,14 +76,20 @@ def site_eval(cam: str, bdir: Path) -> dict:
     out["offline_periods"] = int(np.sum((gaps > OFFLINE_H) & (sun_mid >= DAY_SUN_DEG)))
     out["offline_longest_h"] = round(float(gaps[sun_mid >= DAY_SUN_DEG].max()), 1) if np.any(sun_mid >= DAY_SUN_DEG) else 0.0
     day = f[f["sun"] >= DAY_SUN_DEG]
-    q_lv = meta.get("quality") or {}
     lens_rows = []
     for dname, g in day.groupby("day"):
         if len(g) >= 4:
             if (~g["ok"].astype(bool)).mean() >= VIEW_SHARE:
                 out["view_changed_days"].append(dname)
             if g["night_img"].astype(bool).mean() >= IR_SHARE:
-                out["ir_days"].append(dname)
+                out["ir_candidate_days"] = out.get("ir_candidate_days", 0) + 1
+                chs = []
+                for p in g[g["night_img"].astype(bool)]["path"].iloc[:3]:
+                    im = cv2.imread(str(ROOT / p))
+                    if im is not None:
+                        chs.append(chroma(im))
+                if chs and float(np.median(chs)) < IR_CHROMA:
+                    out["ir_days"].append(dname)
         pick = g.iloc[np.linspace(0, len(g) - 1, min(3, len(g))).astype(int)]
         qs = []
         for p in pick["path"]:
@@ -93,12 +99,7 @@ def site_eval(cam: str, bdir: Path) -> dict:
         if qs:
             lens_rows.append((dname, float(np.median([q["lap_var"] for q in qs])), float(np.median([q["fog_score"] for q in qs])),
                               pick["path"].iloc[len(pick) // 2]))
-    for i in range(2, len(lens_rows)):
-        w = lens_rows[i - 2:i + 1]
-        bad = [(lv < q_lv.get("lap_var_p5", -1)) or (fg > q_lv.get("fog_p95", 9)) for _, lv, fg, _ in w]
-        worse = w[-1][1] <= w[0][1] or w[-1][2] >= w[0][2]
-        if sum(bad) >= 2 and bad[-1] and worse:
-            out["lens_days"].append(w[-1][0])
+    out["lens_days"] = [f["day"] for f in lens_flags([r[:3] for r in lens_rows])]        # the live function
     out["_lens_examples"] = [r[3] for r in lens_rows if r[0] in set(out["lens_days"])][:6]
     out["_ir_examples"] = [g["path"].iloc[len(g) // 2] for dname, g in day.groupby("day") if dname in set(out["ir_days"])][:6]
     # agreement with the independent SLICE_01B failure-run segments
@@ -106,6 +107,8 @@ def site_eval(cam: str, bdir: Path) -> dict:
     sp = d / "segments.csv"
     if sp.exists():
         for _, s in pd.read_csv(sp).iterrows():
+            if bool(s["linked"]):
+                continue          # a linked segment registers through the reference bank: not a view the camera lost
             seg_days |= {x.strftime("%Y-%m-%d") for x in pd.date_range(s["start"], s["end"])}
     vc = set(out["view_changed_days"])
     obs_days = set(day["day"])
@@ -160,7 +163,8 @@ def main():
             "segment_days_independent": seg, "segment_days_flagged": sum(r["segment_days_flagged"] for r in ok),
             "view_change_recall_vs_segments": round(sum(r["segment_days_flagged"] for r in ok) / seg, 3) if seg else None,
             "view_changed_days_outside_segments": sum(r["flagged_outside_segments"] for r in ok),
-            "ir_stuck_days": sum(len(r["ir_days"]) for r in ok), "lens_days": sum(len(r["lens_days"]) for r in ok),
+            "ir_candidate_days_saturation_test": sum(r.get("ir_candidate_days", 0) for r in ok),
+            "ir_stuck_days_chroma_confirmed": sum(len(r["ir_days"]) for r in ok), "lens_days": sum(len(r["lens_days"]) for r in ok),
             "sites_with_lens_days": sum(len(r["lens_days"]) > 0 for r in ok)}
     OUT.write_text(json.dumps({"summary": summ, "per_site": res,
                                "note": "offline counted from the NIMS upload record; view change compared with the "
