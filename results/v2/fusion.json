@@ -1,0 +1,15 @@
+{
+  "primary": "fused_bias",
+  "camera_models": {
+    "v1": "v1",
+    "v2": "v1+dino_roi@0.5+sun"
+  },
+  "gaps_h": {
+    "6h": 6,
+    "24h": 24,
+    "72h": 72,
+    "7d": 168
+  },
+  "moving_threshold_ft": 0.25,
+  "note": "simulated outages over the calibration history; camera = out-of-fold CV predictions (D-0007 folds)"
+}
