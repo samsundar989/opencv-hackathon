@@ -92,3 +92,7 @@ footer { max-width: 1200px; margin: 24px auto 32px; padding: 0 16px; color: var(
 
 .banner { padding: 8px 12px; border-radius: 8px; background: var(--chip); border: 1px solid var(--line); margin-bottom: 8px; font-size: 14px; }
 [hidden] { display: none !important; }
+.ticks { position: relative; height: 30px; margin: -2px 0 6px; font-size: 11px; color: var(--muted); }
+.ticks .tick { position: absolute; transform: translateX(-50%); text-align: center; white-space: nowrap; border-left: 1px solid var(--warn); padding-left: 3px; line-height: 1.2; }
+.ticks .tick.minor, .ticks .tick.moderate, .ticks .tick.major { color: var(--bad); border-color: var(--bad); }
+.catbtn { font-size: 12px; padding: 2px 8px; margin: 2px 0; }

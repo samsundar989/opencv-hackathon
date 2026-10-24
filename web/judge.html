@@ -10,6 +10,7 @@
 <body>
 <main>
   <h1>For judges: a 60-second tour</h1>
+  <p class="panel small" id="uptime" aria-live="polite">Checking the live worker…</p>
   <ol class="panel" style="padding-left:32px">
     <li><a href="index.html">Live</a>: 20 public USGS river cameras, re-read every 15 minutes by a Graviton worker. Camera stage ± σ sits next to the USGS gauge.</li>
     <li>Open a featured site: <a href="site.html?cam=IL_Salt_Creek_at_Wood_Dale">Salt Creek, IL</a>,
@@ -91,6 +92,13 @@ python scripts/deploy.py                      # the AWS stack (us-east-2), budge
     document.getElementById("src").innerHTML = `Sources: <code>results/kill_test_v2_summary.json</code>, <code>results/kill_test_v2_ci_summary.json</code> (bootstrap by UTC day),
       <code>results/kill_test_v2.csv</code>; constants hashed in <code>results/constants.sha256</code>. ${s.test_frames_scored} test frames scored.`;
   } catch (e) { document.getElementById("kpis").innerHTML = `<div class="panel err">${RS.esc(e.message)}</div>`; }
+  await RS.panel("uptime", async (el) => {
+    const i = await RS.json("live/index.json");
+    const m = (Date.now() - Date.parse(i.cycle_started)) / 60000;
+    el.innerHTML = `${m < 35 ? "🟢" : m < 75 ? "🟡" : "🔴"} Live worker: last cycle <b>${RS.ago(i.cycle_started)}</b>
+      (runs every 15 min on Graviton, OpenCV ${RS.esc(i.opencv?.version)}${i.opencv?.cool ? " COOL" : ""}); ${i.n_errors} site errors in that cycle.
+      An alarm emails the operator if no cycle completes for 75 min.`;
+  });
   await RS.panel("prosp", async (el) => {
     const p = await RS.json("live/prospective/summary.json");
     const f = p.fleet || {};

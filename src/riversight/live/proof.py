@@ -40,6 +40,21 @@ def build_summary() -> dict:
             "dnn_engines": [n for n in dir(cv2.dnn) if n.startswith("ENGINE_")]}
 
 
+def spend() -> dict:
+    """The D-0004 guard budget's own figures (Budgets API: free, unlike Cost Explorer)."""
+    try:
+        import boto3
+        acct = boto3.client("sts").get_caller_identity()["Account"]
+        b = boto3.client("budgets").describe_budget(AccountId=acct, BudgetName="riversight-cap")["Budget"]
+        cs = b.get("CalculatedSpend", {})
+        return {"budget": "riversight-cap", "limit_usd": float(b["BudgetLimit"]["Amount"]),
+                "actual_usd": float(cs.get("ActualSpend", {}).get("Amount", 0)),
+                "forecast_usd": float(cs["ForecastedSpend"]["Amount"]) if cs.get("ForecastedSpend") else None,
+                "read_utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+    except Exception as e:
+        return {"error": type(e).__name__}
+
+
 def proof(models: list) -> dict:
     return {
         "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -48,6 +63,7 @@ def proof(models: list) -> dict:
         "models": [{"cam_id": m.cam_id, "model_sha": m.meta["model_sha"], "frozen_config_sha": m.meta["frozen_config_sha"],
                     "trained_at": m.meta["trained_at"], "n_calib_frames": m.meta["n_calib_frames"]} for m in models],
         "code_sha": os.environ.get("RIVERSIGHT_CODE_SHA", "unknown"),
+        "spend": spend() if os.environ.get("RIVERSIGHT_METRICS") == "1" else None,
     }
 
 

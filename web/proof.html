@@ -13,6 +13,8 @@
   <p class="lede">The worker writes this file every cycle. It records the instance it runs on (from EC2's instance-identity document),
     the OpenCV build it actually imported, and the hash of every site model.</p>
   <div class="kpis" id="kpis"></div>
+  <h2>AWS spend (budget guard)</h2>
+  <div class="panel small" id="spend">Loading…</div>
   <h2>OpenCV build</h2>
   <div class="panel" id="build">Loading…</div>
   <h2>Models</h2>
@@ -35,6 +37,11 @@
     <b>getBuildInformation() sha256</b> <code>${RS.esc(p.opencv.build_info_sha256)}</code><br>
     <b>DNN engines</b> ${RS.esc((p.opencv.dnn_engines || []).join(", "))}<br><b>code</b> ${RS.esc(p.code_sha)}</p>
     <pre>${RS.esc((p.opencv.build_info_excerpt || []).join("\n"))}</pre>`;
+  const sp = p.spend;
+  document.getElementById("spend").innerHTML = sp && !sp.error ? `<p>Actual spend so far <b>$${Number(sp.actual_usd).toFixed(2)}</b>
+      of the $${Number(sp.limit_usd).toFixed(0)} cap${sp.forecast_usd != null ? `; AWS forecast $${Number(sp.forecast_usd).toFixed(2)}` : ""}
+      (budget <code>${RS.esc(sp.budget)}</code>, gross cost before credits, read ${RS.ago(sp.read_utc)}). At 90% the guard stops the worker automatically.</p>`
+    : `<p class="muted">Spend not available yet${sp?.error ? " (" + RS.esc(sp.error) + ")" : ""}.</p>`;
   document.querySelector("#models tbody").innerHTML = (p.models || []).map((m) => `<tr><td>${RS.esc(RS.nice(m.cam_id))}</td>
     <td><code>${RS.esc(m.model_sha.slice(0, 16))}…</code></td><td>${RS.esc(m.trained_at)}</td><td>${m.n_calib_frames}</td></tr>`).join("");
 })();

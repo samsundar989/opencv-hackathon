@@ -9,6 +9,7 @@
 """
 from __future__ import annotations
 
+import hashlib
 from pathlib import Path
 
 from aws_cdk import CfnOutput, Duration, RemovalPolicy, Stack, Tags
@@ -31,7 +32,8 @@ NAMESPACE = "RiverSight"
 
 class LiveStack(Stack):
     def __init__(self, scope: Construct, cid: str, *, email: str, worker_ami: str, instance_type: str,
-                 bedrock_profile: str, approval_token_sha256: str = "", cool_ami_id: str = "", **kw):
+                 bedrock_profile: str, approval_token_sha256: str = "", cool_ami_id: str = "",
+                 origin_secret: str = "", **kw):
         super().__init__(scope, cid, **kw)
         Tags.of(self).add("Project", "riversight")
 
@@ -50,7 +52,8 @@ class LiveStack(Stack):
             runtime=lambda_.Runtime.PYTHON_3_14, architecture=lambda_.Architecture.ARM_64,
             handler="index.handler", code=lambda_.Code.from_asset(str(INFRA / "lambda" / "approvals")),
             timeout=Duration.seconds(15), memory_size=256,
-            environment={"BUCKET": bucket.bucket_name, "APPROVAL_TOKEN_SHA256": approval_token_sha256},
+            environment={"BUCKET": bucket.bucket_name, "APPROVAL_TOKEN_SHA256": approval_token_sha256,
+                         "ORIGIN_SECRET_SHA256": hashlib.sha256(origin_secret.encode()).hexdigest() if origin_secret else ""},
             log_group=logs.LogGroup(self, "ApprovalsLogs", retention=logs.RetentionDays.ONE_MONTH))
         bucket.grant_read(api, "live/approvals/*")
         bucket.grant_put(api, "live/approvals/*")
@@ -76,7 +79,8 @@ class LiveStack(Stack):
                     origin=live_origin, viewer_protocol_policy=cf.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                     cache_policy=live_cache, compress=True),
                 "/api/*": cf.BehaviorOptions(
-                    origin=origins.FunctionUrlOrigin(api_url),
+                    origin=origins.FunctionUrlOrigin(api_url, custom_headers={"x-origin-verify": origin_secret}
+                                                     if origin_secret else None),
                     viewer_protocol_policy=cf.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                     allowed_methods=cf.AllowedMethods.ALLOW_ALL, cache_policy=cf.CachePolicy.CACHING_DISABLED,
                     origin_request_policy=cf.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER),
@@ -100,6 +104,9 @@ class LiveStack(Stack):
                        "arn:aws:bedrock:*::foundation-model/anthropic.claude-haiku-5-5*",
                        "arn:aws:bedrock:*::foundation-model/anthropic.claude-sonnet-5-5*"]))
         alerts.grant_publish(role)
+        role.add_to_policy(iam.PolicyStatement(          # spend on /proof: read the guard budget only
+            actions=["budgets:ViewBudget"],
+            resources=[f"arn:aws:budgets::{self.account}:budget/riversight-cap"]))
         role.add_to_policy(iam.PolicyStatement(actions=["cloudwatch:PutMetricData"], resources=["*"],
                                                conditions={"StringEquals": {"cloudwatch:namespace": NAMESPACE}}))
 

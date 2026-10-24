@@ -745,9 +745,15 @@ def main(argv=None):
         print(f"replayed {len(rows)} frames; flagged {sum(1 for r in rows if r['flags'])}")
         return
     store = LocalStore(Path(a.local)) if a.local else S3Store(a.s3)
-    idx = run_cycle(store, load_models(a.bundles, a.only), agent_fn, force=a.force)
+    models = load_models(a.bundles, a.only)
+    idx = run_cycle(store, models, agent_fn, force=a.force)
     if a.s3:
         score_prospective_hourly(store)
+    try:
+        from riversight.live import nws
+        nws.refresh(store, models)                  # hourly per site: NWPS flood categories + forecast crest
+    except Exception:
+        traceback.print_exc()
     print(json.dumps({k: v for k, v in idx.items() if k != "sites"}, default=str))
     sys.exit(0 if idx["n_errors"] < idx["n_sites"] else 1)
 

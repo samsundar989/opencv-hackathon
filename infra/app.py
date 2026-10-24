@@ -28,5 +28,6 @@ if ctx("deploy_live") != "0":
     LiveStack(app, "RiverSightLive", env=env, email=email, worker_ami=ctx("worker_ami"),
               instance_type=ctx("worker_instance_type"), bedrock_profile=ctx("bedrock_profile"),
               approval_token_sha256=ctx("approval_token_sha256") or "", cool_ami_id=ctx("cool_ami_id") or "",
+              origin_secret=ctx("origin_secret") or "",
               description="RiverSight live: S3 + CloudFront + approvals API + Graviton worker")
 app.synth()

@@ -54,16 +54,21 @@ def git_sha() -> str:
     return subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
 
 
-def approval_token() -> tuple[str, bool]:
+def env_secret(name: str) -> tuple[str, bool]:
+    """A secret kept only in the gitignored .env (generated on first use). Returns (value, newly created)."""
     env = ROOT / ".env"
     lines = env.read_text(encoding="utf-8").splitlines() if env.exists() else []
     for ln in lines:
-        if ln.startswith("APPROVAL_TOKEN="):
+        if ln.startswith(f"{name}="):
             return ln.split("=", 1)[1].strip(), False
     tok = secrets.token_urlsafe(24)
     with env.open("a", encoding="utf-8") as f:
-        f.write(f"\nAPPROVAL_TOKEN={tok}\n")
+        f.write(f"\n{name}={tok}\n")
     return tok, True
+
+
+def approval_token() -> tuple[str, bool]:
+    return env_secret("APPROVAL_TOKEN")
 
 
 def outputs() -> dict:
@@ -238,7 +243,8 @@ def main():
         return
     verify_guard(sess)                       # D-0004: refuse to launch EC2 without the guard
     tok, new = approval_token()
-    ctx = {"approval_token_sha256": hashlib.sha256(tok.encode()).hexdigest()}
+    ctx = {"approval_token_sha256": hashlib.sha256(tok.encode()).hexdigest(),
+           "origin_secret": env_secret("ORIGIN_SECRET")[0]}       # CloudFront -> approvals Lambda only
     if a.worker_ami:
         ctx["worker_ami"] = a.worker_ami
     if a.cool_ami_id:

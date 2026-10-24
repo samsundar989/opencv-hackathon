@@ -27,7 +27,9 @@
         <input type="range" id="stage" min="0" max="10" step="0.01" value="5" aria-describedby="stageOut">
         <output id="stageOut" for="stage">—</output>
       </div>
+      <div id="ticks" class="ticks" aria-hidden="true"></div>
       <div class="small muted" id="marks"></div>
+      <div class="small" id="nws"></div>
     </section>
     <section>
       <div class="panel">
@@ -92,7 +94,8 @@
     strip.innerHTML = `${RS.pill(latest.status)} <span>frame ${RS.ago(latest.t_frame)}</span>
       <span>camera <b>${RS.cam(latest)}</b></span>
       <span>gauge <b>${RS.ft(latest.gauge_stage_ft)}</b> <span class="muted small">(${latest.gauge_age_min ?? "—"} min old)</span></span>
-      <span>flood state <b>${RS.esc(latest.flood_state)}</b></span> ${RS.flags(latest.flags)}`;
+      <span>flood state <b>${RS.esc(latest.flood_state)}</b></span> ${RS.flags(latest.flags)}
+      <div class="small muted" style="flex-basis:100%">Why "${RS.esc(RS.LABEL[latest.status] || latest.status)}"? ${RS.esc(RS.WHY[latest.status] || "")}</div>`;
   });
 
   await RS.panel("now", async (el) => {
@@ -111,7 +114,7 @@
   });
 
   // ---- stage slider: h* blocks drawn onto the shown frame (projective map ref → frame) ----
-  await RS.panel("cv", async (cv) => {
+  await RS.panel("cv", async (cv) => {   // eslint-disable-line
     const ctx = cv.getContext("2d");
     const slider = document.getElementById("stage"), out = document.getElementById("stageOut");
     const banner = document.getElementById("banner");
@@ -184,6 +187,26 @@
         <button type="button" id="toNow">current stage</button> <button type="button" id="toHigh">calibration max</button>`;
       document.getElementById("toNow").onclick = () => { slider.value = now; draw(); };
       document.getElementById("toHigh").onclick = () => { slider.value = hi; draw(); };
+      // NWS flood categories as slider ticks + the forecast crest drawn into today's frame
+      try {
+        const nw = await RS.json(`live/nws/${cam}.json`);
+        const smin = Number(slider.min), smax = Number(slider.max);
+        const cats = Object.entries(nw.flood_categories_ft || {}).sort((a, b) => a[1] - b[1]);
+        const NAMES = { action: "NWS action", minor: "minor flood", moderate: "moderate flood", major: "major flood" };
+        document.getElementById("ticks").innerHTML = cats.filter(([, v]) => v >= smin && v <= smax).map(([k, v]) =>
+          `<span class="tick ${k}" style="left:${(100 * (v - smin) / (smax - smin)).toFixed(1)}%">${NAMES[k] || k}<br>${v} ft</span>`).join("");
+        const fc = nw.forecast;
+        const parts = [];
+        if (cats.length) parts.push(`NWS flood stages at <a href="${RS.esc(nw.page)}">${RS.esc(nw.lid)}</a>: ` + cats.map(([k, v]) =>
+          `<button type="button" class="catbtn" data-v="${v}" ${v > smax ? "disabled title=\"above what this camera has seen\"" : ""}>${NAMES[k] || k} ${v} ft</button>`).join(" ") +
+          (cats.some(([, v]) => v > smax) ? ` <span class="muted">(greyed: above the calibrated range, so the camera cannot show it)</span>` : ""));
+        if (fc) parts.push(`<b>NWS forecast crest ${fc.crest_ft} ft</b> ${new Date(fc.crest_time).toLocaleString([], { weekday: "short", hour: "numeric", minute: "2-digit" })}
+          <button type="button" class="catbtn" data-v="${fc.crest_ft}">show the forecast crest on today's frame</button>
+          ${fc.crest_ft > smax ? '<span class="muted">(above the calibrated range: drawn at the range top, a lower bound)</span>' : ""}`);
+        document.getElementById("nws").innerHTML = parts.length ? parts.join("<br>") : `<span class="muted">${RS.esc(nw.note || "No NWS forecast point for this gauge.")}</span>`;
+        document.querySelectorAll(".catbtn").forEach((b) => b.addEventListener("click", () => {
+          slider.value = Math.min(Number(b.dataset.v), smax); draw(); slider.focus(); }));
+      } catch {}
     }
     slider.addEventListener("input", draw);
     out.textContent = `${Number(slider.value).toFixed(2)} ft`;

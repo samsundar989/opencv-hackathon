@@ -75,12 +75,23 @@ const RS = (() => {
       ? new Date(s.last_daylight_t).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : hm(s.last_daylight_t);
     return c ? `camera ${c} at ${esc(when)}, gauge then ${ft(s.last_daylight_gauge_ft)}` : `last daylight frame ${esc(when)}`;
   }
-  const pill = (s) => `<span class="pill ${esc(s || "pending")}">${esc(LABEL[s] || s || "pending")}</span>`;
+  const WHY = {
+    ok: "Daylight frame registered to the camera's reference; the camera reading and the gauge agree within the model's error.",
+    provisional: "The USGS gauge has not reported for more than 90 minutes, so this camera reading stands in for it (gap-fill). Treat it as provisional.",
+    quarantined: "The agent stopped trusting this camera (e.g. it moved or disagrees with the gauge). It is released automatically after 3 good cycles in a row.",
+    night: "It is dark at the camera, so there is no camera reading. The gauge reading carries on; the image shown is the last daylight frame.",
+    view_change: "The latest frame does not line up with this camera's reference view (it may have been moved or re-aimed), so no camera reading is made.",
+    no_frame: "USGS has not published a frame from this camera.",
+    stale: "This camera has not published a new frame for more than 2 hours. The last frame is shown; the gauge reading is current.",
+    above_range: "The river is above any stage this camera has seen during calibration, so it can only say 'at least this high'. The gauge is trusted.",
+    above_range_provisional: "Above the calibrated range and the gauge is down: the camera reports only a lower bound.",
+    error: "This site failed in the last cycle; the other sites were not affected.", pending: "Waiting for the first reading." };
+  const pill = (s) => `<span class="pill ${esc(s || "pending")}" tabindex="0" title="${esc(WHY[s] || "")}" aria-label="${esc((LABEL[s] || s || "pending") + ". " + (WHY[s] || ""))}">${esc(LABEL[s] || s || "pending")}</span>`;
   const flags = (fs) => (fs || []).map((f) => `<span class="flag">${esc(f)}</span>`).join("");
 
   const qs = (k) => new URLSearchParams(location.search).get(k);
   const days = (n) => [...Array(n).keys()].map((i) => new Date(Date.now() - i * 86400000).toISOString().slice(0, 10)).reverse();
 
-  return { header, json, jsonl, esc, ft, nice, ago, pill, flags, qs, days, cam, panel, FEATURED, featuredRank, lastDay, LABEL };
+  return { header, json, jsonl, esc, ft, nice, ago, pill, flags, qs, days, cam, panel, FEATURED, featuredRank, lastDay, LABEL, WHY };
 })();
 document.addEventListener("DOMContentLoaded", RS.header);

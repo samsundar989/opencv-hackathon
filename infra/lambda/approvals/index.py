@@ -38,7 +38,18 @@ def _list():
     return out[:200]
 
 
+def _from_cloudfront(event) -> bool:
+    """Only CloudFront knows the origin secret; direct calls to the Function URL are refused."""
+    want = os.environ.get("ORIGIN_SECRET_SHA256", "")
+    got = (event.get("headers") or {}).get("x-origin-verify", "")
+    return not want or hmac.compare_digest(want, hashlib.sha256(got.encode()).hexdigest())
+
+
 def handler(event, context):
+    if not _from_cloudfront(event):
+        return _resp(403, {"error": "use the site"})
+    if len(event.get("body") or "") > 4096:
+        return _resp(413, {"error": "body too large"})
     method = event.get("requestContext", {}).get("http", {}).get("method", "GET")
     path = event.get("rawPath", "")
     parts = [p for p in path.split("/") if p]
