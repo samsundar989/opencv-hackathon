@@ -120,15 +120,19 @@ def test_load_models_serves_tier_b_onboarded_as_own_group(tmp_path):
     assert [(m.cam_id, m.group) for m in ms] == [(CAM, "frozen20"), ("XX_New_B", "onboarded")]
 
 
-def test_worker_env_does_not_override(tmp_path, monkeypatch):
+def test_worker_env_does_not_override(tmp_path):
+    """Runs inside a copy of os.environ that is fully restored afterwards (regression: this test once leaked
+    RIVERSIGHT_AGENT_MODE=rules_first into later W2 tests via monkeypatch.delenv's restore)."""
+    import os
+    from unittest import mock
     p = tmp_path / "worker.env"
     p.write_text("# c\nRIVERSIGHT_AGENT_MODE=rules_first\nRIVERSIGHT_T_X=1\n")
-    monkeypatch.setenv("RIVERSIGHT_T_X", "keep")
-    monkeypatch.delenv("RIVERSIGHT_AGENT_MODE", raising=False)
-    cycle.load_worker_env(p)
-    import os
-    assert os.environ["RIVERSIGHT_AGENT_MODE"] == "rules_first" and os.environ["RIVERSIGHT_T_X"] == "keep"
-    monkeypatch.delenv("RIVERSIGHT_AGENT_MODE")
+    env = {k: v for k, v in os.environ.items() if k != "RIVERSIGHT_AGENT_MODE"}
+    env["RIVERSIGHT_T_X"] = "keep"
+    with mock.patch.dict(os.environ, env, clear=True):
+        cycle.load_worker_env(p)
+        assert os.environ["RIVERSIGHT_AGENT_MODE"] == "rules_first" and os.environ["RIVERSIGHT_T_X"] == "keep"
+    assert os.environ.get("RIVERSIGHT_T_X") != "keep"
 
 
 @pytest.mark.skipif(not BUNDLE.exists() or not FRAMES.exists(), reason="bundles / frame cache not present")
