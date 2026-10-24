@@ -12,3 +12,6 @@
 01421500  USGS site number of the Hancock NY gauge (identifier, not a result)
 300    benchmark timed iterations per stage (bench/cool_bench.py --iters; SPRINT_W3 §2)
 50     benchmark warm-up iterations (bench/cool_bench.py --warmup)
+392    DINOv2-S/14 ONNX input width, 224x392 (src/riversight/vision/dino_features.py)
+224    DINOv2-S/14 ONNX input height
+5090   RTX 5090 (hardware name, not a result)

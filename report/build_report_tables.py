@@ -166,7 +166,52 @@ def fewshot() -> str:
     return "\n".join(rows)
 
 
-TABLES = {"headline": headline, "per_site": per_site, "baselines": baselines, "ablations": ablations, "hancock": hancock, "registration": registration, "prospective": prospective, "fewshot": fewshot}
+def agent() -> str:
+    f = RES / "agent_eval" / "summary.json"
+    if not f.exists():
+        return "_No agent evaluation committed yet._"
+    sm = json.loads(f.read_text(encoding="utf-8"))
+    names = {"rules": "deterministic rules", "sonnet": "LLM agent + OpenCV tools", "haiku": "LLM agent + OpenCV tools",
+             "haiku_noev": "LLM agent, flags only (no OpenCV evidence)"}
+    rows = ["| arm | model | repeats | task success (min–max) | real / synthetic | false actions on clean controls | "
+            "fleet triage top-1 | p50 latency s | est. $ total |", "|---|---|---|---|---|---|---|---|---|"]
+    for k in ("rules", "sonnet", "haiku", "haiku_noev"):
+        a = sm["arms"].get(k)
+        if not a:
+            continue
+        ts = a["task_success_pct"]
+        rows.append(f"| {names[k]} | {a.get('model') or '—'} | {a['repeats']} | {ts['mean']} % ({ts['min']}–{ts['max']}) | "
+                    f"{a['task_success_real_pct']} % / {a['task_success_synthetic_pct']} % | "
+                    f"{a['false_actions_on_clean_controls_pct']} % | {a['fleet_triage_top1_pct']} % | {a['latency_s']['p50']} | "
+                    f"{a['estimated_usd_total']} |")
+    e = sm["opencv_evidence_effect"]
+    es = sm["episode_set"]
+    rows += ["", f"Episodes: {es['single_camera_episodes']} single-camera ({es['real']} real, {es['synthetic_labelled']} synthetic and labelled, "
+             f"{es['clean_controls']} clean controls) + {es['fleet_cycles']} fleet cycles; expected actions written before any arm ran; "
+             f"set frozen with sha256 (`results/agent_eval/FROZEN.json`). "
+             f"OpenCV-evidence effect (same LLM with vs without OpenCV tools, paired): {e['points']:+} points "
+             f"(95 % CI {e['ci95_points'][0]} to {e['ci95_points'][1]})."]
+    return "\n".join(rows)
+
+
+def model_v2() -> str:
+    f = RES / "v2" / "cv_summary.csv"
+    if not f.exists():
+        return "_No model v2 results committed yet._"
+    d = pd.read_csv(f).set_index("config")
+    v1 = d.loc["v1"]
+    sel = d[d.selected.astype(bool)].iloc[0]
+    name = d[d.selected.astype(bool)].index[0]
+    rows = ["| year-long forward-chaining CV, 20 sites | v1 (D-0007) | v2 selected (`" + name + "`) |", "|---|---|---|",
+            f"| median MAE ft | {_f(v1.median_mae, 3)} | **{_f(sel.median_mae, 3)}** ({100 * sel.rel_change:+.1f} %) |",
+            f"| mean MAE ft | {_f(v1.mean_mae, 3)} | {_f(sel.mean_mae, 3)} |",
+            f"| median nMAE | {_f(v1.median_nmae, 3)} | {_f(sel.median_nmae, 3)} |",
+            f"| sites meeting P1 | {int(v1.p1_sites)}/20 | {int(sel.p1_sites)}/20 |",
+            f"| sites improved | — | {int(sel.sites_better)}/20 (worst site {sel.worst_site_delta:+.3f} ft) |"]
+    return "\n".join(rows)
+
+
+TABLES = {"headline": headline, "per_site": per_site, "baselines": baselines, "ablations": ablations, "hancock": hancock, "registration": registration, "prospective": prospective, "fewshot": fewshot, "agent": agent, "model_v2": model_v2}
 
 
 def main() -> None:

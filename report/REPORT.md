@@ -206,9 +206,27 @@ StageSight, another entry, reads the staff plate on the same USGS camera (Hancoc
 - Future work: every flood the gauge records could extend the camera's calibrated range, because the site bundle can be refit on new data. Today that refit is a manual export (`scripts/export_site_models.py`), not a scheduled job.
 - Our advantage is elsewhere: 20 cameras without plates, and coverage of most daylight hours, against 2.4 % of hourly frames reported for the plate reader.
 
-### 6.7 Agent evaluation
+### 6.7 Agent evaluation (River Steward)
 
-_Pending (W2)._ Fault-injection episodes, real and synthetic (labelled), each with expected actions written before the run; Bedrock agent vs deterministic rules vs no-OpenCV-evidence ablation; task success, false actions on clean controls, latency, tokens and cost.
+W2's frozen evaluation (`results/agent_eval/REPORT.md`, `LLM_ANALYSIS.md`): every arm runs every episode; task success = the right primary action without forbidden ones. Claude models through Amazon Bedrock (the 5.5 models were not yet available to the project, so the evaluation used Claude Sonnet 4.6 and Haiku 4.5).
+
+<!-- BEGIN:agent -->
+| arm | model | repeats | task success (min–max) | real / synthetic | false actions on clean controls | fleet triage top-1 | p50 latency s | est. $ total |
+|---|---|---|---|---|---|---|---|---|
+| deterministic rules | — | 3 | 93.9 % (93.9–93.9) | 98.4 % / 85.7 % | 0.0 % | 91.7 % | 1.3 | 0.0 |
+| LLM agent + OpenCV tools | Claude Sonnet 4.6 | 1 | 71.4 % (71.4–71.4) | 79.4 % / 57.1 % | 3.8 % | 100.0 % | 55.7 | 5.128 |
+| LLM agent + OpenCV tools | Claude Haiku 4.5 | 3 | 58.8 % (56.1–61.2) | 54.5 % / 66.7 % | 7.7 % | 44.4 % | 42.0 | 4.326 |
+| LLM agent, flags only (no OpenCV evidence) | Claude Haiku 4.5 | 3 | 51.4 % (49.0–55.1) | 47.6 % / 58.1 % | 15.4 % | 52.8 % | 41.2 | 4.126 |
+
+Episodes: 98 single-camera (63 real, 35 synthetic and labelled, 26 clean controls) + 12 fleet cycles; expected actions written before any arm ran; set frozen with sha256 (`results/agent_eval/FROZEN.json`). OpenCV-evidence effect (same LLM with vs without OpenCV tools, paired): +7.5 points (95 % CI -1.4 to 16.3).
+<!-- END:agent -->
+
+**Reading this honestly.**
+- The deterministic rules policy beats both LLM agents on this episode set. The rules were written by the same people who wrote the expected actions, so this partly measures agreement with the authors, but it is still the best policy we have: the live system decides with rules first.
+- The OpenCV evidence clearly matters where the decision depends on what the image shows. With the tools, the LLM re-anchors to a banked reference, recognises night frames and keeps muddy-water frames during a stale gauge. The overall effect is positive, but its confidence interval includes zero, and on gauge flatlines the evidence misleads the LLM.
+- The LLMs' main failure is under-escalation: missing `DRAFT_ALERT` on real rises. Out-of-range readings were the other common miss. The LLM is therefore used as a second opinion on hard cases, never as the only decider (Q-0011).
+- Flood replays through the live cycle drafted an alert in the first cycle above the site's p90 (`results/agent_eval/replay/`).
+- Limits (from W2): gauge-stale episodes are synthetic dropouts on real frames; re-anchoring is tested mostly on one camera (Pecatonica); costs are list-price estimates.
 
 ### 6.8 COOL on Graviton
 
@@ -268,11 +286,25 @@ Flags raised: VIEW_CHANGE 13, LOW_QUALITY 8, GAUGE_STALE 0, DISAGREE 14, RISING 
 
 About a month of overlap with the gauge is already enough; more history does not help the frozen setting, and a full year is slightly worse, consistent with the drift in §6.12. This makes onboarding the rest of the gauged HIVIS fleet cheap. W5's pipeline (`scripts/onboard_*.py`) runs the same frozen-setting code end to end.
 
-**Real gauge outages** bridged by the camera: _pending (W5; the outage scan was interrupted by the host running out of memory)._
+**Real gauge outages** (W5, `results/real_outages/README.md`). Over the last 12 months, 531 of the 875 gauges behind gauged HIVIS cameras had at least one outage of 6 h or more: 3,734 outages, with a median length of 15.0 h, 984 lasting a day or more and 303 a week or more. For 795 of the outages checked, the camera kept posting daylight frames while the gauge was dark. Gauges do go dark, and the cameras usually keep running.
 
-### 6.11 Model v2 candidate (W4)
+At our 20 calibrated sites, few outages are scorable, and in most of them the river barely moved. For hard gaps scored when the gauge came back (refit without the outage ± 7 days), the camera was closer than the last known value in 1 of 16. In 14 of those the river moved less than 0.25 ft, and holding the last reading is nearly exact. Where the river did move: at Clear Fork Trinity (56 h gap) the camera bridged it, 0.11 ft against 0.34 ft for the last known value; at Root River (758 h, winter ice) it failed, 1.34 against 0.35 ft. So far that is one real outage bridged and one failure, not a statistic. The frozen-test gap-fill result (§6.4) remains the main evidence, and the outage catalogue shows how often the situation arises.
 
-_Pending._ DINOv2 features in `cv2.dnn` plus seasonal robustness. Per D-0010 §2, v2 can only be compared with v1 through the same forward-chaining monthly CV inside the history, and as a shadow model on the live stream. It replaces v1 only if it wins there; the frozen test days are never re-read.
+### 6.11 Model v2 candidate: DINOv2 features in `cv2.dnn`
+
+W4 (`results/v2/README.md`). v2 adds a second view of each registered frame: DINOv2-S/14 patch tokens computed by OpenCV 5's DNN engine (`cv2.dnn.readNetFromONNX`; checked against onnxruntime). The tokens go through a fixed, label-free PCA fitted on cameras outside the evaluation, then get the same flood-height-map reliability selection and ridge, combined with v1 at equal weight. Every other knob is the frozen D-0007 setting. It was evaluated with exactly the D-0007 protocol (monthly forward-chaining CV inside the calibration history; v1 reproduces the frozen numbers exactly), and the selection rule was committed before any v2 result existed.
+
+<!-- BEGIN:model_v2 -->
+| year-long forward-chaining CV, 20 sites | v1 (D-0007) | v2 selected (`v1+dino_roi@0.5+sun`) |
+|---|---|---|
+| median MAE ft | 0.380 | **0.252** (-33.7 %) |
+| mean MAE ft | 0.389 | 0.304 |
+| median nMAE | 0.145 | 0.122 |
+| sites meeting P1 | 9/20 | 11/20 |
+| sites improved | — | 19/20 (worst site +0.015 ft) |
+<!-- END:model_v2 -->
+
+v2 is better in every calendar month, most of all in the foliage months that drive v1's drift. The ablations show the DINOv2 features do the work; the seasonal tweaks (sun-position correction, recency weighting) add nothing or hurt. Limits: this is still CV inside one year, the frozen kill-test numbers are not recomputed, and the forward-in-time check is v2's shadow scoring on the live stream (D-0010 §2). Whether v2 is served is decided on Oct 25 (Cowork).
 
 ### 6.12 Failure cases
 
