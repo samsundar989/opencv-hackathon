@@ -1,0 +1,7 @@
+model,method,sites,test_frames,median_mae,mean_mae,sites_with_above_range,frames_above_static_range,median_mae_above_static_range,median_share_out_of_own_range,mean_share_out_of_own_range
+v1,static,16,24000,0.3608,0.5006,15,2026,2.5141,0.0288,0.0793
+v1,monthly,16,24000,0.3054,0.3394,15,2026,2.0002,0.0137,0.0248
+v1,weekly,16,24000,0.2397,0.2681,15,2026,1.8147,0.0113,0.0171
+v2,static,16,24000,0.3086,0.4526,15,2026,2.4025,0.0288,0.0793
+v2,monthly,16,24000,0.1951,0.2514,15,2026,1.7655,0.0137,0.0248
+v2,weekly,16,24000,0.1647,0.1967,15,2026,1.5382,0.0113,0.0171
