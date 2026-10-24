@@ -86,3 +86,23 @@ def test_protocol_cut_bundle_reproduces_scene_score(tmp_path):
     assert set(json.loads((tmp_path / CAM / "meta.json").read_text())) >= {
         "cam_id", "nwis_id", "lat", "lon", "tier", "sigma_ft", "calib_start", "calib_end", "n_calib_frames",
         "stage_p05", "stage_p50", "stage_p90", "stage_p95", "frozen_config_sha", "model_sha", "trained_at"}
+
+
+def test_connected_inundation_ignores_disconnected_blocks():
+    from riversight.live.bundle import connected_inundation, inundation_seed
+    rows, cols = 45, 80
+    thr = np.full(rows * cols, 9.0)
+    acc = np.zeros(rows * cols)
+    g = thr.reshape(rows, cols)
+    a = acc.reshape(rows, cols)
+    a[30:45, 10:60] = 0.95                         # river corridor, low in the frame
+    g[40:45, 10:60] = 1.0                          # water's edge at typical stage
+    g[30:40, 10:60] = 3.0                          # bank floods at 3 ft
+    a[2:6, 60:66] = 0.95                           # reliable speck on the hillside / sky
+    g[2:6, 60:66] = 1.0
+    seed = inundation_seed(thr, acc, 0.8, (rows, cols))
+    assert seed[42, 20] and not seed[3, 62]
+    wet2 = connected_inundation(thr, acc, 0.8, 2.0, seed, (rows, cols))
+    wet4 = connected_inundation(thr, acc, 0.8, 4.0, seed, (rows, cols))
+    assert wet2[42, 20] and not wet2[35, 20] and not wet2[3, 62]
+    assert wet4[35, 20] and not wet4[3, 62]

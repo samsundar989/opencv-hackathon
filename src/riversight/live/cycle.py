@@ -241,7 +241,7 @@ def render_overlay(img: np.ndarray, model: SiteModel, H: np.ndarray | None, stag
     out = img.copy()
     if H is not None and stage is not None and np.isfinite(stage):
         rh, rw = model.meta["ref_shape"]
-        wet = clean_mask(model.wet_mask(stage))
+        wet = model.wet_connected(stage).astype(np.uint8) * 255
         wet_ref = cv2.resize(wet, (rw, rh), interpolation=cv2.INTER_NEAREST)
         wet_img = cv2.warpPerspective(wet_ref, np.asarray(H, float), (img.shape[1], img.shape[0]),
                                       flags=cv2.INTER_NEAREST | cv2.WARP_INVERSE_MAP, borderMode=cv2.BORDER_CONSTANT)

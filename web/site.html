@@ -16,8 +16,9 @@
   <div class="two" style="margin-top:16px">
     <section class="panel">
       <h2 style="margin-top:0">What's under water at a given stage?</h2>
-      <p class="muted small" style="margin:0 0 8px">Drag the slider. Blue blocks are where the flood-height map says the water reaches at that stage.
-        Each block's height h* was learned from this camera's own gauge history. Nobody surveyed anything.</p>
+      <p class="muted small" style="margin:0 0 8px">Drag the slider. Blue is where the water reaches at that stage: blocks whose
+        flood height h* is at or below it <i>and</i> that connect to the river (a flood-fill, so no blue on hillsides or sky).
+        Each block's h* was learned from this camera's own gauge history. Nobody surveyed anything.</p>
       <div id="banner"></div>
       <div class="stage-wrap"><canvas id="cv" role="img" aria-label="Latest camera frame with the area under water at the selected stage in blue"></canvas></div>
       <div class="slider">
@@ -121,6 +122,20 @@
       if (!det) return null;
       return [A, -(b * i - c * h), b * f - c * e, B, a * i - c * g, -(a * f - c * d), C, -(a * h - b * g), a * e - b * d].map((v) => v / det);
     }
+    // connected inundation (D-0011): flood-fill from the river seed through 4-connected blocks with h* <= s.
+    // Same rule as riversight.live.bundle.connected_inundation on the server.
+    function connected(s) {
+      const [rows, cols] = hstar.grid, n = rows * cols, out = new Uint8Array(n);
+      const ok = (i) => hstar.thr[i] !== null && hstar.thr[i] <= s;
+      const stack = (hstar.seed || []).filter(ok);
+      stack.forEach((i) => { out[i] = 1; });
+      while (stack.length) {
+        const i = stack.pop(), r = Math.floor(i / cols), c = i % cols;
+        for (const j of [r > 0 ? i - cols : -1, r < rows - 1 ? i + cols : -1, c > 0 ? i - 1 : -1, c < cols - 1 ? i + 1 : -1])
+          if (j >= 0 && !out[j] && ok(j)) { out[j] = 1; stack.push(j); }
+      }
+      return out;
+    }
     const map = (H, x, y) => { const w = H[6] * x + H[7] * y + H[8]; return [(H[0] * x + H[1] * y + H[2]) / w, (H[3] * x + H[4] * y + H[5]) / w]; };
     function draw() {
       const s = Number(slider.value);
@@ -131,14 +146,11 @@
       if (!hstar || !meta || shown.noOverlay) return;
       const [rows, cols] = hstar.grid, [rh, rw] = meta.ref_shape;
       const sx = rw / hstar.small_wh[0] * hstar.block_px, sy = rh / hstar.small_wh[1] * hstar.block_px;
-      const wet = (r, c) => r >= 0 && c >= 0 && r < rows && c < cols && hstar.thr[r * cols + c] !== null && hstar.thr[r * cols + c] <= s;
+      const flooded = connected(s);
       ctx.fillStyle = "rgba(30,140,255,0.45)";
       ctx.beginPath();
       for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
-        if (!wet(r, c)) continue;
-        let nb = 0;
-        for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) if ((dr || dc) && wet(r + dr, c + dc)) nb++;
-        if (nb < 1) continue;                                   // drop isolated specks
+        if (!flooded[r * cols + c]) continue;
         const pts = [[c, r], [c + 1, r], [c + 1, r + 1], [c, r + 1]].map(([x, y]) => {
           const p = [x * sx, y * sy];
           return Hinv ? map(Hinv, p[0], p[1]) : [p[0] * cv.width / rw, p[1] * cv.height / rh];

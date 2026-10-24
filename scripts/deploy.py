@@ -26,6 +26,7 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
 INFRA = ROOT / "infra"
 OUTPUTS = INFRA / "cdk-outputs.json"
 REGION = "us-east-2"
@@ -137,7 +138,10 @@ def site_data() -> dict[str, bytes]:
                                   "ref_shape", "model_sha", "trained_at", "label")}
         keep["extra_references"] = [{k: e[k] for k in ("file", "start", "end", "linked")} for e in m["extra_references"]]
         sites.append(keep)
-        out[f"sites/{d.name}/hstar.json"] = (d / "hstar.json").read_bytes()
+        hs = json.loads((d / "hstar.json").read_text(encoding="utf-8"))
+        from riversight.live.bundle import SiteModel
+        hs["seed"] = [int(i) for i in SiteModel(d).seed().ravel().nonzero()[0]]   # connected-inundation seed (D-0011)
+        out[f"sites/{d.name}/hstar.json"] = json.dumps(hs).encode()
         out[f"sites/{d.name}/meta.json"] = json.dumps(keep).encode()
         fh = ROOT / "results" / "kill_test_v2" / f"{d.name}_floodheight.png"
         if fh.exists():

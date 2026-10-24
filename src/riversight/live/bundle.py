@@ -162,5 +162,51 @@ class SiteModel:
         return KalmanState(x, P, t_unix), x, (np.sqrt(P) if np.isfinite(P) else float("nan"))
 
     def wet_mask(self, stage: float) -> np.ndarray:
-        """(rows, cols) bool: reliable blocks with h* ≤ stage (what is under water at this stage)."""
+        """(rows, cols) bool: reliable blocks with h* ≤ stage (unconnected; see wet_connected for display)."""
         return self.fhm.wet_at(stage, float(self.a["min_acc"])).reshape(GRID)
+
+    def seed(self) -> np.ndarray:
+        if getattr(self, "_seed", None) is None:
+            self._seed = inundation_seed(self.a["fhm_thr"], self.a["fhm_acc"], float(self.a["min_acc"]))
+        return self._seed
+
+    def wet_connected(self, stage: float) -> np.ndarray:
+        """(rows, cols) bool: what is under water at `stage`, physically: only blocks hydraulically connected
+        to the always-wet river (D-0011 W1-1). Display only; the stage estimate never uses it."""
+        return connected_inundation(self.a["fhm_thr"], self.a["fhm_acc"], float(self.a["min_acc"]), stage, self.seed())
+
+
+# ---- connected inundation (display) -----------------------------------------------------------------
+
+def _components(mask: np.ndarray) -> tuple[int, np.ndarray, np.ndarray]:
+    n, lab, stats, _ = cv2.connectedComponentsWithStats(mask.astype(np.uint8), connectivity=4)
+    return n, lab, stats
+
+
+def inundation_seed(thr: np.ndarray, acc: np.ndarray, min_acc: float, grid: tuple[int, int] = GRID) -> np.ndarray:
+    """(rows, cols) bool seed for the flood-fill: the lowest blocks of the river corridor.
+
+    The corridor is the 4-connected component of reliable blocks (all of them, i.e. wet at the calibration
+    maximum) with the largest area × (centroid height in the frame)²: water lies low in a river camera's view,
+    while reliable specks on foliage, sky or glare lie high and are small. The seed is the corridor's blocks
+    with h* in its lowest decile, so the fill starts at the water's edge at its typical level and grows
+    with stage only through connected blocks."""
+    R = (acc >= min_acc).reshape(grid)
+    h = thr.reshape(grid)
+    n, lab, stats = _components(R)
+    if n <= 1:
+        return np.zeros(grid, bool)
+    cy = np.array([np.mean(np.nonzero(lab == k)[0]) for k in range(1, n)]) / grid[0]
+    corridor = lab == (int(np.argmax(stats[1:, cv2.CC_STAT_AREA] * cy ** 2)) + 1)
+    return corridor & (h <= np.quantile(h[corridor], 0.10) + 1e-6)
+
+
+def connected_inundation(thr: np.ndarray, acc: np.ndarray, min_acc: float, stage: float, seed: np.ndarray,
+                         grid: tuple[int, int] = GRID) -> np.ndarray:
+    """Blocks with h* ≤ stage that are 4-connected (through other such blocks) to the seed."""
+    cand = ((acc >= min_acc) & (thr <= stage)).reshape(grid)
+    if not seed.any():
+        return np.zeros(grid, bool)
+    n, lab, _ = _components(cand)
+    hit = np.unique(lab[seed & cand])
+    return np.isin(lab, hit[hit > 0])
