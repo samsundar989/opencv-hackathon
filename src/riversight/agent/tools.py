@@ -331,7 +331,12 @@ def render_wet_overlay(ctx: ToolContext, cam: str, frame_key: str, stage_ft: flo
             from riversight.vision.register import warp_to_reference
             im = img if img.shape[:2] == ref.shape[:2] else cv2.resize(img, ref.shape[1::-1], interpolation=cv2.INTER_AREA)
             base = warp_to_reference(im, np.asarray(r["H"], float).reshape(3, 3), ref.shape[:2])
-    wet = clean_wet_mask(S.wet_mask(float(stage_ft)).astype(np.uint8))
+    # D-0011: draw only blocks hydraulically connected to the river (W1's live.bundle connected inundation,
+    # the same function the dashboard slider uses); bundles without it fall back to the speckle cleanup
+    if hasattr(S, "wet_connected"):
+        wet = S.wet_connected(float(stage_ft)).astype(np.uint8)
+    else:
+        wet = clean_wet_mask(S.wet_mask(float(stage_ft)).astype(np.uint8))
     m = cv2.resize(wet, (base.shape[1], base.shape[0]), interpolation=cv2.INTER_NEAREST).astype(bool)
     tint = base.copy()
     tint[m] = (0.45 * tint[m] + 0.55 * np.array([255, 120, 20])).astype(np.uint8)
