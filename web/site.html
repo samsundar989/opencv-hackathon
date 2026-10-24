@@ -20,7 +20,8 @@
         flood height h* is at or below it <i>and</i> that connect to the river (a flood-fill, so no blue on hillsides or sky).
         Each block's h* was learned from this camera's own gauge history. Nobody surveyed anything.</p>
       <div id="banner"></div>
-      <div class="stage-wrap"><canvas id="cv" role="img" aria-label="Latest camera frame with the area under water at the selected stage in blue"></canvas></div>
+      <div class="stage-wrap"><img id="ph" hidden alt="Latest camera frame (loading the full-size image)" style="width:100%">
+        <canvas id="cv" hidden role="img" aria-label="Latest camera frame with the area under water at the selected stage in blue"></canvas></div>
       <div class="slider">
         <label for="stage">Stage</label>
         <input type="range" id="stage" min="0" max="10" step="0.01" value="5" aria-describedby="stageOut">
@@ -62,11 +63,20 @@
   if (!cam) { document.getElementById("title").textContent = "No site selected"; return; }
   document.getElementById("title").textContent = RS.nice(cam);
   document.title = `RiverSight — ${RS.nice(cam)}`;
-  const [meta, hstar, latest] = await Promise.all([
-    RS.json(`sites/${cam}/meta.json`).catch(() => null),
-    RS.json(`sites/${cam}/hstar.json`).catch(() => null),
-    RS.json(`live/sites/${cam}/latest.json`).catch(() => null)]);
+  // D-0011 W1-6: latest.json first, so the (already cached) thumbnail paints before anything else loads
+  const pMeta = RS.json(`sites/${cam}/meta.json`).catch(() => null);
+  const pHstar = RS.json(`sites/${cam}/hstar.json`).catch(() => null);
+  const latest = await RS.json(`live/sites/${cam}/latest.json`).catch(() => null);
   const ld = latest?.last_daylight || null;
+  {
+    const daylit = latest && latest.daylight && latest.registration?.ok && latest.status !== "stale";
+    const src = daylit ? (latest.thumb_key || latest.overlay_key) : (ld?.thumb_key || ld?.overlay_key || latest?.thumb_key || latest?.overlay_key);
+    if (src) {
+      const ph = document.getElementById("ph");
+      ph.src = src; ph.hidden = false;
+    }
+  }
+  const [meta, hstar] = await Promise.all([pMeta, pHstar]);
   // draw on the latest registered daylight frame; otherwise on the last remembered daylight frame (D-0009 W1-2)
   const live = latest && latest.daylight && latest.registration?.ok && latest.status !== "stale";
   const shown = live ? { frame_key: latest.frame_key, t_frame: latest.t_frame, H_frame_to_ref: latest.registration.H_frame_to_ref }
@@ -141,6 +151,8 @@
       const s = Number(slider.value);
       out.textContent = `${s.toFixed(2)} ft`;
       if (!img.complete || !img.naturalWidth) return;
+      document.getElementById("ph").hidden = true;
+      cv.hidden = false;
       cv.width = img.naturalWidth; cv.height = img.naturalHeight;
       ctx.drawImage(img, 0, 0);
       if (!hstar || !meta || shown.noOverlay) return;

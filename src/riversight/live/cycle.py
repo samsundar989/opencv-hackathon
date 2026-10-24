@@ -281,6 +281,10 @@ def blur(img: np.ndarray, log: dict | None = None) -> np.ndarray:
     return out
 
 
+def thumbnail(img: np.ndarray, width: int = 480) -> np.ndarray:
+    return cv2.resize(img, (width, round(img.shape[0] * width / img.shape[1])), interpolation=cv2.INTER_AREA)
+
+
 def jpg(img: np.ndarray, q: int = 85) -> bytes:
     ok, b = cv2.imencode(".jpg", img, [cv2.IMWRITE_JPEG_QUALITY, q])
     if not ok:
@@ -424,13 +428,17 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
     overlay = render_overlay(frame.img, model, H, stage_draw, caption)
     frame_key, overlay_key = f"live/frames/{cam}/{ts}.jpg", f"live/overlays/{cam}/{ts}.jpg"
     privacy: dict = {}
-    store.put_bytes(frame_key, jpg(blur(frame.img, privacy)), "image/jpeg", "max-age=31536000")
-    store.put_bytes(overlay_key, jpg(blur(overlay)), "image/jpeg", "max-age=31536000")
+    thumb_key = f"live/thumbs/{cam}/{ts}.jpg"
+    ov_blur = blur(overlay)
+    store.put_bytes(frame_key, jpg(blur(frame.img, privacy), 80), "image/jpeg", "max-age=31536000, immutable")
+    store.put_bytes(overlay_key, jpg(ov_blur, 80), "image/jpeg", "max-age=31536000, immutable")
+    store.put_bytes(thumb_key, jpg(thumbnail(ov_blur), 72), "image/jpeg", "max-age=31536000, immutable")
     frame_age = (pd.Timestamp(t_cycle) - pd.Timestamp(frame.time)).total_seconds() / 60
     reading = {
         "cam_id": cam, "t_frame": iso(frame.time), "t_cycle": iso(t_cycle), "daylight": not night,
         "frame_age_min": _r(frame_age, 0),
-        "sun_elev_deg": _r(elev, 1), "frame_key": frame_key, "overlay_key": overlay_key, "frame_name": frame.filename,
+        "sun_elev_deg": _r(elev, 1), "frame_key": frame_key, "overlay_key": overlay_key, "thumb_key": thumb_key,
+        "frame_name": frame.filename,
         "registration": reg, "quality": {k: v for k, v in q.items() if k != "night_img"},
         "camera_raw_ft": _r(raw), "camera_stage_ft": _r(cam_num),
         "camera_sigma_ft": _r(sigma) if cam_num is not None else None,
@@ -443,8 +451,8 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
     }
     if not night and reg["ok"]:                     # D-0009 W1-2: remembered for night / stale display
         state["last_daylight"] = {k: reading[k] for k in (
-            "t_frame", "frame_key", "overlay_key", "camera_stage_ft", "camera_sigma_ft", "camera_at_least_ft",
-            "gauge_stage_ft")} | {"H_frame_to_ref": reg.get("H_frame_to_ref")}
+            "t_frame", "frame_key", "overlay_key", "thumb_key", "camera_stage_ft", "camera_sigma_ft",
+            "camera_at_least_ft", "gauge_stage_ft")} | {"H_frame_to_ref": reg.get("H_frame_to_ref")}
     reading["last_daylight"] = state.get("last_daylight")
     decision = None
     if agent_fn is not None and [f for f in flags if f != "NIGHT"]:
@@ -655,14 +663,18 @@ def last_slim(store, m: SiteModel) -> dict | None:
 
 
 def slim_reading(r: dict, meta: dict) -> dict:
-    keep = ("cam_id", "t_frame", "t_cycle", "daylight", "overlay_key", "camera_stage_ft", "camera_sigma_ft",
+    keep = ("cam_id", "t_frame", "t_cycle", "daylight", "overlay_key", "thumb_key", "camera_stage_ft", "camera_sigma_ft",
             "camera_at_least_ft", "calibrated_range_ft", "gauge_stage_ft", "gauge_age_min", "flood_state", "flags",
             "status", "provisional", "agent", "frame_age_min")
     out = {k: r.get(k) for k in keep}
     out.update(lat=meta["lat"], lon=meta["lon"], tier=meta["tier"], nwis_id=meta["nwis_id"],
                reg_ok=r["registration"]["ok"],
                last_daylight_overlay_key=(r.get("last_daylight") or {}).get("overlay_key"),
-               last_daylight_t=(r.get("last_daylight") or {}).get("t_frame"))
+               last_daylight_thumb_key=(r.get("last_daylight") or {}).get("thumb_key"),
+               last_daylight_t=(r.get("last_daylight") or {}).get("t_frame"),
+               last_daylight_camera_ft=(r.get("last_daylight") or {}).get("camera_stage_ft"),
+               last_daylight_camera_at_least_ft=(r.get("last_daylight") or {}).get("camera_at_least_ft"),
+               last_daylight_gauge_ft=(r.get("last_daylight") or {}).get("gauge_stage_ft"))
     return out
 
 

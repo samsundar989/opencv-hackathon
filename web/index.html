@@ -30,12 +30,18 @@
   try { idx = await RS.json("live/index.json"); }
   catch (e) { strip.innerHTML = `<span class="err">No live data yet (${RS.esc(e.message)}).</span>`; return; }
   const sites = idx.sites || [];
+  // D-0011 W1-4: count every status, so a night-time strip doesn't read as "broken"
+  const by = {};
+  sites.forEach((s) => { by[s.status || "pending"] = (by[s.status || "pending"] || 0) + 1; });
+  const words = { night: "at night (gauge only)", ok: "OK", provisional: "camera-only (gauge down)", stale: "stale camera",
+    view_change: "view changed", above_range: "above range (gauge trusted)", above_range_provisional: "above range, gauge down",
+    quarantined: "quarantined", no_frame: "no frame", error: "error", pending: "pending" };
+  const order = ["ok", "night", "provisional", "above_range", "above_range_provisional", "view_change", "stale", "quarantined", "no_frame", "error", "pending"];
   const flagged = sites.filter((s) => (s.flags || []).some((f) => f !== "NIGHT")).length;
-  const prov = sites.filter((s) => s.status === "provisional").length;
   strip.innerHTML = `<span><b>${sites.length}</b> cameras</span>
     <span>last cycle <b>${RS.ago(idx.cycle_started)}</b></span>
-    <span><b>${idx.n_ok}</b> OK</span><span><b>${flagged}</b> flagged</span>
-    <span><b>${prov}</b> camera-only (gauge down)</span>
+    ${order.filter((k) => by[k]).map((k) => `<span><b>${by[k]}</b> ${words[k]}</span>`).join("")}
+    <span><b>${flagged}</b> flagged</span>
     <span class="muted small">cycle took ${(idx.cycle_ms / 1000).toFixed(0)} s · OpenCV ${RS.esc(idx.opencv?.version)}${idx.opencv?.cool ? " (COOL)" : ""}</span>`;
 
   await RS.panel("map", async () => {
@@ -60,14 +66,15 @@
   document.getElementById("sites").innerHTML = sites.map((s) => `
     <a class="panel card" href="site.html?cam=${encodeURIComponent(s.cam_id)}">
       ${(() => { const dark = !s.daylight || s.status === "stale" || s.status === "night";
-        const key = dark && s.last_daylight_overlay_key ? s.last_daylight_overlay_key : s.overlay_key;
+        const key = dark && s.last_daylight_overlay_key ? (s.last_daylight_thumb_key || s.last_daylight_overlay_key)
+          : (s.thumb_key || s.overlay_key);
         return key ? `<img loading="lazy" src="${RS.esc(key)}" alt="${dark && s.last_daylight_overlay_key ? "Last daylight frame" : "Latest frame"} from ${RS.esc(RS.nice(s.cam_id))} with the under-water area in blue">` : `<img alt="">`; })()}
       <div class="body">
         <div class="name">${RS.esc(RS.nice(s.cam_id))}</div>
         <div>${RS.featuredRank(s.cam_id) < 99 ? '<span class="pill">featured</span> ' : ""}${RS.pill(s.status)} <span class="muted small">tier ${RS.esc(s.tier || "?")} · ${RS.ago(s.t_frame)}</span></div>
         <div class="nums"><span>camera <b>${RS.cam(s)}</b></span>
           <span>gauge <b>${RS.ft(s.gauge_stage_ft)}</b></span></div>
-        ${(!s.daylight || s.status === "stale") && s.last_daylight_t ? `<div class="muted small">image: last daylight frame ${RS.ago(s.last_daylight_t)}</div>` : ""}
+        ${(!s.daylight || s.status === "stale" || s.status === "night") && s.last_daylight_t ? `<div class="muted small">last daylight: ${RS.lastDay(s)}</div>` : ""}
         <div>${RS.flags((s.flags || []).filter((f) => f !== "NIGHT"))}</div>
       </div>
     </a>`).join("");

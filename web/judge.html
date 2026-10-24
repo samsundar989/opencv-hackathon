@@ -12,9 +12,10 @@
   <h1>For judges: a 60-second tour</h1>
   <ol class="panel" style="padding-left:32px">
     <li><a href="index.html">Live</a>: 20 public USGS river cameras, re-read every 15 minutes by a Graviton worker. Camera stage ± σ sits next to the USGS gauge.</li>
-    <li>Open a featured site: <a href="site.html?cam=WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet">Pecatonica, WI</a>,
-      <a href="site.html?cam=IL_Salt_Creek_at_Wood_Dale">Salt Creek, IL</a> or <a href="site.html?cam=NY_East_Branch_Delaware_River_at_Hancock_Staff">Hancock, NY</a>
-      (then Neversink, Bean Creek, Stony Brook, Buffalo Bayou). <b>Drag the stage slider</b> to see what goes under water at any stage,
+    <li>Open a featured site: <a href="site.html?cam=IL_Salt_Creek_at_Wood_Dale">Salt Creek, IL</a>,
+      <a href="site.html?cam=NY_Neversink_River_at_Godeffroy">Neversink, NY</a> or <a href="site.html?cam=NY_East_Branch_Delaware_River_at_Hancock_Staff">Hancock, NY</a>
+      (then Bean Creek, Stony Brook, Buffalo Bayou). Pecatonica's camera has sent nothing since Oct 20, but its
+      <a href="demo/floodheight_WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet.jpg">flood-height map</a> is our clearest one. <b>Drag the stage slider</b> to see what goes under water at any stage,
       drawn onto today's frame from a flood-height map the camera learned from its own gauge.</li>
     <li>Check the <b>agent decisions</b> on a flagged site, and the <a href="approvals.html">approvals</a> queue (alerts and tickets need a human).</li>
     <li><a href="proof.html">Proof</a>: which OpenCV build and instance produced the readings (Graviton, COOL or stock 5.0.0.93), with model hashes.</li>
@@ -96,12 +97,49 @@ python scripts/deploy.py                      # the AWS stack (us-east-2), budge
     const c = rows.filter((r) => r.tier === "C").map((r) => RS.nice(r.cam_id));
     document.getElementById("tierc").innerHTML = `<b>Tier C (${c.length} sites):</b> low registration, weak year-long correlation, or under 90 calibration days. They are kept in every number above: ${RS.esc(c.join("; "))}.`;
   } catch {}
-  for (const [id, url] of [["agent", "data/agent_eval_summary.json"], ["cool", "data/cool_bench_summary.json"]]) {
-    try {
-      const d = await RS.json(url);
-      document.getElementById(id).innerHTML = `<pre>${RS.esc(JSON.stringify(d, null, 2))}</pre>`;
-    } catch {}
-  }
+  await RS.panel("agent", async (el) => {
+    const d = await RS.json("data/agent_eval_summary.json");
+    const arms = Object.entries(d.arms || {});
+    const pct = (v) => v == null ? "—" : `${Number(v).toFixed(1)}%`;
+    const es = d.episode_set || {};
+    const kinds = [...new Set(arms.flatMap(([, a]) => Object.keys(a.success_by_kind_pct || {})))].sort();
+    el.innerHTML = `<p>${RS.esc(d.status || "")}. Episode set frozen ${RS.esc((es.frozen_utc || "").slice(0, 16).replace("T", " "))} UTC
+        (sha256 <code>${RS.esc((es.sha256 || "").slice(0, 12))}…</code>): ${es.single_camera_episodes} single-camera episodes
+        (${es.real} real, ${es.synthetic_labelled} synthetic, labelled as such), ${es.clean_controls} clean controls, ${es.fleet_cycles} fleet cycles.
+        Expected actions were written ${RS.esc(es.expected_actions_written || "")}.</p>
+      <div class="tablewrap"><table><thead><tr><th>arm</th><th>model</th><th>repeats</th><th>task success</th><th>real / synthetic</th>
+        <th>false actions on clean controls</th><th>fleet triage top-1</th><th>latency p50 / p95</th><th>est. $</th></tr></thead><tbody>
+        ${arms.map(([k, a]) => `<tr><td>${RS.esc(k)}</td><td>${RS.esc(a.model || "rules (no LLM)")}</td><td>${a.repeats ?? "—"}</td>
+          <td><b>${pct(a.task_success_pct?.mean)}</b>${a.task_success_pct && a.task_success_pct.min !== a.task_success_pct.max ? ` <span class="muted">(${pct(a.task_success_pct.min)}–${pct(a.task_success_pct.max)})</span>` : ""}</td>
+          <td>${pct(a.task_success_real_pct)} / ${pct(a.task_success_synthetic_pct)}</td><td>${pct(a.false_actions_on_clean_controls_pct)}</td>
+          <td>${pct(a.fleet_triage_top1_pct)}</td><td>${a.latency_s ? `${a.latency_s.p50} s / ${a.latency_s.p95} s` : "—"}</td>
+          <td>${a.estimated_usd_total != null ? "$" + Number(a.estimated_usd_total).toFixed(2) : "—"}</td></tr>`).join("")}
+      </tbody></table></div>
+      <h3 style="font-size:15px">Success by episode kind</h3>
+      <div class="tablewrap"><table><thead><tr><th>kind</th>${arms.map(([k]) => `<th>${RS.esc(k)}</th>`).join("")}</tr></thead><tbody>
+        ${kinds.map((kd) => `<tr><td>${RS.esc(kd.replace(/_/g, " "))}</td>${arms.map(([, a]) => { const v = a.success_by_kind_pct?.[kd];
+          return `<td${v != null && v < 50 ? ' class="err"' : ""}>${v == null ? "—" : Number(v).toFixed(0) + "%"}</td>`; }).join("")}</tr>`).join("")}
+      </tbody></table></div>
+      <h3 style="font-size:15px">Flood replays (out of sample: bundles cut 3 days before each rise)</h3>
+      <div class="tablewrap"><table><thead><tr><th>camera</th><th>start</th><th>policy</th><th>frames</th><th>flagged</th><th>first alert (UTC)</th><th>alerts drafted</th><th>figure</th></tr></thead><tbody>
+        ${(d.flood_replays || []).map((r) => { const f = (r.figure || "").split("/").pop();
+          return `<tr><td>${RS.esc(RS.nice(r.camera))}</td><td>${RS.esc(r.replay_start)}</td><td>${RS.esc(r.policy)}</td><td>${r.frames}</td><td>${r.flagged}</td>
+          <td>${RS.esc((r.first_alert_utc || "—").slice(0, 16).replace("T", " "))}</td><td>${r.alerts_drafted}</td>
+          <td>${f ? `<a href="agent_replay/${encodeURIComponent(f)}">timeline</a> · <a href="agent_replay/${encodeURIComponent(f.replace("_timeline.png", "_alert.jpg"))}">alert</a>` : "—"}</td></tr>`; }).join("")}
+      </tbody></table></div>
+      <h3 style="font-size:15px">Honest limits</h3>
+      <ul>${(d.honest_limits || []).map((x) => `<li>${RS.esc(x)}</li>`).join("")}</ul>
+      <p class="muted">Sources: ${(d.sources || []).map((x) => `<code>${RS.esc(x)}</code>`).join(", ")}</p>`;
+  });
+  try {                                       // COOL A/B (W3); keeps the placeholder until the file exists
+    const d = await RS.json("data/cool_bench_summary.json");
+    const rows = [];
+    const walk = (o, pre) => Object.entries(o).forEach(([k, v]) => v && typeof v === "object" && !Array.isArray(v)
+      ? walk(v, pre + k + " › ") : rows.push([pre + k, Array.isArray(v) ? v.join(", ") : v]));
+    walk(d, "");
+    document.getElementById("cool").innerHTML = `<div class="tablewrap"><table><tbody>${rows.map(([k, v]) =>
+      `<tr><th>${RS.esc(k.replace(/_/g, " "))}</th><td>${RS.esc(v)}</td></tr>`).join("")}</tbody></table></div>`;
+  } catch {}
 })();
 </script>
 </body>

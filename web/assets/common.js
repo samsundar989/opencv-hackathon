@@ -47,9 +47,9 @@ const RS = (() => {
     above_range: "above range — gauge trusted", above_range_provisional: "above range (gauge down)" };
 
   // D-0009: featured first (demo quality), the rest alphabetically
-  const FEATURED = ["WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet", "IL_Salt_Creek_at_Wood_Dale",
-    "NY_East_Branch_Delaware_River_at_Hancock_Staff", "NY_Neversink_River_at_Godeffroy", "OH_Bean_Creek_at_Powers",
-    "NJ_Stony_Brook_at_Princeton", "TX_Buffalo_Bayou_at_State_HWY_6_near_Addicks"];
+  const FEATURED = ["IL_Salt_Creek_at_Wood_Dale", "NY_Neversink_River_at_Godeffroy",
+    "NY_East_Branch_Delaware_River_at_Hancock_Staff", "OH_Bean_Creek_at_Powers", "NJ_Stony_Brook_at_Princeton",
+    "TX_Buffalo_Bayou_at_State_HWY_6_near_Addicks", "WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet"];  // D-0011
   const featuredRank = (cam) => { const i = FEATURED.indexOf(cam); return i < 0 ? 99 : i; };
 
   // camera stage text: never a number above the calibrated range (OUT_OF_RANGE)
@@ -65,12 +65,22 @@ const RS = (() => {
     try { await fn(document.getElementById(id)); }
     catch (e) { const el = document.getElementById(id); if (el) el.innerHTML = `<span class="err small">Could not render (${esc(e.message)}).</span>`; console.error(id, e); }
   }
+  const hm = (iso) => new Date(iso).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  // night / stale card line: the last daylight camera reading next to what the gauge said then (D-0011 W1-3)
+  function lastDay(s) {
+    if (!s.last_daylight_t) return "";
+    const c = s.last_daylight_camera_at_least_ft != null ? `≥ ${Number(s.last_daylight_camera_at_least_ft).toFixed(2)} ft`
+      : s.last_daylight_camera_ft != null ? `${Number(s.last_daylight_camera_ft).toFixed(2)} ft` : null;
+    const when = (Date.now() - Date.parse(s.last_daylight_t)) > 20 * 3600e3
+      ? new Date(s.last_daylight_t).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : hm(s.last_daylight_t);
+    return c ? `camera ${c} at ${esc(when)}, gauge then ${ft(s.last_daylight_gauge_ft)}` : `last daylight frame ${esc(when)}`;
+  }
   const pill = (s) => `<span class="pill ${esc(s || "pending")}">${esc(LABEL[s] || s || "pending")}</span>`;
   const flags = (fs) => (fs || []).map((f) => `<span class="flag">${esc(f)}</span>`).join("");
 
   const qs = (k) => new URLSearchParams(location.search).get(k);
   const days = (n) => [...Array(n).keys()].map((i) => new Date(Date.now() - i * 86400000).toISOString().slice(0, 10)).reverse();
 
-  return { header, json, jsonl, esc, ft, nice, ago, pill, flags, qs, days, cam, panel, FEATURED, featuredRank };
+  return { header, json, jsonl, esc, ft, nice, ago, pill, flags, qs, days, cam, panel, FEATURED, featuredRank, lastDay, LABEL };
 })();
 document.addEventListener("DOMContentLoaded", RS.header);

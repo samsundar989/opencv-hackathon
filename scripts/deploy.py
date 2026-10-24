@@ -121,6 +121,9 @@ def site_data() -> dict[str, bytes]:
         out["data/kill_test_v2.json"] = df.to_json(orient="records").encode()
     for v in sorted((ROOT / "results").glob("kill_test_v2_*.json")):
         out[f"data/{v.name}"] = v.read_bytes()
+    for v in sorted((ROOT / "results" / "agent_eval" / "replay").glob("*")):
+        if v.suffix in (".png", ".jpg"):
+            out[f"agent_replay/{v.name}"] = v.read_bytes()
     for v in sorted((ROOT / "results" / "demo").glob("*")):
         out[f"demo/{v.name}"] = v.read_bytes()
     for extra in ("results/agent_eval/summary.json", "results/cool_bench/summary.json", "results/fleet_summary.json"):
