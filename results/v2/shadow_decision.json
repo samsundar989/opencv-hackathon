@@ -1,0 +1,24 @@
+{
+  "pairs": 249,
+  "sites": 16,
+  "t_frame_first": "2026-10-24 11:15:02+00:00",
+  "t_frame_last": "2026-10-24 21:15:02+00:00",
+  "v1_median_ae_ft": 0.183,
+  "v2_median_ae_ft": 0.084,
+  "diff_v2_minus_v1_ft": -0.099,
+  "diff_site_bootstrap_95ci": [
+    -0.236,
+    -0.021
+  ],
+  "sites_v2_better": 12,
+  "sign_test_p_two_sided": 0.0768,
+  "median_gauge_range_ft_per_site": 0.02,
+  "max_gauge_range_ft_per_site": 3.74,
+  "criterion_2_v2_no_worse": true,
+  "criterion_1_cv": {
+    "bar_ft": 0.323,
+    "met": true
+  },
+  "d0012_min_pairs_40": true,
+  "note": "v1 = frozen first-deployed live bundles (D-0010 \u00a71); v2 = shadow bundles models/sites_v2 (committed 2026-10-24 04:36Z in 4521e4c, before every scored frame). Criterion 3 (cycle time) is W1's measurement."
+}

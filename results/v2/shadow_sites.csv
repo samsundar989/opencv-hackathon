@@ -1,0 +1,17 @@
+cam_id,n,v1_median_ae,v2_median_ae,gauge_range_ft,v2_better
+CA_First_Mallard_Branch_nr_Fairfield,26,0.2935,0.1355,3.74,True
+CO_Sand_Creek_at_Mouth_nr_Commerce_City,32,0.016,0.023,0.07,False
+IL_Salt_Creek_at_Wood_Dale,8,0.039,0.037,0.1,True
+MN_Root_River_near_Pilot_Mound,6,0.094,0.175,0.03,False
+NJ_Stony_Brook_at_Princeton,9,0.241,0.1,0.02,True
+NY_East_Branch_Delaware_River_at_Hancock_Staff,7,0.048,0.024,0.01,True
+NY_Neversink_River_at_Godeffroy,9,0.061,0.068,0.01,False
+OH_Bean_Creek_at_Powers,8,0.3515,0.1785,0.01,True
+PA_Brandywine_Creek_at_Chadds_Ford,39,0.347,0.267,0.02,True
+TX_Buffalo_Bayou_at_State_HWY_6_near_Addicks,9,0.3,0.158,0.02,True
+TX_Clear_Fk_Trinity_Rv_at_Ft_Worth,8,0.177,0.0455,0.02,True
+TX_Cowhouse_Ck_at_Old_Georgetown_Rd_nr_Ft_Hood,35,0.115,0.065,0.02,True
+TX_Langham_Creek_at_Addicks_Reservoir_Outflow_near_Addicks,34,0.4745,0.091,0.13,True
+TX_Tenmile_Ck_at_Parkinson_Rd_nr_Ferris,9,0.103,0.063,0.01,True
+TX_White_Rk_Ck_at_Greenville_Ave_Dallas,1,0.46,0.569,0.0,False
+WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,9,0.149,0.01,0.01,True
