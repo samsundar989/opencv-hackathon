@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import re
 
-TIDAL = re.compile(r"(Slough|_Bay(_|$)|Harbou?r|Estuary|_Sound(_|$)|Dock|Marsh|Lagoon|Intracoastal|Tidal)", re.I)
+TIDAL = re.compile(r"(Slough|_Bay(_|$)|_Harbou?r(_|$)|Estuary|_Sound(_|$)|_Dock(_|$)|_Marsh(_|$)|Lagoon|Intracoastal|Tidal)", re.I)
 SMALL = re.compile(r"(Creek|_Ck(_|$)|Branch|_Br_|Brook|_Run(_|$)|_Kill(_|$)|_Fk_|Fork|Bayou)", re.I)
 RIVER = re.compile(r"(River|_Rv(r)?(_|$)|_R_)", re.I)               # "West Branch Susquehanna River" is not a creek
 NOT_A_RIVER = re.compile(r"(Bioreactor|DRAIN|_Tile_|GLRI)", re.I)   # edge-of-field research installations

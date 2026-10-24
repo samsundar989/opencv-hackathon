@@ -10,3 +10,4 @@ def test_camera_types():
     assert camera_type("AK_Alsek_River_at_Dry_Bay_near_Yakutat", "AK", 59.2) == "tidal_coastal"   # "Dry_Bay": name first
     assert camera_type("WI_GLRI_Bioreactor_inlet_near_Duvall_INLET_ARGIDRAIN", "WI", 44.6) == "not_a_river"
     assert camera_type("MO_Missouri_River_at_Hermann", "MO", 38.7) == "large_river"
+    assert camera_type("MN_Redwood_River_near_Marshall", "MN", 44.45) == "large_river"   # "Marsh" inside a town name
