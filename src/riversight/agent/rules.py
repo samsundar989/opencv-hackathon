@@ -22,6 +22,8 @@ as the LLM agent and maps their numbers to actions with fixed, hand-written thre
   Saturation is also inferred inside DISAGREE / GAUGE_STALE: fresh gauge above the calibrated max, raw estimate
   within σ of the max, or the last known gauge (≤ 24 h) already at the max.
   While RISING, fog / texture loss alone do not make a frame unusable (muddy, bank-covering water is not fog).
+  Tidal sites (agent/tidal_sites.json; D-0013 W2-1): RISING alerts only on water above the predicted tide (harmonic
+  residual ≥ max(0.5 ft, 3σ)) or above the site's daily-maximum p99; an ordinary tide is a logged NOOP.
 """
 from __future__ import annotations
 
@@ -184,6 +186,12 @@ def rising(ctx, ev, d, why):
     meta = _meta(ctx, cam)
     out = [action("DENSIFY", minutes=15, hours=12)]
     g = _run(ctx, d, "get_gauge", hours=6)
+    tide = g.get("tidal")
+    if tide and tide.get("ok") and not tide.get("non_tidal_rise"):
+        # D-0013 W2-1: on a tidal site a rise is the tide unless the water stands above the predicted tide
+        why.append(f"tidal site: {g['latest_ft']} ft is the ordinary tide (predicted {tide['predicted_tide_ft']} ft, "
+                   f"residual {tide['residual_ft']:+.2f} ft < {tide['surge_threshold_ft']:.2f}); no alert")
+        return [action("NOOP", reason="tidal", residual_ft=tide["residual_ft"])]
     age = g.get("age_min")
     now_ft = g.get("latest_ft") if age is not None and age <= 60 else None      # age 0.0 is fresh, not missing
     if now_ft is None:
@@ -198,7 +206,7 @@ def rising(ctx, ev, d, why):
     action_stage = ((fc.get("flood_categories_ft") or {}).get("action") if fc.get("available") else None)
     crest = fc.get("crest_ft") if fc.get("available") else round(now_ft + max(rate, 0) * 3, 2)
     alert = now_ft >= p90 or (action_stage is not None and crest is not None and crest >= action_stage) \
-        or (rate >= 0.5 and now_ft >= p50)
+        or (rate >= 0.5 and now_ft >= p50) or bool(tide and tide.get("non_tidal_rise"))
     if not alert:
         why.append(f"rising ({rate:+.2f} ft/h) but {now_ft} ft is below the site p90 {p90}; sampling densified")
         return out

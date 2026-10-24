@@ -75,10 +75,12 @@ class Site:
         hf = pd.read_parquet(d / "history" / "frames.parquet")
         hr = pd.read_parquet(d / "history" / "registration.parquet")[["filename", "night", "ok", "n_inliers", "score", "method", "segment"]]
         h = hf.merge(hr, on="filename")
-        kf = pd.read_parquet(d / "frames.parquet")
-        kr = pd.read_parquet(d / "registration_cascade.parquet")[["filename", "night", "ok", "n_inliers", "score", "method"]]
-        k = kf.merge(kr, on="filename").assign(segment="main")
-        self.frames = pd.concat([h, k]).drop_duplicates("filename").sort_values("time").reset_index(drop=True)
+        parts = [h]
+        if (d / "frames.parquet").exists():              # the 30-day kill-test window (frozen 20 sites only)
+            kf = pd.read_parquet(d / "frames.parquet")
+            kr = pd.read_parquet(d / "registration_cascade.parquet")[["filename", "night", "ok", "n_inliers", "score", "method"]]
+            parts.append(kf.merge(kr, on="filename").assign(segment="main"))
+        self.frames = pd.concat(parts).drop_duplicates("filename").sort_values("time").reset_index(drop=True)
         self.frames["night"] = self.frames["night"].astype(bool)
         self.frames["ok"] = self.frames["ok"].astype(bool)
         g = tools._history_gauge(cam)
@@ -511,6 +513,61 @@ def build_muddy_rises(n_fresh=6, n_stale=3):
         n += 1
 
 
+# ---- v4 (D-0013 W2-1): tidal sites ------------------------------------------------------------------
+
+ONBOARD = ROOT / "models" / "onboard"
+
+
+def tidal_rising_flag(site, t) -> bool:
+    """RISING as the live cycle raises it: 3 h gauge rise >= 0.5 ft or stage at/above the site p90."""
+    return change(site, t, 3) >= 0.5 or (site.gauge_at(t)[0] or -1e9) >= site.meta["stage_p90"]
+
+
+def build_tidal():
+    """Real tidal episodes: ordinary high tides that the old RISING logic alerted on (must not alert), the live false
+    alert Samuel approved on 2026-10-24 (must not alert), and Savannah record-high days (must alert). Labels use the
+    site's daily-maximum distribution only (independent of the harmonic model the agent uses)."""
+    tid = json.loads((ROOT / "src" / "riversight" / "agent" / "tidal_sites.json").read_text(encoding="utf-8"))
+    no_alert = ["DRAFT_ALERT", "OPEN_TICKET", "QUARANTINE", "SET_REFERENCE"]
+    for cam, root, n_tide in (("CA_First_Mallard_Branch_nr_Fairfield", BUNDLES, 4), ("GA_Savannah_River_at_USACE_Dock_at_Savannah", ONBOARD, 3)):
+        site, dm = Site(cam, root), tid[cam]
+        f = site.frames[~site.frames["night"] & site.frames["ok"] & ~site.frames["filename"].isin(EXCLUDE)]
+        day_max = site.gauge.resample("1D").max()
+        f = f.assign(dmax=day_max.reindex(f["time"].dt.floor("D")).to_numpy())
+        tide = f[(f["dmax"] < dm["daily_max_p90"]) & [tidal_rising_flag(site, t) for t in f["time"]]]
+        rel = site.bundles.relative_to(ROOT).as_posix()
+        for _, r in pick(tide, n_tide, 3).iterrows():
+            add("tidal_tide", "real", site, r["time"], reading(site, r, ["RISING"]), recent(site, r["time"]), [], no_alert,
+                severity=0, ctx={"bundle_root": rel},
+                note=f"ordinary tide: gauge {site.gauge_at(r['time'])[0]:.2f} ft, day max {r['dmax']:.2f} < daily-max p90 {dm['daily_max_p90']}")
+        if cam.startswith("GA_"):
+            for day in ("2026-05-17", "2026-09-08", "2026-10-10"):
+                fd = f[f["time"].dt.strftime("%Y-%m-%d") == day]
+                if not len(fd):
+                    continue
+                levels = [site.gauge_at(t)[0] or -1e9 for t in fd["time"]]
+                r = fd.iloc[int(np.argmax(levels))]                   # the frame nearest the day's peak water
+                g = site.gauge_at(r["time"])[0]
+                if g is None or g < dm["daily_max_p95"]:
+                    continue
+                add("tidal_flood", "real", site, r["time"], reading(site, r, ["RISING"]), recent(site, r["time"]),
+                    ["DENSIFY", "DRAFT_ALERT"], ["QUARANTINE", "SET_REFERENCE"], severity=5, ctx={"bundle_root": rel},
+                    note=f"record-high water day (daily max >= p99 {dm['daily_max_p99']}); gauge {g:.2f} ft at the frame")
+    # the false alert Samuel approved on the live site (2026-10-24 18:15Z): an incoming tide extrapolated to a 31 ft crest
+    cam = "CA_First_Mallard_Branch_nr_Fairfield"
+    site = Site(cam)
+    iv = pd.read_parquet(AGENT_EVAL_RAW / f"{cam}_iv_20261024.parquet")
+    inline = [[pd.Timestamp(t).isoformat(), float(v)] for t, v in zip(iv["time"], iv["value"])]
+    site.gauge = pd.Series(iv["value"].to_numpy(float), index=pd.DatetimeIndex(iv["time"]))
+    t = pd.Timestamp("2026-10-24T18:15:04Z")
+    row = {"time": t, "filename": "live", "night": False, "ok": True, "n_inliers": 0, "score": 0, "method": "live"}
+    rd = reading(site, row, ["RISING"], frame_key=f"data/raw/agent_eval/{cam}___2026-10-24T18-15-04Z.jpg", camera_ft=27.725)
+    add("tidal_live_false_alert", "real", site, t, rd, [], [], no_alert, severity=0, ctx={"gauge_inline": inline},
+        injected={"note": "replays live approval apr-20261024-577f088009 (approved false alert)"},
+        note="live 2026-10-24 18:15Z: rules drafted an alert on an incoming tide (+1.17 ft/h, 3 h trend crest 31.3 ft); "
+             "Samuel approved it; documented false alert")
+
+
 # ---- fleet ------------------------------------------------------------------------------------------
 
 def build_fleet(n=12, size=4):
@@ -545,6 +602,7 @@ def main():
     build_synthetic(sites)
     build_out_of_range()
     build_muddy_rises()
+    build_tidal()
     build_fleet()
     OUT.mkdir(parents=True, exist_ok=True)
     lines = [json.dumps(e, sort_keys=True, default=str) for e in EPISODES]

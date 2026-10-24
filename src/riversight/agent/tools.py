@@ -466,7 +466,28 @@ def get_gauge(ctx: ToolContext, nwis_id: str | None = None, hours: float = 24) -
                       f"largest single step {out['max_step_ft']} ft (isolation x{isolation:.1f} vs neighbouring steps); "
                       f"flat for {flat:.1f} h"
                       + (f"; ABOVE the camera's calibrated range (max {smax:.2f} ft)" if out["above_camera_range"] else ""))
+    tid = site_tidal(cam)
+    if tid.get("tidal"):                        # D-0013 W2-1: on a tidal site only water above the tide matters
+        from riversight.agent import tidal
+        g7 = g if hours >= 168 else gauge_series(ctx, cam, 168)
+        a = tidal.assess(g7, g.index[-1], tid)
+        out["tidal"] = {k: a.get(k) for k in ("ok", "predicted_tide_ft", "residual_ft", "surge_threshold_ft",
+                                               "above_daily_max_p99", "non_tidal_rise", "tidal_r2")}
+        out["tidal"]["daily_max_p99_ft"] = tid.get("daily_max_p99")
+        out["summary"] += "; " + a["summary"]
     return out
+
+
+_tidal_sites: dict | None = None
+
+
+def site_tidal(cam: str) -> dict:
+    """Tidal record for a camera from agent/tidal_sites.json (scripts/agent_tidal_scan.py), {} if not tidal."""
+    global _tidal_sites
+    if _tidal_sites is None:
+        p = Path(__file__).with_name("tidal_sites.json")
+        _tidal_sites = json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+    return _tidal_sites.get(cam, {})
 
 
 def get_nws_forecast(ctx: ToolContext, nwis_id: str | None = None) -> dict:

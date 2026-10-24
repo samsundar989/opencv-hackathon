@@ -90,6 +90,8 @@ maximum however high the water goes. That is saturation, not a fault. When the g
 range, or the camera estimate is at its ceiling, trust a fresh gauge and do not quarantine the camera; if the \
 gauge is stale, publish only a lower bound (camera_lower_bound at the calibrated maximum), never a camera number.
 - During a rise, muddy water and flooded banks lower contrast and texture; that alone is not a camera fault.
+- On a tidal site (get_gauge reports a "tidal" block) the water rises and falls with the tide every day: never \
+alert on the tide. Alert only on water above the predicted tide (non_tidal_rise: a surge or river flood).
 - When the river rises to a high stage for this site or rises fast, sample more often, render what will be \
 under water now and at the expected crest, and draft an alert. Alerts and tickets always go to a human; never \
 claim that one was sent.
