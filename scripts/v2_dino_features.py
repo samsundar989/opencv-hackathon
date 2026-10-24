@@ -81,16 +81,19 @@ def calib_frames(cam: str, live: bool = False) -> pd.DataFrame:
         p = d / n
         if p.exists():
             z = np.load(p)
-            names.append(pd.DataFrame({"filename": z["filename"], "t": pd.to_datetime(z["t"], utc=True)}))
-    df = pd.concat(names).drop_duplicates("filename")
+            names.append(pd.DataFrame({"filename": z["filename"], "t": pd.to_datetime(z["t"], utc=True),
+                                       "src": "hist" if n == "scene_history_all.npz" else "k30"}))
+    df = pd.concat(names).drop_duplicates("filename")      # first wins, as in scene_tune.load_train
     if not live:
         df = df[df["t"] < CUT]
     hist = pd.read_parquet(d / "history" / "frames.parquet", columns=["filename", "path"]).merge(
         pd.read_parquet(d / "history" / "registration.parquet", columns=["filename", "H"]), on="filename")
     k30 = pd.read_parquet(d / "frames.parquet", columns=["filename", "path"]).merge(
         pd.read_parquet(d / "registration_cascade.parquet", columns=["filename", "H"]), on="filename")
-    reg = pd.concat([hist, k30]).drop_duplicates("filename")
-    out = df.merge(reg, on="filename", how="left").sort_values("t").reset_index(drop=True)
+    # H from the registration of the cache the v1 feature came from (a frame can sit in both tables with a
+    # failed history registration but a good 30-day-window one, and v1 then used the latter)
+    reg = pd.concat([hist.assign(src="hist"), k30.assign(src="k30")]).drop_duplicates(["filename", "src"])
+    out = df.merge(reg, on=["filename", "src"], how="left").sort_values("t").reset_index(drop=True)
     miss = out["H"].isna().sum()
     if miss:
         raise RuntimeError(f"{cam}: {miss} calibration frames without a homography")

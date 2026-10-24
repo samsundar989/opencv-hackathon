@@ -151,3 +151,23 @@ def test_shadow_bundle_primal_equals_cv_dual(tmp_path, cfg):
         Z = S.nuisance_matrix(t, 32.8, -96.8, s["sun"] == "sundoy")
         p = p + S.nuisance_fit(Z[:n], loo, Z[n:])
     assert np.allclose(got, p, atol=1e-4)
+
+
+def test_calib_frames_takes_h_from_the_cache_v1_used(tmp_path, monkeypatch):
+    """Regression (Big Brook, Sand Ck): a frame with a failed history registration (H null) but a good 30-day
+    cascade registration is a kill30_fit feature in v1, so its H must come from the cascade."""
+    import v2_dino_features as V
+    d = tmp_path / "derived" / "cam"
+    (d / "history").mkdir(parents=True)
+    t = pd.to_datetime(["2026-09-01 15:00", "2026-09-02 15:00"], utc=True).asi8
+    np.savez(d / "scene_history_all.npz", filename=np.array(["a.jpg"]), t=t[:1])
+    np.savez(d / "scene_kill30_fit.npz", filename=np.array(["a.jpg", "b.jpg"]), t=t)
+    I, J = np.eye(3).ravel().tolist(), (np.eye(3) * 2).ravel().tolist()
+    pd.DataFrame({"filename": ["a.jpg", "b.jpg"], "path": ["pa", "pb"]}).to_parquet(d / "history" / "frames.parquet")
+    pd.DataFrame({"filename": ["a.jpg", "b.jpg"], "H": [I, None]}).to_parquet(d / "history" / "registration.parquet")
+    pd.DataFrame({"filename": ["a.jpg", "b.jpg"], "path": ["pa", "pb"]}).to_parquet(d / "frames.parquet")
+    pd.DataFrame({"filename": ["a.jpg", "b.jpg"], "H": [J, J]}).to_parquet(d / "registration_cascade.parquet")
+    monkeypatch.setattr(V, "DATA", tmp_path)
+    f = V.calib_frames("cam").set_index("filename")
+    assert f.loc["a.jpg", "src"] == "hist" and np.allclose(f.loc["a.jpg", "H"], I)
+    assert f.loc["b.jpg", "src"] == "k30" and np.allclose(f.loc["b.jpg", "H"], J)
