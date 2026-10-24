@@ -267,6 +267,15 @@ def test_llm_loop_runs_tools_and_submits(monkeypatch):
     assert seen[1]["messages"][-1]["content"][0]["toolResult"]["toolUseId"] == "t1"
 
 
+def test_llm_submission_with_bare_string_actions_is_parsed(monkeypatch):
+    """Regression (final Haiku 4.5 arm, Oct 24): actions sent as bare strings crashed the parser -> rules fallback."""
+    canned(monkeypatch)
+    conv, _ = fake_bedrock([[{"toolUse": {"toolUseId": "s", "name": "submit_decision",
+                                          "input": {"actions": ["DENSIFY", "DRAFT_ALERT"], "rationale": "rising fast"}}}]])
+    d = llm.run(ev(["RISING"]), CTX(), converse=conv)
+    assert d["decided_by"] == "llm" and schema.action_types(d) == ["DENSIFY", "DRAFT_ALERT"] and d["approval_id"]
+
+
 def test_llm_tool_budget_is_enforced(monkeypatch):
     calls = canned(monkeypatch)
     loop = [{"toolUse": {"toolUseId": f"t{i}", "name": "get_gauge", "input": {}}} for i in range(12)]

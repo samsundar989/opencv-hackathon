@@ -186,6 +186,36 @@ def _jsonable(x: Any) -> Any:
     return json.loads(json.dumps(x, default=lambda o: o.tolist() if hasattr(o, "tolist") else str(o)))
 
 
+def _maybe_json(x: Any) -> Any:
+    if isinstance(x, str):
+        try:
+            return json.loads(x)
+        except ValueError:
+            return x
+    return x
+
+
+def parse_submission(sub: Any) -> dict:
+    """Normalise submit_decision input. Models sometimes send actions as bare strings ("DENSIFY"), the whole
+    input or args as a JSON string; 2 of the first 90 Haiku 4.5 runs did, and the strict parser raised (the
+    decision then fell back to rules). Unknown shapes become no action; finalize() drops unknown types."""
+    sub = _maybe_json(sub)
+    if not isinstance(sub, dict):
+        return {"actions": [], "rationale": str(sub)[:600]}
+    acts = _maybe_json(sub.get("actions")) or []
+    if isinstance(acts, (str, dict)):
+        acts = [acts]
+    out = []
+    for a in acts:
+        a = _maybe_json(a)
+        if isinstance(a, str):
+            out.append({"type": a, "args": {}})
+        elif isinstance(a, dict):
+            args = _maybe_json(a.get("args")) or {}
+            out.append({"type": a.get("type"), "args": args if isinstance(args, dict) else {"value": args}})
+    return {"actions": out, "rationale": str(sub.get("rationale") or "")}
+
+
 def run(event: dict, ctx: tools.ToolContext, model: str = HAIKU, converse: Callable[..., dict] | None = None,
         effort: str | None = os.environ.get("RIVERSIGHT_AGENT_EFFORT")) -> dict:
     """One LLM decision. Raises on transport errors (the caller falls back to rules)."""
@@ -239,6 +269,7 @@ def run(event: dict, ctx: tools.ToolContext, model: str = HAIKU, converse: Calla
     d["n_tool_calls"] = n_tools
     if submitted is None:
         raise RuntimeError(f"model did not submit a decision within {MAX_TURNS} turns")
-    d["actions"] = [{"type": a.get("type"), "args": a.get("args") or {}} for a in submitted.get("actions") or []]
-    d["rationale"] = submitted.get("rationale", "")
+    submitted = parse_submission(submitted)
+    d["actions"] = submitted["actions"]
+    d["rationale"] = submitted["rationale"]
     return schema.finalize(event, d)
