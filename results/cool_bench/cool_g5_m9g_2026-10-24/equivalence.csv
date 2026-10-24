@@ -1,0 +1,9 @@
+arm,stage,max_abs_diff,min_psnr_db,sites,shape_mismatch
+cool,block_features,0,,20,False
+cool,cvtColor_lab,0,inf,20,False
+cool,imdecode,0,inf,20,False
+cool,resize_area,0,inf,20,False
+cool,sobel_magnitude,0,,20,False
+cool,stage_fixedH,0,,20,False
+cool,stage_pipeline,0.00044201,,20,False
+cool,warpPerspective,0,inf,20,False

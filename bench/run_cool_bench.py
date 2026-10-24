@@ -290,10 +290,21 @@ def main() -> None:
               "region": REGION, "source": "ec2: AWS Price List API (or --ec2-price); cool: Marketplace listing",
               "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")}
     (out / "prices.json").write_text(json.dumps(prices, indent=1), encoding="utf-8")
+    method = "launcher wall clock, launch to terminate"
+    if hours is None:
+        # --collect: launch time from EC2, end = the last arm's finish + 10 min for upload and shutdown (an estimate)
+        insts = [i for r in ec2.describe_instances(Filters=[{"Name": "tag:Name", "Values": [tag]}])["Reservations"]
+                 for i in r["Instances"]]
+        ends = [json.loads(p.read_text(encoding="utf-8")).get("finished_utc") for p in out.glob("*/provenance.json")]
+        ends = [datetime.fromisoformat(e.replace("Z", "+00:00")) for e in ends if e]
+        if insts and ends:
+            iid = insts[0]["InstanceId"]
+            hours = ((max(ends) - insts[0]["LaunchTime"]).total_seconds() + 600) / 3600
+            method = "EC2 LaunchTime to the last arm's finished_utc + 10 min (estimate)"
     if hours is not None:
         (out / "spend.json").write_text(json.dumps({"instance_id": iid, "ami": args.ami, "hours": round(hours, 3),
-                                                    "usd_estimate": round(hours * (ec2_usd + args.cool_price), 4)},
-                                                   indent=1), encoding="utf-8")
+                                                    "usd_estimate": round(hours * (ec2_usd + args.cool_price), 4),
+                                                    "method": method}, indent=1), encoding="utf-8")
     subprocess.run([sys.executable, str(ROOT / "bench" / "compare_arms.py"), str(out), "--baseline", "pip-5.0.0.93"],
                    check=False)
     print(f"results in {out}")

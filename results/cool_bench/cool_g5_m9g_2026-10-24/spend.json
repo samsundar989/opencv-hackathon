@@ -1,0 +1,7 @@
+{
+ "instance_id": "i-0a3ad30ec888c6eb3",
+ "ami": "ami-0d9a06f3c16d66f9e",
+ "hours": 1.566,
+ "usd_estimate": 0.161,
+ "method": "EC2 LaunchTime to the last arm's finished_utc + 10 min (estimate)"
+}

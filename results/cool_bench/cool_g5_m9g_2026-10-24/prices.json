@@ -1,0 +1,8 @@
+{
+ "instance": "m9g.large",
+ "ec2_usd_per_h": 0.09784,
+ "cool_usd_per_h": 0.005,
+ "region": "us-east-2",
+ "source": "ec2: AWS Price List API (or --ec2-price); cool: Marketplace listing",
+ "date": "2026-10-24"
+}

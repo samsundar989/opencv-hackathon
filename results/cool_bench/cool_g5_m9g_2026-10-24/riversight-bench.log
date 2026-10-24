@@ -1,0 +1,148 @@
++ shutdown -h +330
+Shutdown scheduled for Sat 2026-10-24 08:03:14 UTC, use 'shutdown -c' to cancel.
++ W=/opt/rsb
++ mkdir -p /opt/rsb/pack /opt/rsb/code /opt/rsb/results
++ cd /opt/rsb
++ python3 -m venv /opt/xfer
++ /opt/xfer/bin/pip install -q boto3
++ cat
++ X='/opt/xfer/bin/python /opt/xfer/x.py'
++ /opt/xfer/bin/python /opt/xfer/x.py get code.tgz code.tgz
++ tar xzf code.tgz -C code
++ /opt/xfer/bin/python /opt/xfer/x.py get pack.tgz pack.tgz
++ tar xzf pack.tgz -C pack
++ SKIP_COOL=
++ CV=
++ NUMPY_V=
++ for v in 3.14 3.13 3.12
++ '[' -d /opt/cool/python_3.14/site-packages/cv2/python-3.14 ']'
++ '[' -x /usr/bin/python3.14 ']'
++ CV=3.14
++ break
++ echo 'COOL python: 3.14'
++ tee /opt/rsb/results/arms.txt
+COOL python: 3.14
++ ls -d /opt/cool/cpp_sdk /opt/cool/python_3.12 /opt/cool/python_3.13 /opt/cool/python_3.14 /opt/cool/samples /opt/cool/venvs
++ '[' '' '!=' 1 ']'
++ '[' -n 3.14 ']'
+++ ls -d /opt/cool/python_3.14/site-packages/numpy-2.5.3.dist-info
+++ sed -E 's/.*numpy-([^-]+)\.dist-info/\1/'
+++ head -1
++ NUMPY_V=2.5.3
++ /usr/bin/python3.14 -m venv /opt/coolvenv
++ /opt/coolvenv/bin/pip install -q numpy==2.5.3
++ /opt/coolvenv/bin/pip freeze
++ PYTHONPATH=/opt/cool/python_3.14/site-packages/cv2/python-3.14
++ LD_LIBRARY_PATH=/opt/cool/cpp_sdk/lib:/opt/ffmpeg/lib
++ /opt/coolvenv/bin/python code/bench/cool_bench.py --pack /opt/rsb/pack --out /opt/rsb/results --arm cool --threads 1,all --dnn-iters 100 --fleet 20,880
+{
+ "arm": "cool",
+ "cv2_file": "/opt/cool/python_3.14/site-packages/cv2/python-3.14/cv2.cpython-314-aarch64-linux-gnu.so",
+ "cv2_version": "5.1.0-dev",
+ "build_info_sha256": "d3a4bed98ab0bdaa52b940c73682b8f5d3062106a136f452cf7cd950ec352026",
+ "kleidicv": true,
+ "python": "3.14.4",
+ "numpy": "2.5.3",
+ "platform": "Linux-7.0.0-1012-aws-aarch64-with-glibc2.43",
+ "machine": "aarch64",
+ "cpu": "0xd84",
+ "nproc": 2,
+ "cv2_default_threads": 2,
+ "ami_id": "ami-0d9a06f3c16d66f9e",
+ "started_utc": "2026-10-24T02:33:29Z"
+}
+[ WARN:0@3.020] global net_impl_backend.cpp:372 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@3.254] global net_impl_backend.cpp:372 setPreferableTarget Targets are not supported by the new graph engine for now
+[1 thr] imdecode                           p50     1.083 ms  p95     1.605  cpu 1.00
+[1 thr] register_orb_magsac                p50    38.506 ms  p95    45.711  cpu 1.00
+[1 thr] register_aliked_lightglue_magsac   p50  2064.698 ms  p95  2077.483  cpu 1.00
+[1 thr] warpPerspective                    p50     1.426 ms  p95     1.886  cpu 1.00
+[1 thr] resize_area                        p50     0.694 ms  p95     0.756  cpu 1.00
+[1 thr] cvtColor_lab                       p50     0.124 ms  p95     0.129  cpu 1.00
+[1 thr] sobel_magnitude                    p50     0.078 ms  p95     0.088  cpu 1.00
+[1 thr] block_features                     p50     1.678 ms  p95     1.798  cpu 1.00
+[1 thr] ridge_predict                      p50     0.022 ms  p95     0.041  cpu 2.10
+[1 thr] frame_pipeline                     p50    50.782 ms  p95  2121.298  cpu 1.00
+[1 thr] fleet   20 rep 0: 19.40 s, 1.03 fr/s, registered 20
+[1 thr] fleet   20 rep 1: 19.38 s, 1.03 fr/s, registered 20
+[1 thr] fleet   20 rep 2: 19.36 s, 1.03 fr/s, registered 20
+[1 thr] fleet   20 rep 3: 19.37 s, 1.03 fr/s, registered 20
+[1 thr] fleet   20 rep 4: 19.35 s, 1.03 fr/s, registered 20
+[1 thr] fleet  880 rep 0: 1106.84 s, 0.80 fr/s, registered 757
+[2 thr] imdecode                           p50     1.084 ms  p95     1.606  cpu 1.00
+[2 thr] register_orb_magsac                p50    23.112 ms  p95    27.636  cpu 1.70
+[2 thr] register_aliked_lightglue_magsac   p50  1160.381 ms  p95  1162.893  cpu 1.94
+[2 thr] warpPerspective                    p50     0.782 ms  p95     1.031  cpu 2.00
+[2 thr] resize_area                        p50     0.704 ms  p95     0.760  cpu 1.00
+[2 thr] cvtColor_lab                       p50     0.124 ms  p95     0.128  cpu 1.00
+[2 thr] sobel_magnitude                    p50     0.078 ms  p95     0.088  cpu 1.00
+[2 thr] block_features                     p50     1.679 ms  p95     1.800  cpu 1.00
+[2 thr] ridge_predict                      p50     0.023 ms  p95     0.042  cpu 1.97
+[2 thr] frame_pipeline                     p50    34.921 ms  p95  1194.021  cpu 1.93
+[2 thr] fleet   20 rep 0: 10.96 s, 1.82 fr/s, registered 20
+[2 thr] fleet   20 rep 1: 10.97 s, 1.82 fr/s, registered 20
+[2 thr] fleet   20 rep 2: 10.97 s, 1.82 fr/s, registered 20
+[2 thr] fleet   20 rep 3: 11.05 s, 1.81 fr/s, registered 20
+[2 thr] fleet   20 rep 4: 10.96 s, 1.82 fr/s, registered 20
+[2 thr] fleet  880 rep 0: 627.27 s, 1.40 fr/s, registered 757
+wrote /opt/rsb/results/cool
++ BASE=/usr/bin/python3.14
++ '[' -x /usr/bin/python3.14 ']'
++ /usr/bin/python3.14 -m venv /opt/pipvenv
++ '[' -n 2.5.3 ']'
++ NP=numpy==2.5.3
++ /opt/pipvenv/bin/pip install -q opencv-python-headless==5.0.0.93 numpy==2.5.3
++ /opt/pipvenv/bin/pip freeze
++ /opt/pipvenv/bin/python code/bench/cool_bench.py --pack /opt/rsb/pack --out /opt/rsb/results --arm pip-5.0.0.93 --threads 1,all --dnn-iters 100 --fleet 20,880
+{
+ "arm": "pip-5.0.0.93",
+ "cv2_file": "/opt/pipvenv/lib/python3.14/site-packages/cv2/__init__.py",
+ "cv2_version": "5.0.0",
+ "build_info_sha256": "4460ffe25568d7f496997f0593f568f4d91ee4740c97f057b2986c237e8a386c",
+ "kleidicv": true,
+ "python": "3.14.4",
+ "numpy": "2.5.3",
+ "platform": "Linux-7.0.0-1012-aws-aarch64-with-glibc2.43",
+ "machine": "aarch64",
+ "cpu": "0xd84",
+ "nproc": 2,
+ "cv2_default_threads": 2,
+ "ami_id": "ami-0d9a06f3c16d66f9e",
+ "started_utc": "2026-10-24T03:14:41Z"
+}
+[ WARN:0@0.031] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@0.249] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[1 thr] imdecode                           p50     1.069 ms  p95     1.584  cpu 1.00
+[1 thr] register_orb_magsac                p50    44.620 ms  p95    52.306  cpu 1.00
+[1 thr] register_aliked_lightglue_magsac   p50  2055.672 ms  p95  2059.751  cpu 1.00
+[1 thr] warpPerspective                    p50     1.411 ms  p95     1.866  cpu 1.00
+[1 thr] resize_area                        p50     0.700 ms  p95     0.763  cpu 1.00
+[1 thr] cvtColor_lab                       p50     0.121 ms  p95     0.125  cpu 1.00
+[1 thr] sobel_magnitude                    p50     0.076 ms  p95     0.087  cpu 1.00
+[1 thr] block_features                     p50     1.676 ms  p95     1.795  cpu 1.00
+[1 thr] ridge_predict                      p50     0.022 ms  p95     0.041  cpu 1.97
+[1 thr] frame_pipeline                     p50    57.332 ms  p95  2116.411  cpu 1.00
+[1 thr] fleet   20 rep 0: 19.40 s, 1.03 fr/s, registered 20
+[1 thr] fleet   20 rep 1: 19.43 s, 1.03 fr/s, registered 20
+[1 thr] fleet   20 rep 2: 19.41 s, 1.03 fr/s, registered 20
+[1 thr] fleet   20 rep 3: 19.43 s, 1.03 fr/s, registered 20
+[1 thr] fleet   20 rep 4: 19.43 s, 1.03 fr/s, registered 20
+[1 thr] fleet  880 rep 0: 1108.93 s, 0.79 fr/s, registered 757
+[2 thr] imdecode                           p50     1.070 ms  p95     1.588  cpu 1.00
+[2 thr] register_orb_magsac                p50    27.989 ms  p95    34.908  cpu 1.61
+[2 thr] register_aliked_lightglue_magsac   p50  1159.736 ms  p95  1162.035  cpu 1.94
+[2 thr] warpPerspective                    p50     0.773 ms  p95     1.021  cpu 2.00
+[2 thr] resize_area                        p50     0.712 ms  p95     0.782  cpu 1.00
+[2 thr] cvtColor_lab                       p50     0.121 ms  p95     0.124  cpu 1.00
+[2 thr] sobel_magnitude                    p50     0.076 ms  p95     0.086  cpu 1.00
+[2 thr] block_features                     p50     1.668 ms  p95     1.788  cpu 1.00
+[2 thr] ridge_predict                      p50     0.022 ms  p95     0.045  cpu 2.10
+[2 thr] frame_pipeline                     p50    42.231 ms  p95  1198.082  cpu 1.92
+[2 thr] fleet   20 rep 0: 11.08 s, 1.81 fr/s, registered 20
+[2 thr] fleet   20 rep 1: 11.08 s, 1.80 fr/s, registered 20
+[2 thr] fleet   20 rep 2: 11.10 s, 1.80 fr/s, registered 20
+[2 thr] fleet   20 rep 3: 11.09 s, 1.80 fr/s, registered 20
+[2 thr] fleet   20 rep 4: 11.09 s, 1.80 fr/s, registered 20
+[2 thr] fleet  880 rep 0: 631.46 s, 1.39 fr/s, registered 757
+wrote /opt/rsb/results/pip-5.0.0.93
++ cp /var/log/riversight-bench.log /opt/rsb/results/

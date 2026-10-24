@@ -34,3 +34,11 @@ def test_html_visible_text_only_and_stale_claims(tmp_path, monkeypatch):
     assert [n for _, _, n in crn.check([page], set(), set())] == ["0.444"]
     hits = crn.check_stale([page], rules)
     assert [line for _, line, _ in hits] == [2, 3]
+
+
+def test_corpus_accepts_four_decimals_and_small_value_sig_figs(tmp_path):
+    res = tmp_path / "r.csv"
+    res.write_text("0.0561653\n0.00044201\n")
+    known = crn.corpus([res])
+    assert {"0.0562", "0.056", "0.00044", "0.000442"} <= known
+    assert "0.0563" not in known

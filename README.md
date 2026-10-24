@@ -46,7 +46,7 @@ USGS NIMS frame ─► register (ALIKED + LightGlue + USAC_MAGSAC) ─► warpPe
 
 ![RiverSight architecture](docs/img/architecture.svg)
 
-Agent loop and component details: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Every OpenCV 5 call that carries weight, and what breaks without it: [`docs/OPENCV5_USAGE.md`](docs/OPENCV5_USAGE.md). COOL vs stock OpenCV on Graviton: `docs/COOL_BENCHMARK.md` (in progress).
+Agent loop and component details: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Every OpenCV 5 call that carries weight, and what breaks without it: [`docs/OPENCV5_USAGE.md`](docs/OPENCV5_USAGE.md). COOL vs stock OpenCV on Graviton5, same instance: flat end to end (1.0067× over 880 frames) because the learned matcher dominates; 1.21× on ORB registration; bit-identical outputs; one m9g.large covers ~880 cameras at a 15-minute cadence (`docs/COOL_BENCHMARK.md`).
 
 ## Quick start
 

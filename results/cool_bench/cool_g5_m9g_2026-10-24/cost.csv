@@ -1,0 +1,5 @@
+arm,cadence_min,instance,usd_per_h,fleet_frames_per_s,cameras_per_instance,usd_per_camera_month,break_even_speedup_vs_stock
+cool,15,m9g.large,0.10284,1.4029,1262,0.0586442,1.0511
+cool,30,m9g.large,0.10284,1.4029,2525,0.0293221,1.0511
+pip-5.0.0.93,15,m9g.large,0.09784,1.3936,1254,0.0561653,1
+pip-5.0.0.93,30,m9g.large,0.09784,1.3936,2508,0.0280827,1

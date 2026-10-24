@@ -2,7 +2,7 @@
 
 Scans README.md, report/REPORT.md and the W3 docs, pulls out each numeric token, and checks it against
 the numbers in git-tracked files under results/ (CSV, JSON, Markdown, TXT). A float in a results file also
-matches its roundings to 1–3 decimals and, for values in [0, 1], its percentage to 0–1 decimals. Fractions
+matches its roundings to 1–4 decimals (2–3 significant figures below 0.01) and, for values in [0, 1], its percentage to 0–1 decimals. Fractions
 like 14/20 are checked part by part.
 
 Not checked (stated so nobody over-reads a pass):
@@ -17,6 +17,7 @@ Known-wrong claims in report/stale_claims.txt (regex, reason) fail the check whe
 """
 from __future__ import annotations
 
+import math
 import re
 import subprocess
 import sys
@@ -73,8 +74,11 @@ def corpus(files: list[Path]) -> set[str]:
             if v == int(v) and "." not in t and "e" not in t.lower():
                 s.add(str(int(v)))
                 continue
-            for d in (1, 2, 3):
+            for d in (1, 2, 3, 4):
                 s.add(f"{v:.{d}f}")
+            if 0 < abs(v) < 0.01:              # tiny values (ft differences, $/camera): 2–3 significant figures
+                for sig in (2, 3):
+                    s.add(f"{float(f'{v:.{sig}g}'):.{sig - 1 - math.floor(math.log10(abs(v)))}f}")
             if 0 <= v <= 1:
                 for d in (0, 1):
                     s.add(f"{100 * v:.{d}f}")

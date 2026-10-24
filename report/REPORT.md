@@ -212,7 +212,20 @@ _Pending (W2)._ Fault-injection episodes, real and synthetic (labelled), each wi
 
 ### 6.8 COOL on Graviton
 
-_Pending._ COOL vs stock pip OpenCV 5.0.0.93 on the same m9g.large: per-kernel speedups, the whole per-frame pipeline, the fleet cycle, output equivalence, and $ per camera-month. Harness: `bench/`; method: `docs/COOL_BENCHMARK.md`.
+COOL G5 vs stock pip OpenCV 5.0.0.93 on the same m9g.large, same Python and numpy, the live per-frame path stage by stage plus the fleet cycle (`results/cool_bench/cool_g5_m9g_2026-10-24/`; full tables and method: `docs/COOL_BENCHMARK.md`).
+
+| | COOL vs stock |
+|---|---|
+| fleet cycle, 880 frames, 2 cores | 1.0067× (1.4029 vs 1.3936 frames/s) |
+| ORB + MAGSAC registration, 1 / 2 threads | 1.16× / 1.21× |
+| whole per-frame path, p50, 1 / 2 threads | 1.13× / 1.21× |
+| resize, cvtColor, Sobel, warpPerspective, imdecode | 0.975× – 1.011× |
+| ALIKED + LightGlue (≈ 98 % of stage time) | 0.996× / 0.999× |
+| outputs | bit-identical pixels; stage estimates within 0.00044 ft |
+| $ per camera-month at 15 min, incl. COOL fee | $0.0586 vs $0.0562 |
+| one m9g.large covers | ~880 cameras at 15 min (627 s per cycle) |
+
+Honest reading: end to end, COOL is flat on this workload, because the cycle is dominated by the learned matcher, which COOL does not speed up. The stock aarch64 wheel already ships KleidiCV, and our images are small. COOL's real gain is in ORB registration, which most frames go through. Because the outputs are identical and the cost difference is a fraction of a cent per camera-month, the live worker runs COOL. The whole gauged HIVIS fleet fits on one Graviton instance either way.
 
 ### 6.9 Prospective live evaluation
 

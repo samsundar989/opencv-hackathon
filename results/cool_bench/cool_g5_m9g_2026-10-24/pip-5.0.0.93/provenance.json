@@ -1,0 +1,49 @@
+{
+ "arm": "pip-5.0.0.93",
+ "cv2_file": "/opt/pipvenv/lib/python3.14/site-packages/cv2/__init__.py",
+ "cv2_version": "5.0.0",
+ "build_info_sha256": "4460ffe25568d7f496997f0593f568f4d91ee4740c97f057b2986c237e8a386c",
+ "kleidicv": true,
+ "python": "3.14.4",
+ "numpy": "2.5.3",
+ "platform": "Linux-7.0.0-1012-aws-aarch64-with-glibc2.43",
+ "machine": "aarch64",
+ "cpu": "0xd84",
+ "nproc": 2,
+ "cv2_default_threads": 2,
+ "ec2_identity": {
+  "accountId": "154648810691",
+  "architecture": "arm64",
+  "availabilityZone": "us-east-2c",
+  "billingProducts": null,
+  "devpayProductCodes": null,
+  "marketplaceProductCodes": [
+   "216fpdsdup19yw3vwuiwx254l"
+  ],
+  "imageId": "ami-0d9a06f3c16d66f9e",
+  "instanceId": "i-0a3ad30ec888c6eb3",
+  "instanceType": "m9g.large",
+  "kernelId": null,
+  "pendingTime": "2026-10-24T02:31:59Z",
+  "privateIp": "172.31.32.8",
+  "ramdiskId": null,
+  "region": "us-east-2",
+  "version": "2017-09-30"
+ },
+ "ami_id": "ami-0d9a06f3c16d66f9e",
+ "started_utc": "2026-10-24T03:14:41Z",
+ "finished_utc": "2026-10-24T03:55:56Z",
+ "args": {
+  "pack": "/opt/rsb/pack",
+  "out": "/opt/rsb/results",
+  "arm": "pip-5.0.0.93",
+  "warmup": "50",
+  "iters": "300",
+  "dnn_warmup": "10",
+  "dnn_iters": "100",
+  "threads": "1,all",
+  "fleet": "20,880",
+  "fleet_repeats": "5",
+  "only": "None"
+ }
+}

@@ -1,0 +1,7 @@
+COOL python: 3.14
+/opt/cool/cpp_sdk
+/opt/cool/python_3.12
+/opt/cool/python_3.13
+/opt/cool/python_3.14
+/opt/cool/samples
+/opt/cool/venvs
