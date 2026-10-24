@@ -17,6 +17,7 @@ sites:
   score: 0.635
   live: true
   tier: B
+  batch: 1
 - cam_id: TX_Blanco_River_at_Fischer_Store_Road_near_Fischer
   nwis_id: 08170950
   state: TX
@@ -27,6 +28,7 @@ sites:
   score: 0.25
   live: false
   tier: C
+  batch: 1
 - cam_id: TX_Blanco_River_at_Crabapple_Road_near_Blanco
   nwis_id: 08170800
   state: TX
@@ -37,6 +39,7 @@ sites:
   score: 0.11
   live: true
   tier: B
+  batch: 1
 - cam_id: TX_Blanco_River_at_Wimberley
   nwis_id: 08171000
   state: TX
@@ -47,6 +50,7 @@ sites:
   score: 0.0944
   live: false
   tier: C
+  batch: 1
 - cam_id: NY_Genesee_River_at_Avon_Staff_Gage
   nwis_id: 04228500
   state: NY
@@ -57,6 +61,7 @@ sites:
   score: 1.0
   live: false
   tier: C
+  batch: 1
 - cam_id: TX_Elm_Fk_Trinity_Rv_nr_Lewisville
   nwis_id: 08053000
   state: TX
@@ -67,6 +72,7 @@ sites:
   score: 1.0
   live: true
   tier: B
+  batch: 1
 - cam_id: OH_Tiffin_River_near_Evansport
   nwis_id: 04185318
   state: OH
@@ -77,6 +83,7 @@ sites:
   score: 1.0
   live: true
   tier: B
+  batch: 1
 - cam_id: KS_Big_Blue_R_nr_Manhattan
   nwis_id: 06887000
   state: KS
@@ -87,6 +94,7 @@ sites:
   score: 1.0
   live: true
   tier: B
+  batch: 1
 - cam_id: KS_Big_Blue_River_near_Manhattan
   nwis_id: 06887000
   state: KS
@@ -97,6 +105,7 @@ sites:
   score: 1.0
   live: true
   tier: B
+  batch: 1
 - cam_id: GA_Savannah_River_at_USACE_Dock_at_Savannah
   nwis_id: 021989773
   state: GA
@@ -107,6 +116,7 @@ sites:
   score: 1.0
   live: true
   tier: B
+  batch: 1
 - cam_id: IL_Illinois_River_at_Henry
   nwis_id: 05558300
   state: IL
@@ -117,6 +127,7 @@ sites:
   score: 1.0
   live: true
   tier: B
+  batch: 1
 - cam_id: MN_Minnesota_River_at_Morton
   nwis_id: 05316580
   state: MN
@@ -127,6 +138,7 @@ sites:
   score: 1.0
   live: false
   tier: C
+  batch: 1
 - cam_id: ID_Clearwater_River_at_Spalding
   nwis_id: '13342500'
   state: ID
@@ -137,6 +149,7 @@ sites:
   score: 1.0
   live: true
   tier: B
+  batch: 1
 - cam_id: WI_Nemadji_River_near_South_Superior
   nwis_id: '04024430'
   state: WI
@@ -147,6 +160,7 @@ sites:
   score: 1.0
   live: false
   tier: C
+  batch: 1
 - cam_id: KS_Kansas_River_at_Wamego
   nwis_id: 06887500
   state: KS
@@ -157,6 +171,7 @@ sites:
   score: 1.0
   live: true
   tier: B
+  batch: 1
 - cam_id: SD_James_River_at_Columbia
   nwis_id: '06471000'
   state: SD
@@ -167,6 +182,7 @@ sites:
   score: 1.0
   live: true
   tier: B
+  batch: 1
 - cam_id: MN_Bois_De_Sioux_River_near_Doran
   nwis_id: '05051300'
   state: MN
@@ -177,6 +193,7 @@ sites:
   score: 1.0
   live: true
   tier: B
+  batch: 1
 - cam_id: OH_Ottawa_River_near_Kalida
   nwis_id: 04188100
   state: OH
@@ -187,6 +204,7 @@ sites:
   score: 1.0
   live: true
   tier: B
+  batch: 1
 - cam_id: NY_Mohawk_River_at_Lock_8_near_Schenectady
   nwis_id: '01354330'
   state: NY
@@ -197,6 +215,7 @@ sites:
   score: 1.0
   live: false
   tier: C
+  batch: 1
 - cam_id: WI_Fox_River_at_Princeton
   nwis_id: '04073365'
   state: WI
@@ -207,6 +226,7 @@ sites:
   score: 1.0
   live: true
   tier: B
+  batch: 1
 - cam_id: MO_Missouri_River_at_Hermann
   nwis_id: 06934500
   state: MO
@@ -217,6 +237,7 @@ sites:
   score: 0.9167
   live: true
   tier: B
+  batch: 1
 - cam_id: IN_St_Joseph_River_near_Newville
   nwis_id: 04178000
   state: IN
@@ -227,6 +248,7 @@ sites:
   score: 0.9167
   live: true
   tier: B
+  batch: 1
 - cam_id: MN_Minnesota_River_near_Jordan_DOWNSTREAM
   nwis_id: '05330000'
   state: MN
@@ -237,6 +259,7 @@ sites:
   score: 0.9167
   live: true
   tier: B
+  batch: 1
 - cam_id: GA_Withlacoochee_River_at_Skipper_Bridge_Road_near_Bemiss
   nwis_id: 023177483
   state: GA
@@ -247,6 +270,7 @@ sites:
   score: 0.9167
   live: true
   tier: B
+  batch: 1
 - cam_id: ND_Missouri_River_below_Mandan
   nwis_id: 06349070
   state: ND
@@ -257,6 +281,7 @@ sites:
   score: 0.9167
   live: true
   tier: B
+  batch: 1
 - cam_id: OH_Auglaize_River_near_Defiance
   nwis_id: 04191500
   state: OH
@@ -267,6 +292,7 @@ sites:
   score: 0.9167
   live: false
   tier: C
+  batch: 1
 - cam_id: IN_WABASH_RIVER_AT_NEW_HARMONY
   nwis_id: 03378500
   state: IN
@@ -277,6 +303,7 @@ sites:
   score: 0.9
   live: true
   tier: B
+  batch: 1
 - cam_id: NY_Mohawk_River_at_Lock_9_at_Rotterdam_Junction_Downstream_Zoom
   nwis_id: '01354230'
   state: NY
@@ -287,6 +314,7 @@ sites:
   score: 0.9
   live: false
   tier: C
+  batch: 1
 - cam_id: MN_Minnesota_River_near_Jordan_UPSTREAM
   nwis_id: '05330000'
   state: MN
@@ -297,6 +325,7 @@ sites:
   score: 0.9
   live: true
   tier: B
+  batch: 1
 - cam_id: MN_Buffalo_River_near_Dilworth
   nwis_id: '05062000'
   state: MN
@@ -307,6 +336,7 @@ sites:
   score: 0.9
   live: true
   tier: B
+  batch: 1
 - cam_id: WI_Chippewa_River_at_Durand
   nwis_id: 05369500
   state: WI
@@ -317,6 +347,7 @@ sites:
   score: 0.9
   live: true
   tier: B
+  batch: 1
 - cam_id: MN_Sprague_Creek_near_Sprague_Manitoba_Canada
   nwis_id: '05106000'
   state: MN
@@ -327,6 +358,7 @@ sites:
   score: 0.9
   live: true
   tier: B
+  batch: 1
 - cam_id: OH_Maumee_River_at_Waterville
   nwis_id: 04193500
   state: OH
@@ -337,6 +369,7 @@ sites:
   score: 0.9
   live: true
   tier: B
+  batch: 1
 - cam_id: IL_Illinois_River_at_Florence
   nwis_id: 05586300
   state: IL
@@ -347,6 +380,7 @@ sites:
   score: 0.8889
   live: false
   tier: C
+  batch: 1
 - cam_id: NE_Missouri_River_at_Decatur
   nwis_id: '06601200'
   state: NE
@@ -357,6 +391,7 @@ sites:
   score: 0.8889
   live: true
   tier: B
+  batch: 1
 - cam_id: AK_Alsek_River_at_Dry_Bay_near_Yakutat
   nwis_id: '15129120'
   state: AK
@@ -367,6 +402,7 @@ sites:
   score: 0.8333
   live: false
   tier: C
+  batch: 1
 - cam_id: SC_Pee_Dee_River_near_Florence_DOWNSTREAM
   nwis_id: 02130810
   state: SC
@@ -377,6 +413,7 @@ sites:
   score: 0.8333
   live: true
   tier: B
+  batch: 1
 - cam_id: SC_Waccamaw_River_at_SC_22_below_Longs
   nwis_id: '02110525'
   state: SC
@@ -387,6 +424,7 @@ sites:
   score: 0.8333
   live: true
   tier: B
+  batch: 1
 - cam_id: WI_Wisconsin_River_at_Muscoda
   nwis_id: '05407000'
   state: WI
@@ -397,6 +435,7 @@ sites:
   score: 0.825
   live: true
   tier: B
+  batch: 1
 - cam_id: KS_Kansas_River_at_De_Soto
   nwis_id: 06892350
   state: KS
@@ -407,3 +446,556 @@ sites:
   score: 0.8148
   live: true
   tier: B
+  batch: 1
+- cam_id: TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca
+  nwis_id: 08158823
+  state: TX
+  lat: 30.1251
+  lng: -97.9057
+  name: Stoneledge Div of Little Bear Ck nr Manchaca
+  swing_ft: 0.45
+  score: 0.1688
+  camera_type: small_stream
+  batch: 2
+  live: false
+- cam_id: TX_Zacate_Ck_at_Laredo
+  nwis_id: 08458995
+  state: TX
+  lat: 27.5361
+  lng: -99.5002
+  name: Zacate Ck at Laredo
+  swing_ft: 0.47
+  score: 0.1371
+  camera_type: small_stream
+  batch: 2
+  live: false
+- cam_id: GA_Sweetwater_Creek_at_Austell
+  nwis_id: 02336910
+  state: GA
+  lat: 33.8178
+  lng: -84.65
+  name: Sweetwater Creek at Austell
+  swing_ft: 3.141
+  score: 1.0
+  camera_type: small_stream
+  batch: 2
+  live: false
+- cam_id: CA_Dutch_Slough_below_Jersey_Island_Road_at_Jersey_Island
+  nwis_id: '11313433'
+  state: CA
+  lat: 38.0135
+  lng: -121.6677
+  name: Dutch Slough below Jersey Island Road at Jersey Island
+  swing_ft: 3.47
+  score: 1.0
+  camera_type: tidal_coastal
+  batch: 2
+  live: false
+- cam_id: WI_Chippewa_River_at_Grand_Ave_at_Eau_Claire
+  nwis_id: 05366800
+  state: WI
+  lat: 44.8096
+  lng: -91.503
+  name: Chippewa River at Grand Ave at Eau Claire
+  swing_ft: 4.67
+  score: 1.0
+  camera_type: cold_climate
+  batch: 2
+  live: false
+- cam_id: MN_Redwood_River_near_Marshall
+  nwis_id: '05315000'
+  state: MN
+  lat: 44.4302
+  lng: -95.8296
+  name: Redwood River near Marshall
+  swing_ft: 2.01
+  score: 1.0
+  camera_type: tidal_coastal
+  batch: 2
+  live: false
+- cam_id: UT_Bear_R_Bay_Outflow_at_Causeway_Brg_nr_Warren
+  nwis_id: '10010060'
+  state: UT
+  lat: 41.2341
+  lng: -112.3372
+  name: Bear R Bay Outflow at Causeway Bridge Near Warren
+  swing_ft: 2.05
+  score: 1.0
+  camera_type: tidal_coastal
+  batch: 2
+  live: false
+- cam_id: GA_Peachtree_Creek_at_Atlanta
+  nwis_id: '02336300'
+  state: GA
+  lat: 33.8203
+  lng: -84.4076
+  name: Peachtree Creek at Atlanta
+  swing_ft: 1.96
+  score: 0.98
+  camera_type: small_stream
+  batch: 2
+  live: false
+- cam_id: ND_Souris_River_near_Sherwood
+  nwis_id: '05114000'
+  state: ND
+  lat: 48.99
+  lng: -101.9583
+  name: Souris River near Sherwood
+  swing_ft: 4.491
+  score: 0.9167
+  camera_type: cold_climate
+  batch: 2
+  live: false
+- cam_id: GA_Big_Creek_near_Alpharetta
+  nwis_id: '02335700'
+  state: GA
+  lat: 34.0506
+  lng: -84.2694
+  name: Big Creek near Alpharetta
+  swing_ft: 2.73
+  score: 0.9167
+  camera_type: small_stream
+  batch: 2
+  live: false
+- cam_id: WI_East_River_at_N_Baird_Street_at_Green_Bay
+  nwis_id: 04085138
+  state: WI
+  lat: 44.5092
+  lng: -87.9918
+  name: East River at N Baird Street at Green Bay
+  swing_ft: 2.62
+  score: 0.9
+  camera_type: tidal_coastal
+  batch: 2
+  live: false
+- cam_id: NY_Schoharie_Creek_at_Prattsville_Upstream_View
+  nwis_id: '01350000'
+  state: NY
+  lat: 42.3194
+  lng: -74.4367
+  name: Schoharie Creek at Prattsville Upstream View
+  swing_ft: 2.39
+  score: 0.8889
+  camera_type: small_stream
+  batch: 2
+  live: false
+- cam_id: WI_Duck_Creek_near_Howard_DOWNSTREAM
+  nwis_id: '04072150'
+  state: WI
+  lat: 44.5334
+  lng: -88.1297
+  name: Duck Creek near Howard DOWNSTREAM
+  swing_ft: 3.52
+  score: 0.8889
+  camera_type: small_stream
+  batch: 2
+  live: false
+- cam_id: AK_Kasilof_River_near_Kasilof
+  nwis_id: '15242000'
+  state: AK
+  lat: 60.3175
+  lng: -151.2619
+  name: Kasilof River near Kasilof
+  swing_ft: 4.52
+  score: 0.875
+  camera_type: cold_climate
+  batch: 2
+  live: false
+- cam_id: ND_Crooked_Creek_near_Emerson
+  nwis_id: 06339200
+  state: ND
+  lat: 47.1826
+  lng: -102.6044
+  name: Crooked Creek near Emerson
+  swing_ft: 1.88
+  score: 0.846
+  camera_type: small_stream
+  batch: 2
+  live: false
+- cam_id: MN_Minnesota_River_at_Mankato_MN
+  nwis_id: '05325000'
+  state: MN
+  lat: 44.17
+  lng: -94.0023
+  name: Minnesota River at Mankato MN
+  swing_ft: 5.87
+  score: 0.8333
+  camera_type: large_river
+  batch: 2
+  live: false
+- cam_id: OH_Platter_Creek_near_Sherwood
+  nwis_id: 04183979
+  state: OH
+  lat: 41.2669
+  lng: -84.5919
+  name: Platter Creek near Sherwood
+  swing_ft: 1.869
+  score: 0.8307
+  camera_type: small_stream
+  batch: 2
+  live: false
+- cam_id: MN_Rainy_River_at_Boat_Landing_below_International_Falls
+  nwis_id: 05129515
+  state: MN
+  lat: 48.5922
+  lng: -93.4467
+  name: Rainy River at Boat Landing below International Falls
+  swing_ft: 9.1
+  score: 0.825
+  camera_type: cold_climate
+  batch: 2
+  live: false
+- cam_id: WI_Cedar_Creek_near_Cedarburg
+  nwis_id: 04086500
+  state: WI
+  lat: 43.3231
+  lng: -87.9786
+  name: Cedar Creek near Cedarburg
+  swing_ft: 1.65
+  score: 0.825
+  camera_type: small_stream
+  batch: 2
+  live: false
+- cam_id: MN_Thief_River_near_Thief_River_Falls
+  nwis_id: '05076000'
+  state: MN
+  lat: 48.1855
+  lng: -96.17
+  name: Thief River near Thief River Falls
+  swing_ft: 4.18
+  score: 0.8
+  camera_type: cold_climate
+  batch: 2
+  live: false
+- cam_id: WI_Wolf_River_at_New_London
+  nwis_id: 04079000
+  state: WI
+  lat: 44.3922
+  lng: -88.7404
+  name: Wolf River at New London
+  swing_ft: 8.06
+  score: 0.8
+  camera_type: large_river
+  batch: 2
+  live: false
+- cam_id: OH_Blanchard_River_near_Dupont
+  nwis_id: 04190000
+  state: OH
+  lat: 41.0414
+  lng: -84.2269
+  name: Blanchard River near Dupont
+  swing_ft: 9.29
+  score: 0.8
+  camera_type: large_river
+  batch: 2
+  live: false
+- cam_id: NY_MOHAWK_RIVER_AT_LOCK_9_AT_ROTTERDAM_JUNCTION_NY
+  nwis_id: '01354230'
+  state: NY
+  lat: 42.8783
+  lng: -74.0408
+  name: Mohawk River at Lock 9 at Rotterdam Junction Downstream View
+  swing_ft: 10.89
+  score: 0.8
+  camera_type: large_river
+  batch: 2
+  live: false
+- cam_id: ND_Cherry_Creek_on_State_Highway_23_near_Schafer
+  nwis_id: '06337200'
+  state: ND
+  lat: 47.8052
+  lng: -103.176
+  name: Cherry Creek on State Highway 23 near Schafer
+  swing_ft: 2.053
+  score: 0.7875
+  camera_type: small_stream
+  batch: 2
+  live: false
+- cam_id: ND_Missouri_River_at_Bismarck
+  nwis_id: '06342500'
+  state: ND
+  lat: 46.8142
+  lng: -100.8214
+  name: Missouri River at Bismarck
+  swing_ft: 5.22
+  score: 0.7778
+  camera_type: cold_climate
+  batch: 2
+  live: false
+- cam_id: OH_Eagle_Creek_above_Findlay
+  nwis_id: 04188496
+  state: OH
+  lat: 40.9792
+  lng: -83.6533
+  name: Eagle Creek above Findlay
+  swing_ft: 3.7
+  score: 0.7778
+  camera_type: small_stream
+  batch: 2
+  live: false
+- cam_id: OH_St_Marys_River_at_Walcot_Street_at_Willshire
+  nwis_id: 04181049
+  state: OH
+  lat: 40.7489
+  lng: -84.7892
+  name: St Marys River at Walcot Street at Willshire
+  swing_ft: 7.95
+  score: 0.7778
+  camera_type: large_river
+  batch: 2
+  live: false
+- cam_id: MN_Minnehaha_Creek_below_Grays_Bay_Dam_in_Minnetonka
+  nwis_id: 05289100
+  state: MN
+  lat: 44.9533
+  lng: -93.4872
+  name: Minnehaha Creek below Grays Bay Dam in Minnetonka
+  swing_ft: 1.55
+  score: 0.775
+  camera_type: tidal_coastal
+  batch: 2
+  live: false
+- cam_id: SC_CROOKED_CREEK_BELOW_N_MARLBORO_ST_AT_BENNETTSVILLE
+  nwis_id: 021305805
+  state: SC
+  lat: 34.6198
+  lng: -79.6857
+  name: CROOKED CREEK BELOW N MARLBORO ST AT BENNETTSVILLE
+  swing_ft: 1.68
+  score: 0.77
+  camera_type: small_stream
+  batch: 2
+  live: false
+- cam_id: AK_Red_Cloud_River_at_Anton_Larsen_Bay_near_Kodiak
+  nwis_id: '15297476'
+  state: AK
+  lat: 57.8168
+  lng: -152.6261
+  name: Red Cloud River at Anton Larsen Bay near Kodiak
+  swing_ft: 1.73
+  score: 0.7569
+  camera_type: tidal_coastal
+  batch: 2
+  live: false
+- cam_id: IL_Vermilion_River_near_Danville
+  nwis_id: 03339000
+  state: IL
+  lat: 40.1009
+  lng: -87.5972
+  name: Vermilion River near Danville
+  swing_ft: 9.303
+  score: 0.75
+  camera_type: large_river
+  batch: 2
+  live: false
+- cam_id: CA_Sacramento_River_at_Freeport
+  nwis_id: '11447650'
+  state: CA
+  lat: 38.4557
+  lng: -121.5016
+  name: Sacramento River at Freeport
+  swing_ft: 10.85
+  score: 0.75
+  camera_type: large_river
+  batch: 2
+  live: false
+- cam_id: WA_Cowlitz_River_at_Castle_Rock
+  nwis_id: '14243000'
+  state: WA
+  lat: 46.2748
+  lng: -122.9146
+  name: Cowlitz River at Castle Rock
+  swing_ft: 7.86
+  score: 0.75
+  camera_type: cold_climate
+  batch: 2
+  live: false
+- cam_id: AK_Anchor_River_near_Anchor_Point
+  nwis_id: '15239900'
+  state: AK
+  lat: 59.7466
+  lng: -151.7552
+  name: Anchor River near Anchor Point
+  swing_ft: 3.88
+  score: 0.7292
+  camera_type: cold_climate
+  batch: 2
+  live: false
+- cam_id: ME_Kennebec_River_at_Calumet_Bridge_at_Augusta
+  nwis_id: 01049320
+  state: ME
+  lat: 44.3186
+  lng: -69.7717
+  name: Kennebec River at Calumet Bridge at Augusta
+  swing_ft: 6.99
+  score: 0.7
+  camera_type: large_river
+  batch: 2
+  live: false
+- cam_id: NY_Mohawk_River_at_Lock_9_at_Rotterdam_Junction_Upstream
+  nwis_id: '01354230'
+  state: NY
+  lat: 42.8783
+  lng: -74.0408
+  name: Mohawk River at Lock 9 at Rotterdam Junction Upstream
+  swing_ft: 10.89
+  score: 0.7
+  camera_type: large_river
+  batch: 2
+  live: false
+- cam_id: WA_Pend_Oreille_River_at_Newport
+  nwis_id: '12395500'
+  state: WA
+  lat: 48.1822
+  lng: -117.0342
+  name: Pend Oreille River at Newport
+  swing_ft: 8.33
+  score: 0.6667
+  camera_type: cold_climate
+  batch: 2
+  live: false
+- cam_id: ND_Edmore_Coulee_Trib_nr_Webster
+  nwis_id: '05056215'
+  state: ND
+  lat: 48.2664
+  lng: -98.6809
+  name: Edmore Coulee Trib nr Webster
+  swing_ft: 5.11
+  score: 0.6667
+  camera_type: cold_climate
+  batch: 2
+  live: false
+- cam_id: AK_Salmon_River_near_Hyder
+  nwis_id: '15008000'
+  state: AK
+  lat: 56.0258
+  lng: -130.067
+  name: Salmon River near Hyder
+  swing_ft: 4.0
+  score: 0.6667
+  camera_type: cold_climate
+  batch: 2
+  live: false
+- cam_id: CA_Georgiana_Slough_Salmonid_Migratory_Barrier
+  nwis_id: '381427121305401'
+  state: CA
+  lat: 38.2409
+  lng: -121.5158
+  name: Sacramento R bl Walnut Grove Br A Walnut Grove
+  swing_ft: 5.34
+  score: 0.6667
+  camera_type: tidal_coastal
+  batch: 2
+  live: false
+- cam_id: PA_Pine_Creek_at_Grant_Avenue_at_Etna
+  nwis_id: 03049807
+  state: PA
+  lat: 40.5031
+  lng: -79.9484
+  name: Pine Creek at Grant Avenue at Etna
+  swing_ft: 1.85
+  score: 0.6595
+  camera_type: small_stream
+  batch: 2
+  live: false
+- cam_id: OH_Maumee_River_at_Antwerp
+  nwis_id: 04183500
+  state: OH
+  lat: 41.1989
+  lng: -84.7444
+  name: Maumee River at Antwerp
+  swing_ft: 8.32
+  score: 0.6562
+  camera_type: large_river
+  batch: 2
+  live: false
+- cam_id: CA_Suisun_Slough_nr_Benicia
+  nwis_id: '11455740'
+  state: CA
+  lat: 38.1238
+  lng: -122.0814
+  name: Suisun Slough nr Benicia
+  swing_ft: 4.95
+  score: 0.6562
+  camera_type: tidal_coastal
+  batch: 2
+  live: false
+- cam_id: MI_Kawkawlin_River_at_State_Park_Dr_at_Bay_City
+  nwis_id: '04143600'
+  state: MI
+  lat: 43.6516
+  lng: -83.8978
+  name: Kawkawlin River at State Park Dr at Bay City
+  swing_ft: 2.51
+  score: 0.6
+  camera_type: tidal_coastal
+  batch: 2
+  live: false
+- cam_id: NY_Canajoharie_Creek_near_Canajoharie
+  nwis_id: 01349150
+  state: NY
+  lat: 42.8763
+  lng: -74.6029
+  name: Canajoharie Creek near Canajoharie
+  swing_ft: 2.26
+  score: 0.5714
+  camera_type: small_stream
+  batch: 2
+  live: false
+- cam_id: CA_Green_Slough_nr_Courtland
+  nwis_id: '381905121413901'
+  state: CA
+  lat: 38.3179
+  lng: -121.6942
+  name: Green Slough nr Courtland
+  swing_ft: 3.61
+  score: 0.5714
+  camera_type: tidal_coastal
+  batch: 2
+  live: false
+- cam_id: NY_Rondout_Creek_at_Rondout
+  nwis_id: '01372007'
+  state: NY
+  lat: 41.9181
+  lng: -73.9817
+  name: Rondout Creek at Rondout
+  swing_ft: 4.42
+  score: 0.5556
+  camera_type: small_stream
+  batch: 2
+  live: false
+- cam_id: TX_Trinity_Rv_nr_Rosser
+  nwis_id: 08062500
+  state: TX
+  lat: 32.4265
+  lng: -96.463
+  name: Trinity Rv nr Rosser
+  swing_ft: 11.07
+  score: 0.5093
+  camera_type: large_river
+  batch: 2
+  live: false
+- cam_id: PA_West_Branch_Susquehanna_River_at_Lewisburg
+  nwis_id: '01553500'
+  state: PA
+  lat: 40.9676
+  lng: -76.8764
+  name: West Branch Susquehanna River at Lewisburg
+  swing_ft: 6.24
+  score: 0.5
+  camera_type: large_river
+  batch: 2
+  live: false
+- cam_id: AK_Taku_River_near_Juneau
+  nwis_id: '15041200'
+  state: AK
+  lat: 58.5383
+  lng: -133.7017
+  name: Taku River near Juneau
+  swing_ft: 7.19
+  score: 0.4667
+  camera_type: cold_climate
+  batch: 2
+  live: false
+selection_b2: scripts/onboard_pool.py --diverse → results/onboarding/candidates_ranked_b2.csv
+  (D-0013 W5-1)
