@@ -85,6 +85,11 @@ def summarise():
                      "listed": fe.get("listed"), "selected": fe.get("selected"), "nims_calls": fe.get("nims_calls"),
                      "downloads": fe.get("downloads"), **{f"s_{k}": v for k, v in s.items()}, "error": r.get("error")})
     df = pd.DataFrame(rows)
+    if not df.empty:                                     # camera type + batch (D-0013: % qualifying by type)
+        from riversight.onboard.types import camera_type
+        fl = {x["cam_id"]: x for x in yaml.safe_load(FLEET.read_text(encoding="utf-8"))["sites"]} if FLEET.exists() else {}
+        df["camera_type"] = [camera_type(c, fl.get(c, {}).get("state"), fl.get(c, {}).get("lat")) for c in df["cam_id"]]
+        df["batch"] = [fl.get(c, {}).get("batch", 1) for c in df["cam_id"]]
     if df.empty:
         print("no onboarding records yet")
         return
@@ -132,7 +137,8 @@ def cost(done: pd.DataFrame):
            "mb_downloaded_median": float(np.median(mb)),
            "fetch_wall_s_median": float(done["s_fetch"].median()) if "s_fetch" in done else None,
            "cpu_s_median": float(cpu_s.median()), "cpu_s_p90": float(cpu_s.quantile(0.9)),
-           "usd_per_site_median": float(cpu_s.median() / 3600 * VCPU_USD_H)}
+           "usd_per_site_median": float(cpu_s.median() / 3600 * VCPU_USD_H),
+           "cameras_per_cpu_hour": float(3600 * len(done) / cpu_s.sum()) if cpu_s.sum() else None}
     proj = {"cameras": HIVIS_GAUGED,
             "nims_listing_calls": per["nims_listing_calls_median"] * HIVIS_GAUGED,
             "gb_downloaded": per["mb_downloaded_median"] * HIVIS_GAUGED / 1000,
@@ -184,11 +190,19 @@ def readme(df: pd.DataFrame):
     if cp.exists():
         c = json.loads(cp.read_text(encoding="utf-8"))
         pc, pj = c["per_camera"], c["projection_all_gauged_hivis"]
+        if "camera_type" in done:
+            g = done.groupby("camera_type").agg(n=("cam_id", "size"), b=("live_eligible", lambda x: int(x.fillna(False).astype(bool).sum())),
+                                                 nmae=("nmae", "median"), mae=("mae", "median"))
+            L += ["", "## Qualifying by camera type (type from the camera id, state and latitude: `riversight.onboard.types`)", "",
+                  "| camera type | onboarded | tier B (served) | % qualifying | median CV nMAE | median CV MAE ft |", "|---|---|---|---|---|---|"]
+            for t, r in g.iterrows():
+                L.append(f"| {t} | {int(r.n)} | {int(r.b)} | {100 * r.b / r.n:.0f} % | {f(r.nmae, 3)} | {f(r.mae)} |")
         L += ["", "## Cost to onboard one camera (`cost.json`)", "",
               f"Medians over {pc['sites_measured']} finished sites: {pc['nims_listing_calls_median']:.0f} NIMS listing calls, "
               f"{pc['usgs_iv_requests_per_site']} USGS IV requests (8 gauges per request), {pc['mb_downloaded_median']:.0f} MB of "
               f"720-px frames, fetch {pc['fetch_wall_s_median']:.0f} s wall, **{pc['cpu_s_median'] / 60:.0f} CPU-minutes** "
               f"(p90 {pc['cpu_s_p90'] / 60:.0f}), **${pc['usd_per_site_median']:.3f}** at {c['price_basis']}.",
+              f"Throughput: **{pc.get('cameras_per_cpu_hour') or 0:.2f} cameras per CPU-hour** (all finished sites).",
               f"Projected to all {pj['cameras']} gauged HIVIS cameras: {pj['cpu_hours']:.0f} CPU-hours "
               f"(**${pj['usd_compute']:.0f}** compute; {pj['wall_hours_cpu_on_16_vcpu']:.0f} h on 16 vCPU), "
               f"{pj['gb_downloaded']:.0f} GB of frames, {pj['nims_listing_calls']:.0f} NIMS calls "

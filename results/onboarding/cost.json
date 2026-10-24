@@ -8,7 +8,8 @@
     "fetch_wall_s_median": 145.65,
     "cpu_s_median": 4043.3999999999996,
     "cpu_s_p90": 6650.93,
-    "usd_per_site_median": 0.054922849999999995
+    "usd_per_site_median": 0.054922849999999995,
+    "cameras_per_cpu_hour": 0.8813338988559184
   },
   "projection_all_gauged_hivis": {
     "cameras": 880,

@@ -59,9 +59,19 @@ Same last-2-month test set for every calibration length, 29 sites (kill-test his
 | median nMAE | 0.130 | 0.107 | 0.108 | 0.113 | 0.124 | 0.122 |
 | P1 sites | 13 | 16 | 17 | 17 | 13 | 16 |
 
+## Qualifying by camera type (type from the camera id, state and latitude: `riversight.onboard.types`)
+
+| camera type | onboarded | tier B (served) | % qualifying | median CV nMAE | median CV MAE ft |
+|---|---|---|---|---|---|
+| cold_climate | 10 | 8 | 80 % | 0.186 | 1.27 |
+| large_river | 27 | 20 | 74 % | 0.147 | 1.06 |
+| small_stream | 1 | 1 | 100 % | 0.133 | 0.71 |
+| tidal_coastal | 2 | 1 | 50 % | 0.051 | 0.43 |
+
 ## Cost to onboard one camera (`cost.json`)
 
 Medians over 40 finished sites: 37 NIMS listing calls, 0.125 USGS IV requests (8 gauges per request), 119 MB of 720-px frames, fetch 146 s wall, **67 CPU-minutes** (p90 111), **$0.055** at m9g.large $0.0978/h on-demand (2 vCPU).
+Throughput: **0.88 cameras per CPU-hour** (all finished sites).
 Projected to all 880 gauged HIVIS cameras: 988 CPU-hours (**$48** compute; 62 h on 16 vCPU), 105 GB of frames, 32560 NIMS calls (36 h of polite sequential fetching). CPU-seconds measured on the x86 dev box (sam-mega-pc), single thread per site.
 
 ## Hand-off to W1
