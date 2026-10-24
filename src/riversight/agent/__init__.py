@@ -64,8 +64,38 @@ def alert_hysteresis(event: Event, d: Decision, sink: Sink) -> Decision:
     return d
 
 
+TICKET_HOLD_H = 24.0
+
+
+def ticket_hysteresis(event: Event, d: Decision, sink: Sink) -> Decision:
+    """One open ticket per site and kind per TICKET_HOLD_H. A camera that stays moved / out of range would
+    otherwise get a new recalibration ticket (and an approval email) every cycle — 13 for Animas on Oct 23
+    between 21:32 and 00:47 UTC."""
+    tickets = [a for a in d["actions"] if a["type"] == "OPEN_TICKET"]
+    if not tickets:
+        return d
+    t = pd.Timestamp((event.get("reading") or {}).get("t_frame") or pd.Timestamp.now(tz="UTC"))
+    keep, dropped = [], []
+    for a in tickets:
+        kind = (a.get("args") or {}).get("kind") or "other"
+        key = f"live/agent/tickets/{event.get('cam_id')}__{kind}.json"
+        txt = sink.get_text(key)
+        last = json.loads(txt) if txt else None
+        if last and (t - pd.Timestamp(last["t"])).total_seconds() < TICKET_HOLD_H * 3600:
+            dropped.append(f"{kind} (open since {last['t']})")
+        else:
+            sink.put_json(key, {"t": t.isoformat(), "kind": kind})
+            keep.append(a)
+    if dropped:
+        d["actions"] = [a for a in d["actions"] if a["type"] != "OPEN_TICKET"] + keep
+        d["suppressed_tickets"] = dropped
+        d["rationale"] += f" [ticket already open: {', '.join(dropped)}; duplicate suppressed]"
+        d = schema.finalize(event, d)
+    return d
+
+
 def second_opinion(event: Event, ctx: ToolContext, d: Decision, converse=None) -> Decision:
-    """Sonnet 5.5 re-decides an event whose Haiku decision would page a human (RIVERSIGHT_AGENT_ESCALATE=1).
+    """Sonnet 4.6 re-decides an event whose Haiku 4.5 decision would page a human (RIVERSIGHT_AGENT_ESCALATE=1).
     The Haiku decision stands; disagreement is recorded so the approver sees it."""
     from riversight.agent import llm
     try:
@@ -118,6 +148,7 @@ def handle(event: Event, ctx: ToolContext | None = None, model: str | None = Non
             d["fallback_reason"] = f"{type(e).__name__}: {str(e)[:200]}"
     if event.get("mode", "live") != "eval":           # eval episodes are independent; live/replay keep state
         d = alert_hysteresis(event, d, sink)
+        d = ticket_hysteresis(event, d, sink)
     if record:
         ledger.add(d.get("tokens_in", 0) + d.get("tokens_out", 0), d.get("usd", 0.0))
     if write_log:

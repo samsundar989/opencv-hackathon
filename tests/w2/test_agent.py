@@ -214,6 +214,19 @@ def test_alert_hysteresis_suppresses_repeat_drafts(tmp_path, monkeypatch):
     assert out[1]["approval_id"] is None and "duplicate suppressed" in out[1]["rationale"]
 
 
+def test_ticket_hysteresis_one_open_ticket_per_site_and_kind(tmp_path, monkeypatch):
+    """Regression (live Animas, Oct 23): a persistent view change opened a recalibration ticket every cycle."""
+    canned(monkeypatch, image_quality=GOOD_Q, reregister_fullres={"best": {"ok": False, "inliers": 3}})
+    sink = Sink(local_dir=tmp_path, bucket="")
+    out = []
+    for hour in (0, 1, 2, 30):
+        e = ev(["VIEW_CHANGE"], recent_flags=[["VIEW_CHANGE"], ["VIEW_CHANGE"]], mode="replay")
+        e["reading"]["t_frame"] = (pd.Timestamp("2026-10-23T21:00Z") + pd.Timedelta(hours=hour)).isoformat()
+        out.append(agent.handle(e, ctx=tools.ToolContext(sink=sink), use_llm=False))
+    assert ["OPEN_TICKET" in schema.action_types(d) for d in out] == [True, False, False, True]
+    assert all("QUARANTINE" in schema.action_types(d) for d in out) and out[1]["approval_id"] is None
+
+
 def test_token_cap_falls_back_to_rules(tmp_path, monkeypatch):
     canned(monkeypatch, get_gauge={"latest_ft": 4.2, "age_min": 15, "change_1h_ft": 0.1}, get_nws_forecast={"available": False})
     sink = Sink(local_dir=tmp_path, bucket="")
