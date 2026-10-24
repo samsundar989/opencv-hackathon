@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Fleet camera-health QA: offline cameras, view changes, IR stuck on, lens degradation, gauge vs camera.">
+<title>RiverSight — camera health</title>
+<link rel="stylesheet" href="assets/app.css">
+<script src="assets/common.js"></script>
+</head>
+<body>
+<main>
+  <h1>Camera health</h1>
+  <p class="lede">USGS runs about 1,300 river cameras and nobody watches them. River Steward checks every served camera from its own recent
+    frames, the same OpenCV measurements the live pipeline makes: is it offline, has the view moved, is IR stuck on, is the lens degrading,
+    does the camera disagree with the gauge? Each finding is a <b>ticket draft</b>. Nothing is sent anywhere until an operator approves it.</p>
+  <div class="panel strip" id="sum">Loading…</div>
+  <h2>Checks</h2>
+  <div class="kpis" id="checks"></div>
+  <h2>Findings</h2>
+  <div id="list"></div>
+</main>
+<script>
+(async () => {
+  const LAB = { offline: "offline (no frame > 6 h in daylight)", view_changed: "view changed (frames don't register)",
+    ir_stuck_on: "IR stuck on in daylight", lens_degradation: "lens degrading (sharpness / haze trend)",
+    gauge_vs_camera: "camera vs gauge persistently apart" };
+  let h;
+  try { h = await RS.json("live/agent/health.json"); }
+  catch (e) { document.getElementById("sum").innerHTML = `<span class="err">No health report yet (${RS.esc(e.message)}).</span>`; return; }
+  document.getElementById("sum").innerHTML = `<span><b>${h.n_sites}</b> cameras checked</span><span><b>${h.n_sites_with_issues}</b> need attention</span>
+    <span><b>${h.n_issues}</b> findings</span><span class="muted small">window ${h.window_days} days · updated ${RS.ago(h.generated_utc)} · ${RS.esc(h.note || "")}</span>`;
+  const issues = h.sites.flatMap((s) => (s.issues || []).map((i) => ({ ...i, cam_id: s.cam_id, last_frame: s.last_frame })));
+  document.getElementById("checks").innerHTML = (h.checks || []).map((c) => `<div class="panel kpi"><div class="v">${issues.filter((i) => i.check === c).length}</div>
+    <div class="l">${RS.esc(LAB[c] || c)}</div></div>`).join("");
+  issues.sort((a, b) => (b.severity || 0) - (a.severity || 0) || a.cam_id.localeCompare(b.cam_id));
+  document.getElementById("list").innerHTML = issues.length ? issues.map((i) => `<article class="panel" style="margin-bottom:12px">
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        ${(i.images || [])[1] || (i.images || [])[0] ? `<img loading="lazy" src="${RS.esc((i.images || [])[1] || i.images[0])}" alt="Latest frame from ${RS.esc(RS.nice(i.cam_id))}" style="width:240px;max-width:100%;border-radius:8px">` : ""}
+        <div style="flex:1;min-width:220px">
+          <b><a href="site.html?cam=${encodeURIComponent(i.cam_id)}">${RS.esc(RS.nice(i.cam_id))}</a></b>
+          <span class="pill ${i.severity >= 3 ? "view_change" : "pending"}">${RS.esc(LAB[i.check] || i.check)}</span>
+          <p class="small" style="margin:6px 0">${RS.esc(i.summary || "")}</p>
+          <p class="small muted" style="margin:0">evidence: ${RS.esc(Object.entries(i.evidence || {}).map(([k, v]) => `${k.replace(/_/g, " ")} ${v}`).join(" · "))}
+            ${i.last_frame ? ` · last frame ${RS.ago(i.last_frame)}` : ""}</p>
+          ${i.ticket_draft ? `<div class="decision small" style="margin-top:8px"><b>Ticket draft</b> <span class="pill provisional">needs operator approval · not sent</span><br>${RS.esc(i.ticket_draft.text || "")}</div>` : ""}
+        </div></div></article>`).join("")
+    : `<p>No findings: every camera looks healthy.</p>`;
+})();
+</script>
+</body>
+</html>

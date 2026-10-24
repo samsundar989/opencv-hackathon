@@ -759,6 +759,13 @@ def run_cycle(store, models: list[SiteModel], agent_fn=default_agent_fn, now: da
         build_feed(store, models, idx)
     except Exception:
         traceback.print_exc()
+    try:                                            # W2 fleet camera-health QA (D-0013 W2-3), at most hourly
+        last = (store.get_json("live/agent/health.json") or {}).get("generated_utc")
+        if not last or (pd.Timestamp.now(tz="UTC") - pd.Timestamp(last)).total_seconds() >= 55 * 60:
+            from riversight.agent.health import write_health
+            write_health(store)
+    except Exception:
+        traceback.print_exc()
     try:                                            # W2: ranked "needs a person" list for the dashboard
         from riversight.agent.triage import write_triage
         write_triage(store)

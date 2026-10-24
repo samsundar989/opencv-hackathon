@@ -1,6 +1,6 @@
 // RiverSight dashboard: shared helpers (no build step).
 const RS = (() => {
-  const NAV = [["index.html", "Live"], ["judge.html", "Judges: start here"], ["approvals.html", "Approvals"], ["proof.html", "Proof"], ["api.html", "Data API"]];
+  const NAV = [["index.html", "Live"], ["judge.html", "Judges: start here"], ["approvals.html", "Approvals"], ["health.html", "Camera health"], ["proof.html", "Proof"], ["api.html", "Data API"]];
 
   function header() {
     const here = location.pathname.split("/").pop() || "index.html";
@@ -88,7 +88,7 @@ const RS = (() => {
     error: "This site failed in the last cycle; the other sites were not affected.", pending: "Waiting for the first reading." };
   // headline "RiverSight stage" (D-0013 W1-1): fused value + provenance
   const SRC = { "gauge": ["gauge", "ok", "The USGS gauge is reporting, so RiverSight shows the gauge."],
-    "camera gap-fill": ["camera gap-fill", "provisional", "The gauge is down: the camera's reading, anchored to the gauge's last 48 h, fills the gap. σ grows the longer it lasts."],
+    "camera gap-fill": ["camera gap-fill", "provisional", "The gauge is down: the camera's reading, anchored to the gauge's last 48 h, fills the gap. σ grows the longer it lasts; treat it as a lower bound on the uncertainty (it is under-dispersed in W4's outage simulation)."],
     "last gauge": ["last gauge, σ growing", "night", "No fresh gauge and no usable camera frame: the last value, with uncertainty growing at the river's own rate of change."],
     "lower bound": ["lower bound", "above_range", "Above the camera's calibrated range with the gauge down: the river is at least this high."] };
   function fused(r) {
