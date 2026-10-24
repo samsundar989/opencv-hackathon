@@ -10,6 +10,7 @@ import hashlib
 import hmac
 import json
 import os
+import re
 from datetime import datetime, timezone
 
 import boto3
@@ -17,6 +18,14 @@ import boto3
 s3 = boto3.client("s3")
 BUCKET = os.environ["BUCKET"]
 PREFIX = "live/approvals/"
+
+
+ID_RE = re.compile(r"[A-Za-z0-9_-]{1,64}")
+
+
+def valid_id(aid: str) -> bool:
+    """Approval ids from the cycle (hex) and from the agent (apr-YYYYMMDD-hex): letters, digits, '-', '_'."""
+    return bool(ID_RE.fullmatch(aid or ""))
 
 
 def _resp(code, body):
@@ -60,7 +69,7 @@ def handler(event, context):
     if method != "POST" or len(parts) != 3:
         return _resp(405, {"error": "method not allowed"})
     aid = parts[2]
-    if not aid.isalnum() or len(aid) > 64:
+    if not valid_id(aid):
         return _resp(400, {"error": "bad id"})
     try:
         body = json.loads(event.get("body") or "{}")
