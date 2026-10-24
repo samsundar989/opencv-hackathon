@@ -274,21 +274,30 @@ Flags raised: VIEW_CHANGE 13, LOW_QUALITY 8, GAUGE_STALE 0, DISAGREE 14, RISING 
 
 ### 6.10 Onboarding new cameras and real gauge outages
 
-**How much gauge history does a new camera need?** For 10 kill-test cameras, the frozen setting was refit on only the last N days of history before the same two test months (W5, `results/onboarding/fewshot*.csv`; history before 2026-10-03 only, so the frozen test days are untouched).
+**Onboarding beyond the 20 (W5, `results/onboarding/README.md`).** One command per camera (`scripts/onboard_site.py`) fetches 12 months of frames and gauge data, builds a reference, registers, extracts features, runs the same forward-chaining CV and assigns a tier with the frozen D-0007 setting, with no per-site tuning. These cameras were onboarded on Oct 24–25 and are not part of the frozen test.
+- 40 cameras attempted, 39 finished: 29 tier B (eligible to serve), 10 tier C (registration under 80 % or weak correlation).
+- Tier B: median CV MAE 0.93 ft, median nMAE 0.136. These are mostly large rivers (Missouri, Illinois, Wabash) whose stage ranges are many feet, so the absolute error is larger and the relative error is about the frozen 20-site CV's (nMAE 0.145).
+- As with the first 20, the camera beats a 24-hour-old gauge value at only 3 of 29 tier-B sites. It is a gap-filler, not a replacement.
+- Cost per new camera (median of 39): 66 CPU-minutes and about 116 MB of frames, about $0.054 at m9g.large on-demand. Projected to all 880 gauged HIVIS cameras: about $48 of compute and 102 GB of frames.
+
+**How much gauge history does a new camera need?** For each of 29 sites, refit on only the last N days before the same two test months:
 
 <!-- BEGIN:fewshot -->
 | days of calibration | 14 | 30 | 60 | 90 | 180 | 365 |
 |---|---|---|---|---|---|---|
-| median MAE ft | 0.238 | 0.236 | 0.223 | 0.254 | 0.227 | 0.249 |
-| median nMAE | 0.113 | 0.089 | 0.102 | 0.131 | 0.137 | 0.150 |
-| P1 sites (of 10) | 7 | 9 | 9 | 7 | 7 | 6 |
+| median MAE ft | 0.747 | 0.515 | 0.529 | 0.532 | 0.537 | 0.513 |
+| median nMAE | 0.130 | 0.107 | 0.108 | 0.113 | 0.124 | 0.122 |
+| P1 sites (of 29) | 13 | 16 | 17 | 17 | 13 | 16 |
 <!-- END:fewshot -->
 
-About a month of overlap with the gauge is already enough; more history does not help the frozen setting, and a full year is slightly worse, consistent with the drift in §6.12. This makes onboarding the rest of the gauged HIVIS fleet cheap. W5's pipeline (`scripts/onboard_*.py`) runs the same frozen-setting code end to end.
+About a month of overlap with the gauge is enough. More history does not help the frozen setting, which matches the drift in §6.12.
 
-**Real gauge outages** (W5, `results/real_outages/README.md`). Over the last 12 months, 531 of the 875 gauges behind gauged HIVIS cameras had at least one outage of 6 h or more: 3,734 outages, with a median length of 15.0 h, 984 lasting a day or more and 303 a week or more. For 795 of the outages checked, the camera kept posting daylight frames while the gauge was dark. Gauges do go dark, and the cameras usually keep running.
-
-At our 20 calibrated sites, few outages are scorable, and in most of them the river barely moved. For hard gaps scored when the gauge came back (refit without the outage ± 7 days), the camera was closer than the last known value in 1 of 16. In 14 of those the river moved less than 0.25 ft, and holding the last reading is nearly exact. Where the river did move: at Clear Fork Trinity (56 h gap) the camera bridged it, 0.11 ft against 0.34 ft for the last known value; at Root River (758 h, winter ice) it failed, 1.34 against 0.35 ft. So far that is one real outage bridged and one failure, not a statistic. The frozen-test gap-fill result (§6.4) remains the main evidence, and the outage catalogue shows how often the situation arises.
+**Real gauge outages** (W5, `results/real_outages/README.md`).
+- **How often:** over the last 12 months, 531 of the 875 gauges behind gauged HIVIS cameras had at least one outage of 6 h or more: 3,734 outages, median 15.0 h, 984 lasting a day or more and 303 a week or more. For 1,042 of the 1,635 outages checked, the camera kept posting daylight frames while the gauge was dark.
+- **How the camera did**, scored at the moment the gauge came back, against holding the last known value. Two variants: *causal* (refit only on data before the outage, which is what a live system could do) and a *hindsight reconstruction* that excludes the outage ± 7 days but uses data after it.
+  - Most outages are on a quiet river. In 44 of 60 hindsight-scored gaps the river moved less than 0.25 ft, and holding the last reading is nearly exact.
+  - Where the river moved 0.25 ft or more, the camera was closer in **5 of 10** gaps (causal) and **6 of 16** (hindsight). The clearest win: during a 44-day estimated outage on the Clearwater River at Spalding, the camera's MAE was 0.98 ft against 1.80 ft for the last known value (hindsight refit). Losses include Missouri River at Hermann and a winter ice gap on the Root River.
+  - So the camera helps when the river moves while the gauge is dark, which is when a fill-in matters. It wins about half those cases, not all of them.
 
 ### 6.11 Model v2 candidate: DINOv2 features in `cv2.dnn`
 

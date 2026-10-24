@@ -28,7 +28,8 @@ _Flood-height map: each patch is coloured by the stage at which it goes under wa
 - **Live, prospective:** the deployed models are scored on every live daylight reading against the gauge, pre-registered before the first cycle. Report §6.9 has the current table (`results/live_prospective/`). In quiet conditions a 24-hour-old gauge value beats the camera, as in the frozen test.
 - **Agent:** on 98 frozen episodes (63 real), the deterministic rules policy is right 93.9 % of the time with no false actions on clean controls. Claude Sonnet 4.6 with the OpenCV tools: 71.4 %. Claude Haiku 4.5: 58.8 %, or 51.4 % without the OpenCV evidence. So the live system decides with rules first, and the LLM is a second opinion (`results/agent_eval/`, report §6.7).
 - **Model v2 candidate:** DINOv2 features run in `cv2.dnn` cut the year-long CV median MAE from 0.380 to 0.252 ft and improve 19 of 20 sites (`results/v2/`, report §6.11). Not yet served.
-- **Gauges do go dark:** 531 of 875 gauges behind HIVIS cameras had an outage of 6 h or more in the past year, and cameras kept posting frames through 795 of the outages checked (`results/real_outages/`).
+- **Gauges do go dark:** 531 of 875 gauges behind HIVIS cameras had an outage of 6 h or more in the past year, and cameras kept posting frames through 1,042 of the 1,635 outages checked. Where the river moved while the gauge was dark, the camera beat the last known value in 5 of 10 gaps with a causal refit (`results/real_outages/`).
+- **Onboarding:** 39 more cameras were onboarded with one command each and the frozen setting (29 tier B, median nMAE 0.136), for about $0.054 of compute per camera (`results/onboarding/`).
 
 ## Not claimed
 
