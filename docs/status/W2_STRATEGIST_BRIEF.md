@@ -1,83 +1,69 @@
-# W2 River Steward: brief for the strategist (Fri 2026-10-23, ~16:45 CT)
+# W2 River Steward: brief for the strategist (Sat 2026-10-24, ~01:30 CT)
 
-**One line:** The agent is fully built and evaluated offline, and the rules baseline is final. The prize-deciding evidence still needs Bedrock, which needs `aws login`. That evidence is LLM-with-OpenCV versus LLM-without-OpenCV. Once Samuel logs in, the remaining arms take about 2 hours to run.
+**One line:** The agent evaluation is final. The deterministic OpenCV-evidence policy (93.9 %) beats Claude Sonnet 4.6 (71.4 %) and Claude Haiku 4.5 (58.8 %), and the live site currently lets Haiku decide. That is **Q-0011**, and it's the one decision W2 needs. The approval round-trip still needs Samuel's token.
 
-## 1. Acceptance (SPRINT_W2), as of now
+## 1. Acceptance (SPRINT_W2 + D-0009 + D-0011), as of now
 
 | item | status | evidence |
 |---|---|---|
-| `handle()` / `rules.handle()` keep the INTERFACES signatures; every behaviour has a test | **done** | `src/riversight/agent/`; `tests/w2/` has 28 tests and the full suite is green |
-| ≥ 60 episodes, expected actions written first, hash before the final arms | **done** | 78 single-camera episodes (48 real), 26 clean controls, 12 fleet cycles; `results/agent_eval/FROZEN.json` (episodes sha `e12e0f29…`) |
-| 3 arms × 3 repeats, 2 LLM models | **1 of 4 arms run** | the rules arm is final. Haiku, Haiku-without-OpenCV and Sonnet are blocked on `aws login` (Q-0008) |
-| ≥ 2 real floods replayed through the full loop, plus a timeline image | **done (rules policy)** | 3 floods through W1's `live.cycle.replay`; `results/agent_eval/replay/` |
-| Live decisions in `live/agent/*.jsonl` and on the dashboard; one real approval round-trip, screenshotted | **not started** | needs W1's G1 deploy, which is also blocked on `aws login` |
-| Kill switch, token cap and audit log demonstrated | **unit-tested only** | still needs a live demo once deployed |
+| `handle()` / `rules.handle()` keep the INTERFACES signatures; every behaviour has a test | **done** | `tests/w2/`: 38 tests, all green |
+| ≥ 60 episodes, expected actions written first, hash before the final arms | **done** | v3: 98 single-camera (63 real), 26 clean controls, 12 fleet cycles; `FROZEN.json` git `47b1298` |
+| 3 arms × 3 repeats, 2 LLM models | **done** | rules 3×, Claude Haiku 4.5 3×, Haiku flags-only 3×, Claude Sonnet 4.6 1× (per ANSWER 0010). Opus 4.5 dropped on budget |
+| D-0009: out-of-range + muddy-water behaviour, with episodes | **done** | 20 episodes (Hancock/Pecatonica floods, Animas live); rules 20/20 |
+| ≥ 2 real floods through the full loop + timeline image | **done (rules)** | 3 floods through W1's `live.cycle.replay`; `results/agent_eval/replay/` |
+| Kill switch, token cap, audit log on the live stack | **done** | `results/agent_eval/live_demo/` |
+| Fleet triage view data | **done** | `live/agent/triage.json`, written by W1's cycle every run |
+| D-0011: connected-inundation overlay | **done** | `render_wet_overlay` uses W1's `wet_connected` |
+| `summary.json` for `/judge` | **done** | `results/agent_eval/summary.json` (+ `LLM_ANALYSIS.md`) |
+| One real approval round-trip, screenshotted | **blocked on Samuel** | token only he has. Approve Animas `apr-20261023-1a09d4dc90` on `/approvals` (W1 fixed the id bug at 401fbed) |
 
-## 2. Numbers we can quote today (all from committed files)
+## 2. Numbers we can quote (all from `results/agent_eval/summary.json`)
 
-Source: `results/agent_eval/REPORT.md` (generated from `results/agent_eval/runs/rules.jsonl`).
+| arm | task success | false actions, clean controls | fleet top-1 | est. $ |
+|---|---|---|---|---|
+| rules (same OpenCV tools) | **93.9 %** | 0.0 % | 91.7 % | 0 |
+| Claude Sonnet 4.6 | 71.4 % | 3.8 % | **100 %** | 5.13 |
+| Claude Haiku 4.5 | 58.8 % (56.1–61.2) | 7.7 % | 44.4 % | 4.33 |
+| Claude Haiku 4.5, flags only | 51.4 % (49.0–55.1) | 15.4 % | 52.8 % | 4.13 |
 
-**Rules baseline, frozen set, 3 repeats (identical, because the policy is deterministic):**
-- Task success **92.3 %**: real episodes 97.9 %, synthetic 83.3 %.
-- False actions on the 26 clean controls: **0**.
-- Unneeded escalations: **0**.
-- Fleet triage: top-1 66.7 %, Kendall τ 0.83.
-- Latency p50 / p95: 1.2 / 15.2 s. This is tool compute; re-registering against up to 12 references drives the p95.
+**OpenCV-evidence effect** (paired, Haiku with tools minus flags only):
+- **Overall:** +7.5 points, **95 % CI −1.4 to +16.3**. Not significant overall.
+- **Decisive where the action depends on the image:**
+  - re-anchoring: +73, and 0 % without registration evidence
+  - muddy-water gap-fill: +89
+  - night gap-fill: +44
+  - false actions on clean controls halve
+- **Negative** on a stuck gauge (−83).
 
-**Rules failures, all honest:**
-- Gauge drift: 0 of 3. The rules have no drift test, by design. This is the headroom an LLM can show.
-- 1 gauge offset.
-- 1 synthetic camera fault too mild to show in the image.
-- 1 rise just under the site p90.
-- Every fleet-triage miss inherits one of these per-event misses.
+**Flood replays** (models trained before each flood): the alert is drafted in the first cycle the gauge crosses p90, at all three floods.
 
-**Flood replays** (models cut 3 days before each rise, so out-of-sample). The alert was drafted **in the first cycle the gauge crossed the site p90** at all three:
+## 3. What to claim, and what not to
 
-| flood | rise |
-|---|---|
-| Salt Creek, Jul 3 | +4.9 ft |
-| Pecatonica, Apr 14 | +3.8 ft |
-| Hancock, Jul 29 | +8.8 ft (StageSight's site) |
+**Claim:**
+- OpenCV evidence drives the actions. The rules policy is 100 % tool evidence.
+- Measured lifts where image facts matter (above).
+- Human approval for every alert and ticket, with kill switch and token cap demonstrated live.
+- Honest multi-model evaluation, with failure modes published.
 
-## 3. What not to claim yet
+**Don't claim:**
+- "The LLM agent beats rules", or any average OpenCV-evidence gain. The CI crosses 0.
+- Any Claude 5.5 model.
+- That the camera measures above its calibrated range: it saturates, and the agent then trusts the gauge.
+- Real gauge outages. Those episodes are synthetic dropouts on real frames.
 
-- **Any LLM-agent number.** None exists yet.
-- **"OpenCV output drives the decisions."** We can't claim this as measured until the no-OpenCV arm (c) runs. The design does support saying "the agent can't decide without OpenCV evidence", and the rules policy depends on tool outputs.
-- **"Real gauge outages."** None over 3 h exists in the 20 site histories. Every gauge-stale episode is a synthetic dropout on a real frame, and is labelled synthetic.
-- **"Real camera view changes."** Say **"real registration loss"** instead. Spot checks found Big Brook and White Rock re-aimed, but Pecatonica is the same view after a strong seasonal change.
-- **"The camera tracks big floods."** Above its calibrated range the camera saturates: Hancock reads about 10 ft against an 18 ft gauge. The agent handles this correctly by trusting the gauge and quarantining the camera. That's the story; camera accuracy in floods is not.
-- **Re-anchoring diversity.** Re-anchoring was tested on 10 real episodes, but 8 of them come from one camera (Pecatonica). Salt Creek supplies the other 2.
+**Integrity trail** (good for the report): `runs_v1/README.md` and `POST_FREEZE_CHANGES.md`. Three label/bug corrections before any LLM arm, the OOM incident, and the parser fix after the arms.
 
-## 4. Integrity trail (worth a line in the report: it shows rigor, not weakness)
+## 4. Decisions needed
 
-All of these were found by the runs and fixed **before any LLM arm ran**. Each superseded run is kept with a README in `results/agent_eval/runs_v1/`.
+- **Q-0011 (W2's recommendation: option a).** Rules take the actions. Sonnet 4.6 ranks the fleet, second-opinions anything that pages a human, and reviews gauge drift.
+  - **Ready now:** `RIVERSIGHT_AGENT_MODE=rules_first` + `RIVERSIGHT_AGENT_ESCALATE=1` on the worker, which is W1's env.
+  - **Cost:** about $0.05 per paging decision.
+- **Video:** the Hancock timeline and the Salt Creek alert overlay are ready. Use the `/approvals` screenshot once Samuel approves.
 
-1. **v1 episode labels.** Four view episodes trusted the history pipeline's registration flags and turned out wrong. Every real view episode is now re-checked against the exact reference bank it exposes.
-2. **Rules bug.** A gauge reading 0 minutes old was treated as missing. Found in the Hancock replay; a regression test now covers it.
-3. **Alert spam.** The Hancock replay drafted 40 alerts, one email per 30-minute cycle. A hysteresis guard rail (one alert per site per rise, unless the water is +0.5 ft higher or 12 h have passed) brought it to 4.
+## 5. Spend and incidents
 
-## 5. Decisions needed
-
-- **D1: Sonnet arm budget.**
-  - Rough estimate for 78 × 3 runs, at Anthropic list price and before measuring: about $15. Bedrock's rate is unknown.
-  - That exceeds D-0008's $10 single-action rule.
-  - **Recommendation:** run the Haiku arms first (about $1–3). Then run Sonnet **once** over the full set, about $5. The contract asks for 3 runs per arm, and StageSight did 3 per model, so if the bar must be matched, file a Q- for the full 3×.
-  - The pilot gives the real figure before anything is committed.
-- **D2: add a gauge-drift rule now?**
-  - **Recommendation: no.** It would need a re-freeze, and the honest 0 of 3 is the clearest showcase of what an LLM adds over fixed thresholds, provided Haiku gets it.
-  - If Haiku also fails, report it as a known limitation.
-- **D3: video assets.** Ready to use now:
-  - `results/agent_eval/replay/NY_East_Branch_Delaware_River_at_Hancock_Staff_2026-07-28_rules_timeline.png`
-  - `results/agent_eval/replay/IL_Salt_Creek_at_Wood_Dale_2026-07-03_rules_alert.jpg`
-
-  LLM versions will appear alongside them once Bedrock is up. The live approval screenshot depends on W1's G1.
-
-## 6. Dependencies and timeline after `aws login`
-
-1. **About 15 min.** Pilot of 5 dev episodes: confirm the cross-region model IDs (`us.anthropic.claude-haiku-5-5`, `…sonnet-5-5`), measure tokens and dollars, and check `additionalModelRequestFields` handling. If `llm.py` needs a transport fix, re-freeze; the episodes are unchanged.
-2. **About 1–1.5 h on worker-q.** Final arms: Haiku, then Haiku-no-OpenCV, then Sonnet (per D1). LLM flood replays alongside.
-3. **About 30 min after W1's G1.** One real approval round-trip, plus kill-switch and token-cap demos on the live stack.
-
-**For W1** (in `docs/status/W2.md`): a QUARANTINE never lifts in the live state, so Hancock stays quarantined after the crest. Suggestion: clear it once registration is OK and camera and gauge agree for N cycles.
-
-**Risk:** if login slips past Sat morning, the LLM arms still fit before G2 (Sat evening), but the approval round-trip depends on W1's deploy the same day.
+- **Bedrock ≈ $20.4** (final arms $13.6, lost OOM runs $6.01, pilots $0.81), under the $25 ceiling.
+- **OOM incident** (Fri ~21:30 CT): W2's eval jobs committed 31–40 GiB each and the host crashed.
+  - **Fixed:** one shared ALIKED/LightGlue per process.
+  - **Measured:** 1.9 GiB peak, 74/74 tool outputs identical.
+  - The live worker gets the same fix when W1 redeploys.
