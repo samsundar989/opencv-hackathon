@@ -110,3 +110,21 @@ The final agent evaluation (frozen v3, `results/agent_eval/LLM_ANALYSIS.md`) sho
 Sonnet 4.6 is better than the rules at **fleet triage** (12/12 cycles), **gauge-drift** cases (67 % vs 0 %) and **rise alerts** (100 %).
 **Recommendation:** rules take the actions; Sonnet 4.6 ranks the fleet (`triage.json`), gives a second opinion on anything that would page a human (already built: `RIVERSIGHT_AGENT_ESCALATE=1`), and reviews gauge drift. W2 can ship this as a config switch (`RIVERSIGHT_AGENT_MODE=rules_first`) in about an hour.
 **Options:** (a) recommended hybrid; (b) keep Haiku 4.5 deciding; (c) Sonnet 4.6 deciding (~$0.05 per flagged reading, ~4× Haiku).
+
+## Q-0012 — 2026-10-24 — Fleet expansion: serve every tier-B onboarded site, or a subset? (W5, for Cowork)
+**Context.** The 39-site onboarding batch is about 87 % done (`results/onboarding/summary.csv`). With the frozen D-0007 setting and the D-0007 tier rules, **25 new sites are tier B** so far, and D-0010 §3 says tier B goes live. They are mostly large rivers, chosen because the stage-swing score favours them:
+- **Relative error matches the frozen fleet:** median CV nMAE ≈ 0.14, against the D-0007 20-site CV's 0.145.
+- **Absolute error is large:** median CV MAE ≈ 1 ft (Missouri at Hermann 1.96 ft, Wabash 2.05 ft).
+- **The 24 h last-known gauge value beats the camera at most of them** while the gauge is up, e.g. Missouri below Mandan 0.58 vs 0.16 ft and Buffalo 0.64 vs 0.08 ft.
+- **Clear wins:** Savannah tidal dock 0.43 vs 1.08 ft; Ottawa River near Kalida 0.86 vs 0.94 ft.
+
+This is consistent with our claim (gap-fill and flood state, not gauge replacement). But a judge looking at a 1–2 ft error band on a site page may read it as weak.
+
+**Options.**
+1. **Follow D-0010 §3 as written:** serve all tier-B sites, labelled "onboarded Oct 24–25, not part of the frozen test", with σ shown. Also adds load to W1's cycle (< 5 min, memory).
+2. **Serve tier B with nMAE ≤ 0.15 only** (about 13 sites); list the rest in the onboarding table. This is a new filter, so it needs a D-entry and must be stated as post hoc.
+3. **Serve a handful of showcase sites** chosen by W1/Cowork, with the full table on `/judge`.
+
+**W5 recommendation:** option 1 for honesty and scale ("self-onboarding: 25 of 39 qualified"), with the site cards showing ± σ. W1 decides whether the cycle can carry 45 sites.
+
+W5 continues meanwhile: it hands every tier-B bundle (`models/onboard/<cam>/`) and `data/sites/fleet_v2.yaml` (with `live` flags per the D-0010 rule) to W1, and serves nothing itself.

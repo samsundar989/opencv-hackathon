@@ -103,10 +103,14 @@ def choose_reference(cam: str, days: int = 45) -> str:
     out = DATA / "derived" / cam / "registration_cascade.parquet"
     if out.exists():
         return pd.read_parquet(out)["ref"].iloc[0]
-    f = pd.read_parquet(DATA / "derived" / cam / "history" / "frames.parquet")
-    f = f[f["time"] >= pd.Timestamp(W_END) - pd.Timedelta(days=days)].dropna(subset=["stage_ft"]).reset_index(drop=True)
+    f = pd.read_parquet(DATA / "derived" / cam / "history" / "frames.parquet").dropna(subset=["stage_ft"])
+    if not len(f):
+        raise RuntimeError("no frames with gauge stage in the window")
+    # the last `days` days that have gauge stage (a gauge dark at the window end must not block onboarding)
+    end = min(pd.Timestamp(W_END), f["time"].max() + pd.Timedelta("1s"))
+    f = f[f["time"] >= end - pd.Timedelta(days=days)].reset_index(drop=True)
     if len(f) < 10:
-        raise RuntimeError(f"only {len(f)} frames with stage in the last {days} days")
+        raise RuntimeError(f"only {len(f)} frames with stage in the {days} days before {end:%Y-%m-%d}")
     f["window"] = "fit"
     f["path"] = [str(ROOT / p) for p in f["path"]]
     i, _ = pick(f, Cfg())
