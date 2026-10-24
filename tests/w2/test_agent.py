@@ -287,7 +287,7 @@ def test_llm_tool_budget_is_enforced(monkeypatch):
 
 def test_bedrock_throttle_is_retried_not_fallen_back(monkeypatch):
     """Regression (pilot, Oct 23): 3/12 decisions fell back to rules on ThrottlingException at a 10 RPM quota."""
-    from botocore.exceptions import ClientError
+    ClientError = pytest.importorskip("botocore.exceptions").ClientError   # botocore comes with .[aws], not .[dev]
     calls = []
 
     class Fake:
