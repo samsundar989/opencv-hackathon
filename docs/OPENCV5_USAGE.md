@@ -21,6 +21,13 @@ Order of execution: register → warp → block features → flood-height ROI �
 
 These features feed the flood-height map and the kernel-ridge regressor (`calib/flood_height_map.py`, `calib/scene_regressor.py`, NumPy/SciPy). On the 20-day fit window the scene model met MAE ≤ 0.25 ft at **9/19** sites, against **1/20** for the classical transect detector it replaced (`results/kill_test_v2_summary.json`, `fit_window` block). On the frozen test days: **14/20** sites, median MAE **0.182** ft.
 
+### 1b. Model v2 candidate: DINOv2 in OpenCV 5's DNN engine (W4; D-0010 §2 decides serving)
+
+| call | where | what it does for us | what breaks without it | evidence |
+|---|---|---|---|---|
+| **5.0** `cv2.dnn.readNetFromONNX(path, cv2.dnn.ENGINE_AUTO)` + `forward()` (engine looked up by name: 5.0 `ENGINE_NEW/CLASSIC`, 5.1 `ENGINE_OPENCV/ORT`) | `vision/dino_features.py` | Runs DINOv2-S/14 (fixed 224×392 ONNX, Apache-2.0) on the registered 320×180 frame → 16×28 patch tokens. Same engine on the 5090 box and the Graviton worker; no PyTorch at run time. Max abs diff vs onnxruntime 1.5e-4 (`tests/w4/test_v2.py`). | v2 has no features. In the D-0007 CV, removing the DINO kernel from the selected v2 takes median MAE from **0.252 to 0.381 ft** (`v1+sun`); DINO features alone give 0.257. | `results/v2/cv_summary.csv`, `results/v2/report.json` |
+| `cv2.dnn.blobFromImageWithParams` + `Image2BlobParams` (per-channel `scalefactor`, `mean`, `swapRB`) | `vision/dino_features.py` | Resize, BGR→RGB and ImageNet mean/std normalisation in one OpenCV call. | Hand-written NumPy preprocessing that has to match the training normalisation exactly. | `test_dino_cv2dnn_matches_onnxruntime` |
+
 ## 2. Camera QA (live flags and agent tools)
 
 | call | where | what it does | what breaks without it |
