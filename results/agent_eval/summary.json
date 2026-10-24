@@ -1,10 +1,10 @@
 {
  "title": "River Steward \u2014 fleet agent evaluation",
- "status": "rules baseline final; LLM arms pending: haiku, haiku_noev, sonnet",
+ "status": "final",
  "episode_set": {
   "file": "results/agent_eval/episodes.jsonl",
   "sha256": "074bda748f3989d28dd709b3d795bf13a69382116d37a7e06d32ec2ae2459920",
-  "frozen_utc": "2026-10-23T21:05:36+00:00",
+  "frozen_utc": "2026-10-24T03:03:34+00:00",
   "single_camera_episodes": 98,
   "real": 63,
   "synthetic_labelled": 35,
@@ -13,9 +13,170 @@
   "expected_actions_written": "by the builder, before any arm ran"
  },
  "arms": {
+  "haiku": {
+   "arm": "Claude agent with OpenCV tools",
+   "model": "Claude Haiku 4.5",
+   "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+   "repeats": 3,
+   "task_success_pct": {
+    "mean": 58.8,
+    "min": 56.1,
+    "max": 61.2
+   },
+   "task_success_real_pct": 54.5,
+   "task_success_synthetic_pct": 66.7,
+   "false_actions_on_clean_controls_pct": 7.7,
+   "unneeded_escalations_per_episode": 0.082,
+   "fleet_triage_top1_pct": 44.4,
+   "fleet_triage_kendall_tau": 0.5,
+   "llm_fallbacks_to_rules": "3/294",
+   "latency_s_note": "LLM latency includes client-side pacing at 9 requests/min (account quota 10/min) shared by 3 threads",
+   "latency_s": {
+    "p50": 42.0,
+    "p95": 65.4
+   },
+   "tokens_per_episode": 9927,
+   "estimated_usd_total": 4.326,
+   "success_by_kind_pct": {
+    "control_disagree": 73.3,
+    "control_rise": 100.0,
+    "control_view": 100.0,
+    "disagree_camfault": 33.3,
+    "gauge_drift": 11.1,
+    "gauge_flatline": 16.7,
+    "gauge_offset": 100.0,
+    "muddy_rise": 16.7,
+    "muddy_stale": 88.9,
+    "oor_gauge": 20.0,
+    "oor_live": 25.0,
+    "oor_stale": 33.3,
+    "reanchor_banked": 73.3,
+    "reg_loss_onset": 25.0,
+    "reg_loss_persist": 50.0,
+    "rise_alert": 33.3,
+    "rise_minor": 66.7,
+    "stale_camera": 86.7,
+    "stale_night": 44.4,
+    "view_shift": 100.0,
+    "view_transient": 88.9
+   },
+   "failure_modes": [
+    {
+     "kind": "rise_alert",
+     "failure": "missing DRAFT_ALERT",
+     "runs": 14
+    },
+    {
+     "kind": "muddy_rise",
+     "failure": "missing DRAFT_ALERT",
+     "runs": 12
+    },
+    {
+     "kind": "oor_live",
+     "failure": "forbidden MARK_PROVISIONAL",
+     "runs": 9
+    },
+    {
+     "kind": "reanchor_banked",
+     "failure": "missing SET_REFERENCE; wrong args",
+     "runs": 8
+    },
+    {
+     "kind": "reg_loss_onset",
+     "failure": "missing QUARANTINE",
+     "runs": 8
+    },
+    {
+     "kind": "gauge_drift",
+     "failure": "wrong args",
+     "runs": 7
+    }
+   ]
+  },
+  "haiku_noev": {
+   "arm": "same Claude agent, tools return only the flags (no OpenCV evidence)",
+   "model": "Claude Haiku 4.5",
+   "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+   "repeats": 3,
+   "task_success_pct": {
+    "mean": 51.4,
+    "min": 49.0,
+    "max": 55.1
+   },
+   "task_success_real_pct": 47.6,
+   "task_success_synthetic_pct": 58.1,
+   "false_actions_on_clean_controls_pct": 15.4,
+   "unneeded_escalations_per_episode": 0.109,
+   "fleet_triage_top1_pct": 52.8,
+   "fleet_triage_kendall_tau": 0.47,
+   "llm_fallbacks_to_rules": "1/294",
+   "latency_s_note": "LLM latency includes client-side pacing at 9 requests/min (account quota 10/min) shared by 3 threads",
+   "latency_s": {
+    "p50": 41.2,
+    "p95": 61.9
+   },
+   "tokens_per_episode": 9168,
+   "estimated_usd_total": 4.126,
+   "success_by_kind_pct": {
+    "control_disagree": 86.7,
+    "control_rise": 91.7,
+    "control_view": 70.8,
+    "disagree_camfault": 8.3,
+    "gauge_drift": 22.2,
+    "gauge_flatline": 100.0,
+    "gauge_offset": 91.7,
+    "muddy_rise": 33.3,
+    "muddy_stale": 0.0,
+    "oor_gauge": 40.0,
+    "oor_live": 16.7,
+    "oor_stale": 50.0,
+    "reanchor_banked": 0.0,
+    "reg_loss_onset": 50.0,
+    "reg_loss_persist": 70.8,
+    "rise_alert": 45.8,
+    "rise_minor": 33.3,
+    "stale_camera": 86.7,
+    "stale_night": 0.0,
+    "view_shift": 88.9,
+    "view_transient": 94.4
+   },
+   "failure_modes": [
+    {
+     "kind": "reanchor_banked",
+     "failure": "missing SET_REFERENCE; wrong args",
+     "runs": 15
+    },
+    {
+     "kind": "rise_alert",
+     "failure": "missing DRAFT_ALERT",
+     "runs": 11
+    },
+    {
+     "kind": "disagree_camfault",
+     "failure": "missing QUARANTINE",
+     "runs": 10
+    },
+    {
+     "kind": "stale_night",
+     "failure": "wrong args",
+     "runs": 9
+    },
+    {
+     "kind": "muddy_stale",
+     "failure": "wrong args",
+     "runs": 8
+    },
+    {
+     "kind": "gauge_drift",
+     "failure": "wrong args",
+     "runs": 7
+    }
+   ]
+  },
   "rules": {
    "arm": "deterministic rules policy (baseline)",
    "model": null,
+   "model_id": null,
    "repeats": 3,
    "task_success_pct": {
     "mean": 93.9,
@@ -29,9 +190,10 @@
    "fleet_triage_top1_pct": 91.7,
    "fleet_triage_kendall_tau": 0.89,
    "llm_fallbacks_to_rules": "0/294",
+   "latency_s_note": "LLM latency includes client-side pacing at 9 requests/min (account quota 10/min) shared by 3 threads",
    "latency_s": {
-    "p50": 2.1,
-    "p95": 14.3
+    "p50": 1.3,
+    "p95": 9.3
    },
    "tokens_per_episode": 0,
    "estimated_usd_total": 0.0,
@@ -57,10 +219,141 @@
     "stale_night": 100.0,
     "view_shift": 100.0,
     "view_transient": 100.0
-   }
+   },
+   "failure_modes": [
+    {
+     "kind": "gauge_drift",
+     "failure": "missing OPEN_TICKET; forbidden QUARANTINE; wrong args",
+     "runs": 9
+    },
+    {
+     "kind": "disagree_camfault",
+     "failure": "missing QUARANTINE",
+     "runs": 3
+    },
+    {
+     "kind": "gauge_offset",
+     "failure": "missing OPEN_TICKET; forbidden QUARANTINE; wrong args",
+     "runs": 3
+    },
+    {
+     "kind": "rise_alert",
+     "failure": "missing DRAFT_ALERT",
+     "runs": 3
+    }
+   ]
+  },
+  "sonnet": {
+   "arm": "Claude agent with OpenCV tools, second model",
+   "model": "Claude Sonnet 4.6",
+   "model_id": "us.anthropic.claude-sonnet-4-6",
+   "repeats": 1,
+   "task_success_pct": {
+    "mean": 71.4,
+    "min": 71.4,
+    "max": 71.4
+   },
+   "task_success_real_pct": 79.4,
+   "task_success_synthetic_pct": 57.1,
+   "false_actions_on_clean_controls_pct": 3.8,
+   "unneeded_escalations_per_episode": 0.214,
+   "fleet_triage_top1_pct": 100.0,
+   "fleet_triage_kendall_tau": 0.89,
+   "llm_fallbacks_to_rules": "0/98",
+   "latency_s_note": "LLM latency includes client-side pacing at 9 requests/min (account quota 10/min) shared by 3 threads",
+   "latency_s": {
+    "p50": 55.7,
+    "p95": 77.1
+   },
+   "tokens_per_episode": 11692,
+   "estimated_usd_total": 5.128,
+   "success_by_kind_pct": {
+    "control_disagree": 80.0,
+    "control_rise": 100.0,
+    "control_view": 100.0,
+    "disagree_camfault": 0.0,
+    "gauge_drift": 66.7,
+    "gauge_flatline": 100.0,
+    "gauge_offset": 100.0,
+    "muddy_rise": 100.0,
+    "muddy_stale": 33.3,
+    "oor_gauge": 0.0,
+    "oor_live": 0.0,
+    "oor_stale": 0.0,
+    "reanchor_banked": 100.0,
+    "reg_loss_onset": 50.0,
+    "reg_loss_persist": 87.5,
+    "rise_alert": 100.0,
+    "rise_minor": 100.0,
+    "stale_camera": 20.0,
+    "stale_night": 33.3,
+    "view_shift": 100.0,
+    "view_transient": 100.0
+   },
+   "failure_modes": [
+    {
+     "kind": "oor_gauge",
+     "failure": "forbidden MARK_PROVISIONAL",
+     "runs": 4
+    },
+    {
+     "kind": "oor_live",
+     "failure": "forbidden MARK_PROVISIONAL",
+     "runs": 3
+    },
+    {
+     "kind": "stale_camera",
+     "failure": "forbidden OPEN_TICKET",
+     "runs": 3
+    },
+    {
+     "kind": "disagree_camfault",
+     "failure": "forbidden OPEN_TICKET",
+     "runs": 2
+    },
+    {
+     "kind": "muddy_stale",
+     "failure": "forbidden OPEN_TICKET",
+     "runs": 2
+    },
+    {
+     "kind": "stale_night",
+     "failure": "forbidden OPEN_TICKET",
+     "runs": 2
+    }
+   ]
   }
  },
- "opencv_evidence_effect": null,
+ "opencv_evidence_effect": {
+  "what": "Claude Haiku 4.5 with OpenCV tools minus the same model with flags-only tools; paired per episode",
+  "points": 7.5,
+  "ci95_points": [
+   -1.4,
+   16.3
+  ],
+  "episodes": 98,
+  "largest_gains_by_kind_points": {
+   "muddy_stale": 88.9,
+   "reanchor_banked": 73.3,
+   "stale_night": 44.4,
+   "rise_minor": 33.3,
+   "control_view": 29.2
+  },
+  "largest_losses_by_kind_points": {
+   "reg_loss_persist": -20.8,
+   "reg_loss_onset": -25.0,
+   "gauge_flatline": -83.3
+  }
+ },
+ "sensitivity_post_hoc": {
+  "rule": "on real out-of-range episodes, a provisional LOWER BOUND (camera_lower_bound) published beside a fresh gauge counts as allowed (D-0009 forbids a camera number, not a bound). Post-hoc, after seeing the LLM runs; the frozen scores above are the headline.",
+  "task_success_pct": {
+   "haiku": 60.9,
+   "haiku_noev": 52.7,
+   "rules": 93.9,
+   "sonnet": 78.6
+  }
+ },
  "flood_replays": [
   {
    "camera": "IL_Salt_Creek_at_Wood_Dale",

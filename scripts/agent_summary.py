@@ -30,8 +30,10 @@ def arm_block(arm: str, s: pd.DataFrame, f: pd.DataFrame) -> dict:
     ctrl = s[s["kind"].isin(CONTROL_KINDS)]
     far = ctrl.groupby("rep")["forbidden_hit"].apply(lambda x: (x.fillna("") != "").mean())
     model = s["model"].dropna().iloc[0] if s["model"].notna().any() else None
+    from riversight.agent.llm import model_name
     return {
-        "arm": ARM_NAMES.get(arm, arm), "model": model, "repeats": int(s["rep"].nunique()),
+        "arm": ARM_NAMES.get(arm, arm), "model": model_name(model) if model else None, "model_id": model,
+        "repeats": int(s["rep"].nunique()),
         "task_success_pct": {"mean": pct(per.mean()), "min": pct(per.min()), "max": pct(per.max())},
         "task_success_real_pct": pct(s[s["source"] == "real"]["success"].mean()),
         "task_success_synthetic_pct": pct(s[s["source"] == "synthetic"]["success"].mean()),
@@ -40,11 +42,60 @@ def arm_block(arm: str, s: pd.DataFrame, f: pd.DataFrame) -> dict:
         "fleet_triage_top1_pct": pct(f["top1"].mean()) if len(f) else None,
         "fleet_triage_kendall_tau": round(float(f["tau"].mean()), 2) if len(f) else None,
         "llm_fallbacks_to_rules": f"{int((s['fallback'].fillna('') != '').sum())}/{len(s)}",
+        "latency_s_note": "LLM latency includes client-side pacing at 9 requests/min (account quota 10/min) shared by 3 threads",
         "latency_s": {"p50": round(s["latency_ms"].quantile(0.5) / 1000, 1), "p95": round(s["latency_ms"].quantile(0.95) / 1000, 1)},
         "tokens_per_episode": int((s["tokens_in"] + s["tokens_out"]).mean()),
         "estimated_usd_total": round(float(s["usd"].sum() + (f["usd"].sum() if len(f) else 0)), 3),
         "success_by_kind_pct": {k: pct(g["success"].mean()) for k, g in s.groupby("kind")},
+        "failure_modes": failure_modes(s),
     }
+
+
+def failure_modes(s: pd.DataFrame) -> list[dict]:
+    """Most frequent ways an arm failed: missing required / forbidden present / wrong arguments, per kind."""
+    bad = s[~s["success"]].copy()
+    if not len(bad):
+        return []
+    def why(r):
+        w = []
+        if r["missing"]:
+            w.append("missing " + r["missing"])
+        if r["forbidden_hit"]:
+            w.append("forbidden " + r["forbidden_hit"])
+        if not r["args_ok"]:
+            w.append("wrong args")
+        return "; ".join(w)
+    bad["why"] = bad.apply(why, axis=1)
+    top = bad.groupby(["kind", "why"]).size().sort_values(ascending=False).head(6)
+    return [{"kind": k, "failure": w, "runs": int(n)} for (k, w), n in top.items()]
+
+
+def oor_lower_bound_ok(r: dict) -> bool:
+    """Post-hoc sensitivity rule (NOT the headline): on oor_gauge / oor_live, a MARK_PROVISIONAL whose source is
+    camera_lower_bound is a lower bound, not a camera number; D-0009 only forbids a camera number."""
+    if r["kind"] not in ("oor_gauge", "oor_live") or r["success"] or r["missing"] or not r["args_ok"]:
+        return bool(r["success"])
+    hits = set((r["forbidden_hit"] or "").split("+")) - {""}
+    mp = [a for a in r["decision"]["actions"] if a["type"] == "MARK_PROVISIONAL"]
+    return hits == {"MARK_PROVISIONAL"} and all((a.get("args") or {}).get("source") == "camera_lower_bound" for a in mp)
+
+
+def evidence_effect(rows: list[dict], n_boot: int = 4000) -> dict | None:
+    """Paired per-episode effect of OpenCV evidence: success(haiku) − success(haiku_noev), each averaged over its
+    repeats, then mean over episodes with a bootstrap 95 % CI over episodes."""
+    df = pd.DataFrame([{k: r[k] for k in ("episode_id", "kind", "arm", "success")} for r in rows if r["kind"] != "fleet"])
+    if not {"haiku", "haiku_noev"} <= set(df["arm"]):
+        return None
+    m = df[df["arm"].isin(["haiku", "haiku_noev"])].pivot_table(index=["episode_id", "kind"], columns="arm", values="success", aggfunc="mean").dropna()
+    d = (m["haiku"] - m["haiku_noev"]).to_numpy()
+    rng = np.random.default_rng(0)
+    boots = [rng.choice(d, len(d)).mean() for _ in range(n_boot)]
+    by_kind = (m["haiku"] - m["haiku_noev"]).groupby(level="kind").mean().sort_values(ascending=False)
+    return {"what": "Claude Haiku 4.5 with OpenCV tools minus the same model with flags-only tools; paired per episode",
+            "points": round(100 * d.mean(), 1), "ci95_points": [round(100 * float(np.percentile(boots, 2.5)), 1),
+                                                                 round(100 * float(np.percentile(boots, 97.5)), 1)],
+            "episodes": int(len(d)), "largest_gains_by_kind_points": {k: round(100 * v, 1) for k, v in by_kind.head(5).items()},
+            "largest_losses_by_kind_points": {k: round(100 * v, 1) for k, v in by_kind.tail(3).items()}}
 
 
 def replays() -> list[dict]:
@@ -71,10 +122,11 @@ def main():
     eps = [json.loads(line) for line in (RES / "episodes.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()]
     single = [e for e in eps if e["kind"] != "fleet"]
     arms = {a: arm_block(a, g, f[f["arm"] == a] if len(f) else f) for a, g in s.groupby("arm")} if len(s) else {}
-    effect = None
-    if "haiku" in arms and "haiku_noev" in arms:
-        effect = {"what": "task success with OpenCV evidence minus without (same model, same episodes)",
-                  "points": round(arms["haiku"]["task_success_pct"]["mean"] - arms["haiku_noev"]["task_success_pct"]["mean"], 1)}
+    effect = evidence_effect(rows)
+    sens = {}
+    for a, g in s.groupby("arm"):
+        recs = [r for r in rows if r.get("arm") == a and r["kind"] != "fleet"]
+        sens[a] = pct(np.mean([oor_lower_bound_ok(r) for r in recs]))
     pending = [a for a in ("haiku", "haiku_noev", "sonnet") if a not in arms]
     doc = {
         "title": "River Steward — fleet agent evaluation",
@@ -88,6 +140,10 @@ def main():
                         "expected_actions_written": "by the builder, before any arm ran"},
         "arms": arms,
         "opencv_evidence_effect": effect,
+        "sensitivity_post_hoc": {"rule": "on real out-of-range episodes, a provisional LOWER BOUND (camera_lower_bound) published "
+                                         "beside a fresh gauge counts as allowed (D-0009 forbids a camera number, not a bound). "
+                                         "Post-hoc, after seeing the LLM runs; the frozen scores above are the headline.",
+                                 "task_success_pct": sens},
         "flood_replays": replays(),
         "honest_limits": [
             "Gauge-stale episodes are synthetic dropouts on real frames: no real outage > 3 h exists in the 20 histories.",
