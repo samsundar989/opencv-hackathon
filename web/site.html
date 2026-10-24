@@ -43,6 +43,22 @@
       </div>
     </section>
   </div>
+  <section class="panel" style="margin-top:16px" id="replay-sec" hidden>
+    <h2 style="margin-top:0">Replay a flood</h2>
+    <p class="muted small" id="replay-note"></p>
+    <div class="two">
+      <div>
+        <img id="rp-img" alt="Replay frame: camera view with the area under water in blue" style="width:100%;border-radius:8px;background:var(--chip);aspect-ratio:16/9;object-fit:contain">
+        <div class="slider">
+          <button type="button" id="rp-play" aria-label="Play the flood replay">▶ Play</button>
+          <input type="range" id="rp-pos" min="0" max="0" value="0" aria-label="Replay position">
+          <output id="rp-time"></output>
+        </div>
+        <div style="position:relative;height:180px"><canvas id="rp-chart" aria-label="Camera stage vs gauge during the replayed flood"></canvas></div>
+      </div>
+      <div><div class="small" id="rp-now"></div><h3 style="font-size:14px">What the agent did</h3><div class="small" id="rp-log" style="max-height:420px;overflow:auto"></div></div>
+    </div>
+  </section>
   <section class="panel" style="margin-top:16px">
     <h2 style="margin-top:0">Last 7 days: camera ± σ vs gauge</h2>
     <div style="position:relative;height:300px"><canvas id="chart" aria-label="Seven-day chart of camera stage against gauge stage"></canvas></div>
@@ -246,6 +262,59 @@
                   y: { title: { display: true, text: "stage (ft)", color: c("--muted") }, ticks: { color: c("--muted") }, grid: { color: c("--line") } } },
         plugins: { legend: { labels: { color: c("--ink"), filter: (i) => !i.text.includes("σ") } },
                    tooltip: { callbacks: { title: (it) => new Date(it[0].parsed.x).toLocaleString(), afterLabel: (it) => it.raw.f ? it.raw.f.join(", ") : "" } } } } });
+  });
+
+  // ---- replay a flood (D-0013 W1-2): pre-computed out-of-sample replay, frame by frame ----
+  await RS.panel("replay-sec", async (sec) => {
+    const idx = await RS.json("replays/index.json").catch(() => []);
+    const ev = idx.find((e) => e.cam_id === cam);
+    if (!ev) return;
+    const man = await RS.json(`replays/${encodeURIComponent(ev.event)}/manifest.json`);
+    const F = man.frames.filter((f) => f.overlay);
+    if (!F.length) return;
+    sec.hidden = false;
+    const base = `replays/${encodeURIComponent(ev.event)}/`;
+    document.getElementById("replay-note").innerHTML = `A real flood, ${RS.esc(man.window[0].slice(0, 10))} → ${RS.esc(man.window[1].slice(0, 10))}, replayed through the
+      live pipeline with a model trained only on frames before ${RS.esc(man.bundle_cut)} (so the camera meets this flood out of sample).
+      Calibrated range ${man.calibrated_range_ft.map((v) => Number(v).toFixed(2)).join("–")} ft. Agent: ${RS.esc(man.policy)}; alerts would wait for a person.`;
+    if (typeof Chart === "undefined" && document.readyState !== "complete") await new Promise((r) => window.addEventListener("load", r, { once: true }));
+    const css = getComputedStyle(document.documentElement), c = (v) => css.getPropertyValue(v).trim();
+    const xs = (k) => F.filter((f) => f[k] != null).map((f) => ({ x: Date.parse(f.t), y: f[k] }));
+    const ch = new Chart(document.getElementById("rp-chart"), { type: "line", data: { datasets: [
+      { label: "gauge", data: xs("gauge_ft"), borderColor: c("--ink"), pointRadius: 0, borderWidth: 1.5 },
+      { label: "camera", data: xs("camera_ft"), borderColor: c("--water"), pointRadius: 1.5, borderWidth: 1.5, spanGaps: 6 * 3600e3 },
+      { label: "camera ≥ (above range)", data: xs("camera_at_least_ft"), showLine: false, pointStyle: "rectRot", pointRadius: 4, borderColor: c("--water") },
+      { label: "now", data: [], showLine: false, pointRadius: 7, borderColor: c("--warn"), backgroundColor: c("--warn") }]},
+      options: { responsive: true, maintainAspectRatio: false, animation: false, parsing: false,
+        scales: { x: { type: "linear", ticks: { color: c("--muted"), maxTicksLimit: 6, callback: (v) => new Date(v).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit" }) }, grid: { color: c("--line") } },
+                  y: { ticks: { color: c("--muted") }, grid: { color: c("--line") }, title: { display: true, text: "ft", color: c("--muted") } } },
+        plugins: { legend: { labels: { color: c("--ink"), boxWidth: 10 } } } } });
+    const pos = document.getElementById("rp-pos"), img = document.getElementById("rp-img"), play = document.getElementById("rp-play");
+    pos.max = F.length - 1;
+    F.forEach((f) => { const im = new Image(); im.src = base + (f.thumb || f.overlay); });     // preload
+    function show(i) {
+      const f = F[i];
+      img.src = base + f.overlay;
+      document.getElementById("rp-time").textContent = new Date(f.t).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+      ch.data.datasets[3].data = [{ x: Date.parse(f.t), y: f.camera_ft ?? f.camera_at_least_ft ?? f.gauge_ft }]; ch.update("none");
+      document.getElementById("rp-now").innerHTML = `${RS.pill(f.status)} camera <b>${RS.cam({ camera_stage_ft: f.camera_ft, camera_sigma_ft: f.sigma_ft, camera_at_least_ft: f.camera_at_least_ft })}</b>
+        · gauge <b>${RS.ft(f.gauge_ft)}</b> · ${RS.esc(f.flood_state || "")} ${RS.flags(f.flags)}`;
+      const log = F.slice(0, i + 1).filter((g) => g.agent && (g.agent.actions || []).some((a) => a !== "NOOP")).reverse();
+      document.getElementById("rp-log").innerHTML = log.length ? log.map((g) => `<div class="decision ${(g.agent.actions || []).includes("DRAFT_ALERT") ? "llm" : ""}">
+        <b>${(g.agent.actions || []).map(RS.esc).join(", ")}</b> <span class="muted">${new Date(g.t).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}</span>
+        ${(g.agent.actions || []).includes("DRAFT_ALERT") ? ' <span class="pill provisional">alert drafted — waits for a person</span>' : ""}<br>${RS.esc(g.agent.rationale || "")}</div>`).join("")
+        : `<span class="muted">Nothing yet: the river is normal, so the agent is not called.</span>`;
+    }
+    let timer = null;
+    const stop = () => { clearInterval(timer); timer = null; play.textContent = "▶ Play"; };
+    play.onclick = () => {
+      if (timer) return stop();
+      if (+pos.value >= F.length - 1) pos.value = 0;
+      play.textContent = "⏸ Pause";
+      timer = setInterval(() => { if (+pos.value >= F.length - 1) return stop(); pos.value = +pos.value + 1; show(+pos.value); }, 450);
+    };
+    pos.addEventListener("input", () => { stop(); show(+pos.value); });
+    show(0);
   });
 
   // ---- frozen-test numbers ----
