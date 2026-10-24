@@ -6,6 +6,8 @@ Three levels, from "check every number in five minutes" to "rebuild the data fro
 
 Python ≥ 3.12. OpenCV is pinned to `opencv-python-headless==5.0.0.93`.
 
+On Windows, clone into a short folder or run `git config --global core.longpaths true` first: a few result filenames are long, and a deep clone path exceeds Windows' 260-character limit.
+
 ```bash
 git clone <repo-url> riversight && cd riversight
 python -m venv .venv && . .venv/bin/activate        # Windows: .venv\Scripts\activate
