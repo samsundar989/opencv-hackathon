@@ -6,7 +6,7 @@
 <meta name="description" content="One river camera read as a water-level gauge: live stage vs the USGS gauge, and what is under water at any stage.">
 <title>RiverSight — site</title>
 <link rel="stylesheet" href="assets/app.css">
-<script src="assets/vendor/chart.umd.min.js"></script>
+<script defer src="assets/vendor/chart.umd.min.js"></script>
 <script src="assets/common.js"></script>
 </head>
 <body>
@@ -222,6 +222,8 @@
     document.getElementById("chartnote").textContent = rows.length
       ? `${rows.length} readings since ${new Date(rows[0].t_frame).toLocaleString()}. Night frames and above-range frames have no camera number.`
       : "No readings recorded yet.";
+    if (typeof Chart === "undefined" && document.readyState !== "complete")   // deferred library still loading
+      await new Promise((r) => window.addEventListener("load", r, { once: true }));
     if (typeof Chart === "undefined") throw new Error("chart library failed to load");
     const pt = (k) => rows.filter((r) => r[k] != null).map((r) => ({ x: Date.parse(r.t_frame), y: r[k] }));
     const band = (sgn) => rows.filter((r) => r.camera_stage_ft != null && r.camera_sigma_ft != null)
