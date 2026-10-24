@@ -1,0 +1,43 @@
+{
+  "selected_config": "v1+dino_roi@0.5+sun",
+  "v1_median_mae_ft": 0.38,
+  "v2_median_mae_ft": 0.2519,
+  "median_mae_ratio_v2_over_v1": 0.6629,
+  "ratio_bootstrap_95ci": [
+    0.5925,
+    0.9046
+  ],
+  "sites_better": 19,
+  "sites": 20,
+  "sign_test_p_two_sided": 4.01e-05,
+  "worst_site_delta_ft": 0.0148,
+  "worst_site": "CO_Sand_Creek_at_Mouth_nr_Commerce_City",
+  "p1_sites_v1": 9,
+  "p1_sites_v2": 11,
+  "d0010_criterion_1": {
+    "bar_ft": 0.323,
+    "met": true
+  },
+  "ablation_rel_change": {
+    "v1": 0.0,
+    "dino_roi": -0.3232,
+    "dino_v1roi": -0.3042,
+    "dino_all": -0.3144,
+    "dino_roi+norm": -0.3249,
+    "v1+dino_roi@0.3": -0.3259,
+    "v1+dino_roi@0.5": -0.3354,
+    "v1+dino_v1roi@0.5": -0.331,
+    "v1+gmean@0.3": -0.3183,
+    "v1+dino_roi+norm@0.5": -0.3304,
+    "v1+sun": 0.0027,
+    "v1+sundoy": -0.0138,
+    "v1+rec45": 0.0089,
+    "v1+rec120": 0.009,
+    "v1+dino_roi@0.5+sun": -0.3371,
+    "v1+dino_roi@0.5+sundoy": -0.3195,
+    "v1+dino_roi@0.5+rec45": -0.1987,
+    "v1+dino_roi@0.5+rec120": -0.3005,
+    "v1+dino_roi+norm@0.5+sun+rec120": -0.2117
+  },
+  "note": "forward-chaining monthly CV inside the calibration history (D-0007 folds); not the frozen kill-test numbers"
+}
