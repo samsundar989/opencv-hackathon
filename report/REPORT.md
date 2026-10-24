@@ -214,13 +214,48 @@ _Pending (W2)._ Fault-injection episodes, real and synthetic (labelled), each wi
 
 _Pending._ COOL vs stock pip OpenCV 5.0.0.93 on the same m9g.large: per-kernel speedups, the whole per-frame pipeline, the fleet cycle, output equivalence, and $ per camera-month. Harness: `bench/`; method: `docs/COOL_BENCHMARK.md`.
 
-### 6.9 Prospective live evaluation (W1)
+### 6.9 Prospective live evaluation
 
-_Pending; scoring started with the first COOL cycle, 2026-10-23 ~16:28 CT._ Pre-registered in D-0010 §1 before that cycle: the live bundles as first deployed (`results/live_prospective/frozen_models.json`) are scored on every daylight reading with registration OK against the USGS reading closest in time (±20 min), until the code freeze. Saturated (`OUT_OF_RANGE`) readings are counted separately. Baseline: a 24-hour last-known gauge value. This is forward in time, out of sample, and reported whatever it shows (`results/live_prospective/`).
+Pre-registered in D-0010 §1 before the first COOL cycle: the live bundles as first deployed (`results/live_prospective/frozen_models.json`) are scored on every daylight reading with registration OK, against the USGS reading closest in time, until the code freeze. Saturated (`OUT_OF_RANGE`) readings are counted, not scored. Baseline: the gauge's value 24 hours earlier. Forward in time, out of sample, reported whatever it shows; refreshed from `results/live_prospective/` (W1, `scripts/score_prospective.py`).
 
-### 6.10 Real gauge outages and onboarding new cameras (W5)
+<!-- BEGIN:prospective -->
+Window: 2026-10-23 21:28 UTC (first COOL cycle) to 2026-10-24 02:30 UTC so far; submission cut 2026-10-26 17:00 UTC. Models: frozen live models (results/live_prospective/frozen_models.json). Match: closest USGS IV reading within ±20 min of the frame. The camera beats a 24-hour-old gauge value at 0 of 13 scored sites so far. That matches the frozen test: in quiet conditions persistence is hard to beat; the camera's value is outages, flood state and QA.
 
-_Pending._ (a) Real gauge outages in the history of our cameras, and what the camera read while the gauge was silent. (b) A self-onboarding pipeline for more gauged HIVIS cameras, and the accuracy-vs-days-of-calibration curve (`results/real_outages/`, `results/onboarding/`).
+| | readings | daylight | scored | saturated (gauge trusted) | coverage | camera MAE ft | median AE ft | within ±0.25 ft | 24 h last-known MAE ft |
+|---|---|---|---|---|---|---|---|---|---|
+| **fleet** | 146 | 66 | 51 | 2 | 77.3 % | 0.274 | 0.221 | 51.0 % | 0.077 |
+| First Mallard Branch nr Fairfield (CA) | 18 | 17 | 15 | 2 | 88.2 % | 0.320 | 0.339 | 20.0 % | 0.179 |
+| Sand Creek at Mouth nr Commerce City (CO) | 14 | 12 | 12 | 0 | 100.0 % | 0.154 | 0.174 | 100.0 % | 0.023 |
+| Cowhouse Ck at Old Georgetown Rd nr Ft Hood (TX) | 17 | 7 | 7 | 0 | 100.0 % | 0.119 | 0.124 | 100.0 % | 0.006 |
+| Langham Creek at Addicks Reservoir Outflow near Addicks (TX) | 17 | 5 | 5 | 0 | 100.0 % | 0.566 | 0.507 | 0.0 % | 0.068 |
+| Salt Creek at Wood Dale (IL) | 5 | 2 | 2 | 0 | 100.0 % | 0.231 | 0.231 | 50.0 % | 0.070 |
+| Brandywine Creek at Chadds Ford (PA) | 17 | 2 | 2 | 0 | 100.0 % | 0.447 | 0.447 | 0.0 % | 0.045 |
+| Root River near Pilot Mound (MN) | 5 | 2 | 2 | 0 | 100.0 % | 0.413 | 0.413 | 0.0 % | 0.045 |
+| East Branch Delaware River at Hancock Staff (NY) | 4 | 1 | 1 | 0 | 100.0 % | 0.057 | 0.057 | 100.0 % | 0.040 |
+| Buffalo Bayou at State HWY 6 near Addicks (TX) | 4 | 1 | 1 | 0 | 100.0 % | 0.296 | 0.296 | 0.0 % | 0.080 |
+| Clear Fk Trinity Rv at Ft Worth (TX) | 4 | 1 | 1 | 0 | 100.0 % | 0.540 | 0.540 | 0.0 % | 0.080 |
+| Tenmile Ck at Parkinson Rd nr Ferris (TX) | 4 | 1 | 1 | 0 | 100.0 % | 0.044 | 0.044 | 100.0 % | 0.010 |
+| White Rk Ck at Greenville Ave Dallas (TX) | 4 | 1 | 1 | 0 | 100.0 % | 0.462 | 0.462 | 0.0 % | 0.040 |
+| Swan Creek at Lalor Road near Fitchburg (WI) | 4 | 1 | 1 | 0 | 100.0 % | 0.078 | 0.078 | 100.0 % | 0.010 |
+
+Flags raised: VIEW_CHANGE 13, LOW_QUALITY 8, GAUGE_STALE 0, DISAGREE 14, RISING 23, OUT_OF_RANGE 16. Agent actions: DENSIFY 23, QUARANTINE 13, OPEN_TICKET 13, NOOP 8, MARK_PROVISIONAL 6.
+<!-- END:prospective -->
+
+### 6.10 Onboarding new cameras and real gauge outages
+
+**How much gauge history does a new camera need?** For 10 kill-test cameras, the frozen setting was refit on only the last N days of history before the same two test months (W5, `results/onboarding/fewshot*.csv`; history before 2026-10-03 only, so the frozen test days are untouched).
+
+<!-- BEGIN:fewshot -->
+| days of calibration | 14 | 30 | 60 | 90 | 180 | 365 |
+|---|---|---|---|---|---|---|
+| median MAE ft | 0.238 | 0.236 | 0.223 | 0.254 | 0.227 | 0.249 |
+| median nMAE | 0.113 | 0.089 | 0.102 | 0.131 | 0.137 | 0.150 |
+| P1 sites (of 10) | 7 | 9 | 9 | 7 | 7 | 6 |
+<!-- END:fewshot -->
+
+About a month of overlap with the gauge is already enough; more history does not help the frozen setting, and a full year is slightly worse, consistent with the drift in §6.12. This makes onboarding the rest of the gauged HIVIS fleet cheap. W5's pipeline (`scripts/onboard_*.py`) runs the same frozen-setting code end to end.
+
+**Real gauge outages** bridged by the camera: _pending (W5; the outage scan was interrupted by the host running out of memory)._
 
 ### 6.11 Model v2 candidate (W4)
 

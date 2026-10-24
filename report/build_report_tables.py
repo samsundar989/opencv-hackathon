@@ -123,7 +123,50 @@ def registration() -> str:
     return "\n".join(rows)
 
 
-TABLES = {"headline": headline, "per_site": per_site, "baselines": baselines, "ablations": ablations, "hancock": hancock, "registration": registration}
+def prospective() -> str:
+    f = RES / "live_prospective" / "summary.json"
+    if not f.exists():
+        return "_No prospective results committed yet._"
+    sm = json.loads(f.read_text(encoding="utf-8"))
+    fl = sm["fleet"]
+    ps = pd.read_csv(RES / "live_prospective" / "per_site.csv")
+    ps = ps[ps.scored > 0].sort_values("scored", ascending=False)
+    beats = sm["sites_camera_beats_lkv24"]
+    verdict = ("The camera beats a 24-hour-old gauge value at "
+               f"{beats} of {sm['sites_scored']} scored sites so far"
+               + (". That matches the frozen test: in quiet conditions persistence is hard to beat; the camera's"
+                  " value is outages, flood state and QA." if beats == 0 else "."))
+    rows = [f"Window: {sm['window_start_utc'][:16].replace('T', ' ')} UTC (first COOL cycle) to "
+            f"{sm['scored_until_utc'][:16].replace('T', ' ')} UTC so far; submission cut {sm['submission_cut_utc'][:16].replace('T', ' ')} UTC. "
+            f"Models: {sm['models']}. Match: {sm['rules']['match']}. {verdict}", "",
+            "| | readings | daylight | scored | saturated (gauge trusted) | coverage | camera MAE ft | median AE ft | within ±0.25 ft | 24 h last-known MAE ft |",
+            "|---|---|---|---|---|---|---|---|---|---|",
+            f"| **fleet** | {fl['readings']} | {fl['daylight_readings']} | {fl['scored']} | {fl['saturated_gauge_trusted']} | "
+            f"{fl['coverage_pct']} % | {fl['mae_ft']} | {fl['median_ae_ft']} | {fl['within_025_pct']} % | {fl['lkv24_mae_ft']} |"]
+    for _, r in ps.iterrows():
+        rows.append(f"| {short(r.cam_id)} | {int(r.readings)} | {int(r.daylight_readings)} | {int(r.scored)} | "
+                    f"{int(r.saturated_gauge_trusted)} | {_f(r.coverage_pct, 1)} % | {_f(r.mae_ft, 3)} | {_f(r.median_ae_ft, 3)} | "
+                    f"{_f(r.within_025_pct, 1)} % | {_f(r.lkv24_mae_ft, 3)} |")
+    flags = ", ".join(f"{k} {v}" for k, v in fl["flags"].items())
+    acts = ", ".join(f"{k} {v}" for k, v in fl["agent_actions"].items())
+    rows += ["", f"Flags raised: {flags}. Agent actions: {acts}."]
+    return "\n".join(rows)
+
+
+def fewshot() -> str:
+    f = RES / "onboarding" / "fewshot_summary.csv"
+    if not f.exists():
+        return "_No onboarding results committed yet._"
+    d = pd.read_csv(f)
+    rows = ["| days of calibration | " + " | ".join(str(int(x)) for x in d.days) + " |",
+            "|---" * (len(d) + 1) + "|",
+            "| median MAE ft | " + " | ".join(_f(x, 3) for x in d.median_mae) + " |",
+            "| median nMAE | " + " | ".join(_f(x, 3) for x in d.median_nmae) + " |",
+            f"| P1 sites (of {int(d.sites.iloc[0])}) | " + " | ".join(str(int(x)) for x in d.p1_sites) + " |"]
+    return "\n".join(rows)
+
+
+TABLES = {"headline": headline, "per_site": per_site, "baselines": baselines, "ablations": ablations, "hancock": hancock, "registration": registration, "prospective": prospective, "fewshot": fewshot}
 
 
 def main() -> None:
