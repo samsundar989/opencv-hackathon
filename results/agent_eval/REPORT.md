@@ -1,43 +1,47 @@
 # River Steward — agent evaluation
 
-Episode set: `results/agent_eval/episodes.jsonl`, sha256 `074bda748f3989d28dd709b3d795bf13a69382116d37a7e06d32ec2ae2459920` (frozen 2026-10-24T03:03:34+00:00, git 47b129838); 98 single-camera episodes (63 real) + 12 fleet cycles. Expected actions were written by `scripts/agent_build_episodes.py` before any arm ran. Every number below is computed by `scripts/agent_eval.py report` from `results/agent_eval/runs/*.jsonl`.
+Episode set: `results/agent_eval/episodes.jsonl`, sha256 `706de0cfda245e9cd4511fd367d576036eb1a4e6c50b5343c55d59cc97765b9a` (frozen 2026-10-24T21:06:42+00:00, git 3c340eef9); 108 single-camera episodes (73 real) + 12 fleet cycles. Expected actions were written by `scripts/agent_build_episodes.py` before any arm ran. Every number below is computed by `scripts/agent_eval.py report` from `results/agent_eval/runs/*.jsonl`.
 
-Arms: **rules** = deterministic policy (`agent/rules.py`); **haiku** = Bedrock Claude Haiku 4.5 agent with the OpenCV tools; **haiku_noev** = the same agent whose tools return only the reading's flags (no OpenCV evidence); **sonnet** = the agent on Claude Sonnet 4.6; **opus** = the agent on Claude Opus 4.5 (if run). Claude 5.5 models are not available to this AWS account (docs/HUMAN.md ANSWER 0010). Each arm ran every episode 3×; cells show mean over repeats (min–max across repeats).
+Arms: **rules** = deterministic policy (`agent/rules.py`); **haiku** = Bedrock Claude Haiku 4.5 agent with the OpenCV tools; **haiku_noev** = the same agent whose tools return only the reading's flags (no OpenCV evidence); **sonnet** = the agent on Claude Sonnet 4.6; **opus** = the agent on Claude Opus 4.5 (if run). **hybrid** = D-0012 rules-first: the rules act, Sonnet reviews gauge drift and ranks the fleet. Claude 5.5 models are not available to this AWS account (docs/HUMAN.md ANSWER 0010). Each arm ran every episode 3×; cells show mean over repeats (min–max across repeats).
 
 ## Headline
 
 | arm | task success | real episodes | synthetic | false-action rate on clean controls | unneeded escalations / episode | fleet top-1 | fleet Kendall τ | LLM fallbacks | p50 / p95 latency (s) | tokens / episode | $ / episode (est.) |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| rules | 93.9% (93.9%–93.9%) | 98.4% (98.4%–98.4%) | 85.7% (85.7%–85.7%) | 0.0% (0.0%–0.0%) | 0.01 | 91.7% (91.7%–91.7%) | 0.89 | 0/294 | 1.3 / 9.3 | 0 | 0.0000 |
+| rules | 92.6% (92.6%–92.6%) | 95.9% (95.9%–95.9%) | 85.7% (85.7%–85.7%) | 0.0% (0.0%–0.0%) | 0.01 | 83.3% (83.3%–83.3%) | 0.86 | 0/324 | 0.8 / 6.7 | 0 | 0.0000 |
 | haiku | 58.8% (56.1%–61.2%) | 54.5% (49.2%–60.3%) | 66.7% (62.9%–68.6%) | 7.7% (3.8%–11.5%) | 0.08 | 44.4% (33.3%–50.0%) | 0.50 | 3/294 | 42.0 / 65.4 | 9,928 | 0.0147 |
 | haiku_noev | 51.4% (49.0%–55.1%) | 47.6% (42.9%–54.0%) | 58.1% (57.1%–60.0%) | 15.4% (11.5%–19.2%) | 0.11 | 52.8% (41.7%–66.7%) | 0.47 | 1/294 | 41.2 / 61.9 | 9,169 | 0.0140 |
 | sonnet | 71.4% (71.4%–71.4%) | 79.4% (79.4%–79.4%) | 57.1% (57.1%–57.1%) | 3.8% (3.8%–3.8%) | 0.21 | 100.0% (100.0%–100.0%) | 0.89 | 0/98 | 55.7 / 77.1 | 11,692 | 0.0523 |
+| hybrid | 93.2% (92.6%–93.5%) | 95.9% (95.9%–95.9%) | 87.6% (85.7%–88.6%) | 0.0% (0.0%–0.0%) | 0.01 | 86.1% (83.3%–91.7%) | 0.90 | 0/324 | 0.8 / 6.8 | 1,786 | 0.0096 |
 
 ## Task success by episode kind
 
-| kind | source | n | rules | haiku | haiku_noev | sonnet |
-|---|---|---|---|---|---|---|
-| control_disagree | real | 5 | 100% | 73% | 87% | 80% |
-| control_rise | real | 4 | 100% | 100% | 92% | 100% |
-| control_view | real | 8 | 100% | 100% | 71% | 100% |
-| disagree_camfault | synthetic | 4 | 75% | 33% | 8% | 0% |
-| gauge_drift | synthetic | 3 | 0% | 11% | 22% | 67% |
-| gauge_flatline | synthetic | 2 | 100% | 17% | 100% | 100% |
-| gauge_offset | synthetic | 4 | 75% | 100% | 92% | 100% |
-| muddy_rise | real | 6 | 100% | 17% | 33% | 100% |
-| muddy_stale | synthetic | 3 | 100% | 89% | 0% | 33% |
-| oor_gauge | real | 5 | 100% | 20% | 40% | 0% |
-| oor_live | real | 4 | 100% | 25% | 17% | 0% |
-| oor_stale | synthetic | 2 | 100% | 33% | 50% | 0% |
-| reanchor_banked | real | 10 | 100% | 73% | 0% | 100% |
-| reg_loss_onset | real | 4 | 100% | 25% | 50% | 50% |
-| reg_loss_persist | real | 8 | 100% | 50% | 71% | 88% |
-| rise_alert | real | 8 | 88% | 33% | 46% | 100% |
-| rise_minor | real | 1 | 100% | 67% | 33% | 100% |
-| stale_camera | synthetic | 5 | 100% | 87% | 87% | 20% |
-| stale_night | synthetic | 3 | 100% | 44% | 0% | 33% |
-| view_shift | synthetic | 3 | 100% | 100% | 89% | 100% |
-| view_transient | synthetic | 6 | 100% | 89% | 94% | 100% |
+| kind | source | n | rules | haiku | haiku_noev | sonnet | hybrid |
+|---|---|---|---|---|---|---|---|
+| control_disagree | real | 5 | 100% | 73% | 87% | 80% | 100% |
+| control_rise | real | 4 | 100% | 100% | 92% | 100% | 100% |
+| control_view | real | 8 | 100% | 100% | 71% | 100% | 100% |
+| disagree_camfault | synthetic | 4 | 75% | 33% | 8% | 0% | 75% |
+| gauge_drift | synthetic | 3 | 0% | 11% | 22% | 67% | 22% |
+| gauge_flatline | synthetic | 2 | 100% | 17% | 100% | 100% | 100% |
+| gauge_offset | synthetic | 4 | 75% | 100% | 92% | 100% | 75% |
+| muddy_rise | real | 6 | 100% | 17% | 33% | 100% | 100% |
+| muddy_stale | synthetic | 3 | 100% | 89% | 0% | 33% | 100% |
+| oor_gauge | real | 5 | 100% | 20% | 40% | 0% | 100% |
+| oor_live | real | 4 | 100% | 25% | 17% | 0% | 100% |
+| oor_stale | synthetic | 2 | 100% | 33% | 50% | 0% | 100% |
+| reanchor_banked | real | 10 | 100% | 73% | 0% | 100% | 100% |
+| reg_loss_onset | real | 4 | 100% | 25% | 50% | 50% | 100% |
+| reg_loss_persist | real | 8 | 100% | 50% | 71% | 88% | 100% |
+| rise_alert | real | 8 | 88% | 33% | 46% | 100% | 88% |
+| rise_minor | real | 1 | 100% | 67% | 33% | 100% | 100% |
+| stale_camera | synthetic | 5 | 100% | 87% | 87% | 20% | 100% |
+| stale_night | synthetic | 3 | 100% | 44% | 0% | 33% | 100% |
+| tidal_flood | real | 2 | 0% | – | – | – | 0% |
+| tidal_live_false_alert | real | 1 | 100% | – | – | – | 100% |
+| tidal_tide | real | 7 | 100% | – | – | – | 100% |
+| view_shift | synthetic | 3 | 100% | 100% | 89% | 100% | 100% |
+| view_transient | synthetic | 6 | 100% | 89% | 94% | 100% | 100% |
 
 ## Detection in cycles (real registration loss)
 
@@ -49,17 +53,20 @@ Onset = the first flagged cycle of a real registration-loss segment; persistent 
 | haiku | 25% | 42% | 79% | 62% |
 | haiku_noev | 50% | 75% | 92% | 79% |
 | sonnet | 50% | 75% | 88% | 100% |
+| hybrid | 100% | 0% | 100% | 100% |
 
 ## Failure cases
 
-**rules** — 6 episodes failed at least once:
+**rules** — 8 episodes failed at least once:
 
-- `disagree_camfault-TX_Buffalo_Bayou_at_Stat-20261009T1700` (3/3 repeats): did `NOOP`, missing `QUARANTINE`. *fresh camera estimate agrees with the gauge (-0.06 ft, σ 0.41) low-quality frame; the quality gate already suppresses it*
-- `gauge_drift-IL_Salt_Creek_at_Wood_Da-20261007T1600` (3/3 repeats): did `QUARANTINE`, missing `OPEN_TICKET`, forbidden `QUARANTINE`, wrong args. *camera differs by -1.28 ft with a normal-looking gauge; trusting the gauge, camera quarantined*
-- `gauge_drift-NJ_Stony_Brook_at_Prince-20261008T1900` (3/3 repeats): did `QUARANTINE`, missing `OPEN_TICKET`, forbidden `QUARANTINE`, wrong args. *camera differs by -1.11 ft with a normal-looking gauge; trusting the gauge, camera quarantined*
-- `gauge_drift-TX_Buffalo_Bayou_at_Stat-20261009T1800` (3/3 repeats): did `QUARANTINE`, missing `OPEN_TICKET`, forbidden `QUARANTINE`, wrong args. *camera differs by -1.10 ft with a normal-looking gauge; trusting the gauge, camera quarantined*
-- `gauge_offset-NJ_Big_Brook_near_Marlbo-20261007T2100` (3/3 repeats): did `QUARANTINE`, missing `OPEN_TICKET`, forbidden `QUARANTINE`, wrong args. *camera fault: frame does not register; readings quarantined*
-- `rise_alert-CA_First_Mallard_Branch_-20261006T1615` (3/3 repeats): did `DENSIFY`, missing `DRAFT_ALERT`. *rising (+1.39 ft/h) but 26.43 ft is below the site p90 27.852; sampling densified*
+- `disagree_camfault-TX_Buffalo_Bayou_at_Stat-20261009T1700` (3/3 repeats): did `NOOP`, missing `QUARANTINE`. *fresh camera estimate agrees with the gauge (-0.06 ft, σ 0.41); low-quality frame; the quality gate already suppresses it.*
+- `gauge_drift-IL_Salt_Creek_at_Wood_Da-20261007T1600` (3/3 repeats): did `QUARANTINE`, missing `OPEN_TICKET`, forbidden `QUARANTINE`, wrong args. *camera differs by -1.28 ft with a normal-looking gauge; trusting the gauge, camera quarantined.*
+- `gauge_drift-NJ_Stony_Brook_at_Prince-20261008T1900` (3/3 repeats): did `QUARANTINE`, missing `OPEN_TICKET`, forbidden `QUARANTINE`, wrong args. *camera differs by -1.11 ft with a normal-looking gauge; trusting the gauge, camera quarantined.*
+- `gauge_drift-TX_Buffalo_Bayou_at_Stat-20261009T1800` (3/3 repeats): did `QUARANTINE`, missing `OPEN_TICKET`, forbidden `QUARANTINE`, wrong args. *camera differs by -1.10 ft with a normal-looking gauge; trusting the gauge, camera quarantined.*
+- `gauge_offset-NJ_Big_Brook_near_Marlbo-20261007T2100` (3/3 repeats): did `QUARANTINE`, missing `OPEN_TICKET`, forbidden `QUARANTINE`, wrong args. *camera fault: frame does not register; readings quarantined.*
+- `rise_alert-CA_First_Mallard_Branch_-20261006T1615` (3/3 repeats): did `NOOP`, missing `DENSIFY+DRAFT_ALERT`. *tidal site: 26.43 ft is the ordinary tide (predicted 26.791 ft, residual -0.36 ft < 1.22); no alert.*
+- `tidal_flood-GA_Savannah_River_at_USA-20260908T2300` (3/3 repeats): did `NOOP`, missing `DENSIFY+DRAFT_ALERT`. *tidal site: 5.66 ft is the ordinary tide (predicted 6.284 ft, residual -0.62 ft < 2.48); no alert.*
+- `tidal_flood-GA_Savannah_River_at_USA-20261010T1400` (3/3 repeats): did `NOOP`, missing `DENSIFY+DRAFT_ALERT`. *tidal site: 5.73 ft is the ordinary tide (predicted 6.331 ft, residual -0.60 ft < 2.48); no alert.*
 
 **haiku** — 60 episodes failed at least once:
 
@@ -111,6 +118,17 @@ Onset = the first flagged cycle of a real registration-loss segment; persistent 
 - `oor_gauge-WI_East_Branch_Pecatonic-20260415T1300` (1/1 repeats): did `DENSIFY+DRAFT_ALERT+MARK_PROVISIONAL`, forbidden `MARK_PROVISIONAL`. *The gauge reads 9.17 ft — 3.6 ft above this camera's calibrated ceiling of 5.58 ft — and is fresh, steadily rising (+1.15 ft in 6 h), with no anomalous steps; the camera's reported 4.62 ft is saturation at its calibrated*
 - `oor_gauge-WI_East_Branch_Pecatonic-20260415T1900` (1/1 repeats): did `DENSIFY+DRAFT_ALERT+MARK_PROVISIONAL+OPEN_TICKET+QUARANTINE`, forbidden `MARK_PROVISIONAL+OPEN_TICKET+QUARANTINE`. *The camera has persistently registered to an uncalibrated banked view (reference_20260207.jpg) for ≥3 consecutive cycles, confirming a real physical shift — likely flood-driven — not a transient fault; the camera cannot *
 - `oor_live-CO_Animas_River_at_Duran-20261023T1845` (1/1 repeats): did `DENSIFY+DRAFT_ALERT+MARK_PROVISIONAL`, forbidden `MARK_PROVISIONAL`. *The camera frame re-registers cleanly to its current calibrated reference (50 ALIKED+LightGlue inliers); the live ORB pass was a false alarm. The gauge is fresh at 8.34 ft — well above the camera's calibrated ceiling of *
+
+**hybrid** — 8 episodes failed at least once:
+
+- `disagree_camfault-TX_Buffalo_Bayou_at_Stat-20261009T1700` (3/3 repeats): did `NOOP`, missing `QUARANTINE`. *fresh camera estimate agrees with the gauge (-0.06 ft, σ 0.41); low-quality frame; the quality gate already suppresses it.*
+- `gauge_drift-IL_Salt_Creek_at_Wood_Da-20261007T1600` (1/3 repeats): did `QUARANTINE`, missing `OPEN_TICKET`, forbidden `QUARANTINE`, wrong args. *camera differs by -1.28 ft with a normal-looking gauge; trusting the gauge, camera quarantined.*
+- `gauge_drift-NJ_Stony_Brook_at_Prince-20261008T1900` (3/3 repeats): did `QUARANTINE`, missing `OPEN_TICKET`, forbidden `QUARANTINE`, wrong args. *camera differs by -1.11 ft with a normal-looking gauge; trusting the gauge, camera quarantined.*
+- `gauge_drift-TX_Buffalo_Bayou_at_Stat-20261009T1800` (3/3 repeats): did `QUARANTINE`, missing `OPEN_TICKET`, forbidden `QUARANTINE`, wrong args. *camera differs by -1.10 ft with a normal-looking gauge; trusting the gauge, camera quarantined.*
+- `gauge_offset-NJ_Big_Brook_near_Marlbo-20261007T2100` (3/3 repeats): did `QUARANTINE`, missing `OPEN_TICKET`, forbidden `QUARANTINE`, wrong args. *camera fault: frame does not register; readings quarantined.*
+- `rise_alert-CA_First_Mallard_Branch_-20261006T1615` (3/3 repeats): did `NOOP`, missing `DENSIFY+DRAFT_ALERT`. *tidal site: 26.43 ft is the ordinary tide (predicted 26.791 ft, residual -0.36 ft < 1.22); no alert.*
+- `tidal_flood-GA_Savannah_River_at_USA-20260908T2300` (3/3 repeats): did `NOOP`, missing `DENSIFY+DRAFT_ALERT`. *tidal site: 5.66 ft is the ordinary tide (predicted 6.284 ft, residual -0.62 ft < 2.48); no alert.*
+- `tidal_flood-GA_Savannah_River_at_USA-20261010T1400` (3/3 repeats): did `NOOP`, missing `DENSIFY+DRAFT_ALERT`. *tidal site: 5.73 ft is the ordinary tide (predicted 6.331 ft, residual -0.60 ft < 2.48); no alert.*
 
 ## Notes
 

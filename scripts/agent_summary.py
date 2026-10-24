@@ -18,7 +18,8 @@ RES = ROOT / "results" / "agent_eval"
 CONTROL_KINDS = ("control_view", "control_disagree", "control_rise", "view_transient", "view_shift")
 ARM_NAMES = {"rules": "deterministic rules policy (baseline)", "haiku": "Claude agent with OpenCV tools",
              "haiku_noev": "same Claude agent, tools return only the flags (no OpenCV evidence)",
-             "sonnet": "Claude agent with OpenCV tools, second model"}
+             "sonnet": "Claude agent with OpenCV tools, second model",
+             "hybrid": "D-0012 hybrid: rules act; Claude Sonnet 4.6 reviews gauge drift, ranks the fleet, second-opinions paging decisions"}
 
 
 def pct(x) -> float | None:
@@ -80,6 +81,51 @@ def oor_lower_bound_ok(r: dict) -> bool:
     return hits == {"MARK_PROVISIONAL"} and all((a.get("args") or {}).get("source") == "camera_lower_bound" for a in mp)
 
 
+def v3_subset(rows: list[dict]) -> dict:
+    """Task success of every arm on the 98 v3 episodes (the LLM-only arms ran on v3; rules and hybrid on v4 = v3 + tidal)."""
+    v3 = RES / "runs_v1" / "FROZEN_v3.json"
+    ids = None
+    if (RES / "runs_v1" / "rules_v3_final.jsonl").exists():
+        ids = {json.loads(l)["episode_id"] for l in (RES / "runs_v1" / "rules_v3_final.jsonl").read_text(encoding="utf-8").splitlines()
+               if l.strip() and json.loads(l)["kind"] != "fleet"}
+    if not ids:
+        return {}
+    df = pd.DataFrame([{k: r[k] for k in ("episode_id", "arm", "rep", "success")} for r in rows if r["kind"] != "fleet"])
+    df = df[df["episode_id"].isin(ids)]
+    out = {}
+    for a, g in df.groupby("arm"):
+        per = g.groupby("rep")["success"].mean()
+        out[a] = {"task_success_pct": pct(per.mean()), "min": pct(per.min()), "max": pct(per.max()), "episodes": int(g["episode_id"].nunique())}
+    return {"what": "every arm on the same 98 v3 episodes (like-for-like)", "frozen": v3.name if v3.exists() else None, "arms": out}
+
+
+def hybrid_stats(rows: list[dict]) -> dict | None:
+    h = [r for r in rows if r.get("arm") == "hybrid" and r["kind"] != "fleet"]
+    if not h:
+        return None
+    dr = [r for r in h if r["decision"].get("drift_review")]
+    so = [r for r in h if r["decision"].get("second_opinion") and "error" not in r["decision"]["second_opinion"]]
+    return {"drift_reviews": len(dr), "drift_reviews_turned_into_gauge_ticket": sum(bool(r["decision"]["drift_review"].get("gauge_suspect")) for r in dr),
+            "drift_review_kinds": {k: int(v) for k, v in pd.Series([r["kind"] for r in dr]).value_counts().items()} if dr else {},
+            "second_opinions": len(so), "second_opinion_agreement_pct": pct(np.mean([r["decision"]["second_opinion"]["agrees"] for r in so])) if so else None,
+            "note": "rules act; Sonnet can only replace the drift-blind quarantine with a human-approved gauge_suspect ticket; "
+                    "second opinions (repeat 0 only, pre-registered for budget) are recorded, never override"}
+
+
+def tidal_block(rows: list[dict]) -> dict:
+    out = {}
+    for a in ("rules", "hybrid"):
+        g = [r for r in rows if r.get("arm") == a and r["kind"].startswith("tidal")]
+        if g:
+            out[a] = {k: f"{sum(r['success'] for r in g if r['kind'] == k)}/{sum(r['kind'] == k for r in g)}"
+                      for k in sorted({r["kind"] for r in g})}
+    return {"what": "D-0013 W2-1 tidal episodes (v4): ordinary tides must not alert; record-high days should",
+            "results_runs": out,
+            "finding": "Savannah's record-high days are king tides the harmonic model predicts (negative residual) and sit "
+                       "between the daily-max p95 and p99, so the tidal rule does not alert; whether a predicted king tide should "
+                       "page a human is a policy question (NWS issues coastal-flood advisories for them)."}
+
+
 def evidence_effect(rows: list[dict], n_boot: int = 4000) -> dict | None:
     """Paired per-episode effect of OpenCV evidence: success(haiku) − success(haiku_noev), each averaged over its
     repeats, then mean over episodes with a bootstrap 95 % CI over episodes."""
@@ -139,6 +185,9 @@ def main():
                         "fleet_cycles": sum(e["kind"] == "fleet" for e in eps),
                         "expected_actions_written": "by the builder, before any arm ran"},
         "arms": arms,
+        "like_for_like_v3": v3_subset(rows),
+        "hybrid": hybrid_stats(rows),
+        "tidal": tidal_block(rows),
         "opencv_evidence_effect": effect,
         "sensitivity_post_hoc": {"rule": "on real out-of-range episodes, a provisional LOWER BOUND (camera_lower_bound) published "
                                          "beside a fresh gauge counts as allowed (D-0009 forbids a camera number, not a bound). "

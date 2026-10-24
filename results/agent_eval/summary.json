@@ -3,10 +3,10 @@
  "status": "final",
  "episode_set": {
   "file": "results/agent_eval/episodes.jsonl",
-  "sha256": "074bda748f3989d28dd709b3d795bf13a69382116d37a7e06d32ec2ae2459920",
-  "frozen_utc": "2026-10-24T03:03:34+00:00",
-  "single_camera_episodes": 98,
-  "real": 63,
+  "sha256": "706de0cfda245e9cd4511fd367d576036eb1a4e6c50b5343c55d59cc97765b9a",
+  "frozen_utc": "2026-10-24T21:06:42+00:00",
+  "single_camera_episodes": 108,
+  "real": 73,
   "synthetic_labelled": 35,
   "clean_controls": 26,
   "fleet_cycles": 12,
@@ -173,27 +173,105 @@
     }
    ]
   },
+  "hybrid": {
+   "arm": "D-0012 hybrid: rules act; Claude Sonnet 4.6 reviews gauge drift, ranks the fleet, second-opinions paging decisions",
+   "model": null,
+   "model_id": null,
+   "repeats": 3,
+   "task_success_pct": {
+    "mean": 93.2,
+    "min": 92.6,
+    "max": 93.5
+   },
+   "task_success_real_pct": 95.9,
+   "task_success_synthetic_pct": 87.6,
+   "false_actions_on_clean_controls_pct": 0.0,
+   "unneeded_escalations_per_episode": 0.009,
+   "fleet_triage_top1_pct": 86.1,
+   "fleet_triage_kendall_tau": 0.9,
+   "llm_fallbacks_to_rules": "0/324",
+   "latency_s_note": "LLM latency includes client-side pacing at 9 requests/min (account quota 10/min) shared by 3 threads",
+   "latency_s": {
+    "p50": 0.8,
+    "p95": 6.8
+   },
+   "tokens_per_episode": 1786,
+   "estimated_usd_total": 3.124,
+   "success_by_kind_pct": {
+    "control_disagree": 100.0,
+    "control_rise": 100.0,
+    "control_view": 100.0,
+    "disagree_camfault": 75.0,
+    "gauge_drift": 22.2,
+    "gauge_flatline": 100.0,
+    "gauge_offset": 75.0,
+    "muddy_rise": 100.0,
+    "muddy_stale": 100.0,
+    "oor_gauge": 100.0,
+    "oor_live": 100.0,
+    "oor_stale": 100.0,
+    "reanchor_banked": 100.0,
+    "reg_loss_onset": 100.0,
+    "reg_loss_persist": 100.0,
+    "rise_alert": 87.5,
+    "rise_minor": 100.0,
+    "stale_camera": 100.0,
+    "stale_night": 100.0,
+    "tidal_flood": 0.0,
+    "tidal_live_false_alert": 100.0,
+    "tidal_tide": 100.0,
+    "view_shift": 100.0,
+    "view_transient": 100.0
+   },
+   "failure_modes": [
+    {
+     "kind": "gauge_drift",
+     "failure": "missing OPEN_TICKET; forbidden QUARANTINE; wrong args",
+     "runs": 7
+    },
+    {
+     "kind": "tidal_flood",
+     "failure": "missing DENSIFY+DRAFT_ALERT",
+     "runs": 6
+    },
+    {
+     "kind": "disagree_camfault",
+     "failure": "missing QUARANTINE",
+     "runs": 3
+    },
+    {
+     "kind": "gauge_offset",
+     "failure": "missing OPEN_TICKET; forbidden QUARANTINE; wrong args",
+     "runs": 3
+    },
+    {
+     "kind": "rise_alert",
+     "failure": "missing DENSIFY+DRAFT_ALERT",
+     "runs": 3
+    }
+   ]
+  },
   "rules": {
    "arm": "deterministic rules policy (baseline)",
    "model": null,
    "model_id": null,
    "repeats": 3,
    "task_success_pct": {
-    "mean": 93.9,
-    "min": 93.9,
-    "max": 93.9
+    "mean": 92.6,
+    "min": 92.6,
+    "max": 92.6
    },
-   "task_success_real_pct": 98.4,
+   "task_success_real_pct": 95.9,
    "task_success_synthetic_pct": 85.7,
    "false_actions_on_clean_controls_pct": 0.0,
-   "unneeded_escalations_per_episode": 0.01,
-   "fleet_triage_top1_pct": 91.7,
-   "fleet_triage_kendall_tau": 0.89,
-   "llm_fallbacks_to_rules": "0/294",
+   "unneeded_escalations_per_episode": 0.009,
+   "fleet_triage_top1_pct": 83.3,
+   "fleet_triage_kendall_tau": 0.86,
+   "llm_fallbacks_to_rules": "0/324",
    "latency_s_note": "LLM latency includes client-side pacing at 9 requests/min (account quota 10/min) shared by 3 threads",
    "latency_s": {
-    "p50": 1.3,
-    "p95": 9.3
+    "p50": 0.8,
+    "p95": 6.7
    },
    "tokens_per_episode": 0,
    "estimated_usd_total": 0.0,
@@ -217,6 +295,9 @@
     "rise_minor": 100.0,
     "stale_camera": 100.0,
     "stale_night": 100.0,
+    "tidal_flood": 0.0,
+    "tidal_live_false_alert": 100.0,
+    "tidal_tide": 100.0,
     "view_shift": 100.0,
     "view_transient": 100.0
    },
@@ -225,6 +306,11 @@
      "kind": "gauge_drift",
      "failure": "missing OPEN_TICKET; forbidden QUARANTINE; wrong args",
      "runs": 9
+    },
+    {
+     "kind": "tidal_flood",
+     "failure": "missing DENSIFY+DRAFT_ALERT",
+     "runs": 6
     },
     {
      "kind": "disagree_camfault",
@@ -238,7 +324,7 @@
     },
     {
      "kind": "rise_alert",
-     "failure": "missing DRAFT_ALERT",
+     "failure": "missing DENSIFY+DRAFT_ALERT",
      "runs": 3
     }
    ]
@@ -324,6 +410,68 @@
    ]
   }
  },
+ "like_for_like_v3": {
+  "what": "every arm on the same 98 v3 episodes (like-for-like)",
+  "frozen": "FROZEN_v3.json",
+  "arms": {
+   "haiku": {
+    "task_success_pct": 58.8,
+    "min": 56.1,
+    "max": 61.2,
+    "episodes": 98
+   },
+   "haiku_noev": {
+    "task_success_pct": 51.4,
+    "min": 49.0,
+    "max": 55.1,
+    "episodes": 98
+   },
+   "hybrid": {
+    "task_success_pct": 94.6,
+    "min": 93.9,
+    "max": 94.9,
+    "episodes": 98
+   },
+   "rules": {
+    "task_success_pct": 93.9,
+    "min": 93.9,
+    "max": 93.9,
+    "episodes": 98
+   },
+   "sonnet": {
+    "task_success_pct": 71.4,
+    "min": 71.4,
+    "max": 71.4,
+    "episodes": 98
+   }
+  }
+ },
+ "hybrid": {
+  "drift_reviews": 9,
+  "drift_reviews_turned_into_gauge_ticket": 2,
+  "drift_review_kinds": {
+   "gauge_drift": 9
+  },
+  "second_opinions": 36,
+  "second_opinion_agreement_pct": 94.4,
+  "note": "rules act; Sonnet can only replace the drift-blind quarantine with a human-approved gauge_suspect ticket; second opinions (repeat 0 only, pre-registered for budget) are recorded, never override"
+ },
+ "tidal": {
+  "what": "D-0013 W2-1 tidal episodes (v4): ordinary tides must not alert; record-high days should",
+  "results_runs": {
+   "rules": {
+    "tidal_flood": "0/6",
+    "tidal_live_false_alert": "3/3",
+    "tidal_tide": "21/21"
+   },
+   "hybrid": {
+    "tidal_flood": "0/6",
+    "tidal_live_false_alert": "3/3",
+    "tidal_tide": "21/21"
+   }
+  },
+  "finding": "Savannah's record-high days are king tides the harmonic model predicts (negative residual) and sit between the daily-max p95 and p99, so the tidal rule does not alert; whether a predicted king tide should page a human is a policy question (NWS issues coastal-flood advisories for them)."
+ },
  "opencv_evidence_effect": {
   "what": "Claude Haiku 4.5 with OpenCV tools minus the same model with flags-only tools; paired per episode",
   "points": 7.5,
@@ -350,7 +498,8 @@
   "task_success_pct": {
    "haiku": 60.9,
    "haiku_noev": 52.7,
-   "rules": 93.9,
+   "hybrid": 93.2,
+   "rules": 92.6,
    "sonnet": 78.6
   }
  },

@@ -8,7 +8,33 @@ single-camera episodes, 63 real, 26 clean controls, 12 fleet cycles), frozen bef
 ANSWER 0010); the planned Claude Opus 4.5 pass was dropped to stay under the $25 Bedrock ceiling after an
 out-of-memory incident cost $6.01 of lost runs.
 
-## Headline (frozen labels)
+## Update 2026-10-24 evening: the hybrid that now runs live (ANSWER 0011, D-0012)
+Pre-registered before its run (commit `8b6aee8`): **the rules act; Claude Sonnet 4.6 reviews gauge drift** (it may
+replace the rules' drift-blind quarantine with a human-approved gauge-suspect ticket), **ranks the fleet**, and gives a
+recorded, non-overriding **second opinion** on anything that would page a human (repeat 0 only, for budget).
+
+Like for like on the same 98 v3 episodes (`summary.json` → `like_for_like_v3`):
+
+| arm | task success (min–max over repeats) |
+|---|---|
+| **hybrid: rules + Sonnet 4.6 review** | **94.6 %** (93.9–94.9, 3×) |
+| rules alone | 93.9 % (3×, identical) |
+| Claude Sonnet 4.6 alone | 71.4 % (1×) |
+| Claude Haiku 4.5 alone | 58.8 % (56.1–61.2, 3×) |
+| Claude Haiku 4.5, flags only | 51.4 % (49.0–55.1, 3×) |
+
+- Sonnet's drift review fired only on the 9 gauge-drift runs (the rules' blind spot) and turned 2 of them into the
+  correct gauge-suspect ticket (gauge drift: rules 0/9 → hybrid 2/9); nothing else changed.
+- Second opinions agreed with the rules on 34 of 36 paging decisions (94.4 %).
+- False actions on clean controls stay at 0.0 %; the hybrid costs $3.12 for 3 repeats (Sonnet called only on review cases).
+- On the v4 set (v3 + 10 tidal episodes), REPORT.md shows rules 92.6 % and hybrid 93.2 %. Note that REPORT.md's
+  headline mixes sets: rules/hybrid ran on 108 episodes (v4), the LLM-only arms on 98 (v3); compare via the table above.
+
+**Tidal (D-0013 W2-1):** ordinary high tides 21/21 and the approved live false alert 3/3 now decide no alert. Savannah's
+two record-high days 0/6: they are king tides the harmonic model predicts, between the daily-max p95 and p99; whether a
+predicted king tide should page a human is a policy question (NWS does issue coastal-flood advisories for them).
+
+## Headline from the first LLM run (frozen labels, v3)
 
 | arm | task success (min–max over repeats) | real / synthetic | false actions on clean controls | fleet top-1 / τ | fallbacks | est. $ |
 |---|---|---|---|---|---|---|
