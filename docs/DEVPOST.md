@@ -16,7 +16,7 @@ Stream gauges go dark, drift, ice up and get washed out, often when floods hit. 
 ## What it does
 - **Reads the river stage from the camera,** with no staff plate and no survey. Each camera learns from its own gauge's history which patches of the scene go under water at which stage (a *flood-height map*), and turns a new frame into stage ± σ.
 - **Shows the flood in the picture.** A slider on every site page draws what is under water at any stage, only where water can physically connect to the river.
-- **Fills gauge outages.** On frozen test days scored once, the camera beat the gauge's last known value at 15/20 sites after a 72-hour outage and at 18/20 after 7 days.
+- **Fills gauge outages.** On frozen test days scored once, the camera beat the gauge's last known value at 15/20 sites after a 72-hour outage and at 18/20 after 7 days. The fused RiverSight stage (last gauge value, updated by the camera) halves the error during multi-day outages when the river moves: 0.55 vs 1.14 ft at 72 h.
 - **Checks both instruments.** It detects moved, fogged or re-aimed cameras through OpenCV registration and image-quality signals, and catches gauges that disagree with a confident camera.
 - **River Steward agent.** OpenCV-grounded rules act on flagged readings: re-anchor, quarantine, mark gap-fill provisional, densify sampling. Claude on Amazon Bedrock advises: it ranks the fleet, gives a second opinion and drafts alerts. A human approves anything that leaves the system.
 - **Runs live** on AWS Graviton5 with OpenCV's COOL build, every 15 minutes, for 20 frozen-test cameras plus newly onboarded ones.
@@ -38,7 +38,8 @@ Stream gauges go dark, drift, ice up and get washed out, often when floods hit. 
 - **The frozen test passed:** 14/20 sites within 0.25 ft or 10 % of range (bootstrap interval 12–16); median MAE 0.182 ft (95 % CI 0.148–0.22). Flood-state balanced accuracy 0.93 vs 0.75 for a 24-hour-stale gauge.
 - **Self-onboarding:** 30 of 40 new cameras qualified with one command each and the frozen setting, at about $0.055 of compute per camera.
 - **COOL, measured honestly:** bit-identical outputs, 1.16–1.21× faster on the classical registration path, flat end to end because the learned matcher dominates. One m9g.large covers all ~880 gauged HIVIS cameras at a 15-minute cadence for about $0.06 per camera-month.
-- **A DINOv2-in-OpenCV candidate model** cut year-long CV error from 0.380 to 0.252 ft and improved 19 of 20 sites.
+- **A DINOv2-in-OpenCV candidate model** cut year-long CV error from 0.380 to 0.252 ft and improved 19 of 20 sites. In a pre-registered live shadow it read 0.084 vs 0.183 ft on 249 paired readings.
+- **Autonomy chosen by measurement:** the hybrid (rules act, Claude advises, a human approves) scored 94.6 % on 98 frozen episodes. We also logged and fixed a real false alert that a human approved at a tidal site.
 - **Reproducible:** a fresh clone re-derives every reported number and verifies the frozen hashes in about 80 s.
 
 ## What we learned
