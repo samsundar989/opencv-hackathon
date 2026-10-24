@@ -7,6 +7,9 @@
                 warped with the same homography and `warp_small` as v1, → data/derived/<cam>/dino_calib.npz:
                   filename, t, P (n, 448, K) float16 projected patch tokens, cls (n, 384) float16,
                   gmean (n, 384) float16 mean patch token.
+  --live        the frames of scene_kill30_test.npz (Oct 3–14) → dino_live.npz, used ONLY to refit the live
+                shadow bundles on all data, exactly as the v1 live models are (D-0008 ruling 5). Never used by
+                v2_cv.py; the frozen kill-test numbers are not recomputed.
 
 Run via worker-q (CPU, ~36k frames):
   workerq submit --project riversight --priority high --ram 8 --cpus 8 -- python scripts/v2_dino_features.py --jobs 4
@@ -69,17 +72,19 @@ def fit_basis(per_site: int = 60, seed: int = 0):
           f"K={K} explains {ev[:K].sum():.3f} of token variance (K=16: {ev[:16].sum():.3f})")
 
 
-def calib_frames(cam: str) -> pd.DataFrame:
-    """filename, t, path, H for the v1 calibration frames (t < CUT), H from the registration v1 used."""
+def calib_frames(cam: str, live: bool = False) -> pd.DataFrame:
+    """filename, t, path, H for the v1 calibration frames (t < CUT), H from the registration v1 used.
+    live=True: the scene_kill30_test.npz frames instead (live refit only)."""
     d = DATA / "derived" / cam
     names = []
-    for n in ("scene_history_all.npz", "scene_kill30_fit.npz"):
+    for n in (("scene_kill30_test.npz",) if live else ("scene_history_all.npz", "scene_kill30_fit.npz")):
         p = d / n
         if p.exists():
             z = np.load(p)
             names.append(pd.DataFrame({"filename": z["filename"], "t": pd.to_datetime(z["t"], utc=True)}))
     df = pd.concat(names).drop_duplicates("filename")
-    df = df[df["t"] < CUT]
+    if not live:
+        df = df[df["t"] < CUT]
     hist = pd.read_parquet(d / "history" / "frames.parquet", columns=["filename", "path"]).merge(
         pd.read_parquet(d / "history" / "registration.parquet", columns=["filename", "H"]), on="filename")
     k30 = pd.read_parquet(d / "frames.parquet", columns=["filename", "path"]).merge(
@@ -92,17 +97,17 @@ def calib_frames(cam: str) -> pd.DataFrame:
     return out
 
 
-def run(cam: str) -> str:
+def run(cam: str, live: bool = False) -> str:
     import cv2
     cv2.setNumThreads(2)
     from riversight.vision import dino_features as D
     from riversight.vision.scene_features import warp_small
-    out = DATA / "derived" / cam / "dino_calib.npz"
+    out = DATA / "derived" / cam / ("dino_live.npz" if live else "dino_calib.npz")
     if out.exists():
         return f"{cam}: cached"
     t0 = time.time()
     basis = dict(np.load(BASIS))
-    f = calib_frames(cam)
+    f = calib_frames(cam, live)
     ref_name = pd.read_parquet(DATA / "derived" / cam / "registration_cascade.parquet", columns=["ref"])["ref"].iloc[0]
     ref = cv2.imread(str(DATA / "raw" / "720" / cam / ref_name))
     net = D.load_net()
@@ -129,6 +134,7 @@ def run(cam: str) -> str:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--fit-basis", action="store_true")
+    ap.add_argument("--live", action="store_true")
     ap.add_argument("--only", nargs="*")
     ap.add_argument("--jobs", type=int, default=4)
     a = ap.parse_args()
@@ -137,7 +143,7 @@ def main():
     cams = [c for c in kill_cams() if not a.only or c in a.only]
     n = 0
     with ProcessPoolExecutor(a.jobs) as ex:
-        futs = {ex.submit(run, c): c for c in cams}
+        futs = {ex.submit(run, c, a.live): c for c in cams}
         for fu in as_completed(futs):
             n += 1
             p = os.environ.get("WORKERQ_PROGRESS")

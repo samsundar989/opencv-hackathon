@@ -153,15 +153,19 @@ def run_site(cam: str) -> str:
         K[("gmean", False)] = S.linear_kernel(Gm[tr], Gm[te])
         info.append({"fold": name, "n_tr": ntr, "n_te": nte, "roi_v1": int(roi.sum()), "roi_dino": int(droi[False].sum()),
                      "roi_dino_norm": int(droi[True].sum()), "v1roi_patches": int(v1p.sum())})
+        solved = {}
         for c, s in specs.items():
-            Ktr, Kte = 0.0, 0.0
-            if s["v1"]:
-                Ktr, Kte = Ktr + (1 - s["w"]) * K["v1"][0], Kte + (1 - s["w"]) * K["v1"][1]
-            if s["dino"]:
-                kd = K[(s["dino"], s["norm"])]
-                Ktr, Kte = Ktr + s["w"] * kd[0], Kte + s["w"] * kd[1]
-            sw = S.recency_weights(t[tr], s["tau"]) if s["tau"] else None
-            p, loo = S.ridge_dual(Ktr, Kte, h[tr], LAM, sw)
+            key = (s["v1"], s["dino"], s["norm"], s["w"], s["tau"])      # the sun variants share a solve
+            if key not in solved:
+                Ktr, Kte = 0.0, 0.0
+                if s["v1"]:
+                    Ktr, Kte = Ktr + (1 - s["w"]) * K["v1"][0], Kte + (1 - s["w"]) * K["v1"][1]
+                if s["dino"]:
+                    kd = K[(s["dino"], s["norm"])]
+                    Ktr, Kte = Ktr + s["w"] * kd[0], Kte + s["w"] * kd[1]
+                sw = S.recency_weights(t[tr], s["tau"]) if s["tau"] else None
+                solved[key] = S.ridge_dual(Ktr, Kte, h[tr], LAM, sw)
+            p, loo = solved[key]
             if s["sun"]:
                 Z = Zs if s["sun"] == "sun" else Zd
                 bias_te = S.nuisance_fit(Z[tr], loo, Z[te])
