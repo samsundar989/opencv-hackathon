@@ -104,6 +104,9 @@ def tarball() -> bytes:
         for f in ONNX:
             add(ROOT / "models" / "onnx" / f, f"models/onnx/{f}")
         add(ROOT / "results" / "live_prospective" / "frozen_models.json", "results/live_prospective/frozen_models.json")
+        if (ROOT / "models" / "sites_v2").is_dir():          # W4 shadow model (D-0010 §2): bundles + DINOv2 net
+            add(ROOT / "models" / "sites_v2", "models/sites_v2")
+            add(ROOT / "models" / "onnx" / "dinov2_small_224x392.onnx", "models/onnx/dinov2_small_224x392.onnx")
         sha = git_sha().encode()
         ti = tarfile.TarInfo("CODE_SHA")
         ti.size = len(sha)

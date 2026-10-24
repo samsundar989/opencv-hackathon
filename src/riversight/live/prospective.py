@@ -41,7 +41,8 @@ def load_readings(store, cams: list[str], start: pd.Timestamp, end: pd.Timestamp
                 rows.append({"cam_id": r["cam_id"], "t_frame": r["t_frame"], "t_cycle": r["t_cycle"],
                              "daylight": r.get("daylight"), "reg_ok": (r.get("registration") or {}).get("ok"),
                              "model_sha": r.get("model_sha"), "camera_ft": r.get("camera_stage_ft"),
-                             "camera_at_least_ft": r.get("camera_at_least_ft"), "flags": "|".join(r.get("flags", [])),
+                             "camera_at_least_ft": r.get("camera_at_least_ft"), "shadow_ft": r.get("shadow_stage_ft"),
+                             "flags": "|".join(r.get("flags", [])),
                              "status": r.get("status"), "agent_actions": "|".join((r.get("agent") or {}).get("actions") or [])})
     df = pd.DataFrame(rows)
     if not len(df):
@@ -83,6 +84,9 @@ def score(df: pd.DataFrame, frozen: dict, gauges: dict[str, pd.Series], nwis: di
     df["scored"] = eligible & df["camera_ft"].notna() & df["gauge_ft"].notna() & ~df["saturated"]
     df["abs_err"] = np.where(df["scored"], (df["camera_ft"] - df["gauge_ft"]).abs(), np.nan)
     df["lkv24_abs_err"] = np.where(df["scored"] & df["lkv24_ft"].notna(), (df["lkv24_ft"] - df["gauge_ft"]).abs(), np.nan)
+    if "shadow_ft" not in df:
+        df["shadow_ft"] = np.nan
+    df["shadow_abs_err"] = np.where(df["scored"] & df["shadow_ft"].notna(), (df["shadow_ft"] - df["gauge_ft"]).abs(), np.nan)
 
     def agg(g: pd.DataFrame) -> dict:
         s = g[g["scored"]]
@@ -95,6 +99,11 @@ def score(df: pd.DataFrame, frozen: dict, gauges: dict[str, pd.Series], nwis: di
                 "within_025_pct": round(100 * float((s["abs_err"] <= WITHIN_FT).mean()), 1) if len(s) else None,
                 "lkv24_mae_ft": round(float(s["lkv24_abs_err"].mean()), 3) if s["lkv24_abs_err"].notna().any() else None,
                 "lkv24_median_ae_ft": round(float(s["lkv24_abs_err"].median()), 3) if s["lkv24_abs_err"].notna().any() else None,
+                # v2 shadow on the same readings (D-0010 §2 criterion 2: no worse than v1's median AE)
+                "shadow_n": int(s["shadow_abs_err"].notna().sum()),
+                "shadow_median_ae_ft": round(float(s["shadow_abs_err"].median()), 3) if s["shadow_abs_err"].notna().any() else None,
+                "v1_median_ae_on_shadow_rows_ft": round(float(s.loc[s["shadow_abs_err"].notna(), "abs_err"].median()), 3)
+                if s["shadow_abs_err"].notna().any() else None,
                 "flags": {f: int(g["flags"].str.contains(f).sum()) for f in
                           ("VIEW_CHANGE", "LOW_QUALITY", "GAUGE_STALE", "DISAGREE", "RISING", "OUT_OF_RANGE")},
                 "agent_actions": pd.Series([a for x in g["agent_actions"] for a in x.split("|") if a]).value_counts().to_dict()}

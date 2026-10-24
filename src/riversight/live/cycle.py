@@ -233,6 +233,41 @@ class SiteRegistrar:
         return best
 
 
+# ---- v2 shadow (W4) --------------------------------------------------------------------------------
+
+SHADOW_DIR = Path(os.environ.get("RIVERSIGHT_SHADOW_BUNDLES", BUNDLES.parent / "sites_v2"))
+_SHADOW: dict = {}
+
+
+def shadow_v2(cam: str, img: np.ndarray, H, ref_shape, frame: "Frame", state: dict) -> dict | None:
+    """v2 (DINOv2 tokens in cv2.dnn + v1 block features) estimate beside v1. Absent bundles or any error → None;
+    a v2 failure never touches the v1 reading."""
+    if not (SHADOW_DIR / cam).is_dir():
+        return None
+    t0 = time.perf_counter()
+    try:
+        from riversight.calib.scene_v2 import ShadowV2
+        from riversight.live.bundle import warp_small_safe
+        from riversight.vision import dino_features as D
+        from riversight.vision.scene_features import block_features
+        if "net" not in _SHADOW:
+            _SHADOW["net"] = D.load_net()
+            _SHADOW["basis"] = dict(np.load(SHADOW_DIR / "dino_pca_basis.npz"))
+        if cam not in _SHADOW:
+            _SHADOW[cam] = ShadowV2(SHADOW_DIR / cam)
+        small = warp_small_safe(img, H, ref_shape)
+        F = block_features(small).astype(np.float16).astype(np.float32)
+        P = D.project(D.tokens(_SHADOW["net"], small)[1:], _SHADOW["basis"]).astype(np.float16)
+        raw2 = float(_SHADOW[cam].predict_raw(F, P, frame.time))
+        ks2, x2, _ = _SHADOW[cam].kalman_step(KalmanState.from_json(state.get("kalman_v2")), frame.time.timestamp(), raw2)
+        state["kalman_v2"] = ks2.to_json()
+        return {"shadow_raw_ft": _r(raw2), "shadow_stage_ft": _r(x2), "shadow_model": "v2",
+                "shadow_ms": round((time.perf_counter() - t0) * 1000)}
+    except Exception as e:
+        traceback.print_exc()
+        return {"shadow_error": repr(e)[:200]}
+
+
 # ---- overlay ----------------------------------------------------------------------------------------
 
 def render_overlay(img: np.ndarray, model: SiteModel, H: np.ndarray | None, stage: float | None,
@@ -359,6 +394,7 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
     reg = {"ok": False, "inliers": 0, "inlier_ratio": None, "reproj_px": None, "ref": None, "method": None}
     raw = cam_x = None
     H = None
+    shadow = None
     if night:
         flags.append("NIGHT")
     else:
@@ -381,6 +417,7 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
             if not state.get("quarantined"):
                 ks, cam_x, _ = model.kalman_step(KalmanState.from_json(state.get("kalman")), frame.time.timestamp(), raw)
                 state["kalman"] = ks.to_json()
+            shadow = shadow_v2(cam, img, H, tuple(meta["ref_shape"]), frame, state)
     g_val, g_t, g_rise = gauge.at(meta["nwis_id"], t_cycle)
     g_age = None if g_t is None else (pd.Timestamp(t_cycle) - g_t).total_seconds() / 60
     if g_age is None or g_age > GAUGE_STALE_MIN:
@@ -449,6 +486,8 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
         "model_sha": meta["model_sha"][:12], "code_sha": code_sha(), "opencv": opencv_info(), "mode": mode,
         "privacy": {"faces_blurred": privacy.get("faces_blurred", 0), "detector": "YuNet", "score": FACE_SCORE},
     }
+    if shadow:                                      # W4 v2 candidate (D-0010 §2): logged and scored, never served
+        reading.update(shadow)
     if not night and reg["ok"]:                     # D-0009 W1-2: remembered for night / stale display
         state["last_daylight"] = {k: reading[k] for k in (
             "t_frame", "frame_key", "overlay_key", "thumb_key", "camera_stage_ft", "camera_sigma_ft",
