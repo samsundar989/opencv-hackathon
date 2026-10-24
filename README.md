@@ -5,7 +5,7 @@ Entry for the OpenCV AI Competition 2026, powered by AWS.
 
 RiverSight turns USGS HIVIS river webcams that sit beside an official stream gauge into calibrated water-level instruments, without a staff plate or a site survey. Every frame is registered to a per-site reference with OpenCV 5's learned ALIKED + LightGlue features and USAC_MAGSAC. A **scene model** learns from the gauge's own history which patches of the image flood at which stage. That gives a **flood-height map** for each camera, and a stage reading ± σ from any new daylight frame. A fleet of 20 calibrated cameras runs live on AWS Graviton with COOL. **River Steward**, a Bedrock agent, watches the fleet. It re-anchors cameras whose view changed, fills gauge outages with provisional camera readings, separates camera faults from suspect gauges, and on a rise draws what will be under water at the forecast crest and drafts an alert that a human approves.
 
-**Live:** _URL added at gate G1 (Fri Oct 23)._ · **Report:** `report/REPORT.md` (in progress) · **Video:** _added at submission._
+**Live:** https://d2aes2r6og8aap.cloudfront.net (start at [`/judge`](https://d2aes2r6og8aap.cloudfront.net/judge.html); 20 cameras, every 15 min, Graviton5 + COOL) · **Report:** [`report/REPORT.md`](report/REPORT.md) · **Runbook:** [`docs/RUNBOOK.md`](docs/RUNBOOK.md) · **Video:** _added at submission._
 
 ## What it does, in numbers (frozen protocol, test days read once)
 
