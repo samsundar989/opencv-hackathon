@@ -45,7 +45,11 @@ ARMS = {"rules": dict(use_llm=False, evidence="full", model=None),
         "haiku": dict(use_llm=True, evidence="full", model=llm.HAIKU),
         "haiku_noev": dict(use_llm=True, evidence="flags_only", model=llm.HAIKU),
         "sonnet": dict(use_llm=True, evidence="full", model=llm.SONNET),
-        "opus": dict(use_llm=True, evidence="full", model=llm.OPUS)}
+        "opus": dict(use_llm=True, evidence="full", model=llm.OPUS),
+        # D-0012 hybrid, pre-registered 2026-10-24 before its run: rules act; Sonnet 4.6 reviews gauge drift (may turn
+        # the drift-blind quarantine into a human-approved gauge_suspect ticket) and ranks the fleet; its non-scoring
+        # second opinion on paging decisions runs in repeat 0 only (Bedrock budget, D-0012 <= $25 total)
+        "hybrid": dict(use_llm=True, evidence="full", model=llm.SONNET, mode="rules_first", escalate_reps=(0,))}
 CONTROL_KINDS = ("control_view", "control_disagree", "control_rise", "view_transient", "view_shift")
 FROZEN_FILES = ["src/riversight/agent/llm.py", "src/riversight/agent/rules.py", "src/riversight/agent/tools.py",
                 "src/riversight/agent/schema.py", "src/riversight/agent/fleet.py", "scripts/agent_eval.py"]
@@ -149,7 +153,8 @@ def run_episode(ep, arm, rep, sink):
     cfg = ARMS[arm]
     ctx = make_ctx(ep, cfg["evidence"], sink)
     t0 = time.perf_counter()
-    d = agent.handle(ep["event"], ctx=ctx, model=cfg["model"], use_llm=cfg["use_llm"], record=False)
+    d = agent.handle(ep["event"], ctx=ctx, model=cfg["model"], use_llm=cfg["use_llm"], record=False,
+                     agent_mode=cfg.get("mode"), escalate=(rep in cfg.get("escalate_reps", ())) if cfg.get("mode") else None)
     wall = round(1000 * (time.perf_counter() - t0))
     tool_ms = sum(s.get("ms", 0) for s in d.get("steps", []))
     return {"episode_id": ep["episode_id"], "kind": ep["kind"], "source": ep["source"], "cam_id": ep["cam_id"],
@@ -274,6 +279,7 @@ def report():
          f"Arms: **rules** = deterministic policy (`agent/rules.py`); **haiku** = Bedrock {llm.model_name(llm.HAIKU)} agent with the "
          "OpenCV tools; **haiku_noev** = the same agent whose tools return only the reading's flags (no OpenCV evidence); "
          f"**sonnet** = the agent on {llm.model_name(llm.SONNET)}; **opus** = the agent on {llm.model_name(llm.OPUS)} (if run). "
+         "**hybrid** = D-0012 rules-first: the rules act, Sonnet reviews gauge drift and ranks the fleet. "
          "Claude 5.5 models are not available to this AWS account (docs/HUMAN.md ANSWER 0010). Each arm ran every episode "
          f"{int(s.groupby('arm')['rep'].nunique().max())}×; cells show mean over repeats (min–max across repeats).", "",
          "## Headline", "", "| arm | task success | real episodes | synthetic | false-action rate on clean controls | "

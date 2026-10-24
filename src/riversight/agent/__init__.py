@@ -94,6 +94,31 @@ def ticket_hysteresis(event: Event, d: Decision, sink: Sink) -> Decision:
     return d
 
 
+def drift_review(event: Event, ctx: ToolContext, d: Decision, converse=None) -> Decision:
+    """Hybrid gauge-drift review: the rules quarantined a usable, registered camera because it disagrees with a
+    normal-looking gauge — the one case the rules cannot judge (a slowly drifting gauge looks normal). Sonnet 4.6
+    re-decides with the same tools; if it judges the gauge suspect, the quarantine becomes a human-approved
+    OPEN_TICKET gauge_suspect (nothing external happens without approval). Otherwise the rules decision stands."""
+    from riversight.agent import llm
+    try:
+        s = llm.run(event, ctx, model=llm.SONNET, converse=converse)
+    except Exception as e:                                                        # noqa: BLE001
+        d["drift_review"] = {"error": type(e).__name__}
+        return d
+    d["tokens_in"] += s["tokens_in"]
+    d["tokens_out"] += s["tokens_out"]
+    d["usd"] = round(d["usd"] + s["usd"], 6)
+    ticket = next((a for a in s["actions"] if a["type"] == "OPEN_TICKET" and (a.get("args") or {}).get("kind") == "gauge_suspect"), None)
+    d["drift_review"] = {"model": s["model"], "actions": schema.action_types(s), "gauge_suspect": ticket is not None,
+                         "rationale": s["rationale"]}
+    if ticket is None:
+        return d
+    d["actions"] = [a for a in d["actions"] if a["type"] != "QUARANTINE"] + [ticket]
+    d["decided_by"] = "rules+llm_review"
+    d["rationale"] += f" [Sonnet drift review: gauge suspect, ticket instead of quarantine: {s['rationale'][:200]}]"
+    return schema.finalize(event, d)
+
+
 def second_opinion(event: Event, ctx: ToolContext, d: Decision, converse=None) -> Decision:
     """Sonnet 4.6 re-decides an event whose decision (Haiku 4.5, or the rules in rules_first mode) would page a
     human (RIVERSIGHT_AGENT_ESCALATE=1). The first decision stands; disagreement is recorded for the approver."""
@@ -116,7 +141,8 @@ def second_opinion(event: Event, ctx: ToolContext, d: Decision, converse=None) -
 
 
 def handle(event: Event, ctx: ToolContext | None = None, model: str | None = None, converse=None,
-           use_llm: bool | None = None, record: bool | None = None, write_log: bool = False) -> Decision:
+           use_llm: bool | None = None, record: bool | None = None, write_log: bool = False,
+           agent_mode: str | None = None, escalate: bool | None = None) -> Decision:
     """Decide what to do about one flagged reading.
 
     record     honour the kill switch and charge the daily token ledger (default: live mode only)
@@ -133,11 +159,16 @@ def handle(event: Event, ctx: ToolContext | None = None, model: str | None = Non
         d = _kill_decision(event)
     elif not use_llm:
         d = rules.handle(event, ctx)
-    elif os.environ.get("RIVERSIGHT_AGENT_MODE", "llm_first") == "rules_first":
-        # Q-0011 option (a): the deterministic OpenCV-evidence policy acts (93.9 % in the frozen eval vs 71.4 %
-        # Sonnet 4.6 / 58.8 % Haiku 4.5); Claude only reviews what would page a human, within the token cap.
+    elif (agent_mode or os.environ.get("RIVERSIGHT_AGENT_MODE", "llm_first")) == "rules_first":
+        # ANSWER 0011 / D-0012 hybrid: the deterministic OpenCV-evidence policy acts (93.9 % in the frozen eval vs
+        # 71.4 % Sonnet 4.6 / 58.8 % Haiku 4.5); Claude Sonnet 4.6 reviews gauge drift (where the rules are blind)
+        # and gives a recorded second opinion on anything that would page a human, within the token cap.
         d = rules.handle(event, ctx)
-        if d.get("approval_id") and os.environ.get("RIVERSIGHT_AGENT_ESCALATE") == "1" and not (record and ledger.exhausted()):
+        capped = record and ledger.exhausted()
+        if not capped and any((a.get("args") or {}).get("reason") == "disagree_gauge_normal" for a in d["actions"]):
+            d = drift_review(event, ctx, d, converse)
+        esc = (os.environ.get("RIVERSIGHT_AGENT_ESCALATE") == "1") if escalate is None else escalate
+        if d.get("approval_id") and esc and not capped:
             d = second_opinion(event, ctx, d, converse)
     elif record and ledger.exhausted():
         d = rules.handle(event, ctx)

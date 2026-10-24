@@ -348,6 +348,26 @@ def test_rules_first_mode_rules_act_sonnet_reviews_only_paging_decisions(monkeyp
     assert d["decided_by"] == "rules" and models == []          # nothing pages a human -> no LLM call
 
 
+def test_hybrid_drift_review_turns_blind_quarantine_into_gauge_ticket(monkeypatch):
+    """D-0012 hybrid: the rules quarantine a good camera that disagrees with a normal-looking gauge (blind to drift);
+    Sonnet's review can replace that with a human-approved gauge_suspect ticket, and only then."""
+    canned(monkeypatch, image_quality=GOOD_Q, estimate_stage={"ok": True, "stage_ft": 5.0, "sigma_ft": 0.2},
+           get_gauge={"latest_ft": 6.1, "age_min": 0.0, "max_step_ft": 0.02, "step_isolation": 1, "flat_hours": 0})
+
+    def reviewer(kind):
+        def conv(**kw):
+            assert kw["modelId"] == llm.SONNET
+            acts = [{"type": "OPEN_TICKET", "args": {"kind": kind}}] if kind else [{"type": "QUARANTINE"}]
+            return {"output": {"message": {"role": "assistant", "content": [{"toolUse": {"toolUseId": "s", "name": "submit_decision",
+                    "input": {"actions": acts, "rationale": "drifting gauge"}}}]}}, "stopReason": "tool_use",
+                    "usage": {"inputTokens": 10, "outputTokens": 5}}
+        return conv
+    d = agent.handle(ev(["DISAGREE"]), ctx=CTX(), converse=reviewer("gauge_suspect"), agent_mode="rules_first", escalate=False)
+    assert schema.action_types(d) == ["OPEN_TICKET"] and d["decided_by"] == "rules+llm_review" and d["approval_id"]
+    d = agent.handle(ev(["DISAGREE"]), ctx=CTX(), converse=reviewer(None), agent_mode="rules_first", escalate=False)
+    assert schema.action_types(d) == ["QUARANTINE"] and d["drift_review"]["gauge_suspect"] is False
+
+
 def test_flags_only_ablation_withholds_evidence():
     ctx = tools.ToolContext(evidence="flags_only", event=ev(["VIEW_CHANGE"]))
     r = tools.call(ctx, "estimate_stage", {"cam": "CAM", "frame_key": "k.jpg"})
