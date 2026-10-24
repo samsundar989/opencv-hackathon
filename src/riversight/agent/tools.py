@@ -87,19 +87,29 @@ def _frame(key: str) -> np.ndarray:
 
 # ---- registration helpers ---------------------------------------------------------------------------
 
-_registrars: dict[tuple[str, str], Any] = {}
-_reg_lock = threading.RLock()        # ALIKED/LightGlue objects are not shared across threads concurrently
+# ONE detector/matcher instance per method per process; only each reference's keypoints + descriptors are cached
+# (~1k × 128 floats). The first version built an ALIKED+LightGlue instance per reference image (~1.3 GB each):
+# the eval jobs committed 31-40 GiB each and took the host down on Oct 23 (worker-q 3741-3743).
+_registrars: dict[str, Any] = {}
+_ref_feats: dict[tuple[str, str], tuple] = {}
+_reg_lock = threading.RLock()        # the shared ALIKED/LightGlue objects are used by one thread at a time
+MAX_REF_FEATS = 512
 
 
 def _registrar(ref_path: str, method: str, ref_img: np.ndarray):
+    """The shared registrar for `method`, pointed at `ref_path`'s cached reference features. Call under _reg_lock."""
     from riversight.killtest import Cfg, make_registrar
+    if method not in _registrars:
+        _registrars[method] = make_registrar(Cfg(), method)
+    R = _registrars[method]
     k = (ref_path, method)
-    with _reg_lock:
-        if k not in _registrars:
-            R = make_registrar(Cfg(), method)
-            R.set_reference(ref_img)
-            _registrars[k] = R
-        return _registrars[k]
+    if k not in _ref_feats:
+        if len(_ref_feats) >= MAX_REF_FEATS:
+            _ref_feats.clear()
+        R.set_reference(ref_img)
+        _ref_feats[k] = (R._ref_kp, R._ref_desc, R._ref_shape)
+    R._ref_kp, R._ref_desc, R._ref_shape = _ref_feats[k]
+    return R
 
 
 def _register(img: np.ndarray, ref_path: str, ref_img: np.ndarray, methods=("orb", "aliked")) -> dict:

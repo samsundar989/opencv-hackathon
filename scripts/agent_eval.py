@@ -93,7 +93,9 @@ def kendall_tau(pred: list, truth: list) -> float:
 
 class ToolCache:
     def __init__(self):
-        self.dir = WORK / "cache" / sha(ROOT / "src/riversight/agent/tools.py")[:12]
+        # RIVERSIGHT_TOOL_CACHE lets parallel worker-q jobs share one cache (their snapshots each have their own runs/)
+        base = Path(os.environ.get("RIVERSIGHT_TOOL_CACHE", WORK / "cache"))
+        self.dir = base / sha(ROOT / "src/riversight/agent/tools.py")[:12]
         self.dir.mkdir(parents=True, exist_ok=True)
         self.lock = threading.Lock()
         self.mem: dict[str, dict] = {}
@@ -125,7 +127,9 @@ class ToolCache:
             with self.lock:
                 c = self._load(eid)
                 c[key] = {"res": res, "ms": ms}
-                (self.dir / f"{eid}.json").write_text(json.dumps(c, default=str), encoding="utf-8")
+                tmp = self.dir / f"{eid}.{os.getpid()}.tmp"            # atomic: several processes share the cache
+                tmp.write_text(json.dumps(c, default=str), encoding="utf-8")
+                tmp.replace(self.dir / f"{eid}.json")
             return res
         return call
 

@@ -1,0 +1,12 @@
+{
+ "episodes": 44,
+ "missing_cache": 0,
+ "calls_identical": 74,
+ "calls_different": 0,
+ "diffs": [],
+ "peak_rss_gib": 1.9,
+ "peak_vms_gib": 2.76,
+ "seconds": 180,
+ "n_registrar_instances": 2,
+ "n_cached_reference_features": 87
+}
