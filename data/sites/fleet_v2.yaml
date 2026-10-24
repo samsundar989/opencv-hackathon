@@ -395,8 +395,8 @@ sites:
   name: Wisconsin River at Muscoda
   swing_ft: 4.92
   score: 0.825
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: KS_Kansas_River_at_De_Soto
   nwis_id: 06892350
   state: KS
