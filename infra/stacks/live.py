@@ -78,6 +78,10 @@ class LiveStack(Stack):
                 "/live/*": cf.BehaviorOptions(
                     origin=live_origin, viewer_protocol_policy=cf.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                     cache_policy=live_cache, compress=True),
+                "/api/v1/*": cf.BehaviorOptions(           # public read-only feed (static S3), before the /api/* Lambda
+                    origin=live_origin, viewer_protocol_policy=cf.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                    cache_policy=live_cache, compress=True,
+                    response_headers_policy=cf.ResponseHeadersPolicy.CORS_ALLOW_ALL_ORIGINS),
                 "/api/*": cf.BehaviorOptions(
                     origin=origins.FunctionUrlOrigin(api_url, custom_headers={"x-origin-verify": origin_secret}
                                                      if origin_secret else None),
@@ -94,6 +98,7 @@ class LiveStack(Stack):
         role = iam.Role(self, "WorkerRole", assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"),
                         managed_policies=[iam.ManagedPolicy.from_aws_managed_policy_name("AmazonSSMManagedInstanceCore")])
         bucket.grant_read_write(role, "live/*")
+        bucket.grant_read_write(role, "api/v1/*")
         bucket.grant_read(role, "models/*")
         bucket.grant_read(role, "deploy/*")
         role.add_to_policy(iam.PolicyStatement(actions=["s3:ListBucket"], resources=[bucket.bucket_arn]))

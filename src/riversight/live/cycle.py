@@ -506,6 +506,13 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
     slim = {k: reading[k] for k in ("t_frame", "camera_stage_ft", "gauge_stage_ft", "flags")}
     state["recent"] = (recent + [slim])[-RECENT_N:]
     state["last_frame"], state["last_t"] = frame.filename, iso(frame.time)
+    try:                                            # public Atom feed: flood-state changes (D-0013 W1-3)
+        from riversight.live.feed import flood_event
+        flood_event(store, reading, state.get("flood_state_prev"))
+    except Exception:
+        traceback.print_exc()
+    if reading.get("flood_state") not in (None, "unknown"):
+        state["flood_state_prev"] = reading["flood_state"]
     store.put_json(f"live/sites/{cam}/latest.json", reading)
     store.append_jsonl(f"live/sites/{cam}/{frame.time:%Y-%m-%d}.jsonl", reading)
     store.put_json(f"live/state/{cam}.json", state)
@@ -706,6 +713,11 @@ def run_cycle(store, models: list[SiteModel], agent_fn=default_agent_fn, now: da
            "n_errors": len(errors), "errors": errors, "code_sha": code_sha(), "opencv": opencv_info(), "sites": sites}
     store.put_json("live/index.json", idx)
     store.append_jsonl(f"live/cycles/{now:%Y-%m-%d}.jsonl", {k: v for k, v in idx.items() if k != "sites"})
+    try:                                            # public read-only feed under /api/v1/ (D-0013 W1-3)
+        from riversight.live.feed import build as build_feed
+        build_feed(store, models, idx)
+    except Exception:
+        traceback.print_exc()
     try:                                            # W2: ranked "needs a person" list for the dashboard
         from riversight.agent.triage import write_triage
         write_triage(store)

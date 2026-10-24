@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="RiverSight public data feed: camera-derived river stage for USGS HIVIS cameras as static JSON and Atom.">
+<title>RiverSight — data API</title>
+<link rel="stylesheet" href="assets/app.css">
+<script src="assets/common.js"></script>
+</head>
+<body>
+<main>
+  <h1>Public data feed</h1>
+  <p class="lede">Read-only static JSON and an Atom feed, refreshed by the live worker every cycle (15 min). No key, CORS open.
+    Values are camera-derived estimates from RiverSight's live models next to the USGS gauge; they are not official USGS data.
+    Images are face-blurred derivatives of USGS HIVIS frames (public domain).</p>
+
+  <h2>Endpoints</h2>
+  <div class="panel tablewrap"><table>
+    <thead><tr><th>path</th><th>what</th><th>refresh</th></tr></thead><tbody>
+    <tr><td><a href="api/v1/sites.json"><code>/api/v1/sites.json</code></a></td><td>every served camera: location, group (<code>frozen20</code> | <code>onboarded</code>), status, latest values</td><td>each cycle</td></tr>
+    <tr><td><code>/api/v1/sites/&lt;cam_id&gt;/latest.json</code></td><td>the latest reading for one camera</td><td>each cycle</td></tr>
+    <tr><td><code>/api/v1/sites/&lt;cam_id&gt;/history.json</code></td><td>the last 7 days of readings</td><td>hourly</td></tr>
+    <tr><td><a href="api/v1/feed.xml"><code>/api/v1/feed.xml</code></a></td><td>Atom: flood-state changes (normal / elevated / flood) and operator-approved flood alerts</td><td>each cycle</td></tr>
+    </tbody></table></div>
+
+  <h2>Example</h2>
+  <pre id="ex">curl -s https://d2aes2r6og8aap.cloudfront.net/api/v1/sites/IL_Salt_Creek_at_Wood_Dale/latest.json</pre>
+  <pre id="sample" class="small">Loading a live sample…</pre>
+
+  <h2>Fields</h2>
+  <div class="panel tablewrap"><table><thead><tr><th>field</th><th>meaning</th></tr></thead><tbody>
+    <tr><td><code>camera_stage_ft</code>, <code>camera_sigma_ft</code></td><td>Stage read from the image (scene model + Kalman), ± the site's year-long out-of-fold error. <code>null</code> at night, when the frame does not register, or above the calibrated range.</td></tr>
+    <tr><td><code>camera_at_least_ft</code></td><td>Set instead of a number when the river is above anything the camera saw in calibration: the stage is at least this high.</td></tr>
+    <tr><td><code>calibrated_range_ft</code></td><td>[min, max] stage in the camera's calibration data.</td></tr>
+    <tr><td><code>gauge_stage_ft</code>, <code>gauge_time</code>, <code>gauge_age_min</code></td><td>The co-located USGS gauge (NWIS IV) as seen by the cycle.</td></tr>
+    <tr><td><code>fused_stage_ft</code>, <code>fused_sigma_ft</code>, <code>fused_source</code></td><td>Headline "RiverSight stage": the gauge when fresh, a camera-driven gap-fill when not (present once enabled).</td></tr>
+    <tr><td><code>flood_state</code></td><td><code>normal</code> | <code>elevated</code> (≥ calibration p90) | <code>flood</code> (≥ p99) | <code>unknown</code>.</td></tr>
+    <tr><td><code>status</code></td><td>ok, provisional (gauge down), above_range, view_change, quarantined, night, stale, …</td></tr>
+    <tr><td><code>flags</code></td><td>VIEW_CHANGE, LOW_QUALITY, GAUGE_STALE, DISAGREE, RISING, OUT_OF_RANGE, NIGHT.</td></tr>
+    <tr><td><code>overlay_url</code>, <code>thumb_url</code></td><td>The frame with the area under water at the estimated stage (connected inundation), face-blurred.</td></tr>
+    <tr><td><code>group</code></td><td><code>frozen20</code>: the 20 evaluated cameras. <code>onboarded</code>: added Oct 24–25 with the frozen setting, not part of the frozen test.</td></tr>
+  </tbody></table></div>
+  <p class="small muted">Not for life-safety decisions. Use official NWS warnings and USGS data for those.</p>
+</main>
+<script>
+RS.json("api/v1/sites/IL_Salt_Creek_at_Wood_Dale/latest.json").then((d) => {
+  document.getElementById("sample").textContent = JSON.stringify(d, null, 2);
+}).catch(() => { document.getElementById("sample").textContent = "(sample unavailable)"; });
+</script>
+</body>
+</html>

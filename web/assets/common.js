@@ -1,6 +1,6 @@
 // RiverSight dashboard: shared helpers (no build step).
 const RS = (() => {
-  const NAV = [["index.html", "Live"], ["judge.html", "Judges: start here"], ["approvals.html", "Approvals"], ["proof.html", "Proof"]];
+  const NAV = [["index.html", "Live"], ["judge.html", "Judges: start here"], ["approvals.html", "Approvals"], ["proof.html", "Proof"], ["api.html", "Data API"]];
 
   function header() {
     const here = location.pathname.split("/").pop() || "index.html";
