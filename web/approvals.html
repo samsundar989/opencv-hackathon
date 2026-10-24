@@ -46,7 +46,12 @@
         ${a.overlay_key ? `<img src="${RS.esc(a.overlay_key)}" alt="Frame the agent saw" style="max-width:100%;border-radius:8px" loading="lazy">` : ""}
       </article>`).join("");
     el.querySelectorAll("button[data-id]").forEach((b) => b.addEventListener("click", async () => {
-      if (!tok.value) { tok.focus(); return; }
+      if (!tok.value) {
+        tok.focus();
+        b.parentElement.querySelector(".needtok")?.remove();
+        b.insertAdjacentHTML("afterend", ` <span class="err small needtok">Enter the operator token in the box at the top first.</span>`);
+        return;
+      }
       b.disabled = true;
       const r = await fetch(`api/approvals/${encodeURIComponent(b.dataset.id)}`, { method: "POST", headers: { "content-type": "application/json" },
         body: JSON.stringify({ decision: b.dataset.d, token: tok.value }) });
