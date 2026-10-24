@@ -24,6 +24,11 @@
   <div id="map" role="region" aria-label="Map of camera sites"></div>
   <h2>Sites</h2>
   <div class="grid" id="sites"></div>
+  <h2 id="onb-h" hidden>Onboarded this weekend</h2>
+  <p class="lede" id="onb-lede" hidden>Self-calibrated from each gauge's own history with the frozen setting (no per-site tuning); not part of the
+    frozen test. Each card shows the camera ± σ and the site's forward-chaining CV error (nMAE = MAE ÷ the site's stage range).
+    Scored live as a separate group.</p>
+  <div class="grid" id="onboarded"></div>
 </main>
 <script>
 (async () => {
@@ -31,7 +36,7 @@
   let idx;
   try { idx = await RS.json("live/index.json"); }
   catch (e) { strip.innerHTML = `<span class="err">No live data yet (${RS.esc(e.message)}).</span>`; return; }
-  const sites = idx.sites || [];
+  let sites = idx.sites || [];
   // D-0011 W1-4: count every status, so a night-time strip doesn't read as "broken"
   const by = {};
   sites.forEach((s) => { by[s.status || "pending"] = (by[s.status || "pending"] || 0) + 1; });
@@ -76,6 +81,23 @@
   if (pts.length) map.fitBounds(pts, { padding: [24, 24] });
   });
 
+  const onb = sites.filter((s) => s.group === "onboarded");
+  sites = sites.filter((s) => s.group !== "onboarded");
+  await RS.panel("onboarded", async (el) => {
+    if (!onb.length) return;
+    const cv = await RS.json("data/onboarded.json").catch(() => ({}));
+    document.getElementById("onb-h").hidden = false; document.getElementById("onb-lede").hidden = false;
+    onb.sort((a, b) => a.cam_id.localeCompare(b.cam_id));
+    el.innerHTML = onb.map((s) => { const c = cv[s.cam_id] || {};
+      const dark = !s.daylight || s.status === "stale" || s.status === "night";
+      const key = dark && s.last_daylight_overlay_key ? (s.last_daylight_thumb_key || s.last_daylight_overlay_key) : (s.thumb_key || s.overlay_key);
+      return `<a class="panel card" href="site.html?cam=${encodeURIComponent(s.cam_id)}">
+        ${key ? `<img loading="lazy" src="${RS.esc(key)}" alt="${dark ? "Last daylight frame" : "Latest frame"} from ${RS.esc(RS.nice(s.cam_id))}">` : `<img alt="">`}
+        <div class="body"><div class="name">${RS.esc(RS.nice(s.cam_id))}</div>
+          <div>${RS.pill(s.status)} <span class="muted small">tier ${RS.esc(c.tier || s.tier || "?")} · CV nMAE ${c.cv_nmae != null ? Number(c.cv_nmae).toFixed(3) : "—"}</span></div>
+          <div class="nums"><span>camera <b>${RS.cam(s)}</b></span><span>gauge <b>${RS.ft(s.gauge_stage_ft)}</b></span></div>
+          ${dark && s.last_daylight_t ? `<div class="muted small">last daylight: ${RS.lastDay(s)}</div>` : ""}</div></a>`; }).join("");
+  });
   await RS.panel("sites", async () => {
   sites.sort((a, b) => RS.featuredRank(a.cam_id) - RS.featuredRank(b.cam_id) || a.cam_id.localeCompare(b.cam_id));
   document.getElementById("sites").innerHTML = sites.map((s) => `

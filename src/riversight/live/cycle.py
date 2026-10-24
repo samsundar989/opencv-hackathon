@@ -611,6 +611,7 @@ def apply_decision(d: dict, reading: dict, state: dict, store, t_cycle: datetime
         store.put_json(f"live/approvals/{aid}.json", {
             "approval_id": aid, "status": "pending", "created": iso(t_cycle), "cam_id": reading["cam_id"],
             "event_id": d.get("event_id"), "actions": pending, "rationale": d.get("rationale"),
+            "decided_by": d.get("decided_by"), "second_opinion": d.get("second_opinion"),
             "overlay_key": reading["overlay_key"], "reading": {k: reading[k] for k in (
                 "t_frame", "camera_stage_ft", "camera_sigma_ft", "gauge_stage_ft", "flood_state", "flags")}})
         notify_approval(aid, reading, pending, d.get("rationale"))
@@ -635,9 +636,27 @@ def notify_approval(aid: str, reading: dict, actions: list, rationale: str | Non
 
 # ---- cycle ------------------------------------------------------------------------------------------
 
-def load_models(bundles: Path = BUNDLES, only: list[str] | None = None) -> list[SiteModel]:
-    return [SiteModel(d) for d in sorted(Path(bundles).iterdir())
-            if (d / "meta.json").exists() and not d.name.startswith(".") and (not only or d.name in only)]
+ONBOARD = Path(os.environ.get("RIVERSIGHT_ONBOARD_BUNDLES", BUNDLES.parent / "onboard"))
+SERVED_TIERS = ("A", "B")          # D-0010 §3 / D-0012: onboarded sites are served only at tier B or better
+
+
+def load_models(bundles: Path = BUNDLES, only: list[str] | None = None, onboard: Path | None = ONBOARD) -> list[SiteModel]:
+    """The frozen-20 live bundles, then W5's onboarded bundles (tier A/B only), each tagged with its group."""
+    out = []
+    for root, group in ((Path(bundles), "frozen20"), (Path(onboard) if onboard else None, "onboarded")):
+        if root is None or not root.is_dir():
+            continue
+        for d in sorted(root.iterdir()):
+            if not (d / "meta.json").exists() or d.name.startswith(".") or (only and d.name not in only):
+                continue
+            m = SiteModel(d)
+            if group == "onboarded" and m.meta.get("tier") not in SERVED_TIERS:
+                continue
+            if any(x.cam_id == m.cam_id for x in out):
+                continue
+            m.group = group
+            out.append(m)
+    return out
 
 
 def due(state: dict | None, now: datetime) -> bool:
@@ -712,6 +731,7 @@ def slim_reading(r: dict, meta: dict) -> dict:
             "status", "provisional", "agent", "frame_age_min")
     out = {k: r.get(k) for k in keep}
     out.update(lat=meta["lat"], lon=meta["lon"], tier=meta["tier"], nwis_id=meta["nwis_id"],
+               group="onboarded" if meta.get("onboarded") else "frozen20",
                reg_ok=r["registration"]["ok"],
                last_daylight_overlay_key=(r.get("last_daylight") or {}).get("overlay_key"),
                last_daylight_thumb_key=(r.get("last_daylight") or {}).get("thumb_key"),
@@ -758,16 +778,29 @@ FROZEN_MODELS = Path(os.environ.get("RIVERSIGHT_FROZEN_MODELS",
 
 def score_prospective_hourly(store) -> None:
     """D-0010 §1: refresh live/prospective/* at most once an hour (one batched NWIS IV request)."""
-    if not FROZEN_MODELS.exists():
+    from riversight.live import prospective
+    for path, prefix in ((FROZEN_MODELS, "live/prospective"),
+                         (FROZEN_MODELS.with_name("frozen_models_onboarded.json"), "live/prospective/onboarded")):
+        if not path.exists():
+            continue
+        last = (store.get_json(f"{prefix}/summary.json") or {}).get("generated_utc")
+        if last and (pd.Timestamp.now(tz="UTC") - pd.Timestamp(last)).total_seconds() < 55 * 60:
+            continue
+        try:
+            prospective.run(store, json.loads(path.read_text(encoding="utf-8")), prefix=prefix)
+        except Exception:
+            traceback.print_exc()
+
+
+def load_worker_env(path: Path = ROOT / "worker.env") -> None:
+    """KEY=VALUE lines shipped with the deploy tarball (agent mode, escalation); the systemd env wins."""
+    if not path.exists():
         return
-    last = (store.get_json("live/prospective/summary.json") or {}).get("generated_utc")
-    if last and (pd.Timestamp.now(tz="UTC") - pd.Timestamp(last)).total_seconds() < 55 * 60:
-        return
-    try:
-        from riversight.live import prospective
-        prospective.run(store, json.loads(FROZEN_MODELS.read_text(encoding="utf-8")))
-    except Exception:
-        traceback.print_exc()
+    for ln in path.read_text(encoding="utf-8").splitlines():
+        ln = ln.strip()
+        if ln and not ln.startswith("#") and "=" in ln:
+            k, v = ln.split("=", 1)
+            os.environ.setdefault(k.strip(), v.strip())
 
 
 def main(argv=None):
@@ -782,6 +815,7 @@ def main(argv=None):
     ap.add_argument("--force", action="store_true", help="process every site regardless of cadence")
     ap.add_argument("--out", type=Path, help="replay output dir (default live_local/replay/<cam>)")
     a = ap.parse_args(argv)
+    load_worker_env()
     agent_fn = None if a.no_agent else default_agent_fn
     if a.replay:
         cam, t0, t1 = a.replay

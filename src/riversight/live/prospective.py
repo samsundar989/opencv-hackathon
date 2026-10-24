@@ -127,17 +127,21 @@ def score(df: pd.DataFrame, frozen: dict, gauges: dict[str, pd.Series], nwis: di
     return df, per_site, summary
 
 
-def run(store, frozen: dict, end: pd.Timestamp | None = None) -> dict:
+def run(store, frozen: dict, end: pd.Timestamp | None = None, prefix: str = "live/prospective") -> dict:
+    """Score one pre-registered group (frozen-20, or the onboarded sites with their own window start)."""
     end = end or pd.Timestamp.now(tz="UTC")
+    start = pd.Timestamp(frozen.get("window_start_utc") or WINDOW_START)
     cams = sorted(frozen["models"])
     nwis = {c: frozen["models"][c]["nwis_id"] for c in cams}
-    df = load_readings(store, cams, WINDOW_START, end)
+    df = load_readings(store, cams, start, end)
     if not len(df):
         return {"note": "no readings yet"}
-    df, per_site, summary = score(df, frozen, fetch_gauge(nwis, WINDOW_START, end), nwis)
+    df, per_site, summary = score(df, frozen, fetch_gauge(nwis, start, end), nwis)
+    summary["window_start_utc"] = start.isoformat()
+    summary["group"] = frozen.get("group", "frozen20")
     for name, frame in (("readings.csv", df), ("per_site.csv", per_site)):
         buf = io.StringIO()
         frame.to_csv(buf, index=False, float_format="%.4f")
-        store.put_bytes(f"live/prospective/{name}", buf.getvalue().encode(), "text/csv", "no-cache")
-    store.put_json("live/prospective/summary.json", summary)
+        store.put_bytes(f"{prefix}/{name}", buf.getvalue().encode(), "text/csv", "no-cache")
+    store.put_json(f"{prefix}/summary.json", summary)
     return summary

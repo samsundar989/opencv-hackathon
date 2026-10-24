@@ -1,0 +1,250 @@
+{
+  "decision": "D-0012 Q-0012 option 1 (onboarded group, never mixed with the frozen 20); rules of D-0010 \u00a71",
+  "group": "onboarded",
+  "window_start_utc": "2026-10-24T20:42:23+00:00",
+  "note": "frozen at deploy time, before the first cycle that serves these bundles",
+  "bundles": "W5 onboarding (models/onboard, frozen D-0007 setting, 12 months to 2026-10-23)",
+  "frozen_utc": "2026-10-24T20:42:23+00:00",
+  "models": {
+    "GA_Savannah_River_at_USACE_Dock_at_Savannah": {
+      "model_sha": "a4304480cb5a3f5db7ad867344f301a7e7ce59a15fc6af0169619d05512bf19f",
+      "nwis_id": "021989773",
+      "trained_at": "2026-10-24T07:27:38+00:00",
+      "tier": "B",
+      "n_calib_frames": 4003,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "GA_Withlacoochee_River_at_Skipper_Bridge_Road_near_Bemiss": {
+      "model_sha": "7724b009628c6a6183d8aafde8aa0f48954f0b9d40effe6eb866187a428b56b7",
+      "nwis_id": "023177483",
+      "trained_at": "2026-10-24T10:39:29+00:00",
+      "tier": "B",
+      "n_calib_frames": 2198,
+      "calib_end": "2026-10-22T22:00:12+00:00"
+    },
+    "ID_Clearwater_River_at_Spalding": {
+      "model_sha": "e8a69bc96c3243286faa6f451373d2d2ff12afc52288427e02c5aa144ee9d86c",
+      "nwis_id": "13342500",
+      "trained_at": "2026-10-24T08:52:36+00:00",
+      "tier": "B",
+      "n_calib_frames": 1833,
+      "calib_end": "2026-10-22T22:00:13+00:00"
+    },
+    "IL_Illinois_River_at_Henry": {
+      "model_sha": "21e4e1ee86eb135c318b552408914565bee088066ccb882ef483768d1f388563",
+      "nwis_id": "05558300",
+      "trained_at": "2026-10-24T07:52:41+00:00",
+      "tier": "B",
+      "n_calib_frames": 1212,
+      "calib_end": "2026-10-22T22:01:30+00:00"
+    },
+    "IN_St_Joseph_River_near_Newville": {
+      "model_sha": "878f9853b6c774930af8269d1d13322d86cafb469365c70734fa9678376e519e",
+      "nwis_id": "04178000",
+      "trained_at": "2026-10-24T12:20:37+00:00",
+      "tier": "B",
+      "n_calib_frames": 2025,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "IN_WABASH_RIVER_AT_NEW_HARMONY": {
+      "model_sha": "2d417c0c1ccf87451bdac1ded03d262e53d4bbe99eeb879bcd6caf16a8d36f95",
+      "nwis_id": "03378500",
+      "trained_at": "2026-10-24T12:22:52+00:00",
+      "tier": "B",
+      "n_calib_frames": 2501,
+      "calib_end": "2026-10-22T22:00:12+00:00"
+    },
+    "KS_Big_Blue_R_nr_Manhattan": {
+      "model_sha": "d983579d03d8c9d1d546c94bee5ba2c7e4f32320b1527743d4aca4d11a107a74",
+      "nwis_id": "06887000",
+      "trained_at": "2026-10-24T06:05:44+00:00",
+      "tier": "B",
+      "n_calib_frames": 1962,
+      "calib_end": "2026-10-22T23:00:12+00:00"
+    },
+    "KS_Big_Blue_River_near_Manhattan": {
+      "model_sha": "0fef34334caebe70229cd03a3c1817c0ef8e452bb84e211442b36e0a54821fc9",
+      "nwis_id": "06887000",
+      "trained_at": "2026-10-24T07:26:26+00:00",
+      "tier": "B",
+      "n_calib_frames": 2574,
+      "calib_end": "2026-10-22T23:00:00+00:00"
+    },
+    "KS_Kansas_River_at_De_Soto": {
+      "model_sha": "1798130a33f4ba721d5d708ec3a6f41c3d7ea248479b43a369e7255fc359a01c",
+      "nwis_id": "06892350",
+      "trained_at": "2026-10-24T16:23:54+00:00",
+      "tier": "B",
+      "n_calib_frames": 1963,
+      "calib_end": "2026-10-22T22:00:12+00:00"
+    },
+    "KS_Kansas_River_at_Wamego": {
+      "model_sha": "449d159dccc61a824fe98c5c364688813e8c22dc214529f89d38cfe6989ba4b8",
+      "nwis_id": "06887500",
+      "trained_at": "2026-10-24T09:25:18+00:00",
+      "tier": "B",
+      "n_calib_frames": 2369,
+      "calib_end": "2026-10-22T23:00:00+00:00"
+    },
+    "MN_Bois_De_Sioux_River_near_Doran": {
+      "model_sha": "901a507d8daf815375960cfce81dbc4d42269699a6853e94b09f54b00595fd6a",
+      "nwis_id": "05051300",
+      "trained_at": "2026-10-24T10:33:29+00:00",
+      "tier": "B",
+      "n_calib_frames": 1829,
+      "calib_end": "2026-10-22T22:00:12+00:00"
+    },
+    "MN_Buffalo_River_near_Dilworth": {
+      "model_sha": "20a16e4b97f9785d937990699ce7869f319d5d26971b962328f32da864c02d9d",
+      "nwis_id": "05062000",
+      "trained_at": "2026-10-24T13:36:55+00:00",
+      "tier": "B",
+      "n_calib_frames": 1050,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "MN_Minnesota_River_near_Jordan_DOWNSTREAM": {
+      "model_sha": "bd21b289bf8e7ab600827a41b0fe16314fc47cae6f2db9d02734252c54cc4fe7",
+      "nwis_id": "05330000",
+      "trained_at": "2026-10-24T10:47:38+00:00",
+      "tier": "B",
+      "n_calib_frames": 2056,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "MN_Minnesota_River_near_Jordan_UPSTREAM": {
+      "model_sha": "5b14a7a8668c4b7b7c2d2841c5717c878b209be61624160420662295f5089b8b",
+      "nwis_id": "05330000",
+      "trained_at": "2026-10-24T12:56:19+00:00",
+      "tier": "B",
+      "n_calib_frames": 1722,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "MN_Sprague_Creek_near_Sprague_Manitoba_Canada": {
+      "model_sha": "b66707c804213d9f87ba5970540722977a09394b6a71b0f0befdd5ae1102ef3e",
+      "nwis_id": "05106000",
+      "trained_at": "2026-10-24T14:13:32+00:00",
+      "tier": "B",
+      "n_calib_frames": 1352,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "MO_Missouri_River_at_Hermann": {
+      "model_sha": "baef8790ce02b754a85093dedce7fa14f4beff03c73f2bc65ec7939777931df5",
+      "nwis_id": "06934500",
+      "trained_at": "2026-10-24T11:46:25+00:00",
+      "tier": "B",
+      "n_calib_frames": 1947,
+      "calib_end": "2026-10-22T18:00:03+00:00"
+    },
+    "ND_Missouri_River_below_Mandan": {
+      "model_sha": "7afe43b1425fcae6c5301c017c78194fae25d0d2d3b2ce7a7ab4956f612730f6",
+      "nwis_id": "06349070",
+      "trained_at": "2026-10-24T11:31:46+00:00",
+      "tier": "B",
+      "n_calib_frames": 1814,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "NE_Missouri_River_at_Decatur": {
+      "model_sha": "dfc182478e6206df5e7c5d5cf46c19d08dd033db026258182a2ba9bd446672a3",
+      "nwis_id": "06601200",
+      "trained_at": "2026-10-24T14:46:41+00:00",
+      "tier": "B",
+      "n_calib_frames": 1337,
+      "calib_end": "2026-10-22T22:01:17+00:00"
+    },
+    "OH_Maumee_River_at_Waterville": {
+      "model_sha": "847b176da8dd0d53059890ad930097f77728cb71bcee0c142f87df6ac33fe537",
+      "nwis_id": "04193500",
+      "trained_at": "2026-10-24T14:09:56+00:00",
+      "tier": "B",
+      "n_calib_frames": 2277,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "OH_Ottawa_River_near_Kalida": {
+      "model_sha": "f68fda6f6bbd0933ac2073689e8be02ccf233f4680c4010e2d67bb28f04c7dc9",
+      "nwis_id": "04188100",
+      "trained_at": "2026-10-24T10:09:13+00:00",
+      "tier": "B",
+      "n_calib_frames": 1860,
+      "calib_end": "2026-10-22T22:00:12+00:00"
+    },
+    "OH_Tiffin_River_near_Evansport": {
+      "model_sha": "e2983344ae3a21810fc31e457e03821d8177d1c53100f78f653bf4f2f1372eed",
+      "nwis_id": "04185318",
+      "trained_at": "2026-10-24T07:11:43+00:00",
+      "tier": "B",
+      "n_calib_frames": 2486,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "SC_Pee_Dee_River_near_Florence_DOWNSTREAM": {
+      "model_sha": "11dc1c3a3e9b286b9de95d092880d8b143853f16c964333a988945b165250f2b",
+      "nwis_id": "02130810",
+      "trained_at": "2026-10-24T15:37:53+00:00",
+      "tier": "B",
+      "n_calib_frames": 719,
+      "calib_end": "2026-06-30T22:00:04+00:00"
+    },
+    "SC_Waccamaw_River_at_SC_22_below_Longs": {
+      "model_sha": "3ca15e6850beef403564fdf2e7a49f5d8b4198d64587e783e8b807c5f680d2cb",
+      "nwis_id": "02110525",
+      "trained_at": "2026-10-24T14:36:05+00:00",
+      "tier": "B",
+      "n_calib_frames": 1863,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "SD_James_River_at_Columbia": {
+      "model_sha": "382b04d744018edff926b339ed2eaf652cbf95e07b98d239255297b0ed30ffeb",
+      "nwis_id": "06471000",
+      "trained_at": "2026-10-24T08:52:59+00:00",
+      "tier": "B",
+      "n_calib_frames": 1722,
+      "calib_end": "2026-10-22T23:00:04+00:00"
+    },
+    "TX_Blanco_River_at_Crabapple_Road_near_Blanco": {
+      "model_sha": "10b75bc8b6daad42240c1b18fec8bc3b12df90fd1caea72b3912e43357ad04a1",
+      "nwis_id": "08170800",
+      "trained_at": "2026-10-24T05:36:14+00:00",
+      "tier": "B",
+      "n_calib_frames": 1740,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "TX_Elm_Fk_Trinity_Rv_nr_Lewisville": {
+      "model_sha": "7126bbec4b0ef14398b550d1eff3daeaae9f04580ebac6bfcb391d095e4a192d",
+      "nwis_id": "08053000",
+      "trained_at": "2026-10-24T07:04:36+00:00",
+      "tier": "B",
+      "n_calib_frames": 2116,
+      "calib_end": "2026-10-22T20:00:05+00:00"
+    },
+    "TX_San_Antonio_Rv_at_Loop_410": {
+      "model_sha": "8c271dd0343cee141c357f5015e20c1d7e98424a61160dae9e8756ba2a452743",
+      "nwis_id": "08178565",
+      "trained_at": "2026-10-24T05:24:20+00:00",
+      "tier": "B",
+      "n_calib_frames": 944,
+      "calib_end": "2026-10-22T22:01:20+00:00"
+    },
+    "WI_Chippewa_River_at_Durand": {
+      "model_sha": "1f8f79e54aa977ffe43318ae202e4220b7c66285127c60888605c6d88470155d",
+      "nwis_id": "05369500",
+      "trained_at": "2026-10-24T14:01:12+00:00",
+      "tier": "B",
+      "n_calib_frames": 1601,
+      "calib_end": "2026-10-22T20:00:05+00:00"
+    },
+    "WI_Fox_River_at_Princeton": {
+      "model_sha": "6877f3a5feda43cf85622a32d6cadfec355d78198ebefd558be1f97564ad487f",
+      "nwis_id": "04073365",
+      "trained_at": "2026-10-24T10:10:05+00:00",
+      "tier": "B",
+      "n_calib_frames": 1585,
+      "calib_end": "2026-10-22T18:00:04+00:00"
+    },
+    "WI_Wisconsin_River_at_Muscoda": {
+      "model_sha": "5723e2edf7c43d0feaf43011df240cd92ae51a9e5e2e93b196cc5ed81726e2b4",
+      "nwis_id": "05407000",
+      "trained_at": "2026-10-24T15:43:52+00:00",
+      "tier": "B",
+      "n_calib_frames": 2058,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    }
+  }
+}

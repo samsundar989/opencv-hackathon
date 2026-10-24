@@ -40,7 +40,11 @@
           ${a.status === "pending" ? `<div style="display:flex;gap:6px"><button class="primary" data-id="${RS.esc(a.approval_id)}" data-d="approve">Approve</button>
             <button class="danger" data-id="${RS.esc(a.approval_id)}" data-d="reject">Reject</button></div>` : `<div class="small muted">${RS.esc(a.status)} ${RS.ago(a.decided)}${a.note ? " · " + RS.esc(a.note) : ""}</div>`}
         </div>
-        <p class="small">${RS.esc(a.rationale || "")}</p>
+        <p class="small"><b>${RS.esc(a.decided_by === "llm" ? "Agent (LLM)" : "Rules policy")}:</b> ${RS.esc((a.rationale || "").replace(/\s*\[Sonnet second opinion[^\]]*\]/, ""))}</p>
+        ${a.second_opinion ? (a.second_opinion.error ? `<p class="small muted">Second opinion unavailable (${RS.esc(a.second_opinion.error)}).</p>`
+          : `<p class="small decision ${a.second_opinion.agrees ? "" : "llm"}"><b>Second opinion (${RS.esc(a.second_opinion.model || "Claude")}):</b>
+            ${a.second_opinion.agrees ? "agrees" : `<span class="err">disagrees</span> — would do ${RS.esc((a.second_opinion.actions || []).join(", ") || "nothing that needs approval")}`}.
+            ${RS.esc(a.second_opinion.rationale || "")}</p>`) : ""}
         <p class="small">camera ${RS.ft(a.reading?.camera_stage_ft)} · gauge ${RS.ft(a.reading?.gauge_stage_ft)} · ${RS.esc(a.reading?.flood_state)} ${RS.flags(a.reading?.flags)}</p>
         ${(a.actions || []).map((x) => x.args && Object.keys(x.args).length ? `<pre>${RS.esc(JSON.stringify(x.args, null, 2))}</pre>` : "").join("")}
         ${a.overlay_key ? `<img src="${RS.esc(a.overlay_key)}" alt="Frame the agent saw" style="max-width:100%;border-radius:8px" loading="lazy">` : ""}

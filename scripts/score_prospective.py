@@ -50,16 +50,44 @@ def freeze():
     print(f"froze {len(models)} models -> {FROZEN}")
 
 
+def freeze_onboarded():
+    """D-0012: the tier-B onboarded bundles as deployed, scored as their own group from their first live cycle."""
+    out = OUT / "frozen_models_onboarded.json"
+    if out.exists():
+        sys.exit(f"refusing: {out} exists (frozen once)")
+    models = {}
+    for d in sorted((ROOT / "models" / "onboard").iterdir()):
+        if not (d / "meta.json").exists():
+            continue
+        m = json.loads((d / "meta.json").read_text(encoding="utf-8"))
+        if m.get("tier") not in ("A", "B"):
+            continue
+        sha = hashlib.sha256((d / "scene_model.npz").read_bytes()).hexdigest()
+        assert sha == m["model_sha"], d.name
+        models[d.name] = {"model_sha": sha, "nwis_id": m["nwis_id"], "trained_at": m["trained_at"], "tier": m["tier"],
+                          "n_calib_frames": m["n_calib_frames"], "calib_end": m["calib_end"]}
+    doc = {"decision": "D-0012 Q-0012 option 1 (onboarded group, never mixed with the frozen 20); rules of D-0010 §1",
+           "group": "onboarded", "window_start_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+           "note": "frozen at deploy time, before the first cycle that serves these bundles",
+           "bundles": "W5 onboarding (models/onboard, frozen D-0007 setting, 12 months to 2026-10-23)",
+           "frozen_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"), "models": models}
+    out.write_text(json.dumps(doc, indent=2), encoding="utf-8")
+    print(f"froze {len(models)} onboarded models -> {out}")
+
+
 def main():
     ap = argparse.ArgumentParser()
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--freeze", action="store_true")
+    g.add_argument("--freeze-onboarded", action="store_true")
     g.add_argument("--s3", metavar="BUCKET")
     g.add_argument("--local", nargs="?", const=str(ROOT / "live_local"))
     ap.add_argument("--profile", default="riversight")
     a = ap.parse_args()
     if a.freeze:
         return freeze()
+    if a.freeze_onboarded:
+        return freeze_onboarded()
     from riversight.live import prospective
     from riversight.live.store import LocalStore, S3Store
     if a.s3:

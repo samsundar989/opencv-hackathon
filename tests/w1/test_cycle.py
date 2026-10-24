@@ -102,3 +102,30 @@ def test_quarantine_released_after_three_good_cycles(tmp_path):
     assert "quarantined" not in st and r["camera_stage_ft"] is not None
     assert any(a["type"] == "QUARANTINE_RELEASED" for d in store.list("live/agent/") for a in
                [x for line in (tmp_path / d).read_text().splitlines() for x in __import__("json").loads(line)["actions"]])
+
+
+def test_load_models_serves_tier_b_onboarded_as_own_group(tmp_path):
+    import json
+    import shutil
+    if not BUNDLE.exists():
+        pytest.skip("bundles not present")
+    main, onb = tmp_path / "sites", tmp_path / "onboard"
+    shutil.copytree(BUNDLE, main / CAM)
+    for name, tier in (("XX_New_B", "B"), ("XX_New_C", "C")):
+        shutil.copytree(BUNDLE, onb / name)
+        m = json.loads((onb / name / "meta.json").read_text())
+        m.update(cam_id=name, tier=tier, onboarded=True)
+        (onb / name / "meta.json").write_text(json.dumps(m))
+    ms = cycle.load_models(main, onboard=onb)
+    assert [(m.cam_id, m.group) for m in ms] == [(CAM, "frozen20"), ("XX_New_B", "onboarded")]
+
+
+def test_worker_env_does_not_override(tmp_path, monkeypatch):
+    p = tmp_path / "worker.env"
+    p.write_text("# c\nRIVERSIGHT_AGENT_MODE=rules_first\nRIVERSIGHT_T_X=1\n")
+    monkeypatch.setenv("RIVERSIGHT_T_X", "keep")
+    monkeypatch.delenv("RIVERSIGHT_AGENT_MODE", raising=False)
+    cycle.load_worker_env(p)
+    import os
+    assert os.environ["RIVERSIGHT_AGENT_MODE"] == "rules_first" and os.environ["RIVERSIGHT_T_X"] == "keep"
+    monkeypatch.delenv("RIVERSIGHT_AGENT_MODE")

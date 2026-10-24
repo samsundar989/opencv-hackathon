@@ -88,6 +88,14 @@ def verify_guard(sess) -> dict:
     return out
 
 
+def onboarded_bundles() -> list[Path]:
+    root = ROOT / "models" / "onboard"
+    if not root.is_dir():
+        return []
+    return [d for d in sorted(root.iterdir()) if (d / "meta.json").exists()
+            and json.loads((d / "meta.json").read_text(encoding="utf-8")).get("tier") in ("A", "B")]
+
+
 def tarball() -> bytes:
     buf = io.BytesIO()
     with tarfile.open(fileobj=buf, mode="w:gz") as t:
@@ -104,6 +112,12 @@ def tarball() -> bytes:
         for f in ONNX:
             add(ROOT / "models" / "onnx" / f, f"models/onnx/{f}")
         add(ROOT / "results" / "live_prospective" / "frozen_models.json", "results/live_prospective/frozen_models.json")
+        fo = ROOT / "results" / "live_prospective" / "frozen_models_onboarded.json"
+        if fo.exists():
+            add(fo, "results/live_prospective/frozen_models_onboarded.json")
+        add(ROOT / "infra" / "worker" / "worker.env", "worker.env")
+        for d in onboarded_bundles():                          # W5 tier-B sites (D-0012), served as their own group
+            add(d, f"models/onboard/{d.name}")
         if (ROOT / "models" / "sites_v2").is_dir():          # W4 shadow model (D-0010 §2): bundles + DINOv2 net
             add(ROOT / "models" / "sites_v2", "models/sites_v2")
             add(ROOT / "models" / "onnx" / "dinov2_small_224x392.onnx", "models/onnx/dinov2_small_224x392.onnx")
@@ -140,14 +154,23 @@ def site_data() -> dict[str, bytes]:
         if p.exists():
             out[f"data/{Path(extra).parent.name}_{p.name}"] = p.read_bytes()
     sites = []
-    for d in sorted((ROOT / "models" / "sites").iterdir()):
+    onboard_cv = {}
+    sc = ROOT / "results" / "onboarding" / "summary.csv"
+    if sc.exists():
+        for r in pd.read_csv(sc).to_dict("records"):
+            if r.get("tier") in ("A", "B"):
+                f = lambda v: None if v is None or pd.isna(v) else float(v)
+                onboard_cv[r["cam_id"]] = {"tier": r["tier"], "cv_nmae": f(r.get("nmae")), "cv_mae_ft": f(r.get("mae")),
+                                           "sigma_ft": f(r.get("sigma_ft")), "cal_days": f(r.get("cal_days"))}
+    out["data/onboarded.json"] = json.dumps(onboard_cv, allow_nan=False).encode()
+    for d in sorted((ROOT / "models" / "sites").iterdir()) + onboarded_bundles():
         if not (d / "meta.json").exists() or d.name.startswith("."):
             continue
         m = json.loads((d / "meta.json").read_text(encoding="utf-8"))
-        keep = {k: m[k] for k in ("cam_id", "nwis_id", "lat", "lon", "state", "tier", "sigma_ft", "calib_start",
+        keep = {k: m.get(k) for k in ("cam_id", "nwis_id", "lat", "lon", "state", "tier", "sigma_ft", "calib_start",
                                   "calib_end", "n_calib_frames", "stage_p05", "stage_p50", "stage_p90", "stage_p95",
                                   "stage_min", "stage_max", "flood_elevated_ft", "flood_ft", "n_roi_blocks",
-                                  "ref_shape", "model_sha", "trained_at", "label")}
+                                  "ref_shape", "model_sha", "trained_at", "label", "onboarded")}
         keep["extra_references"] = [{k: e[k] for k in ("file", "start", "end", "linked")} for e in m["extra_references"]]
         sites.append(keep)
         hs = json.loads((d / "hstar.json").read_text(encoding="utf-8"))
