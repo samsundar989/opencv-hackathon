@@ -1,0 +1,16 @@
+{
+  "cam_id": "OH_Bean_Creek_at_Powers",
+  "lat": 41.6594951,
+  "lon": -84.2491148,
+  "config": "v1+dino_roi@0.5+sun",
+  "sigma_ft": 0.9774,
+  "n_train_frames": 1941,
+  "n_dropped_no_tokens": 11,
+  "n_roi_blocks": 398,
+  "n_dino_patches": 198,
+  "dino_onnx_sha256": "84c75599e4c99a3a81831e122a5670ebe8179a35aeee7d10b09bcf0fa88bdec7",
+  "pca_basis_sha256": "d92fd10b6f6b195413738767b6501aff90721280ab423d5e834ef924b60c189e",
+  "model_sha": "ef756e29c7be286b3d9a1f4b504ad2e2b8d2492838bff8a729cf1e2363885615",
+  "trained_at": "2026-10-24T04:35:16+00:00",
+  "label": "v2 candidate, SHADOW only (scored beside v1, never served unless D-0010 \u00a72 is met); live refit on all data incl. test days"
+}

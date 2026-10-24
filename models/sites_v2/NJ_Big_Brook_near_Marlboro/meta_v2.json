@@ -1,0 +1,16 @@
+{
+  "cam_id": "NJ_Big_Brook_near_Marlboro",
+  "lat": 40.3197222,
+  "lon": -74.2141667,
+  "config": "v1+dino_roi@0.5+sun",
+  "sigma_ft": 0.3644,
+  "n_train_frames": 576,
+  "n_dropped_no_tokens": 5,
+  "n_roi_blocks": 1732,
+  "n_dino_patches": 418,
+  "dino_onnx_sha256": "84c75599e4c99a3a81831e122a5670ebe8179a35aeee7d10b09bcf0fa88bdec7",
+  "pca_basis_sha256": "d92fd10b6f6b195413738767b6501aff90721280ab423d5e834ef924b60c189e",
+  "model_sha": "3e41c8512d9b2a8fb4f44ae07b1dd2c1402a1aad49f06907675192ba35f9477b",
+  "trained_at": "2026-10-24T04:35:00+00:00",
+  "label": "v2 candidate, SHADOW only (scored beside v1, never served unless D-0010 \u00a72 is met); live refit on all data incl. test days"
+}

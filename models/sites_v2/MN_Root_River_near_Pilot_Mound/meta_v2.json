@@ -1,0 +1,16 @@
+{
+  "cam_id": "MN_Root_River_near_Pilot_Mound",
+  "lat": 43.782779,
+  "lon": -92.03163,
+  "config": "v1+dino_roi@0.5+sun",
+  "sigma_ft": 1.581,
+  "n_train_frames": 1553,
+  "n_dropped_no_tokens": 11,
+  "n_roi_blocks": 310,
+  "n_dino_patches": 163,
+  "dino_onnx_sha256": "84c75599e4c99a3a81831e122a5670ebe8179a35aeee7d10b09bcf0fa88bdec7",
+  "pca_basis_sha256": "d92fd10b6f6b195413738767b6501aff90721280ab423d5e834ef924b60c189e",
+  "model_sha": "9dab1ab916effa6f1a82ae057f9e51d37dc37fd61fa7dbdb0d586f09e776688a",
+  "trained_at": "2026-10-24T04:34:51+00:00",
+  "label": "v2 candidate, SHADOW only (scored beside v1, never served unless D-0010 \u00a72 is met); live refit on all data incl. test days"
+}

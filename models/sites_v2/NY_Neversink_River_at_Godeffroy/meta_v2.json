@@ -1,0 +1,16 @@
+{
+  "cam_id": "NY_Neversink_River_at_Godeffroy",
+  "lat": 41.4413611,
+  "lon": -74.60188889,
+  "config": "v1+dino_roi@0.5+sun",
+  "sigma_ft": 0.3692,
+  "n_train_frames": 1940,
+  "n_dropped_no_tokens": 12,
+  "n_roi_blocks": 838,
+  "n_dino_patches": 302,
+  "dino_onnx_sha256": "84c75599e4c99a3a81831e122a5670ebe8179a35aeee7d10b09bcf0fa88bdec7",
+  "pca_basis_sha256": "d92fd10b6f6b195413738767b6501aff90721280ab423d5e834ef924b60c189e",
+  "model_sha": "111ec04a8028bdc9d0509681e17078b0c3e82625450e6114638cfa20d546e2a2",
+  "trained_at": "2026-10-24T04:35:02+00:00",
+  "label": "v2 candidate, SHADOW only (scored beside v1, never served unless D-0010 \u00a72 is met); live refit on all data incl. test days"
+}

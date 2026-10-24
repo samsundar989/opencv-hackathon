@@ -1,0 +1,16 @@
+{
+  "cam_id": "CO_Sand_Creek_at_Mouth_nr_Commerce_City",
+  "lat": 39.8109722,
+  "lon": -104.9515833,
+  "config": "v1+dino_roi@0.5+sun",
+  "sigma_ft": 0.1559,
+  "n_train_frames": 1022,
+  "n_dropped_no_tokens": 24,
+  "n_roi_blocks": 330,
+  "n_dino_patches": 132,
+  "dino_onnx_sha256": "84c75599e4c99a3a81831e122a5670ebe8179a35aeee7d10b09bcf0fa88bdec7",
+  "pca_basis_sha256": "d92fd10b6f6b195413738767b6501aff90721280ab423d5e834ef924b60c189e",
+  "model_sha": "51efe44eebc6a24ac0bb0435d2def7cc11c06c162c2ac11a5ae045a2cd478a52",
+  "trained_at": "2026-10-24T04:35:22+00:00",
+  "label": "v2 candidate, SHADOW only (scored beside v1, never served unless D-0010 \u00a72 is met); live refit on all data incl. test days"
+}

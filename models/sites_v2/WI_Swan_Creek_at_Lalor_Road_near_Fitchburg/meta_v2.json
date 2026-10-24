@@ -1,0 +1,16 @@
+{
+  "cam_id": "WI_Swan_Creek_at_Lalor_Road_near_Fitchburg",
+  "lat": 42.99951944,
+  "lon": -89.3615417,
+  "config": "v1+dino_roi@0.5+sun",
+  "sigma_ft": 0.4004,
+  "n_train_frames": 2410,
+  "n_dropped_no_tokens": 11,
+  "n_roi_blocks": 731,
+  "n_dino_patches": 171,
+  "dino_onnx_sha256": "84c75599e4c99a3a81831e122a5670ebe8179a35aeee7d10b09bcf0fa88bdec7",
+  "pca_basis_sha256": "d92fd10b6f6b195413738767b6501aff90721280ab423d5e834ef924b60c189e",
+  "model_sha": "720d392b8f68f7aee51fefe5a8ba6f8ea025b1219e7225917143dc9850e29c17",
+  "trained_at": "2026-10-24T04:34:49+00:00",
+  "label": "v2 candidate, SHADOW only (scored beside v1, never served unless D-0010 \u00a72 is met); live refit on all data incl. test days"
+}

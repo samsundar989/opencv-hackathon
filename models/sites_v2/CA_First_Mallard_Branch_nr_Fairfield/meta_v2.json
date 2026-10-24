@@ -1,0 +1,16 @@
+{
+  "cam_id": "CA_First_Mallard_Branch_nr_Fairfield",
+  "lat": 38.1948944444444,
+  "lon": -122.032813888889,
+  "config": "v1+dino_roi@0.5+sun",
+  "sigma_ft": 0.3197,
+  "n_train_frames": 2117,
+  "n_dropped_no_tokens": 21,
+  "n_roi_blocks": 634,
+  "n_dino_patches": 181,
+  "dino_onnx_sha256": "84c75599e4c99a3a81831e122a5670ebe8179a35aeee7d10b09bcf0fa88bdec7",
+  "pca_basis_sha256": "d92fd10b6f6b195413738767b6501aff90721280ab423d5e834ef924b60c189e",
+  "model_sha": "51662e46b310c9c801b35233232f2d6364162bf1721be0f7207b2e9936204d5c",
+  "trained_at": "2026-10-24T04:35:34+00:00",
+  "label": "v2 candidate, SHADOW only (scored beside v1, never served unless D-0010 \u00a72 is met); live refit on all data incl. test days"
+}

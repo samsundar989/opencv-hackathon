@@ -1,0 +1,16 @@
+{
+  "cam_id": "OH_East_Fork_Little_Miami_River_at_Perintown",
+  "lat": 39.13700548,
+  "lon": -84.2379918,
+  "config": "v1+dino_roi@0.5+sun",
+  "sigma_ft": 0.5325,
+  "n_train_frames": 2859,
+  "n_dropped_no_tokens": 12,
+  "n_roi_blocks": 388,
+  "n_dino_patches": 160,
+  "dino_onnx_sha256": "84c75599e4c99a3a81831e122a5670ebe8179a35aeee7d10b09bcf0fa88bdec7",
+  "pca_basis_sha256": "d92fd10b6f6b195413738767b6501aff90721280ab423d5e834ef924b60c189e",
+  "model_sha": "c21ce4a7a871c40773840439cdd657b008887869108ace8e54eac5a73965a053",
+  "trained_at": "2026-10-24T04:35:20+00:00",
+  "label": "v2 candidate, SHADOW only (scored beside v1, never served unless D-0010 \u00a72 is met); live refit on all data incl. test days"
+}

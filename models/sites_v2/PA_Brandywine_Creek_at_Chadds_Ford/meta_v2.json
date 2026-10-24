@@ -1,0 +1,16 @@
+{
+  "cam_id": "PA_Brandywine_Creek_at_Chadds_Ford",
+  "lat": 39.8698328,
+  "lon": -75.5932623,
+  "config": "v1+dino_roi@0.5+sun",
+  "sigma_ft": 0.646,
+  "n_train_frames": 1661,
+  "n_dropped_no_tokens": 24,
+  "n_roi_blocks": 647,
+  "n_dino_patches": 168,
+  "dino_onnx_sha256": "84c75599e4c99a3a81831e122a5670ebe8179a35aeee7d10b09bcf0fa88bdec7",
+  "pca_basis_sha256": "d92fd10b6f6b195413738767b6501aff90721280ab423d5e834ef924b60c189e",
+  "model_sha": "0b67b72bab51df97d672f8b490e975e91785d610f578eca5a37e528b1c8804e1",
+  "trained_at": "2026-10-24T04:35:30+00:00",
+  "label": "v2 candidate, SHADOW only (scored beside v1, never served unless D-0010 \u00a72 is met); live refit on all data incl. test days"
+}

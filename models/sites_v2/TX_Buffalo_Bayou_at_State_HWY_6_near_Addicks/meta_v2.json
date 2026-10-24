@@ -1,0 +1,16 @@
+{
+  "cam_id": "TX_Buffalo_Bayou_at_State_HWY_6_near_Addicks",
+  "lat": 29.76938056,
+  "lon": -95.6431667,
+  "config": "v1+dino_roi@0.5+sun",
+  "sigma_ft": 0.3071,
+  "n_train_frames": 2575,
+  "n_dropped_no_tokens": 12,
+  "n_roi_blocks": 995,
+  "n_dino_patches": 311,
+  "dino_onnx_sha256": "84c75599e4c99a3a81831e122a5670ebe8179a35aeee7d10b09bcf0fa88bdec7",
+  "pca_basis_sha256": "d92fd10b6f6b195413738767b6501aff90721280ab423d5e834ef924b60c189e",
+  "model_sha": "bd3bcb3b39f0806bd6910fc105f5a2fd6d81961be06f1064f23566155daea55e",
+  "trained_at": "2026-10-24T04:34:27+00:00",
+  "label": "v2 candidate, SHADOW only (scored beside v1, never served unless D-0010 \u00a72 is met); live refit on all data incl. test days"
+}

@@ -1,0 +1,16 @@
+{
+  "cam_id": "TX_Cowhouse_Ck_at_Old_Georgetown_Rd_nr_Ft_Hood",
+  "lat": 31.24878888888889,
+  "lon": -97.83784722222222,
+  "config": "v1+dino_roi@0.5+sun",
+  "sigma_ft": 0.5877,
+  "n_train_frames": 1135,
+  "n_dropped_no_tokens": 24,
+  "n_roi_blocks": 1085,
+  "n_dino_patches": 389,
+  "dino_onnx_sha256": "84c75599e4c99a3a81831e122a5670ebe8179a35aeee7d10b09bcf0fa88bdec7",
+  "pca_basis_sha256": "d92fd10b6f6b195413738767b6501aff90721280ab423d5e834ef924b60c189e",
+  "model_sha": "0ece31adeb63da8f43223265506ea62eaf5928855954da5fffb51edd37e49513",
+  "trained_at": "2026-10-24T04:34:17+00:00",
+  "label": "v2 candidate, SHADOW only (scored beside v1, never served unless D-0010 \u00a72 is met); live refit on all data incl. test days"
+}
