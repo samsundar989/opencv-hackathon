@@ -4,7 +4,7 @@ A camera model can't read above the highest stage it was calibrated on (kernel r
 Hancock 17 ft crest was out of range). Refitting as new daylight frames + gauge arrive extends the range.
 This script measures what that buys, with the frozen D-0007 knobs (bs 4, reliability ≥ 0.80, λ = 1, Kalman):
 
-  static    fit once on everything before day 90 of the site's record, never refit
+  static    fit once on everything before day 90 of the site's record (or its 150th frame, if later), never refit
   monthly   refit at every calendar-month start on all earlier frames
   weekly    refit every Monday 00Z on all earlier frames (the proposed online refit)
 
@@ -44,8 +44,13 @@ METHODS = ("static", "monthly", "weekly")
 THR, LAM, MIN_ROI, MIN_DINO_ROI = 0.80, 1.0, 50, 10
 
 
+def test_start(t: pd.DatetimeIndex) -> pd.Timestamp:
+    """Day 90 of the record, or later if fewer than 150 frames precede it (every method's first fit needs 150)."""
+    return max(t[0] + WARMUP, t[min(149, len(t) - 1)] + pd.Timedelta("1s"))
+
+
 def refit_times(t: pd.DatetimeIndex, method: str) -> list[pd.Timestamp]:
-    start = t[0] + WARMUP
+    start = test_start(t)
     if method == "static":
         return [start]
     freq = "MS" if method == "monthly" else "W-MON"
@@ -94,7 +99,7 @@ def run_site(cam: str, configs: dict) -> str:
     g = gauge_series(cam)
     lat, lng = site_latlng(DATA, cam)
     Z = S.nuisance_matrix(t, lat, lng, False)
-    test = t >= t[0] + WARMUP
+    test = t >= test_start(t)
     res, trmax, nref = {}, {}, {}
     for model, cfg in configs.items():
         spec = parse(cfg)
