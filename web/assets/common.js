@@ -86,12 +86,24 @@ const RS = (() => {
     above_range: "The river is above any stage this camera has seen during calibration, so it can only say 'at least this high'. The gauge is trusted.",
     above_range_provisional: "Above the calibrated range and the gauge is down: the camera reports only a lower bound.",
     error: "This site failed in the last cycle; the other sites were not affected.", pending: "Waiting for the first reading." };
+  // headline "RiverSight stage" (D-0013 W1-1): fused value + provenance
+  const SRC = { "gauge": ["gauge", "ok", "The USGS gauge is reporting, so RiverSight shows the gauge."],
+    "camera gap-fill": ["camera gap-fill", "provisional", "The gauge is down: the camera's reading, anchored to the gauge's last 48 h, fills the gap. σ grows the longer it lasts."],
+    "last gauge": ["last gauge, σ growing", "night", "No fresh gauge and no usable camera frame: the last value, with uncertainty growing at the river's own rate of change."],
+    "lower bound": ["lower bound", "above_range", "Above the camera's calibrated range with the gauge down: the river is at least this high."] };
+  function fused(r) {
+    if (!r || r.fused_stage_ft == null) return "";
+    const [lab, cls, why] = SRC[r.fused_source] || [r.fused_source || "?", "pending", ""];
+    const v = `${r.fused_source === "lower bound" ? "≥ " : ""}${Number(r.fused_stage_ft).toFixed(2)} ft` +
+      (r.fused_sigma_ft != null && r.fused_source !== "gauge" ? ` ± ${Number(r.fused_sigma_ft).toFixed(2)}` : "");
+    return `<span>RiverSight stage <b style="font-size:1.15em">${v}</b> <span class="pill ${cls}" tabindex="0" title="${esc(why)}" aria-label="${esc(lab + ". " + why)}">${esc(lab)}</span></span>`;
+  }
   const pill = (s) => `<span class="pill ${esc(s || "pending")}" tabindex="0" title="${esc(WHY[s] || "")}" aria-label="${esc((LABEL[s] || s || "pending") + ". " + (WHY[s] || ""))}">${esc(LABEL[s] || s || "pending")}</span>`;
   const flags = (fs) => (fs || []).map((f) => `<span class="flag">${esc(f)}</span>`).join("");
 
   const qs = (k) => new URLSearchParams(location.search).get(k);
   const days = (n) => [...Array(n).keys()].map((i) => new Date(Date.now() - i * 86400000).toISOString().slice(0, 10)).reverse();
 
-  return { header, json, jsonl, esc, ft, nice, ago, pill, flags, qs, days, cam, panel, FEATURED, featuredRank, lastDay, LABEL, WHY };
+  return { header, json, jsonl, esc, ft, nice, ago, pill, flags, qs, days, cam, panel, FEATURED, featuredRank, lastDay, LABEL, WHY, fused };
 })();
 document.addEventListener("DOMContentLoaded", RS.header);

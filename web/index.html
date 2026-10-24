@@ -95,7 +95,7 @@
         ${key ? `<img loading="lazy" src="${RS.esc(key)}" alt="${dark ? "Last daylight frame" : "Latest frame"} from ${RS.esc(RS.nice(s.cam_id))}">` : `<img alt="">`}
         <div class="body"><div class="name">${RS.esc(RS.nice(s.cam_id))}</div>
           <div>${RS.pill(s.status)} <span class="muted small">tier ${RS.esc(c.tier || s.tier || "?")} · CV nMAE ${c.cv_nmae != null ? Number(c.cv_nmae).toFixed(3) : "—"}</span></div>
-          <div class="nums"><span>camera <b>${RS.cam(s)}</b></span><span>gauge <b>${RS.ft(s.gauge_stage_ft)}</b></span></div>
+          ${RS.fused(s) ? `<div style="margin-top:4px">${RS.fused(s)}</div>` : ""}<div class="nums"><span>camera <b>${RS.cam(s)}</b></span><span>gauge <b>${RS.ft(s.gauge_stage_ft)}</b></span></div>
           ${dark && s.last_daylight_t ? `<div class="muted small">last daylight: ${RS.lastDay(s)}</div>` : ""}</div></a>`; }).join("");
   });
   await RS.panel("sites", async () => {
@@ -109,7 +109,7 @@
       <div class="body">
         <div class="name">${RS.esc(RS.nice(s.cam_id))}</div>
         <div>${RS.featuredRank(s.cam_id) < 99 ? '<span class="pill">featured</span> ' : ""}${RS.pill(s.status)} <span class="muted small">tier ${RS.esc(s.tier || "?")} · ${RS.ago(s.t_frame)}</span></div>
-        <div class="nums"><span>camera <b>${RS.cam(s)}</b></span>
+        ${RS.fused(s) ? `<div style="margin-top:4px">${RS.fused(s)}</div>` : ""}<div class="nums"><span>camera <b>${RS.cam(s)}</b></span>
           <span>gauge <b>${RS.ft(s.gauge_stage_ft)}</b></span></div>
         ${(!s.daylight || s.status === "stale" || s.status === "night") && s.last_daylight_t ? `<div class="muted small">last daylight: ${RS.lastDay(s)}</div>` : ""}
         <div>${RS.flags((s.flags || []).filter((f) => f !== "NIGHT"))}</div>

@@ -129,3 +129,18 @@ def test_worker_env_does_not_override(tmp_path, monkeypatch):
     import os
     assert os.environ["RIVERSIGHT_AGENT_MODE"] == "rules_first" and os.environ["RIVERSIGHT_T_X"] == "keep"
     monkeypatch.delenv("RIVERSIGHT_AGENT_MODE")
+
+
+@pytest.mark.skipif(not BUNDLE.exists() or not FRAMES.exists(), reason="bundles / frame cache not present")
+def test_fused_stage_provenance(tmp_path):
+    _, fresh, _ = _run(tmp_path / "a", gauge_ft=8.0)
+    assert fresh["fused_source"] == "gauge" and fresh["fused_stage_ft"] == 8.0
+    _, stale, _ = _run(tmp_path / "b", gauge_ft=8.0, gauge_age_h=3)
+    assert stale["fused_source"] in ("camera gap-fill", "last gauge", "none")
+    if stale["daylight"] and stale["registration"]["ok"] and stale["camera_at_least_ft"] is None:
+        assert stale["fused_source"] == "camera gap-fill" and stale["fused_sigma_ft"] is not None
+    m = SiteModel(BUNDLE)
+    _, high, _ = _run(tmp_path / "c", gauge_ft=m.meta["stage_max"] + 3, gauge_age_h=3,
+                      state={"kalman": {"x": m.meta["stage_max"] + 1, "P": 0.01, "t": None}})
+    if high["camera_at_least_ft"] is not None:
+        assert high["fused_source"] == "lower bound" and high["fused_stage_ft"] == high["camera_at_least_ft"]

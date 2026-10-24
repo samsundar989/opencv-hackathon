@@ -233,6 +233,46 @@ class SiteRegistrar:
         return best
 
 
+# ---- fused "RiverSight stage" (D-0013 W1-1; filter by W4: riversight.calib.fusion) ----------------
+
+def fuse(state: dict, model: SiteModel, frame: Frame, t_cycle: datetime, raw: float | None, g_fresh: float | None,
+         g_t, flags: list[str], at_least: float | None) -> dict:
+    """Headline stage: the gauge when fresh; when stale, a camera-driven Kalman (camera − gauge offset anchored
+    over the last 48 h of paired readings, the site's D-0007 r and q) whose σ grows without frames; above the
+    calibrated range with the gauge down, a lower bound. Provenance travels with the number."""
+    from riversight.calib.fusion import BIAS_WINDOW, MIN_BIAS_FRAMES, Fused
+    q, r = float(model.a["q"]), float(model.a["r"])
+    fd = state.get("fused") or {}
+    F = Fused(fd.get("x", float("nan")) if fd.get("x") is not None else float("nan"),
+              fd.get("P", float("inf")) if fd.get("P") is not None else float("inf"), fd.get("t"), fd.get("b", 0.0),
+              fd.get("source", "none"))
+    t_frame = frame.time.timestamp()
+    pairs = [p for p in state.get("bias_pairs", [])
+             if pd.Timestamp(p[0], unit="s", tz="UTC") >= pd.Timestamp(t_cycle) - BIAS_WINDOW]
+    usable_cam = raw is not None and "VIEW_CHANGE" not in flags and not state.get("quarantined") and at_least is None
+    if g_fresh is not None:
+        if usable_cam:
+            pairs.append([t_frame, raw, g_fresh])
+        F.gauge(pd.Timestamp(g_t).timestamp(), g_fresh)
+        F.b = float(pd.Series([c - g for _, c, g in pairs]).median()) if len(pairs) >= MIN_BIAS_FRAMES else 0.0
+        out = (F.x, F.sigma, "gauge")
+    elif at_least is not None:
+        F.predict(t_frame, q)
+        out = (at_least, None, "lower bound")
+    elif usable_cam:
+        F.camera(t_frame, raw, r, q)
+        out = (F.x, F.sigma, F.source)
+    else:
+        F.predict(pd.Timestamp(t_cycle).timestamp(), q)
+        out = (F.x, F.sigma, F.source if F.source != "gauge" else "last gauge")
+    state["bias_pairs"] = pairs[-200:]
+    state["fused"] = {"x": None if F.x != F.x else F.x, "P": None if not np.isfinite(F.P) else F.P, "t": F.t,
+                      "b": F.b, "source": F.source}
+    x, sg, src = out
+    return {"fused_stage_ft": _r(x), "fused_sigma_ft": _r(sg) if sg is not None else None, "fused_source": src,
+            "fused_offset_ft": _r(F.b)}
+
+
 # ---- v2 shadow (W4) --------------------------------------------------------------------------------
 
 SHADOW_DIR = Path(os.environ.get("RIVERSIGHT_SHADOW_BUNDLES", BUNDLES.parent / "sites_v2"))
@@ -488,6 +528,7 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
     }
     if shadow:                                      # W4 v2 candidate (D-0010 §2): logged and scored, never served
         reading.update(shadow)
+    reading.update(fuse(state, model, frame, t_cycle, raw, g_fresh, g_t, flags, at_least))
     if not night and reg["ok"]:                     # D-0009 W1-2: remembered for night / stale display
         state["last_daylight"] = {k: reading[k] for k in (
             "t_frame", "frame_key", "overlay_key", "thumb_key", "camera_stage_ft", "camera_sigma_ft",
@@ -740,6 +781,7 @@ def last_slim(store, m: SiteModel) -> dict | None:
 def slim_reading(r: dict, meta: dict) -> dict:
     keep = ("cam_id", "t_frame", "t_cycle", "daylight", "overlay_key", "thumb_key", "camera_stage_ft", "camera_sigma_ft",
             "camera_at_least_ft", "calibrated_range_ft", "gauge_stage_ft", "gauge_age_min", "flood_state", "flags",
+            "fused_stage_ft", "fused_sigma_ft", "fused_source",
             "status", "provisional", "agent", "frame_age_min")
     out = {k: r.get(k) for k in keep}
     out.update(lat=meta["lat"], lon=meta["lon"], tier=meta["tier"], nwis_id=meta["nwis_id"],

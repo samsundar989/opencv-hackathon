@@ -108,7 +108,7 @@
 
   await RS.panel("strip", async (strip) => {
     if (!latest) { strip.textContent = "No live reading yet for this site."; return; }
-    strip.innerHTML = `${RS.pill(latest.status)} <span>frame ${RS.ago(latest.t_frame)}</span>
+    strip.innerHTML = `${RS.fused(latest)} ${RS.pill(latest.status)} <span>frame ${RS.ago(latest.t_frame)}</span>
       <span>camera <b>${RS.cam(latest)}</b></span>
       <span>gauge <b>${RS.ft(latest.gauge_stage_ft)}</b> <span class="muted small">(${latest.gauge_age_min ?? "—"} min old)</span></span>
       <span>flood state <b>${RS.esc(latest.flood_state)}</b></span> ${RS.flags(latest.flags)}
