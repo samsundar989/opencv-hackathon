@@ -76,6 +76,18 @@ def test_refit_skips_with_too_few_new_readings(tmp_path):
     assert res["status"].startswith("skipped") and not (tmp_path / "out" / "cam").exists()
 
 
+def test_residual_files_feed_the_drift_signal(tmp_path):
+    store = LocalStore(tmp_path)
+    t, h, F, P = _data(25, "2026-10-20 14:00", 5)
+    now = t[-1]
+    for i in range(25):
+        R.log_features(store, "cam", t[i], F[i], P[i], h[i], t[i], [], raw_ft=h[i] + 0.4)
+    R.log_features(store, "cam", t[0], F[0], P[0], h[0], t[0], ["LOW_QUALITY"], raw_ft=h[0] + 9)   # excluded
+    rep = R.update_drift(store, "cam", sigma_ft=0.2, now=now)
+    assert rep["n"] == 25 and rep["drifting"] and abs(rep["median_residual_ft"] - 0.4) < 1e-6
+    assert store.get_json(f"{R.DRIFT_PREFIX}/cam.json")["drifting"]
+
+
 def test_drift_signal():
     now = pd.Timestamp("2026-10-25 12:00", tz="UTC")
     t = pd.date_range(now - pd.Timedelta("5D"), periods=30, freq="4h")

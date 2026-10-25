@@ -13,11 +13,13 @@ S3 layout (the worker role may write live/* and read models/*):
   models/recal_base/<cam>.npz                 base set: what the served v2 bundle was trained on (t, h, F, P)
   live/recal/features/<cam>/<YYYYMMDD>/<HHMMSS>.npz   one logged reading
   live/recal/models/<cam>/{scene_model_v2.npz, meta_v2.json}   latest recalibrated bundle
+  live/recal/residuals/<cam>/<YYYYMMDD>.jsonl  {t, raw, g} per reading with a matched gauge (cheap drift input)
   live/recal/drift/<cam>.json                 camera-vs-gauge residual drift over the last 7 days (W2's signal)
 
 CLI (worker, weekly timer, or by hand):
   python -m riversight.calib.recal refit --s3 <bucket> --bundles models/sites_v2 --out models/sites_recal
   python -m riversight.calib.recal refit --local <dir> ...           (tests / local dry runs)
+  python -m riversight.calib.recal drift --s3 <bucket> --bundles models/sites_v2   (cheap; hourly is fine)
 """
 from __future__ import annotations
 
@@ -36,6 +38,7 @@ import pandas as pd
 FEAT_PREFIX = "live/recal/features"
 MODEL_PREFIX = "live/recal/models"
 DRIFT_PREFIX = "live/recal/drift"
+RESID_PREFIX = "live/recal/residuals"
 BASE_KEY = "models/recal_base/{cam}.npz"
 MATCH = pd.Timedelta("20min")          # gauge within ±20 min of the frame (D-0010 §1 scoring rule)
 EXCLUDE_FLAGS = ("VIEW_CHANGE", "LOW_QUALITY", "OUT_OF_RANGE")
@@ -60,7 +63,33 @@ def log_features(store, cam: str, t_frame, F16: np.ndarray, P16: np.ndarray, gau
                                     g=np.float64(np.nan if gauge_ft is None else gauge_ft), gt=np.int64(gt),
                                     raw=np.float64(np.nan if raw_ft is None else raw_ft),
                                     flags=np.array("|".join(flags or []))))
+    fl = flags or []
+    if raw_ft is not None and gauge_ft is not None and gt >= 0 and abs(gt - t.value) <= MATCH.value             and not any(f in fl for f in EXCLUDE_FLAGS):
+        store.append_jsonl(f"{RESID_PREFIX}/{cam}/{t:%Y%m%d}.jsonl",
+                           {"t": t.isoformat(), "raw": round(float(raw_ft), 4), "g": round(float(gauge_ft), 4)})
     return key
+
+
+def residuals(store, cam: str, now=None, days: int = DRIFT_DAYS) -> dict:
+    """{t, h, raw} from the residual day files of the last `days` days (no feature files are read)."""
+    now = pd.Timestamp(now or datetime.now(timezone.utc))
+    rows = []
+    for d in pd.date_range((now - pd.Timedelta(days=days)).floor("D"), now.floor("D"), freq="D"):
+        b = store.get_bytes(f"{RESID_PREFIX}/{cam}/{d:%Y%m%d}.jsonl")
+        for line in (b or b"").decode().splitlines():
+            if line.strip():
+                rows.append(json.loads(line))
+    if not rows:
+        return {"t": pd.DatetimeIndex([], tz="UTC"), "h": np.zeros(0), "raw": np.zeros(0)}
+    df = pd.DataFrame(rows)
+    return {"t": pd.DatetimeIndex(pd.to_datetime(df["t"], utc=True)), "h": df["g"].to_numpy(float), "raw": df["raw"].to_numpy(float)}
+
+
+def update_drift(store, cam: str, sigma_ft: float, now=None) -> dict:
+    rep = {"cam_id": cam, "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+           **drift_report(residuals(store, cam, now), sigma_ft, now)}
+    store.put_json(f"{DRIFT_PREFIX}/{cam}.json", rep)
+    return rep
 
 
 def load_logged(store, cam: str, since=None) -> dict:
@@ -127,8 +156,7 @@ def refit_site(store, cam: str, bundles: Path, out: Path, cache: Path | None = N
     meta0 = json.loads((src / "meta_v2.json").read_text(encoding="utf-8"))
     a0 = np.load(src / "scene_model_v2.npz")
     new = load_logged(store, cam)
-    drift = drift_report(new, float(meta0.get("sigma_ft", float("nan"))), now)
-    store.put_json(f"{DRIFT_PREFIX}/{cam}.json", {"cam_id": cam, "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"), **drift})
+    drift = update_drift(store, cam, float(meta0.get("sigma_ft", float("nan"))), now)
     base = _load_base(store, cam, cache)
     if base is None:
         return {"cam_id": cam, "status": "no base set", "drift": drift}
@@ -167,18 +195,28 @@ def main(argv=None):
     ap = argparse.ArgumentParser(prog="python -m riversight.calib.recal")
     sub = ap.add_subparsers(dest="cmd", required=True)
     r = sub.add_parser("refit")
-    g = r.add_mutually_exclusive_group(required=True)
-    g.add_argument("--s3")
-    g.add_argument("--local", type=Path)
-    r.add_argument("--bundles", type=Path, default=Path("models/sites_v2"))
+    dr = sub.add_parser("drift")
+    for sp in (r, dr):
+        g = sp.add_mutually_exclusive_group(required=True)
+        g.add_argument("--s3")
+        g.add_argument("--local", type=Path)
+        sp.add_argument("--bundles", type=Path, default=Path("models/sites_v2"))
+        sp.add_argument("--only", nargs="*")
     r.add_argument("--out", type=Path, default=Path("models/sites_recal"))
     r.add_argument("--cache", type=Path, default=None, help="local cache for the base sets (downloaded once)")
-    r.add_argument("--only", nargs="*")
     r.add_argument("--min-new", type=int, default=MIN_NEW)
     a = ap.parse_args(argv)
     from riversight.live.store import LocalStore, S3Store
     store = S3Store(a.s3) if a.s3 else LocalStore(a.local)
     cams = sorted(p.name for p in a.bundles.iterdir() if p.is_dir() and (not a.only or p.name in a.only))
+    if a.cmd == "drift":
+        for cam in cams:
+            try:
+                sigma = float(json.loads((a.bundles / cam / "meta_v2.json").read_text(encoding="utf-8")).get("sigma_ft"))
+                print(json.dumps(update_drift(store, cam, sigma)), flush=True)
+            except Exception as e:
+                print(json.dumps({"cam_id": cam, "error": f"{type(e).__name__}: {e}"}), flush=True)
+        return 0
     results = []
     for cam in cams:
         try:
