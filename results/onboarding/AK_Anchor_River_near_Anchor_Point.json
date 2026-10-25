@@ -1,0 +1,18 @@
+{
+  "cam_id": "AK_Anchor_River_near_Anchor_Point",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 4611,
+    "selected": 2084,
+    "nims_calls": 37,
+    "downloads": 2076,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 135.2
+  },
+  "nwis_id": "15239900",
+  "state": "AK",
+  "name": "Anchor River near Anchor Point",
+  "status": "fetched"
+}

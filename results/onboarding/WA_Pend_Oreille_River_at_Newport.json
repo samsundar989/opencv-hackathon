@@ -1,0 +1,18 @@
+{
+  "cam_id": "WA_Pend_Oreille_River_at_Newport",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 4724,
+    "selected": 2513,
+    "nims_calls": 37,
+    "downloads": 2503,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 147.6
+  },
+  "nwis_id": "12395500",
+  "state": "WA",
+  "name": "Pend Oreille River at Newport",
+  "status": "fetched"
+}

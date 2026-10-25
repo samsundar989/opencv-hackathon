@@ -1,0 +1,18 @@
+{
+  "cam_id": "AK_Taku_River_near_Juneau",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 204,
+    "selected": 187,
+    "nims_calls": 37,
+    "downloads": 181,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 90.9
+  },
+  "nwis_id": "15041200",
+  "state": "AK",
+  "name": "Taku River near Juneau",
+  "status": "fetched"
+}

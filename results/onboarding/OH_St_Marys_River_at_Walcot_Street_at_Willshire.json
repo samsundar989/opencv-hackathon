@@ -1,0 +1,18 @@
+{
+  "cam_id": "OH_St_Marys_River_at_Walcot_Street_at_Willshire",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 4630,
+    "selected": 2517,
+    "nims_calls": 37,
+    "downloads": 2510,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 150.5
+  },
+  "nwis_id": "04181049",
+  "state": "OH",
+  "name": "St Marys River at Walcot Street at Willshire",
+  "status": "fetched"
+}

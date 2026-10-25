@@ -1,0 +1,18 @@
+{
+  "cam_id": "OH_Blanchard_River_near_Dupont",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 4798,
+    "selected": 2788,
+    "nims_calls": 37,
+    "downloads": 2781,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 160.2
+  },
+  "nwis_id": "04190000",
+  "state": "OH",
+  "name": "Blanchard River near Dupont",
+  "status": "fetched"
+}

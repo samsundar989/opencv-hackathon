@@ -1,0 +1,18 @@
+{
+  "cam_id": "CA_Green_Slough_nr_Courtland",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 3252,
+    "selected": 2837,
+    "nims_calls": 37,
+    "downloads": 2829,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 150.6
+  },
+  "nwis_id": "381905121413901",
+  "state": "CA",
+  "name": "Green Slough nr Courtland",
+  "status": "fetched"
+}

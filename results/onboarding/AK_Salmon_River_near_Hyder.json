@@ -1,0 +1,18 @@
+{
+  "cam_id": "AK_Salmon_River_near_Hyder",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 274,
+    "selected": 46,
+    "nims_calls": 37,
+    "downloads": 46,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 88.0
+  },
+  "nwis_id": "15008000",
+  "state": "AK",
+  "name": "Salmon River near Hyder",
+  "status": "fetched"
+}

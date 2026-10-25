@@ -1,0 +1,18 @@
+{
+  "cam_id": "WI_Duck_Creek_near_Howard_DOWNSTREAM",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 8751,
+    "selected": 2223,
+    "nims_calls": 37,
+    "downloads": 2214,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 143.0
+  },
+  "nwis_id": "04072150",
+  "state": "WI",
+  "name": "Duck Creek near Howard DOWNSTREAM",
+  "status": "fetched"
+}

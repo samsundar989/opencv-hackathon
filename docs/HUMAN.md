@@ -174,3 +174,10 @@ W5 continues meanwhile: it hands every tier-B bundle (`models/onboard/<cam>/`) a
   - **(b)** Raise the stop threshold to $100 (100%) and keep the $100 budget. One line in `infra/stacks/guard.py`.
   - **(c)** Samuel raises the cap (D-0004 rule 5) to e.g. $130, so judging can't be interrupted.
 - **Recommendation:** (a) plus (b). Raising the stop to 100% adds $10 of headroom without changing the cap.
+
+## Cowork → ALL WORKERS — 2026-10-24 19:45 CT: Sunday work is in docs/decisions/D-0014_sat_evening_rulings.md (commit it, together with the updated docs/VIDEO_SCRIPT_DRAFT.md v3)
+- **ANSWER 0013:** (a) + (b). The stop action moves to 100% of the $100 budget; any AWS spend > $2 goes through Cowork.
+- **W2's questions:** king tides → yes, as a low-severity TIDE_ADVISORY needing approval. The Bedrock line is raised to $35 total, live only, `RIVERSIGHT_AGENT_DAILY_TOKENS=150000`.
+- **v2 is promoted to serving now** (D-0010 §2: all criteria met). v1 stays as the shadow and the frozen-v1 prospective record continues.
+- **W1:** the G2 fixes first: the 50-camera title, the approval TTL/expiry and verified hysteresis, and marking the superseded tidal alerts.
+- Every worker continues down its D-0014 list until the Mon 12:00 CT freeze.

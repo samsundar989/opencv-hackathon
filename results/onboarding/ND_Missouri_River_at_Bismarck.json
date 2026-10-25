@@ -1,0 +1,18 @@
+{
+  "cam_id": "ND_Missouri_River_at_Bismarck",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 8679,
+    "selected": 2243,
+    "nims_calls": 37,
+    "downloads": 2242,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 137.6
+  },
+  "nwis_id": "06342500",
+  "state": "ND",
+  "name": "Missouri River at Bismarck",
+  "status": "fetched"
+}

@@ -1,0 +1,18 @@
+{
+  "cam_id": "NY_MOHAWK_RIVER_AT_LOCK_9_AT_ROTTERDAM_JUNCTION_NY",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 78982,
+    "selected": 3127,
+    "nims_calls": 245,
+    "downloads": 3126,
+    "download_errors": 1
+  },
+  "seconds": {
+    "fetch": 666.3
+  },
+  "nwis_id": "01354230",
+  "state": "NY",
+  "name": "Mohawk River at Lock 9 at Rotterdam Junction Downstream View",
+  "status": "fetched"
+}

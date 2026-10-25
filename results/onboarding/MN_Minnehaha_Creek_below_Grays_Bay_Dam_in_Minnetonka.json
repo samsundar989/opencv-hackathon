@@ -1,0 +1,18 @@
+{
+  "cam_id": "MN_Minnehaha_Creek_below_Grays_Bay_Dam_in_Minnetonka",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 4702,
+    "selected": 2078,
+    "nims_calls": 37,
+    "downloads": 2068,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 134.8
+  },
+  "nwis_id": "05289100",
+  "state": "MN",
+  "name": "Minnehaha Creek below Grays Bay Dam in Minnetonka",
+  "status": "fetched"
+}

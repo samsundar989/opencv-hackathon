@@ -1,23 +1,24 @@
-# RiverSight video — draft script v2 (Cowork, Oct 23; W3 fixes applied; final after Gate G2, Sat evening)
+# RiverSight video — script v3 (FINAL for recording Sun ~10:00 CT) — Cowork, Oct 24 evening
 
-**Target length:** 3:15 (limit 5:00). The demo comes first. Samuel appears on camera at 0:00–0:12 and 2:55–3:15; screen capture with his voice-over in between.
+**Length:** 3:15–3:30 (limit 5:00).
+- Samuel appears on camera at the start and the end; everything else is his voice over W3's B-roll (`results/video_assets/`, rough cut `rough_cut.mp4`).
+- Every number below is in `docs/DEVPOST.md` and traced by `scripts/check_report_numbers.py`. If W3's final report changes any of them, use the report's value.
 
-Numbers in `{braces}` are filled only from committed files. The ones already safe come from W3's list in `docs/status/W3_brief_for_cowork.md`. Never say "first camera water-level system", "first on HIVIS", "replaces gauges", or that we beat StageSight. Never quote a COOL speedup that wasn't measured on AWS.
+| # | time | picture (B-roll file) | words (Samuel) |
+|---|---|---|---|
+| 1 | 0:00–0:15 | Samuel on camera → cut to the live home page (`home.mp4`) | "I'm Samuel. Stream gauges go dark, drift and get washed out, and in the past year 531 of the 875 gauges behind USGS's public river cameras had an outage of six hours or more. The cameras next to them are never read as instruments. RiverSight reads them." |
+| 2 | 0:15–0:45 | Salt Creek site page, slider sweep (`salt_slider.mp4`) | "This is the live USGS camera on Salt Creek, Illinois. Drag the slider and the picture shows what goes under water at any stage. Each patch of the image learned the level at which it gets wet from the camera's own gauge history: no survey, no staff plate. Water is only drawn where it can connect to the river." |
+| 3 | 0:45–1:20 | **Replay a flood** at Salt Creek (`replay.mp4`): overlay rising, chart cursor, agent log | "Here is a real flood from July, replayed out of sample. As the creek rises, the agent samples faster, drafts an alert with these overlays, and waits for a person. At the crest the water goes above anything the camera was trained on, so it says 'at least this high' and trusts the gauge." |
+| 4 | 1:20–1:45 | Registration graphic → `/judge` tiles (`judge.mp4`) | "Under the hood, OpenCV 5's ALIKED and LightGlue with MAGSAC register 95.7% of daylight frames, against 39.6% for ORB. We froze the model and scored 20 cameras once on unseen days: 14 of 20 within a quarter foot or 10% of range, median error 0.18 feet. When the gauge goes dark, the camera beats its 72-hour-old reading at 15 of 20 sites and its week-old reading at 18." |
+| 5 | 1:45–2:10 | v2 / prospective tiles on `/judge` | "A DINOv2 model running inside OpenCV's DNN engine cut year-long error from 0.38 to 0.25 feet. It went live today after beating the old model in a pre-registered live shadow test. And while the gauge is online, the gauge still wins; we show that too." |
+| 6 | 2:10–2:40 | `/approvals` (second opinion on the card), "Needs a person now", `/health` (`approvals.mp4`, `health.mp4`) | "River Steward is the fleet agent. We measured who should act: on 98 frozen test cases, OpenCV-grounded rules scored 94%, Claude alone 71%. So the rules act, Claude on Bedrock ranks the fleet and gives a second opinion, and a person approves anything that leaves the system. It also watches the cameras themselves: offline, moved, or stuck in infrared." |
+| 7 | 2:40–3:00 | Architecture diagram → `/proof` (`proof.mp4`) | "It runs every 15 minutes on AWS Graviton5 with OpenCV's COOL build. COOL gives identical outputs and speeds up registration by 16 to 21%, but it's flat end to end because the neural matcher dominates. One server covers every gauged HIVIS camera for about six cents per camera-month. Thirty of forty new cameras onboarded themselves this weekend." |
+| 8 | 3:00–3:10 | Failure gallery montage | "It can't see at night, fog fools it, cameras get re-aimed, and floods beyond its history saturate it. All of that is flagged, not hidden." |
+| 9 | 3:10–3:25 | Samuel on camera → end card (URL, repo) | "Gauges go dark, drift and get damaged. The cameras are already there. RiverSight makes them a check, a backup, and a picture of where the water is." |
 
-| time | picture | words (Samuel) |
-|---|---|---|
-| 0:00–0:12 | Samuel on camera, then a cut to the live site home | "I'm Samuel. About 880 public USGS river webcams sit right next to stream gauges. RiverSight turns them into a second, independent water-level instrument. Twenty are live today." |
-| 0:12–0:40 | Pecatonica site page: the latest daylight frame with the blue overlay; drag the slider from 5 to 9 ft and the water climbs the bank | "This is the USGS camera on the Pecatonica River in Wisconsin. The camera reads {x.x} feet; the gauge says {y.y}. Drag the slider and you see what goes under water at any level. Each patch of the picture learned the level at which it gets wet from a year of the gauge's own history: no survey, no staff plate, no targets." |
-| 0:40–1:05 | Pipeline: frame → ALIKED+LightGlue inlier lines → reliable blocks highlighted → stage ± σ | "Every frame is registered with OpenCV 5's ALIKED and LightGlue with MAGSAC. Plain ORB registers only 40% of daylight frames; this gets 95.7%. A regression over the reliable patches turns the picture into feet, with an error bar." |
-| 1:05–1:35 | `/judge` tiles: 14/20, 0.18 ft, 15/20 and 18/20, 0/20 | "We froze the model, then scored 20 cameras once on ten unseen days: 14 of 20 within a quarter foot or 10% of their range, median error 0.18 feet. When a gauge goes dark, the camera beats its 72-hour-old reading at 15 of 20 sites and its week-old reading at 18. While the gauge is online the gauge wins, and we show that too." |
-| 1:35–2:15 | River Steward: Hancock flood replay timeline → wet overlay → drafted alert → the approvals page → Samuel taps Approve → email arrives | "A fleet agent, River Steward, watches every camera. When OpenCV loses registration it re-checks against a reference bank and re-anchors or quarantines. When water rises it samples faster, draws the forecast crest into the image and drafts an alert. Nothing goes out without a human. On {N} episodes, {48} of them real, it took the right action {a}% of the time, against {92.3}% for fixed rules, with zero false actions on clean controls." |
-| 2:15–2:40 | Architecture diagram → `/proof` → COOL per-kernel chart | "It runs on AWS Graviton with OpenCV's COOL build. Per kernel, {k}; end to end, {e}× with identical outputs, which works out to {$} per camera-month to watch the whole fleet. Fresh clone to all-green tests takes about 70 seconds." |
-| 2:40–2:55 | Failure gallery: night, hazy lens, re-aimed camera, the Hancock flood above range | "It doesn't see at night. Fog and muddy water look alike to it. Eight of twenty cameras had stretches it couldn't register to today's view. And a flood bigger than anything in the camera's history pins it at its ceiling. Then it says 'at least this high' and trusts the gauge." |
-| 2:55–3:15 | Samuel on camera | "Gauges go dark, drift and get damaged. Cameras are already there. RiverSight makes them a check, a backup, and a picture of where the water is." |
-
-**Recording checklist:**
-- 1080p screen capture; mic test.
-- Dashboard in light mode; record in daylight Central time so the frames are live, or use the "last daylight frame" view.
-- Replays labelled "replay".
-- End card with the URL, repo and team (Samuel).
-- Keep it under 3:30.
+## Recording plan (Sun ~10:00 CT)
+1. **Before:** run `aws login`; open the live site in **daylight** (Salt Creek or Neversink should show "camera" readings), light mode, and close other tabs.
+2. **On-camera parts (shots 1 and 9):** phone or webcam, eye level, quiet room, 2–3 takes each.
+3. **Voice-over (shots 2–8):** read over W3's `rough_cut.mp4`, or re-record the screen live with OBS or Clipchamp while narrating. A live take of the slider and replay looks more authentic.
+4. **Edit:** drop the on-camera clips into the rough cut's intro/outro slots and add the narration. Keep it under 3:30. Export 1080p MP4.
+5. **Upload:** YouTube (unlisted or public) or Vimeo. Paste the link in Devpost.

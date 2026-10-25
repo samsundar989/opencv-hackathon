@@ -1,0 +1,18 @@
+{
+  "cam_id": "MN_Minnesota_River_at_Mankato_MN",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 2350,
+    "selected": 1275,
+    "nims_calls": 37,
+    "downloads": 1266,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 115.8
+  },
+  "nwis_id": "05325000",
+  "state": "MN",
+  "name": "Minnesota River at Mankato MN",
+  "status": "fetched"
+}

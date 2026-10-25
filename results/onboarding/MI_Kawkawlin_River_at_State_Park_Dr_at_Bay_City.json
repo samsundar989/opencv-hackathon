@@ -1,0 +1,18 @@
+{
+  "cam_id": "MI_Kawkawlin_River_at_State_Park_Dr_at_Bay_City",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 8731,
+    "selected": 3548,
+    "nims_calls": 37,
+    "downloads": 3538,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 166.7
+  },
+  "nwis_id": "04143600",
+  "state": "MI",
+  "name": "Kawkawlin River at State Park Dr at Bay City",
+  "status": "fetched"
+}

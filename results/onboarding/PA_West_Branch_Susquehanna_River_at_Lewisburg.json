@@ -1,0 +1,18 @@
+{
+  "cam_id": "PA_West_Branch_Susquehanna_River_at_Lewisburg",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 1886,
+    "selected": 1014,
+    "nims_calls": 37,
+    "downloads": 1012,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 112.0
+  },
+  "nwis_id": "01553500",
+  "state": "PA",
+  "name": "West Branch Susquehanna River at Lewisburg",
+  "status": "fetched"
+}

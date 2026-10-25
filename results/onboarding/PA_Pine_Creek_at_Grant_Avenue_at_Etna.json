@@ -1,0 +1,18 @@
+{
+  "cam_id": "PA_Pine_Creek_at_Grant_Avenue_at_Etna",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 3204,
+    "selected": 1757,
+    "nims_calls": 37,
+    "downloads": 1751,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 132.5
+  },
+  "nwis_id": "03049807",
+  "state": "PA",
+  "name": "Pine Creek at Grant Avenue at Etna",
+  "status": "fetched"
+}

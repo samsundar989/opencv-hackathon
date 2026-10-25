@@ -1,0 +1,18 @@
+{
+  "cam_id": "ME_Kennebec_River_at_Calumet_Bridge_at_Augusta",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 18349,
+    "selected": 4140,
+    "nims_calls": 37,
+    "downloads": 4139,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 179.7
+  },
+  "nwis_id": "01049320",
+  "state": "ME",
+  "name": "Kennebec River at Calumet Bridge at Augusta",
+  "status": "fetched"
+}

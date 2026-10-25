@@ -1,0 +1,18 @@
+{
+  "cam_id": "GA_Peachtree_Creek_at_Atlanta",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 10476,
+    "selected": 1682,
+    "nims_calls": 37,
+    "downloads": 1682,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 134.5
+  },
+  "nwis_id": "02336300",
+  "state": "GA",
+  "name": "Peachtree Creek at Atlanta",
+  "status": "fetched"
+}

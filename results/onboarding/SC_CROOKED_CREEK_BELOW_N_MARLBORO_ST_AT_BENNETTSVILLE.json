@@ -1,0 +1,18 @@
+{
+  "cam_id": "SC_CROOKED_CREEK_BELOW_N_MARLBORO_ST_AT_BENNETTSVILLE",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 33732,
+    "selected": 2082,
+    "nims_calls": 37,
+    "downloads": 2082,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 139.8
+  },
+  "nwis_id": "021305805",
+  "state": "SC",
+  "name": "CROOKED CREEK BELOW N MARLBORO ST AT BENNETTSVILLE",
+  "status": "fetched"
+}

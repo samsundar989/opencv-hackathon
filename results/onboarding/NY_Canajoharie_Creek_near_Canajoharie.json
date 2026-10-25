@@ -1,0 +1,18 @@
+{
+  "cam_id": "NY_Canajoharie_Creek_near_Canajoharie",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 3398,
+    "selected": 1696,
+    "nims_calls": 37,
+    "downloads": 1693,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 135.0
+  },
+  "nwis_id": "01349150",
+  "state": "NY",
+  "name": "Canajoharie Creek near Canajoharie",
+  "status": "fetched"
+}

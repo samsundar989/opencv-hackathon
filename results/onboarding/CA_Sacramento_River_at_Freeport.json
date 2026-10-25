@@ -1,0 +1,18 @@
+{
+  "cam_id": "CA_Sacramento_River_at_Freeport",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 11816,
+    "selected": 2752,
+    "nims_calls": 37,
+    "downloads": 2749,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 149.3
+  },
+  "nwis_id": "11447650",
+  "state": "CA",
+  "name": "Sacramento River at Freeport",
+  "status": "fetched"
+}

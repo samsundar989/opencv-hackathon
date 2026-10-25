@@ -1,0 +1,18 @@
+{
+  "cam_id": "ND_Souris_River_near_Sherwood",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 8142,
+    "selected": 2219,
+    "nims_calls": 37,
+    "downloads": 2218,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 137.4
+  },
+  "nwis_id": "05114000",
+  "state": "ND",
+  "name": "Souris River near Sherwood",
+  "status": "fetched"
+}

@@ -1,0 +1,18 @@
+{
+  "cam_id": "WI_Cedar_Creek_near_Cedarburg",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 3397,
+    "selected": 1610,
+    "nims_calls": 37,
+    "downloads": 1602,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 124.4
+  },
+  "nwis_id": "04086500",
+  "state": "WI",
+  "name": "Cedar Creek near Cedarburg",
+  "status": "fetched"
+}

@@ -1,0 +1,18 @@
+{
+  "cam_id": "IL_Vermilion_River_near_Danville",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 3128,
+    "selected": 1994,
+    "nims_calls": 37,
+    "downloads": 1985,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 133.4
+  },
+  "nwis_id": "03339000",
+  "state": "IL",
+  "name": "Vermilion River near Danville",
+  "status": "fetched"
+}

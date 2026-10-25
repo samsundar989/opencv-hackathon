@@ -1,0 +1,18 @@
+{
+  "cam_id": "OH_Eagle_Creek_above_Findlay",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 8339,
+    "selected": 2493,
+    "nims_calls": 37,
+    "downloads": 2484,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 144.4
+  },
+  "nwis_id": "04188496",
+  "state": "OH",
+  "name": "Eagle Creek above Findlay",
+  "status": "fetched"
+}

@@ -1,0 +1,18 @@
+{
+  "cam_id": "WI_Wolf_River_at_New_London",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 5448,
+    "selected": 2192,
+    "nims_calls": 37,
+    "downloads": 2182,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 136.4
+  },
+  "nwis_id": "04079000",
+  "state": "WI",
+  "name": "Wolf River at New London",
+  "status": "fetched"
+}

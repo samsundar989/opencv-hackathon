@@ -1,0 +1,18 @@
+{
+  "cam_id": "OH_Maumee_River_at_Antwerp",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 3771,
+    "selected": 2314,
+    "nims_calls": 37,
+    "downloads": 2305,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 140.8
+  },
+  "nwis_id": "04183500",
+  "state": "OH",
+  "name": "Maumee River at Antwerp",
+  "status": "fetched"
+}

@@ -1,0 +1,18 @@
+{
+  "cam_id": "CA_Georgiana_Slough_Salmonid_Migratory_Barrier",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 35017,
+    "selected": 4170,
+    "nims_calls": 37,
+    "downloads": 4166,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 179.9
+  },
+  "nwis_id": "381427121305401",
+  "state": "CA",
+  "name": "Sacramento R bl Walnut Grove Br A Walnut Grove",
+  "status": "fetched"
+}

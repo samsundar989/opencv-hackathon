@@ -1,0 +1,18 @@
+{
+  "cam_id": "CA_Suisun_Slough_nr_Benicia",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 13237,
+    "selected": 3149,
+    "nims_calls": 37,
+    "downloads": 3144,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 156.3
+  },
+  "nwis_id": "11455740",
+  "state": "CA",
+  "name": "Suisun Slough nr Benicia",
+  "status": "fetched"
+}

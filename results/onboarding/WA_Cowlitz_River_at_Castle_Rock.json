@@ -1,0 +1,18 @@
+{
+  "cam_id": "WA_Cowlitz_River_at_Castle_Rock",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 5399,
+    "selected": 1351,
+    "nims_calls": 37,
+    "downloads": 1346,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 118.0
+  },
+  "nwis_id": "14243000",
+  "state": "WA",
+  "name": "Cowlitz River at Castle Rock",
+  "status": "fetched"
+}

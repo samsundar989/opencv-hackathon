@@ -1,0 +1,18 @@
+{
+  "cam_id": "TX_Trinity_Rv_nr_Rosser",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 4221,
+    "selected": 2570,
+    "nims_calls": 37,
+    "downloads": 2563,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 144.3
+  },
+  "nwis_id": "08062500",
+  "state": "TX",
+  "name": "Trinity Rv nr Rosser",
+  "status": "fetched"
+}

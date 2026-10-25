@@ -457,8 +457,8 @@ sites:
   score: 0.1688
   camera_type: small_stream
   batch: 2
-  live: false
-  tier: null
+  live: true
+  tier: B
 - cam_id: TX_Zacate_Ck_at_Laredo
   nwis_id: 08458995
   state: TX
@@ -469,8 +469,8 @@ sites:
   score: 0.1371
   camera_type: small_stream
   batch: 2
-  live: false
-  tier: null
+  live: true
+  tier: B
 - cam_id: GA_Sweetwater_Creek_at_Austell
   nwis_id: 02336910
   state: GA
@@ -481,8 +481,8 @@ sites:
   score: 1.0
   camera_type: small_stream
   batch: 2
-  live: false
-  tier: null
+  live: true
+  tier: B
 - cam_id: CA_Dutch_Slough_below_Jersey_Island_Road_at_Jersey_Island
   nwis_id: '11313433'
   state: CA
@@ -493,8 +493,8 @@ sites:
   score: 1.0
   camera_type: tidal_coastal
   batch: 2
-  live: false
-  tier: null
+  live: true
+  tier: B
 - cam_id: WI_Chippewa_River_at_Grand_Ave_at_Eau_Claire
   nwis_id: 05366800
   state: WI
@@ -505,8 +505,8 @@ sites:
   score: 1.0
   camera_type: cold_climate
   batch: 2
-  live: false
-  tier: null
+  live: true
+  tier: B
 - cam_id: MN_Redwood_River_near_Marshall
   nwis_id: '05315000'
   state: MN
@@ -517,8 +517,8 @@ sites:
   score: 1.0
   camera_type: large_river
   batch: 2
-  live: false
-  tier: null
+  live: true
+  tier: B
   type_note: picked as tidal_coastal under a classifier bug ("Marsh" in "Marshall"),
     fixed 2026-10-24
 - cam_id: UT_Bear_R_Bay_Outflow_at_Causeway_Brg_nr_Warren
@@ -532,7 +532,7 @@ sites:
   camera_type: tidal_coastal
   batch: 2
   live: false
-  tier: null
+  tier: C
 - cam_id: GA_Peachtree_Creek_at_Atlanta
   nwis_id: '02336300'
   state: GA
@@ -544,7 +544,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: ND_Souris_River_near_Sherwood
   nwis_id: '05114000'
   state: ND
@@ -556,7 +556,7 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: GA_Big_Creek_near_Alpharetta
   nwis_id: '02335700'
   state: GA
@@ -567,8 +567,8 @@ sites:
   score: 0.9167
   camera_type: small_stream
   batch: 2
-  live: false
-  tier: null
+  live: true
+  tier: B
 - cam_id: WI_East_River_at_N_Baird_Street_at_Green_Bay
   nwis_id: 04085138
   state: WI
@@ -580,7 +580,7 @@ sites:
   camera_type: tidal_coastal
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: NY_Schoharie_Creek_at_Prattsville_Upstream_View
   nwis_id: '01350000'
   state: NY
@@ -592,7 +592,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: WI_Duck_Creek_near_Howard_DOWNSTREAM
   nwis_id: '04072150'
   state: WI
@@ -604,7 +604,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: AK_Kasilof_River_near_Kasilof
   nwis_id: '15242000'
   state: AK
@@ -616,7 +616,7 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: ND_Crooked_Creek_near_Emerson
   nwis_id: 06339200
   state: ND
@@ -628,7 +628,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: MN_Minnesota_River_at_Mankato_MN
   nwis_id: '05325000'
   state: MN
@@ -640,7 +640,7 @@ sites:
   camera_type: large_river
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: OH_Platter_Creek_near_Sherwood
   nwis_id: 04183979
   state: OH
@@ -652,7 +652,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: MN_Rainy_River_at_Boat_Landing_below_International_Falls
   nwis_id: 05129515
   state: MN
@@ -664,7 +664,7 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: WI_Cedar_Creek_near_Cedarburg
   nwis_id: 04086500
   state: WI
@@ -676,7 +676,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: MN_Thief_River_near_Thief_River_Falls
   nwis_id: '05076000'
   state: MN
@@ -688,7 +688,7 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: WI_Wolf_River_at_New_London
   nwis_id: 04079000
   state: WI
@@ -700,7 +700,7 @@ sites:
   camera_type: large_river
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: OH_Blanchard_River_near_Dupont
   nwis_id: 04190000
   state: OH
@@ -712,7 +712,7 @@ sites:
   camera_type: large_river
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: NY_MOHAWK_RIVER_AT_LOCK_9_AT_ROTTERDAM_JUNCTION_NY
   nwis_id: '01354230'
   state: NY
@@ -724,7 +724,7 @@ sites:
   camera_type: large_river
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: ND_Cherry_Creek_on_State_Highway_23_near_Schafer
   nwis_id: '06337200'
   state: ND
@@ -736,7 +736,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: ND_Missouri_River_at_Bismarck
   nwis_id: '06342500'
   state: ND
@@ -748,7 +748,7 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: OH_Eagle_Creek_above_Findlay
   nwis_id: 04188496
   state: OH
@@ -760,7 +760,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: OH_St_Marys_River_at_Walcot_Street_at_Willshire
   nwis_id: 04181049
   state: OH
@@ -772,7 +772,7 @@ sites:
   camera_type: large_river
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: MN_Minnehaha_Creek_below_Grays_Bay_Dam_in_Minnetonka
   nwis_id: 05289100
   state: MN
@@ -784,7 +784,7 @@ sites:
   camera_type: tidal_coastal
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: SC_CROOKED_CREEK_BELOW_N_MARLBORO_ST_AT_BENNETTSVILLE
   nwis_id: 021305805
   state: SC
@@ -796,7 +796,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: AK_Red_Cloud_River_at_Anton_Larsen_Bay_near_Kodiak
   nwis_id: '15297476'
   state: AK
@@ -808,7 +808,7 @@ sites:
   camera_type: tidal_coastal
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: IL_Vermilion_River_near_Danville
   nwis_id: 03339000
   state: IL
@@ -820,7 +820,7 @@ sites:
   camera_type: large_river
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: CA_Sacramento_River_at_Freeport
   nwis_id: '11447650'
   state: CA
@@ -832,7 +832,7 @@ sites:
   camera_type: large_river
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: WA_Cowlitz_River_at_Castle_Rock
   nwis_id: '14243000'
   state: WA
@@ -844,7 +844,7 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: AK_Anchor_River_near_Anchor_Point
   nwis_id: '15239900'
   state: AK
@@ -856,7 +856,7 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: ME_Kennebec_River_at_Calumet_Bridge_at_Augusta
   nwis_id: 01049320
   state: ME
@@ -868,7 +868,7 @@ sites:
   camera_type: large_river
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: NY_Mohawk_River_at_Lock_9_at_Rotterdam_Junction_Upstream
   nwis_id: '01354230'
   state: NY
@@ -880,7 +880,7 @@ sites:
   camera_type: large_river
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: WA_Pend_Oreille_River_at_Newport
   nwis_id: '12395500'
   state: WA
@@ -892,7 +892,7 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: ND_Edmore_Coulee_Trib_nr_Webster
   nwis_id: '05056215'
   state: ND
@@ -904,7 +904,7 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: AK_Salmon_River_near_Hyder
   nwis_id: '15008000'
   state: AK
@@ -916,7 +916,7 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: CA_Georgiana_Slough_Salmonid_Migratory_Barrier
   nwis_id: '381427121305401'
   state: CA
@@ -928,7 +928,7 @@ sites:
   camera_type: tidal_coastal
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: PA_Pine_Creek_at_Grant_Avenue_at_Etna
   nwis_id: 03049807
   state: PA
@@ -940,7 +940,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: OH_Maumee_River_at_Antwerp
   nwis_id: 04183500
   state: OH
@@ -952,7 +952,7 @@ sites:
   camera_type: large_river
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: CA_Suisun_Slough_nr_Benicia
   nwis_id: '11455740'
   state: CA
@@ -964,7 +964,7 @@ sites:
   camera_type: tidal_coastal
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: MI_Kawkawlin_River_at_State_Park_Dr_at_Bay_City
   nwis_id: '04143600'
   state: MI
@@ -976,7 +976,7 @@ sites:
   camera_type: tidal_coastal
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: NY_Canajoharie_Creek_near_Canajoharie
   nwis_id: 01349150
   state: NY
@@ -988,7 +988,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: CA_Green_Slough_nr_Courtland
   nwis_id: '381905121413901'
   state: CA
@@ -1000,7 +1000,7 @@ sites:
   camera_type: tidal_coastal
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: NY_Rondout_Creek_at_Rondout
   nwis_id: '01372007'
   state: NY
@@ -1012,7 +1012,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: TX_Trinity_Rv_nr_Rosser
   nwis_id: 08062500
   state: TX
@@ -1024,7 +1024,7 @@ sites:
   camera_type: large_river
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: PA_West_Branch_Susquehanna_River_at_Lewisburg
   nwis_id: '01553500'
   state: PA
@@ -1036,7 +1036,7 @@ sites:
   camera_type: large_river
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 - cam_id: AK_Taku_River_near_Juneau
   nwis_id: '15041200'
   state: AK
@@ -1048,6 +1048,6 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: null
+  tier: .nan
 selection_b2: scripts/onboard_pool.py --diverse → results/onboarding/candidates_ranked_b2.csv
   (D-0013 W5-1)

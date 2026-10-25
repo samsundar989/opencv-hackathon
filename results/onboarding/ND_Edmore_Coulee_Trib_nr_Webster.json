@@ -1,0 +1,18 @@
+{
+  "cam_id": "ND_Edmore_Coulee_Trib_nr_Webster",
+  "label": "onboarded Oct 24-25, not part of the frozen test",
+  "fetch": {
+    "listed": 3179,
+    "selected": 1534,
+    "nims_calls": 37,
+    "downloads": 1532,
+    "download_errors": 0
+  },
+  "seconds": {
+    "fetch": 121.2
+  },
+  "nwis_id": "05056215",
+  "state": "ND",
+  "name": "Edmore Coulee Trib nr Webster",
+  "status": "fetched"
+}
