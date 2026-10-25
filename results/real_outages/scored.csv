@@ -1,42 +1,68 @@
-cam_id,start,end,variant,status,hours,kinds,codes,truth,n_frames,n_truth,n_train,v_before,v_after,stage_range_in_outage,cam_mae,lkv_mae,cam_median_ae,cam_beats_lkv,cam_end_err,lkv_end_err,end_frame_age_h
+cam_id,start,end,variant,status,hours,kinds,codes,truth,n_frames,n_truth,n_train,v_before,v_after,stage_range_in_outage,cam_end_err,lkv_end_err,end_frame_age_h,cam_mae,lkv_mae,cam_median_ae,cam_beats_lkv
 AK_Alsek_River_at_Dry_Bay_near_Yakutat,2026-02-23 21:00:00+00:00,2026-04-27 22:45:00+00:00,excl7d,too little training (136),,,,,,,,,,,,,,,,,
 AK_Alsek_River_at_Dry_Bay_near_Yakutat,2026-02-23 21:00:00+00:00,2026-04-27 22:45:00+00:00,causal,too little training (16),,,,,,,,,,,,,,,,,
-ID_Clearwater_River_at_Spalding,2025-11-03 08:00:00+00:00,2025-12-16 20:30:00+00:00,excl7d,scored,1044.5,estimated,e,usgs_estimated_backfill,122.0,122.0,1678.0,3.38,6.82,5.81,0.9816,1.8007,0.9269,True,0.1486,3.44,0.4958
+AK_Anchor_River_near_Anchor_Point,2025-12-09 07:30:00+00:00,2026-02-05 20:30:00+00:00,excl7d,scored,1405.0,gap,,after_return_only,36.0,0.0,1650.0,2.07,3.52,,,,,,,,
+AK_Anchor_River_near_Anchor_Point,2025-12-09 07:30:00+00:00,2026-02-05 20:30:00+00:00,causal,too little training (24),,,,,,,,,,,,,,,,,
+AK_Anchor_River_near_Anchor_Point,2026-02-08 09:15:00+00:00,2026-04-09 01:45:00+00:00,excl7d,scored,1432.5,gap,,after_return_only,115.0,0.0,1597.0,4.17,3.58,,0.2757,0.59,0.7458,,,,
+AK_Anchor_River_near_Anchor_Point,2026-02-08 09:15:00+00:00,2026-04-09 01:45:00+00:00,causal,too little training (24),,,,,,,,,,,,,,,,,
+AK_Kasilof_River_near_Kasilof,2025-12-07 17:15:00+00:00,2026-04-12 04:45:00+00:00,excl7d,scored,3011.5,gap|qualified,Ssn,after_return_only,355.0,0.0,1075.0,36.17,35.76,,0.6288,0.41,0.7492,,,,
+AK_Kasilof_River_near_Kasilof,2025-12-07 17:15:00+00:00,2026-04-12 04:45:00+00:00,causal,too little training (42),,,,,,,,,,,,,,,,,
+AK_Kasilof_River_near_Kasilof,2026-05-20 19:00:00+00:00,2026-05-21 09:15:00+00:00,excl7d,scored,14.25,gap,,after_return_only,5.0,0.0,1016.0,36.05,36.07,,0.1972,0.02,3.2483,,,,
+AK_Kasilof_River_near_Kasilof,2026-05-20 19:00:00+00:00,2026-05-21 09:15:00+00:00,causal,scored,14.25,gap,,after_return_only,5.0,0.0,268.0,36.05,36.07,,0.3656,0.02,3.2483,,,,
+CA_Suisun_Slough_nr_Benicia,2026-06-10 06:00:00+00:00,2026-06-10 16:15:00+00:00,excl7d,scored,10.25,gap,,after_return_only,3.0,0.0,2933.0,15.23,13.4,,1.3326,1.83,0.2489,,,,
+CA_Suisun_Slough_nr_Benicia,2026-06-10 06:00:00+00:00,2026-06-10 16:15:00+00:00,causal,scored,10.25,gap,,after_return_only,3.0,0.0,1383.0,15.23,13.4,,0.9386,1.83,0.2489,,,,
+GA_Sweetwater_Creek_at_Austell,2026-07-15 19:45:00+00:00,2026-07-16 12:00:00+00:00,excl7d,scored,16.25,gap,,after_return_only,6.0,0.0,2232.0,11.54,10.2,,0.5905,1.34,0.9978,,,,
+GA_Sweetwater_Creek_at_Austell,2026-07-15 19:45:00+00:00,2026-07-16 12:00:00+00:00,causal,scored,16.25,gap,,after_return_only,6.0,0.0,1577.0,11.54,10.2,,2.0643,1.34,0.9978,,,,
+ID_Clearwater_River_at_Spalding,2025-11-03 08:00:00+00:00,2025-12-16 20:30:00+00:00,excl7d,scored,1044.5,estimated,e,usgs_estimated_backfill,122.0,122.0,1678.0,3.38,6.82,5.81,0.1486,3.44,0.4958,0.9816,1.8007,0.9269,True
 ID_Clearwater_River_at_Spalding,2025-11-03 08:00:00+00:00,2025-12-16 20:30:00+00:00,causal,too little training (8),,,,,,,,,,,,,,,,,
 IL_Illinois_River_at_Florence,2026-01-24 02:00:00+00:00,2026-01-28 13:15:00+00:00,excl7d,scored,107.25,gap,,after_return_only,9.0,0.0,1424.0,15.44,15.92,,,,,,,,
 IL_Illinois_River_at_Florence,2026-01-24 02:00:00+00:00,2026-01-28 13:15:00+00:00,causal,scored,107.25,gap,,after_return_only,9.0,0.0,297.0,15.44,15.92,,,,,,,,
-IL_Illinois_River_at_Florence,2026-02-02 02:00:00+00:00,2026-02-03 23:00:00+00:00,excl7d,scored,45.0,gap,,after_return_only,8.0,0.0,1446.0,16.58,16.59,,,,,,1.7917,0.01,2.9986
-IL_Illinois_River_at_Florence,2026-02-02 02:00:00+00:00,2026-02-03 23:00:00+00:00,causal,scored,45.0,gap,,after_return_only,8.0,0.0,327.0,16.58,16.59,,,,,,1.2319,0.01,2.9986
-IL_Illinois_River_at_Florence,2026-02-07 11:15:00+00:00,2026-02-10 18:00:00+00:00,excl7d,scored,78.75,gap,,after_return_only,10.0,0.0,1441.0,16.4,16.3,,,,,,0.9557,0.1,1.9992
-IL_Illinois_River_at_Florence,2026-02-07 11:15:00+00:00,2026-02-10 18:00:00+00:00,causal,scored,78.75,gap,,after_return_only,10.0,0.0,335.0,16.4,16.3,,,,,,0.4657,0.1,1.9992
+IL_Illinois_River_at_Florence,2026-02-02 02:00:00+00:00,2026-02-03 23:00:00+00:00,excl7d,scored,45.0,gap,,after_return_only,8.0,0.0,1446.0,16.58,16.59,,1.7917,0.01,2.9986,,,,
+IL_Illinois_River_at_Florence,2026-02-02 02:00:00+00:00,2026-02-03 23:00:00+00:00,causal,scored,45.0,gap,,after_return_only,8.0,0.0,327.0,16.58,16.59,,1.2319,0.01,2.9986,,,,
+IL_Illinois_River_at_Florence,2026-02-07 11:15:00+00:00,2026-02-10 18:00:00+00:00,excl7d,scored,78.75,gap,,after_return_only,10.0,0.0,1441.0,16.4,16.3,,0.9557,0.1,1.9992,,,,
+IL_Illinois_River_at_Florence,2026-02-07 11:15:00+00:00,2026-02-10 18:00:00+00:00,causal,scored,78.75,gap,,after_return_only,10.0,0.0,335.0,16.4,16.3,,0.4657,0.1,1.9992,,,,
 IL_Illinois_River_at_Florence,2026-02-11 08:00:00+00:00,2026-02-12 07:30:00+00:00,excl7d,scored,23.5,gap,,after_return_only,4.0,0.0,1437.0,16.14,16.12,,,,,,,,
 IL_Illinois_River_at_Florence,2026-02-11 08:00:00+00:00,2026-02-12 07:30:00+00:00,causal,scored,23.5,gap,,after_return_only,4.0,0.0,338.0,16.14,16.12,,,,,,,,
 IL_Illinois_River_at_Florence,2026-02-13 05:00:00+00:00,2026-02-14 02:15:00+00:00,excl7d,scored,21.25,gap,,after_return_only,4.0,0.0,1436.0,16.05,15.6,,,,,,,,
 IL_Illinois_River_at_Florence,2026-02-13 05:00:00+00:00,2026-02-14 02:15:00+00:00,causal,scored,21.25,gap,,after_return_only,4.0,0.0,342.0,16.05,15.6,,,,,,,,
-IL_Illinois_River_at_Henry,2026-07-15 19:45:00+00:00,2026-07-16 13:00:00+00:00,excl7d,scored,17.25,gap,,after_return_only,5.0,0.0,1117.0,18.5,18.11,,,,,,0.4647,0.39,0.9722
-IL_Illinois_River_at_Henry,2026-07-15 19:45:00+00:00,2026-07-16 13:00:00+00:00,causal,scored,17.25,gap,,after_return_only,5.0,0.0,687.0,18.5,18.11,,,,,,0.4574,0.39,0.9722
-IN_WABASH_RIVER_AT_NEW_HARMONY,2026-01-24 18:45:00+00:00,2026-02-01 16:30:00+00:00,excl7d,scored,189.75,gap|qualified,Eqp,after_return_only,31.0,0.0,2457.0,1.25,1.48,,,,,,3.6792,0.23,0.4986
-IN_WABASH_RIVER_AT_NEW_HARMONY,2026-01-24 18:45:00+00:00,2026-02-01 16:30:00+00:00,causal,scored,189.75,gap|qualified,Eqp,after_return_only,31.0,0.0,410.0,1.25,1.48,,,,,,1.592,0.23,0.4986
-KS_Big_Blue_R_nr_Manhattan,2026-03-15 12:15:00+00:00,2026-03-15 19:15:00+00:00,excl7d,scored,7.0,gap,,after_return_only,3.0,0.0,1884.0,0.65,0.65,,,,,,0.3586,0.0,1.2489
-KS_Big_Blue_R_nr_Manhattan,2026-03-15 12:15:00+00:00,2026-03-15 19:15:00+00:00,causal,scored,7.0,gap,,after_return_only,3.0,0.0,496.0,0.65,0.65,,,,,,0.2812,0.0,1.2489
+IL_Illinois_River_at_Henry,2026-07-15 19:45:00+00:00,2026-07-16 13:00:00+00:00,excl7d,scored,17.25,gap,,after_return_only,5.0,0.0,1117.0,18.5,18.11,,0.4647,0.39,0.9722,,,,
+IL_Illinois_River_at_Henry,2026-07-15 19:45:00+00:00,2026-07-16 13:00:00+00:00,causal,scored,17.25,gap,,after_return_only,5.0,0.0,687.0,18.5,18.11,,0.4574,0.39,0.9722,,,,
+IL_Vermilion_River_near_Danville,2026-01-14 13:30:00+00:00,2026-02-18 19:30:00+00:00,excl7d,scored,846.0,gap,,after_return_only,164.0,0.0,1516.0,2.0,2.18,,1.0547,0.18,1.4989,,,,
+IL_Vermilion_River_near_Danville,2026-01-14 13:30:00+00:00,2026-02-18 19:30:00+00:00,causal,too little training (0),,,,,,,,,,,,,,,,,
+IL_Vermilion_River_near_Danville,2026-02-22 15:00:00+00:00,2026-02-22 23:45:00+00:00,excl7d,scored,8.75,gap,,after_return_only,4.0,0.0,1519.0,1.99,2.01,,0.1273,0.02,1.7478,,,,
+IL_Vermilion_River_near_Danville,2026-02-22 15:00:00+00:00,2026-02-22 23:45:00+00:00,causal,too little training (22),,,,,,,,,,,,,,,,,
+IL_Vermilion_River_near_Danville,2026-02-23 04:00:00+00:00,2026-02-25 15:30:00+00:00,excl7d,scored,59.5,gap,,after_return_only,11.0,0.0,1510.0,1.98,1.87,,0.5413,0.11,1.4942,,,,
+IL_Vermilion_River_near_Danville,2026-02-23 04:00:00+00:00,2026-02-25 15:30:00+00:00,causal,too little training (22),,,,,,,,,,,,,,,,,
+IL_Vermilion_River_near_Danville,2026-02-27 17:15:00+00:00,2026-02-28 00:15:00+00:00,excl7d,scored,7.0,gap,,after_return_only,3.0,0.0,1504.0,1.88,1.9,,0.3245,0.02,2.2464,,,,
+IL_Vermilion_River_near_Danville,2026-02-27 17:15:00+00:00,2026-02-28 00:15:00+00:00,causal,too little training (29),,,,,,,,,,,,,,,,,
+IN_WABASH_RIVER_AT_NEW_HARMONY,2026-01-24 18:45:00+00:00,2026-02-01 16:30:00+00:00,excl7d,scored,189.75,gap|qualified,Eqp,after_return_only,31.0,0.0,2457.0,1.25,1.48,,3.6792,0.23,0.4986,,,,
+IN_WABASH_RIVER_AT_NEW_HARMONY,2026-01-24 18:45:00+00:00,2026-02-01 16:30:00+00:00,causal,scored,189.75,gap|qualified,Eqp,after_return_only,31.0,0.0,410.0,1.25,1.48,,1.592,0.23,0.4986,,,,
+KS_Big_Blue_R_nr_Manhattan,2026-03-15 12:15:00+00:00,2026-03-15 19:15:00+00:00,excl7d,scored,7.0,gap,,after_return_only,3.0,0.0,1884.0,0.65,0.65,,0.3586,0.0,1.2489,,,,
+KS_Big_Blue_R_nr_Manhattan,2026-03-15 12:15:00+00:00,2026-03-15 19:15:00+00:00,causal,scored,7.0,gap,,after_return_only,3.0,0.0,496.0,0.65,0.65,,0.2812,0.0,1.2489,,,,
 KS_Big_Blue_R_nr_Manhattan,2026-07-15 20:00:00+00:00,2026-07-16 12:15:00+00:00,excl7d,scored,16.25,gap,,after_return_only,3.0,0.0,1873.0,5.49,5.4,,,,,,,,
 KS_Big_Blue_R_nr_Manhattan,2026-07-15 20:00:00+00:00,2026-07-16 12:15:00+00:00,causal,scored,16.25,gap,,after_return_only,3.0,0.0,1247.0,5.49,5.4,,,,,,,,
-KS_Big_Blue_River_near_Manhattan,2025-11-30 22:00:00+00:00,2025-12-02 18:30:00+00:00,excl7d,scored,44.5,gap,,after_return_only,8.0,0.0,2505.0,0.99,0.99,,,,,,0.9974,0.0,0.5
+KS_Big_Blue_River_near_Manhattan,2025-11-30 22:00:00+00:00,2025-12-02 18:30:00+00:00,excl7d,scored,44.5,gap,,after_return_only,8.0,0.0,2505.0,0.99,0.99,,0.9974,0.0,0.5,,,,
 KS_Big_Blue_River_near_Manhattan,2025-11-30 22:00:00+00:00,2025-12-02 18:30:00+00:00,causal,too little training (167),,,,,,,,,,,,,,,,,
-KS_Big_Blue_River_near_Manhattan,2026-03-15 12:15:00+00:00,2026-03-15 19:15:00+00:00,excl7d,scored,7.0,gap,,after_return_only,3.0,0.0,2480.0,0.65,0.65,,,,,,0.4786,0.0,1.25
-KS_Big_Blue_River_near_Manhattan,2026-03-15 12:15:00+00:00,2026-03-15 19:15:00+00:00,causal,scored,7.0,gap,,after_return_only,3.0,0.0,652.0,0.65,0.65,,,,,,0.1236,0.0,1.25
-KS_Big_Blue_River_near_Manhattan,2026-07-15 20:00:00+00:00,2026-07-16 12:15:00+00:00,excl7d,scored,16.25,gap,,after_return_only,6.0,0.0,2443.0,5.49,5.4,,,,,,0.1645,0.09,0.25
-KS_Big_Blue_River_near_Manhattan,2026-07-15 20:00:00+00:00,2026-07-16 12:15:00+00:00,causal,scored,16.25,gap,,after_return_only,6.0,0.0,1732.0,5.49,5.4,,,,,,0.3694,0.09,0.25
+KS_Big_Blue_River_near_Manhattan,2026-03-15 12:15:00+00:00,2026-03-15 19:15:00+00:00,excl7d,scored,7.0,gap,,after_return_only,3.0,0.0,2480.0,0.65,0.65,,0.4786,0.0,1.25,,,,
+KS_Big_Blue_River_near_Manhattan,2026-03-15 12:15:00+00:00,2026-03-15 19:15:00+00:00,causal,scored,7.0,gap,,after_return_only,3.0,0.0,652.0,0.65,0.65,,0.1236,0.0,1.25,,,,
+KS_Big_Blue_River_near_Manhattan,2026-07-15 20:00:00+00:00,2026-07-16 12:15:00+00:00,excl7d,scored,16.25,gap,,after_return_only,6.0,0.0,2443.0,5.49,5.4,,0.1645,0.09,0.25,,,,
+KS_Big_Blue_River_near_Manhattan,2026-07-15 20:00:00+00:00,2026-07-16 12:15:00+00:00,causal,scored,16.25,gap,,after_return_only,6.0,0.0,1732.0,5.49,5.4,,0.3694,0.09,0.25,,,,
 KS_Kansas_River_at_Wamego,2026-01-23 14:15:00+00:00,2026-01-24 09:30:00+00:00,excl7d,scored,19.25,gap,,after_return_only,4.0,0.0,2308.0,3.51,3.41,,,,,,,,
 KS_Kansas_River_at_Wamego,2026-01-23 14:15:00+00:00,2026-01-24 09:30:00+00:00,causal,scored,19.25,gap,,after_return_only,4.0,0.0,375.0,3.51,3.41,,,,,,,,
-KS_Kansas_River_at_Wamego,2026-01-31 00:45:00+00:00,2026-02-01 19:00:00+00:00,excl7d,scored,42.25,gap,,after_return_only,8.0,0.0,2293.0,4.55,4.17,,,,,,0.9056,0.38,1.0
-KS_Kansas_River_at_Wamego,2026-01-31 00:45:00+00:00,2026-02-01 19:00:00+00:00,causal,scored,42.25,gap,,after_return_only,8.0,0.0,398.0,4.55,4.17,,,,,,0.1142,0.38,1.0
-KS_Kansas_River_at_Wamego,2026-03-12 17:30:00+00:00,2026-03-12 23:45:00+00:00,excl7d,scored,6.25,gap,,after_return_only,3.0,0.0,2283.0,3.36,3.35,,,,,,0.141,0.01,1.75
-KS_Kansas_River_at_Wamego,2026-03-12 17:30:00+00:00,2026-03-12 23:45:00+00:00,causal,scored,6.25,gap,,after_return_only,3.0,0.0,593.0,3.36,3.35,,,,,,0.112,0.01,1.75
-KS_Kansas_River_at_Wamego,2026-07-17 12:45:00+00:00,2026-07-22 17:15:00+00:00,excl7d,scored,124.5,gap,,after_return_only,43.0,0.0,2250.0,5.82,4.65,,,,,,0.7455,1.17,1.25
-KS_Kansas_River_at_Wamego,2026-07-17 12:45:00+00:00,2026-07-22 17:15:00+00:00,causal,scored,124.5,gap,,after_return_only,43.0,0.0,1629.0,5.82,4.65,,,,,,1.1575,1.17,1.25
-KS_Kansas_River_at_Wamego,2026-07-30 08:30:00+00:00,2026-07-30 18:15:00+00:00,excl7d,scored,9.75,gap,,after_return_only,4.0,0.0,2245.0,5.69,5.52,,,,,,0.4629,0.17,0.25
-KS_Kansas_River_at_Wamego,2026-07-30 08:30:00+00:00,2026-07-30 18:15:00+00:00,causal,scored,9.75,gap,,after_return_only,4.0,0.0,1693.0,5.69,5.52,,,,,,0.4092,0.17,0.25
+KS_Kansas_River_at_Wamego,2026-01-31 00:45:00+00:00,2026-02-01 19:00:00+00:00,excl7d,scored,42.25,gap,,after_return_only,8.0,0.0,2293.0,4.55,4.17,,0.9056,0.38,1.0,,,,
+KS_Kansas_River_at_Wamego,2026-01-31 00:45:00+00:00,2026-02-01 19:00:00+00:00,causal,scored,42.25,gap,,after_return_only,8.0,0.0,398.0,4.55,4.17,,0.1142,0.38,1.0,,,,
+KS_Kansas_River_at_Wamego,2026-03-12 17:30:00+00:00,2026-03-12 23:45:00+00:00,excl7d,scored,6.25,gap,,after_return_only,3.0,0.0,2283.0,3.36,3.35,,0.141,0.01,1.75,,,,
+KS_Kansas_River_at_Wamego,2026-03-12 17:30:00+00:00,2026-03-12 23:45:00+00:00,causal,scored,6.25,gap,,after_return_only,3.0,0.0,593.0,3.36,3.35,,0.112,0.01,1.75,,,,
+KS_Kansas_River_at_Wamego,2026-07-17 12:45:00+00:00,2026-07-22 17:15:00+00:00,excl7d,scored,124.5,gap,,after_return_only,43.0,0.0,2250.0,5.82,4.65,,0.7455,1.17,1.25,,,,
+KS_Kansas_River_at_Wamego,2026-07-17 12:45:00+00:00,2026-07-22 17:15:00+00:00,causal,scored,124.5,gap,,after_return_only,43.0,0.0,1629.0,5.82,4.65,,1.1575,1.17,1.25,,,,
+KS_Kansas_River_at_Wamego,2026-07-30 08:30:00+00:00,2026-07-30 18:15:00+00:00,excl7d,scored,9.75,gap,,after_return_only,4.0,0.0,2245.0,5.69,5.52,,0.4629,0.17,0.25,,,,
+KS_Kansas_River_at_Wamego,2026-07-30 08:30:00+00:00,2026-07-30 18:15:00+00:00,causal,scored,9.75,gap,,after_return_only,4.0,0.0,1693.0,5.69,5.52,,0.4092,0.17,0.25,,,,
+MN_Minnehaha_Creek_below_Grays_Bay_Dam_in_Minnetonka,2026-01-24 16:45:00+00:00,2026-01-25 04:30:00+00:00,excl7d,scored,11.75,gap,,after_return_only,6.0,0.0,1876.0,926.24,926.41,,,,,,,,
+MN_Minnehaha_Creek_below_Grays_Bay_Dam_in_Minnetonka,2026-01-24 16:45:00+00:00,2026-01-25 04:30:00+00:00,causal,scored,11.75,gap,,after_return_only,6.0,0.0,343.0,926.24,926.41,,,,,,,,
+MN_Minnehaha_Creek_below_Grays_Bay_Dam_in_Minnetonka,2026-01-25 16:15:00+00:00,2026-01-26 07:45:00+00:00,excl7d,scored,15.5,gap,,after_return_only,6.0,0.0,1880.0,926.84,927.56,,,,,,,,
+MN_Minnehaha_Creek_below_Grays_Bay_Dam_in_Minnetonka,2026-01-25 16:15:00+00:00,2026-01-26 07:45:00+00:00,causal,scored,15.5,gap,,after_return_only,6.0,0.0,347.0,926.84,927.56,,,,,,,,
+MN_Minnehaha_Creek_below_Grays_Bay_Dam_in_Minnetonka,2026-01-26 16:15:00+00:00,2026-02-07 15:30:00+00:00,excl7d,scored,287.25,gap|qualified,Eqp,after_return_only,56.0,0.0,1858.0,927.02,926.25,,0.5787,0.77,1.4989,,,,
+MN_Minnehaha_Creek_below_Grays_Bay_Dam_in_Minnetonka,2026-01-26 16:15:00+00:00,2026-02-07 15:30:00+00:00,causal,scored,287.25,gap|qualified,Eqp,after_return_only,56.0,0.0,351.0,927.02,926.25,,0.6753,0.77,1.4989,,,,
 MN_Minnesota_River_near_Jordan_DOWNSTREAM,2025-12-01 12:30:00+00:00,2025-12-22 09:30:00+00:00,excl7d,scored,501.0,gap,,after_return_only,68.0,0.0,2015.0,6.93,7.62,,,,,,,,
 MN_Minnesota_River_near_Jordan_DOWNSTREAM,2025-12-01 12:30:00+00:00,2025-12-22 09:30:00+00:00,causal,too little training (125),,,,,,,,,,,,,,,,,
 MN_Minnesota_River_near_Jordan_DOWNSTREAM,2025-12-28 12:00:00+00:00,2026-01-03 12:30:00+00:00,excl7d,scored,144.5,gap,,after_return_only,8.0,0.0,2041.0,7.54,7.4,,,,,,,,
@@ -45,12 +71,12 @@ MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-01-05 17:15:00+00:00,2026-01-06 0
 MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-01-05 17:15:00+00:00,2026-01-06 07:15:00+00:00,causal,too little training (166),,,,,,,,,,,,,,,,,
 MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-01-08 22:30:00+00:00,2026-01-13 06:30:00+00:00,excl7d,scored,104.0,gap,,after_return_only,16.0,0.0,2026.0,7.92,7.75,,,,,,,,
 MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-01-08 22:30:00+00:00,2026-01-13 06:30:00+00:00,causal,too little training (166),,,,,,,,,,,,,,,,,
-MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-02-19 17:30:00+00:00,2026-02-20 01:15:00+00:00,excl7d,scored,7.75,gap,,after_return_only,3.0,0.0,1991.0,8.21,8.27,,,,,,0.2291,0.06,3.2444
-MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-02-19 17:30:00+00:00,2026-02-20 01:15:00+00:00,causal,scored,7.75,gap,,after_return_only,3.0,0.0,297.0,8.21,8.27,,,,,,1.269,0.06,3.2444
-MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-02-24 07:15:00+00:00,2026-02-24 23:30:00+00:00,excl7d,scored,16.25,gap,,after_return_only,5.0,0.0,1991.0,8.7,8.79,,,,,,0.4921,0.09,1.4994
-MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-02-24 07:15:00+00:00,2026-02-24 23:30:00+00:00,causal,scored,16.25,gap,,after_return_only,5.0,0.0,320.0,8.7,8.79,,,,,,1.3894,0.09,1.4994
-MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-02-26 16:45:00+00:00,2026-02-27 03:30:00+00:00,excl7d,scored,10.75,gap,,after_return_only,3.0,0.0,1992.0,8.88,8.7,,,,,,0.5262,0.18,5.4942
-MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-02-26 16:45:00+00:00,2026-02-27 03:30:00+00:00,causal,scored,10.75,gap,,after_return_only,3.0,0.0,331.0,8.88,8.7,,,,,,0.8135,0.18,5.4942
+MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-02-19 17:30:00+00:00,2026-02-20 01:15:00+00:00,excl7d,scored,7.75,gap,,after_return_only,3.0,0.0,1991.0,8.21,8.27,,0.2291,0.06,3.2444,,,,
+MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-02-19 17:30:00+00:00,2026-02-20 01:15:00+00:00,causal,scored,7.75,gap,,after_return_only,3.0,0.0,297.0,8.21,8.27,,1.269,0.06,3.2444,,,,
+MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-02-24 07:15:00+00:00,2026-02-24 23:30:00+00:00,excl7d,scored,16.25,gap,,after_return_only,5.0,0.0,1991.0,8.7,8.79,,0.4921,0.09,1.4994,,,,
+MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-02-24 07:15:00+00:00,2026-02-24 23:30:00+00:00,causal,scored,16.25,gap,,after_return_only,5.0,0.0,320.0,8.7,8.79,,1.3894,0.09,1.4994,,,,
+MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-02-26 16:45:00+00:00,2026-02-27 03:30:00+00:00,excl7d,scored,10.75,gap,,after_return_only,3.0,0.0,1992.0,8.88,8.7,,0.5262,0.18,5.4942,,,,
+MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-02-26 16:45:00+00:00,2026-02-27 03:30:00+00:00,causal,scored,10.75,gap,,after_return_only,3.0,0.0,331.0,8.88,8.7,,0.8135,0.18,5.4942,,,,
 MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-07-15 19:45:00+00:00,2026-07-16 10:00:00+00:00,excl7d,scored,14.25,gap,,after_return_only,4.0,0.0,1954.0,9.45,9.07,,,,,,,,
 MN_Minnesota_River_near_Jordan_DOWNSTREAM,2026-07-15 19:45:00+00:00,2026-07-16 10:00:00+00:00,causal,scored,14.25,gap,,after_return_only,4.0,0.0,1333.0,9.45,9.07,,,,,,,,
 MN_Minnesota_River_near_Jordan_UPSTREAM,2025-12-01 12:30:00+00:00,2025-12-22 09:30:00+00:00,excl7d,scored,501.0,gap,,after_return_only,38.0,0.0,1693.0,6.93,7.62,,,,,,,,
@@ -61,117 +87,211 @@ MN_Minnesota_River_near_Jordan_UPSTREAM,2026-01-05 17:15:00+00:00,2026-01-06 07:
 MN_Minnesota_River_near_Jordan_UPSTREAM,2026-01-05 17:15:00+00:00,2026-01-06 07:15:00+00:00,causal,too little training (104),,,,,,,,,,,,,,,,,
 MN_Minnesota_River_near_Jordan_UPSTREAM,2026-01-08 22:30:00+00:00,2026-01-13 06:30:00+00:00,excl7d,scored,104.0,gap,,after_return_only,13.0,0.0,1688.0,7.92,7.75,,,,,,,,
 MN_Minnesota_River_near_Jordan_UPSTREAM,2026-01-08 22:30:00+00:00,2026-01-13 06:30:00+00:00,causal,too little training (104),,,,,,,,,,,,,,,,,
-MN_Minnesota_River_near_Jordan_UPSTREAM,2026-02-19 17:30:00+00:00,2026-02-20 01:15:00+00:00,excl7d,scored,7.75,gap,,after_return_only,3.0,0.0,1694.0,8.21,8.27,,,,,,0.9861,0.06,3.2475
+MN_Minnesota_River_near_Jordan_UPSTREAM,2026-02-19 17:30:00+00:00,2026-02-20 01:15:00+00:00,excl7d,scored,7.75,gap,,after_return_only,3.0,0.0,1694.0,8.21,8.27,,0.9861,0.06,3.2475,,,,
 MN_Minnesota_River_near_Jordan_UPSTREAM,2026-02-19 17:30:00+00:00,2026-02-20 01:15:00+00:00,causal,too little training (199),,,,,,,,,,,,,,,,,
-MN_Minnesota_River_near_Jordan_UPSTREAM,2026-02-24 07:15:00+00:00,2026-02-24 23:30:00+00:00,excl7d,scored,16.25,gap,,after_return_only,4.0,0.0,1686.0,8.7,8.79,,,,,,2.7816,0.09,1.4983
-MN_Minnesota_River_near_Jordan_UPSTREAM,2026-02-24 07:15:00+00:00,2026-02-24 23:30:00+00:00,causal,scored,16.25,gap,,after_return_only,4.0,0.0,204.0,8.7,8.79,,,,,,1.8689,0.09,1.4983
+MN_Minnesota_River_near_Jordan_UPSTREAM,2026-02-24 07:15:00+00:00,2026-02-24 23:30:00+00:00,excl7d,scored,16.25,gap,,after_return_only,4.0,0.0,1686.0,8.7,8.79,,2.7816,0.09,1.4983,,,,
+MN_Minnesota_River_near_Jordan_UPSTREAM,2026-02-24 07:15:00+00:00,2026-02-24 23:30:00+00:00,causal,scored,16.25,gap,,after_return_only,4.0,0.0,204.0,8.7,8.79,,1.8689,0.09,1.4983,,,,
 MN_Minnesota_River_near_Jordan_UPSTREAM,2026-07-15 19:45:00+00:00,2026-07-16 10:00:00+00:00,excl7d,scored,14.25,gap,,after_return_only,5.0,0.0,1621.0,9.45,9.07,,,,,,,,
 MN_Minnesota_River_near_Jordan_UPSTREAM,2026-07-15 19:45:00+00:00,2026-07-16 10:00:00+00:00,causal,scored,14.25,gap,,after_return_only,5.0,0.0,1013.0,9.45,9.07,,,,,,,,
+MN_Rainy_River_at_Boat_Landing_below_International_Falls,2026-05-15 16:00:00+00:00,2026-05-15 22:45:00+00:00,excl7d,scored,6.75,gap,,after_return_only,3.0,0.0,1866.0,22.55,22.56,,2.137,0.01,0.7494,,,,
+MN_Rainy_River_at_Boat_Landing_below_International_Falls,2026-05-15 16:00:00+00:00,2026-05-15 22:45:00+00:00,causal,scored,6.75,gap,,after_return_only,3.0,0.0,788.0,22.55,22.56,,3.3691,0.01,0.7494,,,,
+MN_Rainy_River_at_Boat_Landing_below_International_Falls,2026-07-25 19:45:00+00:00,2026-07-26 07:00:00+00:00,excl7d,scored,11.25,gap,,after_return_only,3.0,0.0,1851.0,13.44,13.44,,,,,,,,
+MN_Rainy_River_at_Boat_Landing_below_International_Falls,2026-07-25 19:45:00+00:00,2026-07-26 07:00:00+00:00,causal,scored,11.25,gap,,after_return_only,3.0,0.0,1310.0,13.44,13.44,,,,,,,,
+MN_Redwood_River_near_Marshall,2025-12-03 08:00:00+00:00,2025-12-05 10:15:00+00:00,excl7d,scored,50.25,gap,,after_return_only,7.0,0.0,1688.0,7.21,7.23,,,,,,,,
+MN_Redwood_River_near_Marshall,2025-12-03 08:00:00+00:00,2025-12-05 10:15:00+00:00,causal,too little training (146),,,,,,,,,,,,,,,,,
+MN_Redwood_River_near_Marshall,2025-12-06 22:30:00+00:00,2025-12-08 20:30:00+00:00,excl7d,scored,46.0,gap,,after_return_only,4.0,0.0,1687.0,7.34,7.31,,,,,,,,
+MN_Redwood_River_near_Marshall,2025-12-06 22:30:00+00:00,2025-12-08 20:30:00+00:00,causal,too little training (146),,,,,,,,,,,,,,,,,
+MN_Redwood_River_near_Marshall,2025-12-10 21:45:00+00:00,2025-12-15 15:45:00+00:00,excl7d,scored,114.0,gap,,after_return_only,10.0,0.0,1677.0,7.34,7.47,,,,,,,,
+MN_Redwood_River_near_Marshall,2025-12-10 21:45:00+00:00,2025-12-15 15:45:00+00:00,causal,too little training (149),,,,,,,,,,,,,,,,,
+MN_Redwood_River_near_Marshall,2025-12-18 15:00:00+00:00,2025-12-20 04:00:00+00:00,excl7d,scored,37.0,gap,,after_return_only,5.0,0.0,1671.0,7.55,7.62,,0.1188,0.07,5.9989,,,,
+MN_Redwood_River_near_Marshall,2025-12-18 15:00:00+00:00,2025-12-20 04:00:00+00:00,causal,too little training (159),,,,,,,,,,,,,,,,,
 MN_Root_River_near_Pilot_Mound,2025-12-04 02:00:00+00:00,2025-12-26 22:15:00+00:00,excl7d,scored,548.25,gap,,after_return_only,3.0,0.0,1455.0,7.97,8.23,,,,,,,,
 MN_Root_River_near_Pilot_Mound,2025-12-04 02:00:00+00:00,2025-12-26 22:15:00+00:00,causal,too little training (0),,,,,,,,,,,,,,,,,
-MN_Root_River_near_Pilot_Mound,2026-01-15 09:45:00+00:00,2026-02-15 23:45:00+00:00,excl7d,scored,758.0,gap,,after_return_only,38.0,0.0,1428.0,8.54,8.19,,,,,,1.3423,0.35,1.7467
+MN_Root_River_near_Pilot_Mound,2026-01-15 09:45:00+00:00,2026-02-15 23:45:00+00:00,excl7d,scored,758.0,gap,,after_return_only,38.0,0.0,1428.0,8.54,8.19,,1.3423,0.35,1.7467,,,,
 MN_Root_River_near_Pilot_Mound,2026-01-15 09:45:00+00:00,2026-02-15 23:45:00+00:00,causal,too little training (9),,,,,,,,,,,,,,,,,
-MN_Root_River_near_Pilot_Mound,2026-02-22 15:00:00+00:00,2026-02-26 21:15:00+00:00,excl7d,scored,102.25,gap,,after_return_only,5.0,0.0,1434.0,8.09,8.26,,,,,,1.1076,0.17,1.2489
+MN_Root_River_near_Pilot_Mound,2026-02-22 15:00:00+00:00,2026-02-26 21:15:00+00:00,excl7d,scored,102.25,gap,,after_return_only,5.0,0.0,1434.0,8.09,8.26,,1.1076,0.17,1.2489,,,,
 MN_Root_River_near_Pilot_Mound,2026-02-22 15:00:00+00:00,2026-02-26 21:15:00+00:00,causal,too little training (27),,,,,,,,,,,,,,,,,
-MN_Sprague_Creek_near_Sprague_Manitoba_Canada,2025-11-30 15:45:00+00:00,2026-03-20 22:30:00+00:00,excl7d,scored,2646.75,gap,,after_return_only,77.0,0.0,1287.0,4.34,2.72,,,,,,1.8542,1.62,0.4989
+MN_Sprague_Creek_near_Sprague_Manitoba_Canada,2025-11-30 15:45:00+00:00,2026-03-20 22:30:00+00:00,excl7d,scored,2646.75,gap,,after_return_only,77.0,0.0,1287.0,4.34,2.72,,1.8542,1.62,0.4989,,,,
 MN_Sprague_Creek_near_Sprague_Manitoba_Canada,2025-11-30 15:45:00+00:00,2026-03-20 22:30:00+00:00,causal,too little training (132),,,,,,,,,,,,,,,,,
-MO_Missouri_River_at_Hermann,2025-10-31 16:15:00+00:00,2025-10-31 23:15:00+00:00,excl7d,scored,7.0,gap,,after_return_only,3.0,0.0,1922.0,3.54,3.53,,,,,,1.252,0.01,1.2492
+MO_Missouri_River_at_Hermann,2025-10-31 16:15:00+00:00,2025-10-31 23:15:00+00:00,excl7d,scored,7.0,gap,,after_return_only,3.0,0.0,1922.0,3.54,3.53,,1.252,0.01,1.2492,,,,
 MO_Missouri_River_at_Hermann,2025-10-31 16:15:00+00:00,2025-10-31 23:15:00+00:00,causal,too little training (2),,,,,,,,,,,,,,,,,
-MO_Missouri_River_at_Hermann,2025-11-06 14:00:00+00:00,2025-11-06 21:45:00+00:00,excl7d,scored,7.75,gap,,after_return_only,3.0,0.0,1911.0,3.56,3.54,,,,,,1.2302,0.02,1.7492
+MO_Missouri_River_at_Hermann,2025-11-06 14:00:00+00:00,2025-11-06 21:45:00+00:00,excl7d,scored,7.75,gap,,after_return_only,3.0,0.0,1911.0,3.56,3.54,,1.2302,0.02,1.7492,,,,
 MO_Missouri_River_at_Hermann,2025-11-06 14:00:00+00:00,2025-11-06 21:45:00+00:00,causal,too little training (3),,,,,,,,,,,,,,,,,
-MO_Missouri_River_at_Hermann,2025-11-14 21:45:00+00:00,2025-11-18 00:30:00+00:00,excl7d,scored,74.75,gap,,after_return_only,14.0,0.0,1923.0,3.26,3.35,,,,,,0.1879,0.09,2.4967
+MO_Missouri_River_at_Hermann,2025-11-14 21:45:00+00:00,2025-11-18 00:30:00+00:00,excl7d,scored,74.75,gap,,after_return_only,14.0,0.0,1923.0,3.26,3.35,,0.1879,0.09,2.4967,,,,
 MO_Missouri_River_at_Hermann,2025-11-14 21:45:00+00:00,2025-11-18 00:30:00+00:00,causal,too little training (26),,,,,,,,,,,,,,,,,
-MO_Missouri_River_at_Hermann,2025-12-09 16:30:00+00:00,2025-12-09 22:45:00+00:00,excl7d,scored,6.25,gap,,after_return_only,3.0,0.0,1923.0,1.58,1.53,,,,,,0.5965,0.05,0.7494
+MO_Missouri_River_at_Hermann,2025-12-09 16:30:00+00:00,2025-12-09 22:45:00+00:00,excl7d,scored,6.25,gap,,after_return_only,3.0,0.0,1923.0,1.58,1.53,,0.5965,0.05,0.7494,,,,
 MO_Missouri_River_at_Hermann,2025-12-09 16:30:00+00:00,2025-12-09 22:45:00+00:00,causal,too little training (62),,,,,,,,,,,,,,,,,
-MO_Missouri_River_at_Hermann,2025-12-21 15:30:00+00:00,2025-12-21 22:15:00+00:00,excl7d,scored,6.75,gap,,after_return_only,4.0,0.0,1923.0,1.04,0.98,,,,,,0.6511,0.06,0.2489
+MO_Missouri_River_at_Hermann,2025-12-21 15:30:00+00:00,2025-12-21 22:15:00+00:00,excl7d,scored,6.75,gap,,after_return_only,4.0,0.0,1923.0,1.04,0.98,,0.6511,0.06,0.2489,,,,
 MO_Missouri_River_at_Hermann,2025-12-21 15:30:00+00:00,2025-12-21 22:15:00+00:00,causal,too little training (81),,,,,,,,,,,,,,,,,
 MO_Missouri_River_at_Hermann,2025-12-28 15:00:00+00:00,2025-12-30 11:45:00+00:00,excl7d,scored,44.75,gap,,after_return_only,3.0,0.0,1931.0,0.92,0.93,,,,,,,,
 MO_Missouri_River_at_Hermann,2025-12-28 15:00:00+00:00,2025-12-30 11:45:00+00:00,causal,too little training (97),,,,,,,,,,,,,,,,,
-MO_Missouri_River_at_Hermann,2026-01-21 14:00:00+00:00,2026-01-21 22:15:00+00:00,excl7d,scored,8.25,gap,,after_return_only,5.0,0.0,1921.0,0.91,0.91,,,,,,1.3654,0.0,0.2489
+MO_Missouri_River_at_Hermann,2026-01-21 14:00:00+00:00,2026-01-21 22:15:00+00:00,excl7d,scored,8.25,gap,,after_return_only,5.0,0.0,1921.0,0.91,0.91,,1.3654,0.0,0.2489,,,,
 MO_Missouri_River_at_Hermann,2026-01-21 14:00:00+00:00,2026-01-21 22:15:00+00:00,causal,too little training (140),,,,,,,,,,,,,,,,,
 MO_Missouri_River_at_Hermann,2026-02-07 15:00:00+00:00,2026-02-08 09:45:00+00:00,excl7d,scored,18.75,gap,,after_return_only,4.0,0.0,1899.0,0.02,0.31,,,,,,,,
 MO_Missouri_River_at_Hermann,2026-02-07 15:00:00+00:00,2026-02-08 09:45:00+00:00,causal,too little training (167),,,,,,,,,,,,,,,,,
-MO_Missouri_River_at_Hermann,2026-02-14 17:00:00+00:00,2026-02-15 03:15:00+00:00,excl7d,scored,10.25,gap,,after_return_only,3.0,0.0,1899.0,0.98,1.09,,,,,,0.8133,0.11,5.2492
+MO_Missouri_River_at_Hermann,2026-02-14 17:00:00+00:00,2026-02-15 03:15:00+00:00,excl7d,scored,10.25,gap,,after_return_only,3.0,0.0,1899.0,0.98,1.09,,0.8133,0.11,5.2492,,,,
 MO_Missouri_River_at_Hermann,2026-02-14 17:00:00+00:00,2026-02-15 03:15:00+00:00,causal,too little training (188),,,,,,,,,,,,,,,,,
-MO_Missouri_River_at_Hermann,2026-03-23 16:30:00+00:00,2026-03-24 00:45:00+00:00,excl7d,scored,8.25,gap,,after_return_only,4.0,0.0,1890.0,3.36,3.28,,,,,,1.1248,0.08,0.7494
-MO_Missouri_River_at_Hermann,2026-03-23 16:30:00+00:00,2026-03-24 00:45:00+00:00,causal,scored,8.25,gap,,after_return_only,4.0,0.0,375.0,3.36,3.28,,,,,,1.78,0.08,0.7494
-MO_Missouri_River_at_Hermann,2026-03-30 13:30:00+00:00,2026-03-30 22:00:00+00:00,excl7d,scored,8.5,gap,,after_return_only,8.0,0.0,1871.0,3.51,3.68,,,,,,0.2106,0.17,0.9992
-MO_Missouri_River_at_Hermann,2026-03-30 13:30:00+00:00,2026-03-30 22:00:00+00:00,causal,scored,8.5,gap,,after_return_only,8.0,0.0,414.0,3.51,3.68,,,,,,0.8047,0.17,0.9992
-MO_Missouri_River_at_Hermann,2026-07-04 17:30:00+00:00,2026-07-05 16:45:00+00:00,excl7d,scored,23.25,gap,,after_return_only,11.0,0.0,1842.0,12.21,11.83,,,,,,0.9927,0.38,1.7492
-MO_Missouri_River_at_Hermann,2026-07-04 17:30:00+00:00,2026-07-05 16:45:00+00:00,causal,scored,23.25,gap,,after_return_only,11.0,0.0,1231.0,12.21,11.83,,,,,,1.2655,0.38,1.7492
-MO_Missouri_River_at_Hermann,2026-07-05 21:00:00+00:00,2026-07-06 14:45:00+00:00,excl7d,scored,17.75,gap,,after_return_only,6.0,0.0,1850.0,11.56,11.16,,,,,,1.116,0.4,0.7489
-MO_Missouri_River_at_Hermann,2026-07-05 21:00:00+00:00,2026-07-06 14:45:00+00:00,causal,scored,17.75,gap,,after_return_only,6.0,0.0,1244.0,11.56,11.16,,,,,,1.3802,0.4,0.7489
-MO_Missouri_River_at_Hermann,2026-08-25 11:15:00+00:00,2026-08-25 17:45:00+00:00,excl7d,scored,6.5,gap,,after_return_only,3.0,0.0,1861.0,6.21,6.16,,,,,,0.8051,0.05,1.7489
-MO_Missouri_River_at_Hermann,2026-08-25 11:15:00+00:00,2026-08-25 17:45:00+00:00,causal,scored,6.5,gap,,after_return_only,3.0,0.0,1613.0,6.21,6.16,,,,,,1.0551,0.05,1.7489
+MO_Missouri_River_at_Hermann,2026-03-23 16:30:00+00:00,2026-03-24 00:45:00+00:00,excl7d,scored,8.25,gap,,after_return_only,4.0,0.0,1890.0,3.36,3.28,,1.1248,0.08,0.7494,,,,
+MO_Missouri_River_at_Hermann,2026-03-23 16:30:00+00:00,2026-03-24 00:45:00+00:00,causal,scored,8.25,gap,,after_return_only,4.0,0.0,375.0,3.36,3.28,,1.78,0.08,0.7494,,,,
+MO_Missouri_River_at_Hermann,2026-03-30 13:30:00+00:00,2026-03-30 22:00:00+00:00,excl7d,scored,8.5,gap,,after_return_only,8.0,0.0,1871.0,3.51,3.68,,0.2106,0.17,0.9992,,,,
+MO_Missouri_River_at_Hermann,2026-03-30 13:30:00+00:00,2026-03-30 22:00:00+00:00,causal,scored,8.5,gap,,after_return_only,8.0,0.0,414.0,3.51,3.68,,0.8047,0.17,0.9992,,,,
+MO_Missouri_River_at_Hermann,2026-07-04 17:30:00+00:00,2026-07-05 16:45:00+00:00,excl7d,scored,23.25,gap,,after_return_only,11.0,0.0,1842.0,12.21,11.83,,0.9927,0.38,1.7492,,,,
+MO_Missouri_River_at_Hermann,2026-07-04 17:30:00+00:00,2026-07-05 16:45:00+00:00,causal,scored,23.25,gap,,after_return_only,11.0,0.0,1231.0,12.21,11.83,,1.2655,0.38,1.7492,,,,
+MO_Missouri_River_at_Hermann,2026-07-05 21:00:00+00:00,2026-07-06 14:45:00+00:00,excl7d,scored,17.75,gap,,after_return_only,6.0,0.0,1850.0,11.56,11.16,,1.116,0.4,0.7489,,,,
+MO_Missouri_River_at_Hermann,2026-07-05 21:00:00+00:00,2026-07-06 14:45:00+00:00,causal,scored,17.75,gap,,after_return_only,6.0,0.0,1244.0,11.56,11.16,,1.3802,0.4,0.7489,,,,
+MO_Missouri_River_at_Hermann,2026-08-25 11:15:00+00:00,2026-08-25 17:45:00+00:00,excl7d,scored,6.5,gap,,after_return_only,3.0,0.0,1861.0,6.21,6.16,,0.8051,0.05,1.7489,,,,
+MO_Missouri_River_at_Hermann,2026-08-25 11:15:00+00:00,2026-08-25 17:45:00+00:00,causal,scored,6.5,gap,,after_return_only,3.0,0.0,1613.0,6.21,6.16,,1.0551,0.05,1.7489,,,,
 MO_Missouri_River_at_Hermann,2026-10-07 15:30:00+00:00,2026-10-08 07:45:00+00:00,excl7d,scored,16.25,gap,,after_return_only,7.0,0.0,1867.0,15.83,13.92,,,,,,,,
 MO_Missouri_River_at_Hermann,2026-10-07 15:30:00+00:00,2026-10-08 07:45:00+00:00,causal,scored,16.25,gap,,after_return_only,7.0,0.0,1836.0,15.83,13.92,,,,,,,,
-MO_Missouri_River_at_Hermann,2026-10-08 17:30:00+00:00,2026-10-09 15:15:00+00:00,excl7d,scored,21.75,gap,,after_return_only,7.0,0.0,1872.0,12.86,11.17,,,,,,1.7834,1.69,1.2492
-MO_Missouri_River_at_Hermann,2026-10-08 17:30:00+00:00,2026-10-09 15:15:00+00:00,causal,scored,21.75,gap,,after_return_only,7.0,0.0,1843.0,12.86,11.17,,,,,,1.4056,1.69,1.2492
-ND_Missouri_River_below_Mandan,2025-10-23 03:00:00+00:00,2025-10-23 19:00:00+00:00,excl7d,scored,16.0,gap,,after_return_only,3.0,0.0,1788.0,19.16,19.09,,,,,,0.1473,0.07,0.9992
+MO_Missouri_River_at_Hermann,2026-10-08 17:30:00+00:00,2026-10-09 15:15:00+00:00,excl7d,scored,21.75,gap,,after_return_only,7.0,0.0,1872.0,12.86,11.17,,1.7834,1.69,1.2492,,,,
+MO_Missouri_River_at_Hermann,2026-10-08 17:30:00+00:00,2026-10-09 15:15:00+00:00,causal,scored,21.75,gap,,after_return_only,7.0,0.0,1843.0,12.86,11.17,,1.4056,1.69,1.2492,,,,
+ND_Cherry_Creek_on_State_Highway_23_near_Schafer,2025-11-28 06:00:00+00:00,2026-02-04 22:30:00+00:00,excl7d,scored,1648.5,gap,,after_return_only,3.0,0.0,554.0,5.98,7.27,,,,,,,,
+ND_Cherry_Creek_on_State_Highway_23_near_Schafer,2025-11-28 06:00:00+00:00,2026-02-04 22:30:00+00:00,causal,too little training (0),,,,,,,,,,,,,,,,,
+ND_Cherry_Creek_on_State_Highway_23_near_Schafer,2026-04-23 14:15:00+00:00,2026-04-24 02:45:00+00:00,excl7d,scored,12.5,gap,,after_return_only,3.0,0.0,534.0,5.96,5.9,,0.3919,0.06,2.7492,,,,
+ND_Cherry_Creek_on_State_Highway_23_near_Schafer,2026-04-23 14:15:00+00:00,2026-04-24 02:45:00+00:00,causal,too little training (34),,,,,,,,,,,,,,,,,
+ND_Cherry_Creek_on_State_Highway_23_near_Schafer,2026-05-05 11:15:00+00:00,2026-05-05 22:30:00+00:00,excl7d,scored,11.25,gap,,after_return_only,3.0,0.0,544.0,5.87,5.81,,0.0949,0.06,2.4989,,,,
+ND_Cherry_Creek_on_State_Highway_23_near_Schafer,2026-05-05 11:15:00+00:00,2026-05-05 22:30:00+00:00,causal,too little training (52),,,,,,,,,,,,,,,,,
+ND_Cherry_Creek_on_State_Highway_23_near_Schafer,2026-06-15 15:30:00+00:00,2026-06-16 02:00:00+00:00,excl7d,scored,10.5,gap,,after_return_only,5.0,0.0,463.0,6.08,6.05,,0.0641,0.03,1.9925,,,,
+ND_Cherry_Creek_on_State_Highway_23_near_Schafer,2026-06-15 15:30:00+00:00,2026-06-16 02:00:00+00:00,causal,too little training (74),,,,,,,,,,,,,,,,,
+ND_Cherry_Creek_on_State_Highway_23_near_Schafer,2026-07-30 18:15:00+00:00,2026-07-31 01:45:00+00:00,excl7d,scored,7.5,gap,,after_return_only,3.0,0.0,512.0,5.87,5.86,,0.178,0.01,1.7489,,,,
+ND_Cherry_Creek_on_State_Highway_23_near_Schafer,2026-07-30 18:15:00+00:00,2026-07-31 01:45:00+00:00,causal,scored,7.5,gap,,after_return_only,3.0,0.0,221.0,5.87,5.86,,0.047,0.01,1.7489,,,,
+ND_Cherry_Creek_on_State_Highway_23_near_Schafer,2026-08-05 14:15:00+00:00,2026-08-07 03:00:00+00:00,excl7d,scored,36.75,gap,,after_return_only,8.0,0.0,501.0,5.86,5.81,,0.0523,0.05,2.9992,,,,
+ND_Cherry_Creek_on_State_Highway_23_near_Schafer,2026-08-05 14:15:00+00:00,2026-08-07 03:00:00+00:00,causal,scored,36.75,gap,,after_return_only,8.0,0.0,236.0,5.86,5.81,,0.0854,0.05,2.9992,,,,
+ND_Cherry_Creek_on_State_Highway_23_near_Schafer,2026-09-08 13:15:00+00:00,2026-09-08 20:15:00+00:00,excl7d,scored,7.0,gap,,after_return_only,4.0,0.0,510.0,5.91,5.87,,0.1447,0.04,0.2489,,,,
+ND_Cherry_Creek_on_State_Highway_23_near_Schafer,2026-09-08 13:15:00+00:00,2026-09-08 20:15:00+00:00,causal,scored,7.0,gap,,after_return_only,4.0,0.0,338.0,5.91,5.87,,0.0277,0.04,0.2489,,,,
+ND_Cherry_Creek_on_State_Highway_23_near_Schafer,2026-10-19 21:00:00+00:00,2026-10-21 02:15:00+00:00,excl7d,scored,29.25,gap,,after_return_only,4.0,0.0,522.0,6.0,6.02,,0.1437,0.02,4.2492,,,,
+ND_Cherry_Creek_on_State_Highway_23_near_Schafer,2026-10-19 21:00:00+00:00,2026-10-21 02:15:00+00:00,causal,scored,29.25,gap,,after_return_only,4.0,0.0,522.0,6.0,6.02,,0.1437,0.02,4.2492,,,,
+ND_Crooked_Creek_near_Emerson,2025-11-18 14:15:00+00:00,2026-03-01 06:00:00+00:00,excl7d,scored,2463.75,gap,,after_return_only,272.0,0.0,1297.0,19.93,19.7,,0.143,0.23,5.9986,,,,
+ND_Crooked_Creek_near_Emerson,2025-11-18 14:15:00+00:00,2026-03-01 06:00:00+00:00,causal,too little training (78),,,,,,,,,,,,,,,,,
+ND_Crooked_Creek_near_Emerson,2026-06-01 19:00:00+00:00,2026-06-02 08:15:00+00:00,excl7d,scored,13.25,gap,,after_return_only,4.0,0.0,1251.0,19.85,19.88,,,,,,,,
+ND_Crooked_Creek_near_Emerson,2026-06-01 19:00:00+00:00,2026-06-02 08:15:00+00:00,causal,scored,13.25,gap,,after_return_only,4.0,0.0,540.0,19.85,19.88,,,,,,,,
+ND_Crooked_Creek_near_Emerson,2026-06-18 16:45:00+00:00,2026-06-23 13:45:00+00:00,excl7d,scored,117.0,gap,,after_return_only,37.0,0.0,1242.0,20.03,20.24,,0.1856,0.21,1.7481,,,,
+ND_Crooked_Creek_near_Emerson,2026-06-18 16:45:00+00:00,2026-06-23 13:45:00+00:00,causal,scored,117.0,gap,,after_return_only,37.0,0.0,653.0,20.03,20.24,,0.1571,0.21,1.7481,,,,
+ND_Crooked_Creek_near_Emerson,2026-07-16 14:00:00+00:00,2026-07-17 09:15:00+00:00,excl7d,scored,19.25,gap,,after_return_only,7.0,0.0,1242.0,19.95,19.91,,,,,,,,
+ND_Crooked_Creek_near_Emerson,2026-07-16 14:00:00+00:00,2026-07-17 09:15:00+00:00,causal,scored,19.25,gap,,after_return_only,7.0,0.0,823.0,19.95,19.91,,,,,,,,
+ND_Crooked_Creek_near_Emerson,2026-10-01 06:00:00+00:00,2026-10-23 00:00:00+00:00,excl7d,scored,522.0,qualified,Ssn,after_return_only,113.0,0.0,1305.0,18.13,,,,,,,,,
+ND_Crooked_Creek_near_Emerson,2026-10-01 06:00:00+00:00,2026-10-23 00:00:00+00:00,causal,scored,522.0,qualified,Ssn,after_return_only,113.0,0.0,1305.0,18.13,,,,,,,,,
+ND_Edmore_Coulee_Trib_nr_Webster,2025-11-20 17:30:00+00:00,2026-03-24 15:30:00+00:00,excl7d,scored,2974.0,gap,,after_return_only,154.0,0.0,1138.0,67.67,71.15,,,,,,,,
+ND_Edmore_Coulee_Trib_nr_Webster,2025-11-20 17:30:00+00:00,2026-03-24 15:30:00+00:00,causal,too little training (0),,,,,,,,,,,,,,,,,
+ND_Edmore_Coulee_Trib_nr_Webster,2026-03-29 21:45:00+00:00,2026-04-02 11:00:00+00:00,excl7d,scored,85.25,gap,,after_return_only,12.0,0.0,1105.0,70.84,70.49,,,,,,,,
+ND_Edmore_Coulee_Trib_nr_Webster,2026-03-29 21:45:00+00:00,2026-04-02 11:00:00+00:00,causal,too little training (0),,,,,,,,,,,,,,,,,
+ND_Edmore_Coulee_Trib_nr_Webster,2026-04-03 15:45:00+00:00,2026-04-04 01:30:00+00:00,excl7d,scored,9.75,gap,,after_return_only,5.0,0.0,1115.0,70.41,70.37,,0.4292,0.04,1.4989,,,,
+ND_Edmore_Coulee_Trib_nr_Webster,2026-04-03 15:45:00+00:00,2026-04-04 01:30:00+00:00,causal,too little training (17),,,,,,,,,,,,,,,,,
+ND_Edmore_Coulee_Trib_nr_Webster,2026-04-04 18:15:00+00:00,2026-04-05 03:45:00+00:00,excl7d,scored,9.5,gap,,after_return_only,3.0,0.0,1118.0,70.44,70.45,,0.0086,0.01,3.7494,,,,
+ND_Edmore_Coulee_Trib_nr_Webster,2026-04-04 18:15:00+00:00,2026-04-05 03:45:00+00:00,causal,too little training (26),,,,,,,,,,,,,,,,,
+ND_Missouri_River_below_Mandan,2025-10-23 03:00:00+00:00,2025-10-23 19:00:00+00:00,excl7d,scored,16.0,gap,,after_return_only,3.0,0.0,1788.0,19.16,19.09,,0.1473,0.07,0.9992,,,,
 ND_Missouri_River_below_Mandan,2025-10-23 03:00:00+00:00,2025-10-23 19:00:00+00:00,causal,too little training (0),,,,,,,,,,,,,,,,,
-ND_Missouri_River_below_Mandan,2026-07-16 14:00:00+00:00,2026-07-16 23:00:00+00:00,excl7d,scored,9.0,gap,,after_return_only,5.0,0.0,1712.0,20.41,20.24,,,,,,0.0698,0.17,0.9994
-ND_Missouri_River_below_Mandan,2026-07-16 14:00:00+00:00,2026-07-16 23:00:00+00:00,causal,scored,9.0,gap,,after_return_only,5.0,0.0,1232.0,20.41,20.24,,,,,,0.2673,0.17,0.9994
-ND_Missouri_River_below_Mandan,2026-10-19 21:00:00+00:00,2026-10-20 20:15:00+00:00,excl7d,scored,23.25,gap,,after_return_only,5.0,0.0,1776.0,18.75,18.63,,,,,,0.2727,0.12,0.2467
-ND_Missouri_River_below_Mandan,2026-10-19 21:00:00+00:00,2026-10-20 20:15:00+00:00,causal,scored,23.25,gap,,after_return_only,5.0,0.0,1776.0,18.75,18.63,,,,,,0.2727,0.12,0.2467
-NJ_Big_Brook_near_Marlboro,2026-07-15 19:20:00+00:00,2026-07-16 13:25:00+00:00,excl7d,scored,18.083,gap,,after_return_only,3.0,0.0,473.0,9.47,9.5,,,,,,0.0891,0.03,1.4108
+ND_Missouri_River_below_Mandan,2026-07-16 14:00:00+00:00,2026-07-16 23:00:00+00:00,excl7d,scored,9.0,gap,,after_return_only,5.0,0.0,1712.0,20.41,20.24,,0.0698,0.17,0.9994,,,,
+ND_Missouri_River_below_Mandan,2026-07-16 14:00:00+00:00,2026-07-16 23:00:00+00:00,causal,scored,9.0,gap,,after_return_only,5.0,0.0,1232.0,20.41,20.24,,0.2673,0.17,0.9994,,,,
+ND_Missouri_River_below_Mandan,2026-10-19 21:00:00+00:00,2026-10-20 20:15:00+00:00,excl7d,scored,23.25,gap,,after_return_only,5.0,0.0,1776.0,18.75,18.63,,0.2727,0.12,0.2467,,,,
+ND_Missouri_River_below_Mandan,2026-10-19 21:00:00+00:00,2026-10-20 20:15:00+00:00,causal,scored,23.25,gap,,after_return_only,5.0,0.0,1776.0,18.75,18.63,,0.2727,0.12,0.2467,,,,
+NJ_Big_Brook_near_Marlboro,2026-07-15 19:20:00+00:00,2026-07-16 13:25:00+00:00,excl7d,scored,18.083,gap,,after_return_only,3.0,0.0,473.0,9.47,9.5,,0.0891,0.03,1.4108,,,,
 NJ_Big_Brook_near_Marlboro,2026-07-15 19:20:00+00:00,2026-07-16 13:25:00+00:00,causal,too little training (27),,,,,,,,,,,,,,,,,
 NY_East_Branch_Delaware_River_at_Hancock_Staff,2026-07-15 19:15:00+00:00,2026-07-16 11:30:00+00:00,excl7d,scored,16.25,gap,,after_return_only,3.0,0.0,1272.0,9.3,9.28,,,,,,,,
 NY_East_Branch_Delaware_River_at_Hancock_Staff,2026-07-15 19:15:00+00:00,2026-07-16 11:30:00+00:00,causal,scored,16.25,gap,,after_return_only,3.0,0.0,630.0,9.3,9.28,,,,,,,,
+NY_Schoharie_Creek_at_Prattsville_Upstream_View,2026-03-10 16:00:00+00:00,2026-03-11 14:30:00+00:00,excl7d,scored,22.5,gap,,after_return_only,3.0,0.0,1886.0,5.95,6.06,,,,,,,,
+NY_Schoharie_Creek_at_Prattsville_Upstream_View,2026-03-10 16:00:00+00:00,2026-03-11 14:30:00+00:00,causal,scored,22.5,gap,,after_return_only,3.0,0.0,457.0,5.95,6.06,,,,,,,,
+NY_Schoharie_Creek_at_Prattsville_Upstream_View,2026-07-15 19:15:00+00:00,2026-07-16 11:30:00+00:00,excl7d,scored,16.25,gap,,after_return_only,3.0,0.0,1898.0,3.14,3.11,,0.2037,0.03,1.4994,,,,
+NY_Schoharie_Creek_at_Prattsville_Upstream_View,2026-07-15 19:15:00+00:00,2026-07-16 11:30:00+00:00,causal,scored,16.25,gap,,after_return_only,3.0,0.0,1322.0,3.14,3.11,,0.2255,0.03,1.4994,,,,
 OH_Auglaize_River_near_Defiance,2026-07-15 19:15:00+00:00,2026-07-16 12:30:00+00:00,excl7d,scored,17.25,gap,,after_return_only,5.0,0.0,1697.0,6.62,6.1,,,,,,,,
 OH_Auglaize_River_near_Defiance,2026-07-15 19:15:00+00:00,2026-07-16 12:30:00+00:00,causal,scored,17.25,gap,,after_return_only,5.0,0.0,999.0,6.62,6.1,,,,,,,,
-OH_Bean_Creek_at_Powers,2026-05-01 06:00:00+00:00,2026-05-02 05:15:00+00:00,excl7d,scored,23.25,gap,,after_return_only,7.0,0.0,1709.0,11.22,11.4,,,,,,0.7339,0.18,5.2483
-OH_Bean_Creek_at_Powers,2026-05-01 06:00:00+00:00,2026-05-02 05:15:00+00:00,causal,scored,23.25,gap,,after_return_only,7.0,0.0,1101.0,11.22,11.4,,,,,,0.4571,0.18,5.2483
-OH_East_Fork_Little_Miami_River_at_Perintown,2025-10-23 14:30:00+00:00,2025-10-23 21:15:00+00:00,excl7d,scored,6.75,gap,,after_return_only,3.0,0.0,2668.0,2.13,2.13,,,,,,0.5028,0.0,1.2492
+OH_Bean_Creek_at_Powers,2026-05-01 06:00:00+00:00,2026-05-02 05:15:00+00:00,excl7d,scored,23.25,gap,,after_return_only,7.0,0.0,1709.0,11.22,11.4,,0.7339,0.18,5.2483,,,,
+OH_Bean_Creek_at_Powers,2026-05-01 06:00:00+00:00,2026-05-02 05:15:00+00:00,causal,scored,23.25,gap,,after_return_only,7.0,0.0,1101.0,11.22,11.4,,0.4571,0.18,5.2483,,,,
+OH_Blanchard_River_near_Dupont,2025-11-05 05:00:00+00:00,2025-12-01 20:30:00+00:00,excl7d,scored,639.5,gap,,after_return_only,109.0,0.0,2477.0,5.09,5.04,,1.5909,0.05,0.4978,,,,
+OH_Blanchard_River_near_Dupont,2025-11-05 05:00:00+00:00,2025-12-01 20:30:00+00:00,causal,too little training (29),,,,,,,,,,,,,,,,,
+OH_East_Fork_Little_Miami_River_at_Perintown,2025-10-23 14:30:00+00:00,2025-10-23 21:15:00+00:00,excl7d,scored,6.75,gap,,after_return_only,3.0,0.0,2668.0,2.13,2.13,,0.5028,0.0,1.2492,,,,
 OH_East_Fork_Little_Miami_River_at_Perintown,2025-10-23 14:30:00+00:00,2025-10-23 21:15:00+00:00,causal,too little training (87),,,,,,,,,,,,,,,,,
-OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-09 23:30:00+00:00,2025-11-10 21:45:00+00:00,excl7d,scored,22.25,gap,,after_return_only,4.0,0.0,2679.0,2.5,2.46,,,,,,0.6219,0.04,1.7492
+OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-09 23:30:00+00:00,2025-11-10 21:45:00+00:00,excl7d,scored,22.25,gap,,after_return_only,4.0,0.0,2679.0,2.5,2.46,,0.6219,0.04,1.7492,,,,
 OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-09 23:30:00+00:00,2025-11-10 21:45:00+00:00,causal,too little training (179),,,,,,,,,,,,,,,,,
-OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-12 15:45:00+00:00,2025-11-12 22:15:00+00:00,excl7d,scored,6.5,gap,,after_return_only,4.0,0.0,2672.0,2.42,2.42,,,,,,0.0616,0.0,0.2492
+OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-12 15:45:00+00:00,2025-11-12 22:15:00+00:00,excl7d,scored,6.5,gap,,after_return_only,4.0,0.0,2672.0,2.42,2.42,,0.0616,0.0,0.2492,,,,
 OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-12 15:45:00+00:00,2025-11-12 22:15:00+00:00,causal,too little training (190),,,,,,,,,,,,,,,,,
-OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-16 13:00:00+00:00,2025-11-16 22:30:00+00:00,excl7d,scored,9.5,gap,,after_return_only,4.0,0.0,2665.0,2.42,2.42,,,,,,1.1413,0.0,2.4992
-OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-16 13:00:00+00:00,2025-11-16 22:30:00+00:00,causal,scored,9.5,gap,,after_return_only,4.0,0.0,209.0,2.42,2.42,,,,,,0.1767,0.0,2.4992
-OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-30 12:00:00+00:00,2025-11-30 22:00:00+00:00,excl7d,scored,10.0,gap,,after_return_only,4.0,0.0,2663.0,2.96,2.96,,,,,,0.3052,0.0,1.9978
-OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-30 12:00:00+00:00,2025-11-30 22:00:00+00:00,causal,scored,10.0,gap,,after_return_only,4.0,0.0,279.0,2.96,2.96,,,,,,0.5041,0.0,1.9978
-OH_East_Fork_Little_Miami_River_at_Perintown,2026-01-25 06:00:00+00:00,2026-02-11 01:15:00+00:00,excl7d,scored,403.25,gap,,after_return_only,74.0,0.0,2641.0,2.19,2.33,,,,,,1.042,0.14,3.2489
-OH_East_Fork_Little_Miami_River_at_Perintown,2026-01-25 06:00:00+00:00,2026-02-11 01:15:00+00:00,causal,scored,403.25,gap,,after_return_only,74.0,0.0,569.0,2.19,2.33,,,,,,2.0026,0.14,3.2489
-OH_Maumee_River_at_Waterville,2026-01-18 01:00:00+00:00,2026-01-21 17:45:00+00:00,excl7d,scored,88.75,gap,,after_return_only,19.0,0.0,2212.0,2.35,3.94,,,,,,1.7197,1.59,0.7494
-OH_Maumee_River_at_Waterville,2026-01-18 01:00:00+00:00,2026-01-21 17:45:00+00:00,causal,scored,88.75,gap,,after_return_only,19.0,0.0,330.0,2.35,3.94,,,,,,1.9966,1.59,0.7494
-OH_Maumee_River_at_Waterville,2026-01-30 17:45:00+00:00,2026-02-15 23:30:00+00:00,excl7d,scored,389.75,gap,,after_return_only,59.0,0.0,2223.0,3.03,2.14,,,,,,0.0763,0.89,1.4967
-OH_Maumee_River_at_Waterville,2026-01-30 17:45:00+00:00,2026-02-15 23:30:00+00:00,causal,scored,389.75,gap,,after_return_only,59.0,0.0,378.0,3.03,2.14,,,,,,0.3699,0.89,1.4967
-OH_Ottawa_River_near_Kalida,2026-04-27 15:00:00+00:00,2026-05-14 18:30:00+00:00,excl7d,scored,411.5,gap|qualified,Eqp,after_return_only,85.0,0.0,1782.0,4.47,4.77,,,,,,0.3937,0.3,0.4983
-OH_Ottawa_River_near_Kalida,2026-04-27 15:00:00+00:00,2026-05-14 18:30:00+00:00,causal,scored,411.5,gap|qualified,Eqp,after_return_only,85.0,0.0,772.0,4.47,4.77,,,,,,1.2932,0.3,0.4983
-PA_Brandywine_Creek_at_Chadds_Ford,2026-06-27 22:15:00+00:00,2026-06-28 14:30:00+00:00,excl7d,scored,16.25,gap,,after_return_only,4.0,0.0,1327.0,1.68,1.69,,,,,,0.169,0.01,0.4992
-PA_Brandywine_Creek_at_Chadds_Ford,2026-06-27 22:15:00+00:00,2026-06-28 14:30:00+00:00,causal,scored,16.25,gap,,after_return_only,4.0,0.0,297.0,1.68,1.69,,,,,,0.0325,0.01,0.4992
-PA_Brandywine_Creek_at_Chadds_Ford,2026-07-14 18:39:00+00:00,2026-07-15 16:04:00+00:00,excl7d,scored,21.417,gap,,after_return_only,6.0,0.0,1352.0,1.56,1.56,,,,,,0.5362,0.0,0.0661
-PA_Brandywine_Creek_at_Chadds_Ford,2026-07-14 18:39:00+00:00,2026-07-15 16:04:00+00:00,causal,scored,21.417,gap,,after_return_only,6.0,0.0,421.0,1.56,1.56,,,,,,2.3731,0.0,0.0661
-SD_James_River_at_Columbia,2025-12-01 21:45:00+00:00,2025-12-05 22:30:00+00:00,excl7d,scored,96.75,gap,,after_return_only,14.0,0.0,1680.0,7.94,7.94,,,,,,0.1514,0.0,4.4967
+OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-16 13:00:00+00:00,2025-11-16 22:30:00+00:00,excl7d,scored,9.5,gap,,after_return_only,4.0,0.0,2665.0,2.42,2.42,,1.1413,0.0,2.4992,,,,
+OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-16 13:00:00+00:00,2025-11-16 22:30:00+00:00,causal,scored,9.5,gap,,after_return_only,4.0,0.0,209.0,2.42,2.42,,0.1767,0.0,2.4992,,,,
+OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-30 12:00:00+00:00,2025-11-30 22:00:00+00:00,excl7d,scored,10.0,gap,,after_return_only,4.0,0.0,2663.0,2.96,2.96,,0.3052,0.0,1.9978,,,,
+OH_East_Fork_Little_Miami_River_at_Perintown,2025-11-30 12:00:00+00:00,2025-11-30 22:00:00+00:00,causal,scored,10.0,gap,,after_return_only,4.0,0.0,279.0,2.96,2.96,,0.5041,0.0,1.9978,,,,
+OH_East_Fork_Little_Miami_River_at_Perintown,2026-01-25 06:00:00+00:00,2026-02-11 01:15:00+00:00,excl7d,scored,403.25,gap,,after_return_only,74.0,0.0,2641.0,2.19,2.33,,1.042,0.14,3.2489,,,,
+OH_East_Fork_Little_Miami_River_at_Perintown,2026-01-25 06:00:00+00:00,2026-02-11 01:15:00+00:00,causal,scored,403.25,gap,,after_return_only,74.0,0.0,569.0,2.19,2.33,,2.0026,0.14,3.2489,,,,
+OH_Maumee_River_at_Antwerp,2026-03-18 03:45:00+00:00,2026-03-18 17:15:00+00:00,excl7d,scored,13.5,gap,,after_return_only,5.0,0.0,1477.0,12.92,12.49,,0.2389,0.43,0.2492,,,,
+OH_Maumee_River_at_Antwerp,2026-03-18 03:45:00+00:00,2026-03-18 17:15:00+00:00,causal,too little training (97),,,,,,,,,,,,,,,,,
+OH_Maumee_River_at_Waterville,2026-01-18 01:00:00+00:00,2026-01-21 17:45:00+00:00,excl7d,scored,88.75,gap,,after_return_only,19.0,0.0,2212.0,2.35,3.94,,1.7197,1.59,0.7494,,,,
+OH_Maumee_River_at_Waterville,2026-01-18 01:00:00+00:00,2026-01-21 17:45:00+00:00,causal,scored,88.75,gap,,after_return_only,19.0,0.0,330.0,2.35,3.94,,1.9966,1.59,0.7494,,,,
+OH_Maumee_River_at_Waterville,2026-01-30 17:45:00+00:00,2026-02-15 23:30:00+00:00,excl7d,scored,389.75,gap,,after_return_only,59.0,0.0,2223.0,3.03,2.14,,0.0763,0.89,1.4967,,,,
+OH_Maumee_River_at_Waterville,2026-01-30 17:45:00+00:00,2026-02-15 23:30:00+00:00,causal,scored,389.75,gap,,after_return_only,59.0,0.0,378.0,3.03,2.14,,0.3699,0.89,1.4967,,,,
+OH_Ottawa_River_near_Kalida,2026-04-27 15:00:00+00:00,2026-05-14 18:30:00+00:00,excl7d,scored,411.5,gap|qualified,Eqp,after_return_only,85.0,0.0,1782.0,4.47,4.77,,0.3937,0.3,0.4983,,,,
+OH_Ottawa_River_near_Kalida,2026-04-27 15:00:00+00:00,2026-05-14 18:30:00+00:00,causal,scored,411.5,gap|qualified,Eqp,after_return_only,85.0,0.0,772.0,4.47,4.77,,1.2932,0.3,0.4983,,,,
+OH_Platter_Creek_near_Sherwood,2025-12-05 05:30:00+00:00,2025-12-11 21:45:00+00:00,excl7d,scored,160.25,gap,,after_return_only,23.0,0.0,1835.0,1.02,1.36,,0.1604,0.34,3.7467,,,,
+OH_Platter_Creek_near_Sherwood,2025-12-05 05:30:00+00:00,2025-12-11 21:45:00+00:00,causal,too little training (62),,,,,,,,,,,,,,,,,
+OH_Platter_Creek_near_Sherwood,2026-01-25 03:00:00+00:00,2026-02-27 16:32:00+00:00,excl7d,scored,805.533,gap,,after_return_only,62.0,0.0,1828.0,0.97,1.29,,,,,,,,
+OH_Platter_Creek_near_Sherwood,2026-01-25 03:00:00+00:00,2026-02-27 16:32:00+00:00,causal,scored,805.533,gap,,after_return_only,62.0,0.0,239.0,0.97,1.29,,,,,,,,
+OH_St_Marys_River_at_Walcot_Street_at_Willshire,2026-01-19 14:15:00+00:00,2026-02-19 15:00:00+00:00,excl7d,scored,744.75,gap,,after_return_only,125.0,0.0,2115.0,2.65,3.33,,0.3059,0.68,0.9994,,,,
+OH_St_Marys_River_at_Walcot_Street_at_Willshire,2026-01-19 14:15:00+00:00,2026-02-19 15:00:00+00:00,causal,scored,744.75,gap,,after_return_only,125.0,0.0,324.0,2.65,3.33,,0.5358,0.68,0.9994,,,,
+PA_Brandywine_Creek_at_Chadds_Ford,2026-06-27 22:15:00+00:00,2026-06-28 14:30:00+00:00,excl7d,scored,16.25,gap,,after_return_only,4.0,0.0,1327.0,1.68,1.69,,0.169,0.01,0.4992,,,,
+PA_Brandywine_Creek_at_Chadds_Ford,2026-06-27 22:15:00+00:00,2026-06-28 14:30:00+00:00,causal,scored,16.25,gap,,after_return_only,4.0,0.0,297.0,1.68,1.69,,0.0325,0.01,0.4992,,,,
+PA_Brandywine_Creek_at_Chadds_Ford,2026-07-14 18:39:00+00:00,2026-07-15 16:04:00+00:00,excl7d,scored,21.417,gap,,after_return_only,6.0,0.0,1352.0,1.56,1.56,,0.5362,0.0,0.0661,,,,
+PA_Brandywine_Creek_at_Chadds_Ford,2026-07-14 18:39:00+00:00,2026-07-15 16:04:00+00:00,causal,scored,21.417,gap,,after_return_only,6.0,0.0,421.0,1.56,1.56,,2.3731,0.0,0.0661,,,,
+SD_James_River_at_Columbia,2025-12-01 21:45:00+00:00,2025-12-05 22:30:00+00:00,excl7d,scored,96.75,gap,,after_return_only,14.0,0.0,1680.0,7.94,7.94,,0.1514,0.0,4.4967,,,,
 SD_James_River_at_Columbia,2025-12-01 21:45:00+00:00,2025-12-05 22:30:00+00:00,causal,too little training (89),,,,,,,,,,,,,,,,,
 SD_James_River_at_Columbia,2025-12-07 04:00:00+00:00,2025-12-09 10:30:00+00:00,excl7d,scored,54.5,gap,,after_return_only,5.0,0.0,1695.0,7.95,8.21,,,,,,,,
 SD_James_River_at_Columbia,2025-12-07 04:00:00+00:00,2025-12-09 10:30:00+00:00,causal,too little training (107),,,,,,,,,,,,,,,,,
-SD_James_River_at_Columbia,2025-12-12 15:15:00+00:00,2025-12-15 00:30:00+00:00,excl7d,scored,57.25,gap,,after_return_only,11.0,0.0,1698.0,7.6,8.12,,,,,,0.4355,0.52,2.4978
+SD_James_River_at_Columbia,2025-12-12 15:15:00+00:00,2025-12-15 00:30:00+00:00,excl7d,scored,57.25,gap,,after_return_only,11.0,0.0,1698.0,7.6,8.12,,0.4355,0.52,2.4978,,,,
 SD_James_River_at_Columbia,2025-12-12 15:15:00+00:00,2025-12-15 00:30:00+00:00,causal,too little training (114),,,,,,,,,,,,,,,,,
 SD_James_River_at_Columbia,2025-12-16 02:45:00+00:00,2025-12-20 07:15:00+00:00,excl7d,scored,100.5,gap,,after_return_only,12.0,0.0,1699.0,7.84,8.02,,,,,,,,
 SD_James_River_at_Columbia,2025-12-16 02:45:00+00:00,2025-12-20 07:15:00+00:00,causal,too little training (115),,,,,,,,,,,,,,,,,
-SD_James_River_at_Columbia,2025-12-20 23:15:00+00:00,2026-01-08 00:45:00+00:00,excl7d,scored,433.5,gap,,after_return_only,69.0,0.0,1699.0,7.6,8.01,,,,,,1.2166,0.41,2.7492
+SD_James_River_at_Columbia,2025-12-20 23:15:00+00:00,2026-01-08 00:45:00+00:00,excl7d,scored,433.5,gap,,after_return_only,69.0,0.0,1699.0,7.6,8.01,,1.2166,0.41,2.7492,,,,
 SD_James_River_at_Columbia,2025-12-20 23:15:00+00:00,2026-01-08 00:45:00+00:00,causal,too little training (131),,,,,,,,,,,,,,,,,
 SD_James_River_at_Columbia,2026-01-09 17:15:00+00:00,2026-01-10 06:45:00+00:00,excl7d,scored,13.5,gap,,after_return_only,3.0,0.0,1696.0,7.56,7.71,,,,,,,,
 SD_James_River_at_Columbia,2026-01-09 17:15:00+00:00,2026-01-10 06:45:00+00:00,causal,too little training (138),,,,,,,,,,,,,,,,,
-SD_James_River_at_Columbia,2026-01-11 21:00:00+00:00,2026-01-13 19:30:00+00:00,excl7d,scored,46.5,gap,,after_return_only,6.0,0.0,1696.0,6.71,7.42,,,,,,0.2673,0.71,1.4981
+SD_James_River_at_Columbia,2026-01-11 21:00:00+00:00,2026-01-13 19:30:00+00:00,excl7d,scored,46.5,gap,,after_return_only,6.0,0.0,1696.0,6.71,7.42,,0.2673,0.71,1.4981,,,,
 SD_James_River_at_Columbia,2026-01-11 21:00:00+00:00,2026-01-13 19:30:00+00:00,causal,too little training (138),,,,,,,,,,,,,,,,,
 SD_James_River_at_Columbia,2026-01-16 22:00:00+00:00,2026-02-01 11:15:00+00:00,excl7d,scored,373.25,gap|qualified,Eqp,after_return_only,58.0,0.0,1683.0,6.73,6.09,,,,,,,,
 SD_James_River_at_Columbia,2026-01-16 22:00:00+00:00,2026-02-01 11:15:00+00:00,causal,too little training (141),,,,,,,,,,,,,,,,,
-SD_James_River_at_Columbia,2026-02-06 13:00:00+00:00,2026-02-09 18:15:00+00:00,excl7d,scored,77.25,gap|qualified,Eqp,after_return_only,14.0,0.0,1677.0,6.22,6.4,,,,,,1.41,0.18,0.2492
+SD_James_River_at_Columbia,2026-02-06 13:00:00+00:00,2026-02-09 18:15:00+00:00,excl7d,scored,77.25,gap|qualified,Eqp,after_return_only,14.0,0.0,1677.0,6.22,6.4,,1.41,0.18,0.2492,,,,
 SD_James_River_at_Columbia,2026-02-06 13:00:00+00:00,2026-02-09 18:15:00+00:00,causal,too little training (164),,,,,,,,,,,,,,,,,
-SD_James_River_at_Columbia,2026-02-25 17:45:00+00:00,2026-02-26 16:15:00+00:00,excl7d,scored,22.5,gap,,after_return_only,5.0,0.0,1656.0,7.68,7.91,,,,,,0.9672,0.23,0.2464
-SD_James_River_at_Columbia,2026-02-25 17:45:00+00:00,2026-02-26 16:15:00+00:00,causal,scored,22.5,gap,,after_return_only,5.0,0.0,216.0,7.68,7.91,,,,,,0.1126,0.23,0.2464
+SD_James_River_at_Columbia,2026-02-25 17:45:00+00:00,2026-02-26 16:15:00+00:00,excl7d,scored,22.5,gap,,after_return_only,5.0,0.0,1656.0,7.68,7.91,,0.9672,0.23,0.2464,,,,
+SD_James_River_at_Columbia,2026-02-25 17:45:00+00:00,2026-02-26 16:15:00+00:00,causal,scored,22.5,gap,,after_return_only,5.0,0.0,216.0,7.68,7.91,,0.1126,0.23,0.2464,,,,
 SD_James_River_at_Columbia,2026-10-20 12:15:00+00:00,2026-10-21 11:15:00+00:00,excl7d,scored,23.0,gap,,after_return_only,5.0,0.0,1663.0,9.57,9.42,,,,,,,,
 SD_James_River_at_Columbia,2026-10-20 12:15:00+00:00,2026-10-21 11:15:00+00:00,causal,scored,23.0,gap,,after_return_only,5.0,0.0,1663.0,9.57,9.42,,,,,,,,
-TX_Clear_Fk_Trinity_Rv_at_Ft_Worth,2026-06-24 08:15:00+00:00,2026-06-26 16:45:00+00:00,excl7d,scored,56.5,gap,,after_return_only,17.0,0.0,2296.0,8.47,8.81,,,,,,0.1075,0.34,0.7492
-TX_Clear_Fk_Trinity_Rv_at_Ft_Worth,2026-06-24 08:15:00+00:00,2026-06-26 16:45:00+00:00,causal,scored,56.5,gap,,after_return_only,17.0,0.0,1584.0,8.47,8.81,,,,,,0.165,0.34,0.7492
-WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet,2026-07-09 09:00:00+00:00,2026-07-09 18:30:00+00:00,excl7d,scored,9.5,gap,,after_return_only,4.0,0.0,913.0,4.92,4.92,,,,,,0.11,0.0,0.4992
-WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet,2026-07-09 09:00:00+00:00,2026-07-09 18:30:00+00:00,causal,scored,9.5,gap,,after_return_only,4.0,0.0,542.0,4.92,4.92,,,,,,0.1141,0.0,0.4992
-WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,2026-06-15 16:45:00+00:00,2026-06-17 16:30:00+00:00,excl7d,scored,47.75,gap|qualified,Eqp,after_return_only,13.0,0.0,2176.0,6.95,6.97,,,,,,0.1575,0.02,0.4994
-WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,2026-06-15 16:45:00+00:00,2026-06-17 16:30:00+00:00,causal,scored,47.75,gap|qualified,Eqp,after_return_only,13.0,0.0,1355.0,6.95,6.97,,,,,,0.0715,0.02,0.4994
-WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,2026-06-25 14:55:00+00:00,2026-06-25 23:15:00+00:00,excl7d,scored,8.333,gap,,after_return_only,8.0,0.0,2186.0,5.97,5.87,,,,,,0.271,0.1,0.2494
-WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,2026-06-25 14:55:00+00:00,2026-06-25 23:15:00+00:00,causal,scored,8.333,gap,,after_return_only,8.0,0.0,1426.0,5.97,5.87,,,,,,0.7984,0.1,0.2494
-WI_Wisconsin_River_at_Muscoda,2026-05-21 15:00:00+00:00,2026-05-22 17:00:00+00:00,excl7d,scored,26.0,gap,,after_return_only,8.0,0.0,1957.0,2.75,3.02,,,,,,0.0742,0.27,0.9975
-WI_Wisconsin_River_at_Muscoda,2026-05-21 15:00:00+00:00,2026-05-22 17:00:00+00:00,causal,scored,26.0,gap,,after_return_only,8.0,0.0,1030.0,2.75,3.02,,,,,,1.1549,0.27,0.9975
+TX_Clear_Fk_Trinity_Rv_at_Ft_Worth,2026-06-24 08:15:00+00:00,2026-06-26 16:45:00+00:00,excl7d,scored,56.5,gap,,after_return_only,17.0,0.0,2296.0,8.47,8.81,,0.1075,0.34,0.7492,,,,
+TX_Clear_Fk_Trinity_Rv_at_Ft_Worth,2026-06-24 08:15:00+00:00,2026-06-26 16:45:00+00:00,causal,scored,56.5,gap,,after_return_only,17.0,0.0,1584.0,8.47,8.81,,0.165,0.34,0.7492,,,,
+TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,2025-12-29 06:45:00+00:00,2025-12-30 15:55:00+00:00,excl7d,scored,33.167,gap,,after_return_only,6.0,0.0,1541.0,52.01,52.01,,0.0402,0.0,1.9156,,,,
+TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,2025-12-29 06:45:00+00:00,2025-12-30 15:55:00+00:00,causal,too little training (15),,,,,,,,,,,,,,,,,
+TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,2026-01-12 23:55:00+00:00,2026-01-13 18:35:00+00:00,excl7d,scored,18.667,gap,,after_return_only,3.0,0.0,1555.0,52.01,52.02,,0.0546,0.01,0.5811,,,,
+TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,2026-01-12 23:55:00+00:00,2026-01-13 18:35:00+00:00,causal,too little training (77),,,,,,,,,,,,,,,,,
+TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,2026-01-24 08:35:00+00:00,2026-01-26 15:00:00+00:00,excl7d,scored,54.417,gap,,after_return_only,11.0,0.0,1562.0,52.02,52.01,,0.0008,0.01,0.9986,,,,
+TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,2026-01-24 08:35:00+00:00,2026-01-26 15:00:00+00:00,causal,too little training (116),,,,,,,,,,,,,,,,,
+TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,2026-01-30 23:25:00+00:00,2026-01-31 19:40:00+00:00,excl7d,scored,20.25,gap,,after_return_only,3.0,0.0,1558.0,52.01,52.01,,0.1209,0.0,1.6653,,,,
+TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,2026-01-30 23:25:00+00:00,2026-01-31 19:40:00+00:00,causal,too little training (137),,,,,,,,,,,,,,,,,
+TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,2026-01-31 21:05:00+00:00,2026-02-01 16:30:00+00:00,excl7d,scored,19.417,gap,,after_return_only,3.0,0.0,1554.0,52.01,52.02,,0.1488,0.01,0.4986,,,,
+TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca,2026-01-31 21:05:00+00:00,2026-02-01 16:30:00+00:00,causal,too little training (137),,,,,,,,,,,,,,,,,
+TX_Zacate_Ck_at_Laredo,2026-07-30 19:30:00+00:00,2026-07-31 17:00:00+00:00,excl7d,scored,21.5,gap,,after_return_only,5.0,0.0,1245.0,1.2,1.25,,0.0447,0.05,0.9964,,,,
+TX_Zacate_Ck_at_Laredo,2026-07-30 19:30:00+00:00,2026-07-31 17:00:00+00:00,causal,scored,21.5,gap,,after_return_only,5.0,0.0,813.0,1.2,1.25,,0.1528,0.05,0.9964,,,,
+WI_Cedar_Creek_near_Cedarburg,2026-02-19 12:45:00+00:00,2026-02-23 22:15:00+00:00,excl7d,scored,105.5,gap|qualified,Eqp,after_return_only,19.0,0.0,1152.0,6.77,5.92,,0.4152,0.85,2.2411,,,,
+WI_Cedar_Creek_near_Cedarburg,2026-02-19 12:45:00+00:00,2026-02-23 22:15:00+00:00,causal,scored,105.5,gap|qualified,Eqp,after_return_only,19.0,0.0,322.0,6.77,5.92,,0.2026,0.85,2.2411,,,,
+WI_Cedar_Creek_near_Cedarburg,2026-03-06 07:30:00+00:00,2026-03-08 21:45:00+00:00,excl7d,scored,62.25,gap,,after_return_only,12.0,0.0,1162.0,5.67,6.69,,0.0246,1.02,1.7492,,,,
+WI_Cedar_Creek_near_Cedarburg,2026-03-06 07:30:00+00:00,2026-03-08 21:45:00+00:00,causal,scored,62.25,gap,,after_return_only,12.0,0.0,369.0,5.67,6.69,,0.3225,1.02,1.7492,,,,
+WI_Cedar_Creek_near_Cedarburg,2026-04-22 14:00:00+00:00,2026-04-23 03:15:00+00:00,excl7d,scored,13.25,gap|qualified,Eqp,after_return_only,4.0,0.0,1157.0,7.7,7.41,,,,,,,,
+WI_Cedar_Creek_near_Cedarburg,2026-04-22 14:00:00+00:00,2026-04-23 03:15:00+00:00,causal,scored,13.25,gap|qualified,Eqp,after_return_only,4.0,0.0,569.0,7.7,7.41,,,,,,,,
+WI_Cedar_Creek_near_Cedarburg,2026-04-23 13:15:00+00:00,2026-04-24 04:45:00+00:00,excl7d,scored,15.5,gap|qualified,Eqp,after_return_only,4.0,0.0,1167.0,7.32,7.13,,,,,,,,
+WI_Cedar_Creek_near_Cedarburg,2026-04-23 13:15:00+00:00,2026-04-24 04:45:00+00:00,causal,scored,15.5,gap|qualified,Eqp,after_return_only,4.0,0.0,579.0,7.32,7.13,,,,,,,,
+WI_Cedar_Creek_near_Cedarburg,2026-04-24 13:00:00+00:00,2026-04-25 04:15:00+00:00,excl7d,scored,15.25,gap|qualified,Eqp,after_return_only,4.0,0.0,1176.0,6.96,6.95,,,,,,,,
+WI_Cedar_Creek_near_Cedarburg,2026-04-24 13:00:00+00:00,2026-04-25 04:15:00+00:00,causal,scored,15.25,gap|qualified,Eqp,after_return_only,4.0,0.0,588.0,6.96,6.95,,,,,,,,
+WI_Cedar_Creek_near_Cedarburg,2026-04-25 14:15:00+00:00,2026-05-05 22:45:00+00:00,excl7d,scored,248.5,gap|qualified,Eqp,after_return_only,51.0,0.0,1150.0,6.88,5.9,,0.8928,0.98,2.7472,,,,
+WI_Cedar_Creek_near_Cedarburg,2026-04-25 14:15:00+00:00,2026-05-05 22:45:00+00:00,causal,scored,248.5,gap|qualified,Eqp,after_return_only,51.0,0.0,594.0,6.88,5.9,,3.3257,0.98,2.7472,,,,
+WI_Cedar_Creek_near_Cedarburg,2026-09-06 10:15:00+00:00,2026-09-09 17:45:00+00:00,excl7d,scored,79.5,gap,,after_return_only,6.0,0.0,1175.0,6.51,6.12,,,,,,,,
+WI_Cedar_Creek_near_Cedarburg,2026-09-06 10:15:00+00:00,2026-09-09 17:45:00+00:00,causal,scored,79.5,gap,,after_return_only,6.0,0.0,1025.0,6.51,6.12,,,,,,,,
+WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet,2026-07-09 09:00:00+00:00,2026-07-09 18:30:00+00:00,excl7d,scored,9.5,gap,,after_return_only,4.0,0.0,913.0,4.92,4.92,,0.11,0.0,0.4992,,,,
+WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet,2026-07-09 09:00:00+00:00,2026-07-09 18:30:00+00:00,causal,scored,9.5,gap,,after_return_only,4.0,0.0,542.0,4.92,4.92,,0.1141,0.0,0.4992,,,,
+WI_East_River_at_N_Baird_Street_at_Green_Bay,2025-12-04 04:35:00+00:00,2025-12-04 17:15:00+00:00,excl7d,scored,12.667,gap,,after_return_only,4.0,0.0,3447.0,6.4,6.38,,0.2287,0.02,0.2486,,,,
+WI_East_River_at_N_Baird_Street_at_Green_Bay,2025-12-04 04:35:00+00:00,2025-12-04 17:15:00+00:00,causal,scored,12.667,gap,,after_return_only,4.0,0.0,268.0,6.4,6.38,,0.4545,0.02,0.2486,,,,
+WI_East_River_at_N_Baird_Street_at_Green_Bay,2025-12-13 10:20:00+00:00,2025-12-13 16:55:00+00:00,excl7d,scored,6.583,gap,,after_return_only,3.0,0.0,3465.0,6.42,6.41,,0.6568,0.01,0.9156,,,,
+WI_East_River_at_N_Baird_Street_at_Green_Bay,2025-12-13 10:20:00+00:00,2025-12-13 16:55:00+00:00,causal,scored,6.583,gap,,after_return_only,3.0,0.0,313.0,6.42,6.41,,0.6856,0.01,0.9156,,,,
+WI_East_River_at_N_Baird_Street_at_Green_Bay,2025-12-20 17:40:00+00:00,2025-12-21 00:20:00+00:00,excl7d,scored,6.667,gap,,after_return_only,4.0,0.0,3450.0,6.52,6.67,,0.4212,0.15,3.3319,,,,
+WI_East_River_at_N_Baird_Street_at_Green_Bay,2025-12-20 17:40:00+00:00,2025-12-21 00:20:00+00:00,causal,scored,6.667,gap,,after_return_only,4.0,0.0,342.0,6.52,6.67,,0.5453,0.15,3.3319,,,,
+WI_East_River_at_N_Baird_Street_at_Green_Bay,2026-02-16 15:30:00+00:00,2026-02-16 22:10:00+00:00,excl7d,scored,6.667,gap,,after_return_only,7.0,0.0,3398.0,7.33,7.07,,0.1084,0.26,0.1639,,,,
+WI_East_River_at_N_Baird_Street_at_Green_Bay,2026-02-16 15:30:00+00:00,2026-02-16 22:10:00+00:00,causal,scored,6.667,gap,,after_return_only,7.0,0.0,629.0,7.33,7.07,,0.0357,0.26,0.1639,,,,
+WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,2026-06-15 16:45:00+00:00,2026-06-17 16:30:00+00:00,excl7d,scored,47.75,gap|qualified,Eqp,after_return_only,13.0,0.0,2176.0,6.95,6.97,,0.1575,0.02,0.4994,,,,
+WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,2026-06-15 16:45:00+00:00,2026-06-17 16:30:00+00:00,causal,scored,47.75,gap|qualified,Eqp,after_return_only,13.0,0.0,1355.0,6.95,6.97,,0.0715,0.02,0.4994,,,,
+WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,2026-06-25 14:55:00+00:00,2026-06-25 23:15:00+00:00,excl7d,scored,8.333,gap,,after_return_only,8.0,0.0,2186.0,5.97,5.87,,0.271,0.1,0.2494,,,,
+WI_Swan_Creek_at_Lalor_Road_near_Fitchburg,2026-06-25 14:55:00+00:00,2026-06-25 23:15:00+00:00,causal,scored,8.333,gap,,after_return_only,8.0,0.0,1426.0,5.97,5.87,,0.7984,0.1,0.2494,,,,
+WI_Wisconsin_River_at_Muscoda,2026-05-21 15:00:00+00:00,2026-05-22 17:00:00+00:00,excl7d,scored,26.0,gap,,after_return_only,8.0,0.0,1957.0,2.75,3.02,,0.0742,0.27,0.9975,,,,
+WI_Wisconsin_River_at_Muscoda,2026-05-21 15:00:00+00:00,2026-05-22 17:00:00+00:00,causal,scored,26.0,gap,,after_return_only,8.0,0.0,1030.0,2.75,3.02,,1.1549,0.27,0.9975,,,,
