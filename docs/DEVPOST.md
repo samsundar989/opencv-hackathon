@@ -37,7 +37,7 @@ Stream gauges go dark, drift, ice up and get washed out, often when floods hit. 
 
 ## Accomplishments that we're proud of
 - **The frozen test passed:** 14/20 sites within 0.25 ft or 10 % of range (bootstrap interval 12–16); median MAE 0.182 ft (95 % CI 0.148–0.22). Flood-state balanced accuracy 0.93 vs 0.75 for a 24-hour-stale gauge.
-- **Self-onboarding:** 30 of 40 new cameras qualified with one command each and the frozen setting, at about $0.055 of compute per camera.
+- **Self-onboarding:** 64 of 90 new cameras qualified with one command each and the frozen setting, at about $0.059 of compute per camera.
 - **COOL, measured honestly:** bit-identical outputs, 1.16–1.21× faster on the classical registration path, flat end to end because the learned matcher dominates. One m9g.large covers all ~880 gauged HIVIS cameras at a 15-minute cadence for about $0.06 per camera-month.
 - **A DINOv2-in-OpenCV model** cut year-long CV error from 0.380 to 0.252 ft and improved 19 of 20 sites. In a pre-registered live shadow it read 0.084 vs 0.183 ft on 249 paired readings, and it was approved for promotion to the live model on Oct 24 under those pre-registered criteria.
 - **Autonomy chosen by measurement:** the hybrid (rules act, Claude advises, a human approves) scored 94.6 % on 98 frozen episodes. We also logged and fixed a real false alert that a human approved at a tidal site.

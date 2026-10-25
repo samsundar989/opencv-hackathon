@@ -306,12 +306,12 @@ Model v2 in shadow on the same live frames: median absolute error 0.084 ft vs 0.
 
 ### 6.10 Onboarding new cameras and real gauge outages
 
-**Onboarding beyond the 20 (W5, `results/onboarding/README.md`).** One command per camera (`scripts/onboard_site.py`) fetches 12 months of frames and gauge data, builds a reference, registers, extracts features, runs the same forward-chaining CV and assigns a tier with the frozen D-0007 setting, with no per-site tuning. These cameras were onboarded on Oct 24–25 and are not part of the frozen test.
-- 40 cameras attempted, 40 finished: 30 tier B (eligible to serve), 10 tier C (registration under 80 % or weak correlation).
-- Tier B: median CV MAE 0.97 ft, median nMAE 0.140. These are mostly large rivers (Missouri, Illinois, Wabash) whose stage ranges are many feet, so the absolute error is larger and the relative error is about the frozen 20-site CV's (nMAE 0.145).
-- As with the first 20, the camera beats a 24-hour-old gauge value at only 3 of 30 tier-B sites. It is a gap-filler, not a replacement.
-- Cost per new camera (median of 40): 67 CPU-minutes and about 119 MB of frames, about $0.055 at m9g.large on-demand. Projected to all 880 gauged HIVIS cameras: about $48 of compute and 105 GB of frames.
-- Throughput: 0.88 cameras onboarded per CPU-hour. Qualifying rate by camera type: large rivers 74 % (20 of 27), cold-climate cameras 80 % (8 of 10); too few tidal and small-stream cameras yet to say (`results/onboarding/README.md`). A second batch of 50 more diverse cameras is running.
+**Onboarding beyond the 20 (W5, `results/onboarding/README.md`).** One command per camera (`scripts/onboard_site.py`) fetches 12 months of frames and gauge data, builds a reference, registers, extracts features, runs the same forward-chaining CV and assigns a tier with the frozen D-0007 setting, with no per-site tuning. Two batches were onboarded on Oct 24–25, chosen for diversity (large rivers, creeks, cold-climate and tidal/coastal sites). They are not part of the frozen test.
+- 90 cameras onboarded: **64 tier B** (eligible to serve) and 26 tier C (registration under 80 % or weak correlation).
+- Tier B: median CV MAE 0.86 ft, median nMAE 0.143. That is about the frozen 20-site CV's nMAE (0.145); the absolute error is larger because many of these rivers have stage ranges of many feet.
+- Qualifying rate by camera type: large rivers 80 % (32 of 40), tidal/coastal 73 % (8 of 11), creeks 65 % (11 of 17), cold-climate 59 % (13 of 22).
+- As with the first 20, the camera beats a 24-hour-old gauge value at only 9 of 64 tier-B sites. It is a gap-filler, not a replacement.
+- Cost per new camera (median of 90): 73 CPU-minutes and about 141 MB of frames, about $0.059 at m9g.large on-demand; 0.79 cameras onboarded per CPU-hour. Projected to all 880 gauged HIVIS cameras: about $52 of compute and 124 GB of frames.
 - One onboarded camera, the Pee Dee River near Florence SC, sits beside a gauge that has been dark since 2026-06-30. It is served live as a real, ongoing gap-fill example (W5).
 
 **How much gauge history does a new camera need?** For each of 29 sites, refit on only the last N days before the same two test months:
@@ -327,11 +327,15 @@ Model v2 in shadow on the same live frames: median absolute error 0.084 ft vs 0.
 About a month of overlap with the gauge is enough. More history does not help the frozen setting, which matches the drift in §6.13.
 
 **Real gauge outages** (W5, `results/real_outages/README.md`).
-- **How often:** over the last 12 months, 531 of the 875 gauges behind gauged HIVIS cameras had at least one outage of 6 h or more: 3,734 outages, median 15.0 h, 984 lasting a day or more and 303 a week or more. For 1,099 of the 1,735 outages checked, the camera kept posting daylight frames while the gauge was dark.
-- **How the camera did**, scored at the moment the gauge came back, against holding the last known value. Two variants: *causal* (refit only on data before the outage, which is what a live system could do) and a *hindsight reconstruction* that excludes the outage ± 7 days but uses data after it.
-  - Most outages are on a quiet river. In 44 of 61 hindsight-scored gaps the river moved less than 0.25 ft, and holding the last reading is nearly exact.
-  - Where the river moved 0.25 ft or more, the camera was closer in **5 of 11** gaps (causal) and **7 of 17** (hindsight). The clearest win: during a 44-day estimated outage on the Clearwater River at Spalding, the camera's MAE was 0.98 ft against 1.80 ft for the last known value (hindsight refit). Losses include Missouri River at Hermann and a winter ice gap on the Root River.
-  - So the camera helps when the river moves while the gauge is dark, which is when a fill-in matters. It wins roughly 4 to 5 in 10 of those cases, not all of them.
+- **How often:** over the last 12 months, 531 of the 875 gauges behind gauged HIVIS cameras had at least one outage of 6 h or more: 3,734 outages, median 15.0 h, 984 lasting a day or more and 303 a week or more. For 1,241 of the 2,044 outages checked, the camera kept posting daylight frames while the gauge was dark.
+- **How the camera did,** scored at the moment the gauge came back, against holding the last known value. Two variants:
+  - *causal*: refit only on data before the outage, which is what a live system could do;
+  - *hindsight reconstruction*: excludes the outage ± 7 days but uses data after it.
+- Most outages are on a quiet river. In 73 of 102 hindsight-scored gaps the river moved less than 0.25 ft, and holding the last reading is nearly exact.
+- **Where the river moved 0.25 ft or more,** the camera was closer than the last known value in **11 of 19** gaps (causal) and **18 of 29** (hindsight).
+  - The clearest win: during a 44-day estimated outage on the Clearwater River at Spalding, the camera's MAE was 0.98 ft against 1.80 ft for the last known value (hindsight refit).
+  - There are losses too, for example a winter ice gap on the Root River.
+- So the camera helps when the river moves while the gauge is dark, which is when a fill-in matters. It wins in more of those cases than it loses, but not all of them.
 
 ### 6.11 Model v2 candidate: DINOv2 features in `cv2.dnn`
 

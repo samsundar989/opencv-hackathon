@@ -5,3 +5,8 @@
 \b29 (?:of 39 )?(?:new cameras )?(?:qualified )?\(?tier B	onboarding final is 30 tier B of 40 (results/onboarding/README.md, W5 final)
 \b5 of 10 gaps\b	real-outage final: causal 5 of 11, hindsight 7 of 17 (results/real_outages/README.md)
 \b6 of 16\b	real-outage final: hindsight 7 of 17
+\b30 of 40\b	onboarding final: 64 tier B of 90 (results/onboarding/README.md)
+\b7 of 17\b	real-outage final: hindsight 18 of 29, causal 11 of 19 (results/real_outages/README.md)
+\b5 of 11\b	real-outage final: causal 11 of 19
+1,099 of the 1,735	real-outage final: 1,241 of 2,044 outages checked had camera frames
+\$0\.055\b	onboarding final: $0.059 per camera

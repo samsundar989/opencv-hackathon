@@ -4,7 +4,7 @@ RiverSight already runs live on a Graviton worker, onboards a new camera with on
 
 ## Phase 1 (weeks 1–4): cover every gauged HIVIS camera
 
-- **Onboard the whole gauged fleet** with the W5 pipeline (`scripts/onboard_site.py`, frozen setting, automatic tiering). At the measured cost per camera that is about $48 of compute and 105 GB of frames for all ~880 gauged cameras (`results/onboarding/README.md`). Only tier A/B cameras are served; tier C stays in a "needs attention" list.
+- **Onboard the whole gauged fleet** with the W5 pipeline (`scripts/onboard_site.py`, frozen setting, automatic tiering). At the measured cost per camera that is about $52 of compute and 124 GB of frames for all ~880 gauged cameras (`results/onboarding/README.md`). Only tier A/B cameras are served; tier C stays in a "needs attention" list.
 - **Serve them all from one instance.** One m9g.large covers ~880 cameras at a 15-minute cadence for about $0.06 per camera-month (`docs/COOL_BENCHMARK.md`).
 - **Nightly incremental fetch and weekly refit,** so each flood the gauge records extends the camera's calibrated range: the lesson from the Hancock flood (report §6.6). Every refit is scored in shadow before it serves, as model v2 was (D-0010).
 - **Success measure:** prospective live accuracy per camera, published daily. A camera that drifts below its tier is demoted automatically.
