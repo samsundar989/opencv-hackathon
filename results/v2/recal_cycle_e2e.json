@@ -1,0 +1,35 @@
+{
+  "cam_id": "TX_Tenmile_Ck_at_Parkinson_Rd_nr_Ferris",
+  "replayed_readings": 72,
+  "readings_with_v2_shadow": 36,
+  "logged_keys": 36,
+  "logged_usable": 31,
+  "replay_s": 22.4,
+  "matched_to_training_cache": 31,
+  "max_abs_diff_F_vs_cache": 194.375,
+  "max_abs_diff_P_vs_cache": 16.767578125,
+  "median_abs_diff_F_vs_cache": 0.125,
+  "median_abs_diff_P_vs_cache": 0.1474609375,
+  "min_corr_F_vs_cache": 0.9950893485998874,
+  "median_corr_F_vs_cache": 0.9998502646599798,
+  "min_corr_P_vs_cache": 0.9775938467697755,
+  "median_corr_P_vs_cache": 0.996836407533789,
+  "note": "live replay re-registers each frame (live SiteRegistrar), so its H can differ from the cached training H; differences reflect registration, not feature code (test_bundle: same H \u2192 same F)",
+  "refit": {
+    "cam_id": "TX_Tenmile_Ck_at_Parkinson_Rd_nr_Ferris",
+    "status": "refit",
+    "n_new": 31,
+    "stage_max_before_ft": 22.04,
+    "stage_max_after_ft": 22.04,
+    "drift": {
+      "cam_id": "TX_Tenmile_Ck_at_Parkinson_Rd_nr_Ferris",
+      "generated": "2026-10-25T15:05:32+00:00",
+      "n": 31,
+      "window_days": 7,
+      "sigma_ft": 0.4785,
+      "median_residual_ft": 0.0021,
+      "median_abs_residual_ft": 0.0226,
+      "drifting": false
+    }
+  }
+}

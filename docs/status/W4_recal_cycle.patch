@@ -1,0 +1,187 @@
+diff --git a/src/riversight/live/cycle.py b/src/riversight/live/cycle.py
+index 8ac011d..51c4955 100644
+--- a/src/riversight/live/cycle.py
++++ b/src/riversight/live/cycle.py
+@@ -282,6 +282,7 @@ _SHADOW: dict = {}
+ def shadow_v2(cam: str, img: np.ndarray, H, ref_shape, frame: "Frame", state: dict) -> dict | None:
+     """v2 (DINOv2 tokens in cv2.dnn + v1 block features) estimate beside v1. Absent bundles or any error → None;
+     a v2 failure never touches the v1 reading."""
++    _SHADOW.pop("last", None)
+     if not (SHADOW_DIR / cam).is_dir():
+         return None
+     t0 = time.perf_counter()
+@@ -301,13 +302,68 @@ def shadow_v2(cam: str, img: np.ndarray, H, ref_shape, frame: "Frame", state: di
+         raw2 = float(_SHADOW[cam].predict_raw(F, P, frame.time))
+         ks2, x2, _ = _SHADOW[cam].kalman_step(KalmanState.from_json(state.get("kalman_v2")), frame.time.timestamp(), raw2)
+         state["kalman_v2"] = ks2.to_json()
+-        return {"shadow_raw_ft": _r(raw2), "shadow_stage_ft": _r(x2), "shadow_model": "v2",
+-                "shadow_ms": round((time.perf_counter() - t0) * 1000)}
++        _SHADOW["last"] = (cam, F, P, raw2)                # W4 recal (D-0014): logged in run_site once flags are final
++        out = {"shadow_raw_ft": _r(raw2), "shadow_stage_ft": _r(x2), "shadow_model": "v2",
++               "shadow_ms": round((time.perf_counter() - t0) * 1000)}
++        out.update(recal_shadow(cam, F, P, frame, state) or {})
++        return out
+     except Exception as e:
+         traceback.print_exc()
+         return {"shadow_error": repr(e)[:200]}
+ 
+ 
++# ---- weekly self-recalibration (W4, D-0014; riversight.calib.recal) ---------------------------------
++
++RECAL_DIR = Path(os.environ.get("RIVERSIGHT_RECAL_BUNDLES", BUNDLES.parent / "sites_recal"))
++RECAL_LOCK = Path(os.environ.get("RIVERSIGHT_RECAL_LOCK", "/tmp/riversight_recal.lock"))
++
++
++def recal_shadow(cam: str, F: np.ndarray, P: np.ndarray, frame: "Frame", state: dict) -> dict | None:
++    """The latest weekly refit of this site's v2 bundle, scored beside the served model (never served without a
++    human-approved RECALIBRATE). Absent bundle → None; any error → an error field, never an exception."""
++    d = RECAL_DIR / cam
++    if not (d / "meta_v2.json").exists():
++        return None
++    try:
++        from riversight.calib.scene_v2 import ShadowV2
++        mt = (d / "meta_v2.json").stat().st_mtime
++        if _SHADOW.get(("recal", cam), (None,))[0] != mt:
++            _SHADOW[("recal", cam)] = (mt, ShadowV2(d))
++        sh = _SHADOW[("recal", cam)][1]
++        raw3 = float(sh.predict_raw(F, P, frame.time))
++        ks3, x3, _ = sh.kalman_step(KalmanState.from_json(state.get("kalman_recal")), frame.time.timestamp(), raw3)
++        state["kalman_recal"] = ks3.to_json()
++        return {"recal_shadow_raw_ft": _r(raw3), "recal_shadow_ft": _r(x3), "recal_model_sha": str(sh.meta.get("model_sha", ""))[:12]}
++    except Exception as e:
++        traceback.print_exc()
++        return {"recal_shadow_error": repr(e)[:200]}
++
++
++def maybe_recal_jobs(store, now: datetime | None = None) -> str | None:
++    """Launch the weekly refit (Mondays 06–07 UTC, if the last run is > 6 days old) or the hourly drift update as
++    a detached, low-priority process, so the cycle never waits for it. S3 only; RIVERSIGHT_RECAL=0 disables."""
++    if not isinstance(store, S3Store) or os.environ.get("RIVERSIGHT_RECAL", "1") == "0":
++        return None
++    now = pd.Timestamp(now or utcnow())
++    if RECAL_LOCK.exists() and time.time() - RECAL_LOCK.stat().st_mtime < 2 * 3600:
++        return None
++    last = (store.get_json("live/recal/models/_last_run.json") or {}).get("finished")
++    if now.weekday() == 0 and now.hour == 6 and (not last or now - pd.Timestamp(last) > pd.Timedelta("6D")):
++        cmd = ["refit", "--cache", str(Path.home() / ".cache" / "riversight" / "recal_base"), "--out", str(RECAL_DIR)]
++    else:
++        lastd = (store.get_json("live/recal/drift/_last.json") or {}).get("t")
++        if lastd and now - pd.Timestamp(lastd) < pd.Timedelta("55min"):
++            return None
++        store.put_json("live/recal/drift/_last.json", {"t": iso(now)})
++        cmd = ["drift"]
++    RECAL_LOCK.write_text(str(os.getpid()))
++    args = [sys.executable, "-m", "riversight.calib.recal", *cmd, "--s3", store.bucket, "--bundles", str(SHADOW_DIR)]
++    nice = ["nice", "-n", "19"] if os.name == "posix" else []
++    sh = f"{' '.join(nice + args)} > /tmp/riversight_recal_{cmd[0]}.log 2>&1; rm -f {RECAL_LOCK}"
++    subprocess.Popen(["/bin/sh", "-c", sh] if os.name == "posix" else args, cwd=ROOT, start_new_session=True)
++    return cmd[0]
++
++
+ # ---- overlay ----------------------------------------------------------------------------------------
+ 
+ def render_overlay(img: np.ndarray, model: SiteModel, H: np.ndarray | None, stage: float | None,
+@@ -528,6 +584,14 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
+     }
+     if shadow:                                      # W4 v2 candidate (D-0010 §2): logged and scored, never served
+         reading.update(shadow)
++    last = _SHADOW.pop("last", None)
++    if last is not None and last[0] == cam:         # W4 weekly self-recalibration (D-0014): persist F, P + gauge
++        try:
++            from riversight.calib import recal
++            recal.log_features(store, cam, frame.time, last[1].astype(np.float16), last[2], g_val, g_t,
++                               reading["flags"], raw_ft=last[3])
++        except Exception:
++            traceback.print_exc()
+     reading.update(fuse(state, model, frame, t_cycle, raw, g_fresh, g_t, flags, at_least))
+     if not night and reg["ok"]:                     # D-0009 W1-2: remembered for night / stale display
+         state["last_daylight"] = {k: reading[k] for k in (
+@@ -771,6 +835,10 @@ def run_cycle(store, models: list[SiteModel], agent_fn=default_agent_fn, now: da
+         write_triage(store)
+     except Exception:
+         traceback.print_exc()
++    try:                                            # W4 weekly refit / hourly drift (D-0014), detached
++        maybe_recal_jobs(store)
++    except Exception:
++        traceback.print_exc()
+     from riversight.live.proof import proof, put_metrics
+     try:
+         store.put_json("live/proof.json", proof(models))
+diff --git a/tests/w4/test_recal_cycle.py b/tests/w4/test_recal_cycle.py
+new file mode 100644
+index 0000000..0a36b5c
+--- /dev/null
++++ b/tests/w4/test_recal_cycle.py
+@@ -0,0 +1,72 @@
++"""W4 recal wiring in the live cycle (D-0014): job launcher schedule, recal shadow, kill switch."""
++import json
++
++import numpy as np
++import pandas as pd
++
++import riversight.live.cycle as C
++from riversight.calib.scene_v2 import fit_bundle, parse_config
++from riversight.live.store import LocalStore, S3Store
++
++
++class FakeS3(S3Store):
++    """S3Store interface over a local directory (no boto3)."""
++    def __init__(self, root):
++        self._l = LocalStore(root)
++        self.bucket = "test-bucket"
++
++    def get_json(self, key):
++        return self._l.get_json(key)
++
++    def put_json(self, key, obj, cache=None):
++        self._l.put_json(key, obj)
++
++
++def _launches(monkeypatch, tmp_path):
++    calls = []
++    monkeypatch.setattr(C.subprocess, "Popen", lambda *a, **k: calls.append(a[0]))
++    monkeypatch.setattr(C, "RECAL_LOCK", tmp_path / "recal.lock")
++    return calls
++
++
++def test_jobs_schedule_refit_monday_6utc_then_hourly_drift(monkeypatch, tmp_path):
++    calls = _launches(monkeypatch, tmp_path)
++    store = FakeS3(tmp_path / "s3")
++    assert C.maybe_recal_jobs(store, pd.Timestamp("2026-10-26 06:10", tz="UTC")) == "refit"     # Monday 06 UTC
++    assert C.maybe_recal_jobs(store, pd.Timestamp("2026-10-26 06:25", tz="UTC")) is None        # lock held
++    (tmp_path / "recal.lock").unlink()
++    store.put_json("live/recal/models/_last_run.json", {"finished": "2026-10-26T06:20:00+00:00"})
++    assert C.maybe_recal_jobs(store, pd.Timestamp("2026-10-26 06:40", tz="UTC")) == "drift"     # refit done → drift
++    (tmp_path / "recal.lock").unlink()
++    assert C.maybe_recal_jobs(store, pd.Timestamp("2026-10-26 07:00", tz="UTC")) is None        # drift < 55 min ago
++    assert len(calls) == 2 and any("refit" in " ".join(map(str, c)) for c in calls)
++
++
++def test_jobs_disabled_by_env_and_on_local_store(monkeypatch, tmp_path):
++    calls = _launches(monkeypatch, tmp_path)
++    monkeypatch.setenv("RIVERSIGHT_RECAL", "0")
++    assert C.maybe_recal_jobs(FakeS3(tmp_path / "s3"), pd.Timestamp("2026-10-26 06:10", tz="UTC")) is None
++    monkeypatch.delenv("RIVERSIGHT_RECAL")
++    assert C.maybe_recal_jobs(LocalStore(tmp_path / "l"), pd.Timestamp("2026-10-26 06:10", tz="UTC")) is None
++    assert calls == []
++
++
++def test_recal_shadow_scores_and_keeps_its_own_kalman(monkeypatch, tmp_path):
++    rng = np.random.default_rng(0)
++    n = 60
++    t = pd.date_range("2026-06-01 14:00", periods=n, freq="5h", tz="UTC")
++    h = np.linspace(2, 3, n)
++    F = rng.normal(size=(n, 3600, 5)).astype(np.float16)
++    F[:, :300, 0] += h[:, None].astype(np.float16)
++    P = rng.normal(size=(n, 448, 6)).astype(np.float16)
++    d = tmp_path / "sites_recal" / "cam"
++    d.mkdir(parents=True)
++    np.savez(d / "scene_model_v2.npz", **fit_bundle(F, P, t, h, parse_config("v1+dino_roi@0.5+sun"), 32.8, -96.8, q=0.01))
++    (d / "meta_v2.json").write_text(json.dumps({"lat": 32.8, "lon": -96.8, "model_sha": "abc123def456789"}))
++    monkeypatch.setattr(C, "RECAL_DIR", tmp_path / "sites_recal")
++    state = {}
++    frame = C.Frame("x.jpg", t[-1].to_pydatetime(), None)
++    out = C.recal_shadow("cam", F[-1].astype(np.float32), P[-1], frame, state)
++    assert np.isfinite(out["recal_shadow_ft"]) and out["recal_model_sha"] == "abc123def456"
++    assert "kalman_recal" in state and "kalman_v2" not in state
++    assert C.recal_shadow("absent", F[-1], P[-1], frame, state) is None
