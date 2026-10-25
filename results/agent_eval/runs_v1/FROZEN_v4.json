@@ -1,0 +1,20 @@
+{
+  "frozen_at_utc": "2026-10-24T21:06:42+00:00",
+  "git_head": "3c340eef9e7251f06267585cac4a4b018e786b95",
+  "n_episodes": 120,
+  "n_single": 108,
+  "n_real": 73,
+  "hashes": {
+    "episodes.jsonl": "706de0cfda245e9cd4511fd367d576036eb1a4e6c50b5343c55d59cc97765b9a",
+    "src/riversight/agent/llm.py": "feec619890dcb017172427b517b68557069abd263cf13566be475bb7058e4220",
+    "src/riversight/agent/rules.py": "40e820012438e69fc337986c3e77049a7fc6129cd5121f48c491ec5bb945ce31",
+    "src/riversight/agent/tools.py": "397d950b550df3344747d8892514ff605e120bf530f09b211cd7329e27f18df5",
+    "src/riversight/agent/schema.py": "f09e0c1d7d3153dc7c45af590531fed6950bd65ba538f2fd77e26ecad346ff3f",
+    "src/riversight/agent/fleet.py": "81a1bc71bc611ddfcbf156d1ad46cbef35e686c3a7cb25afbec02e019c017b18",
+    "scripts/agent_eval.py": "db229cffc5638b147a2c347f1f814c9723984cd05507434bb0081b64a259bae6"
+  },
+  "models": {
+    "haiku": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "sonnet": "us.anthropic.claude-sonnet-4-6"
+  }
+}
