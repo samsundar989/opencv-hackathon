@@ -9,10 +9,30 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 88.0
+    "fetch": 88.0,
+    "reference": 0.1,
+    "register_features": 11.5,
+    "cv": 0.0
   },
   "nwis_id": "15008000",
   "state": "AK",
   "name": "Salmon River near Hyder",
-  "status": "fetched"
+  "status": "done",
+  "reference": "AK_Salmon_River_near_Hyder___2026-09-12T19-01-20Z.jpg",
+  "registration": {
+    "frames": 46,
+    "daylight": 46,
+    "reg_rate_all": 0.7826,
+    "reg_rate_last30d": 0.875,
+    "n_daylight_last30d": 8,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "C",
+    "tier_reason": "too little data for forward-chaining CV",
+    "n_oof": 0
+  },
+  "tier": "C",
+  "live_eligible": false
 }

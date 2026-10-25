@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 149.3
+    "fetch": 149.3,
+    "reference": 0.5,
+    "register_features": 8372.5,
+    "cv": 6.4,
+    "export": 3.2
   },
   "nwis_id": "11447650",
   "state": "CA",
   "name": "Sacramento River at Freeport",
-  "status": "fetched"
+  "status": "done",
+  "reference": "CA_Sacramento_River_at_Freeport___2026-09-16T17-00-21Z.jpg",
+  "registration": {
+    "frames": 2752,
+    "daylight": 2750,
+    "reg_rate_all": 0.3436,
+    "reg_rate_last30d": 0.9314,
+    "n_daylight_last30d": 175,
+    "view_change_runs": 2,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "B",
+    "n": 734,
+    "n_pred": 734,
+    "reg_rate": 0.9314,
+    "calib_p5_p95_ft": 10.738,
+    "test_range_ft": 11.97,
+    "mae": 1.9044,
+    "nmae": 0.1773,
+    "mae_p15": 0.0322,
+    "mae_p24": 0.2427,
+    "mae_const": 1.6244,
+    "n_ev": 212,
+    "mae_ev": 1.8464,
+    "mae_p24_ev": 0.5862,
+    "spearman": 0.6529,
+    "bacc_flood": 0.6257,
+    "bacc_flood_p24": 0.9924,
+    "n_flood": 13,
+    "gap_6h_lkv": 0.531,
+    "gap_6h_cam": 1.9044,
+    "gap_24h_lkv": 0.2427,
+    "gap_24h_cam": 1.9044,
+    "gap_72h_lkv": 0.538,
+    "gap_72h_cam": 1.9044,
+    "gap_7d_lkv": 0.9364,
+    "gap_7d_cam": 1.9044,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 0.926,
+    "within_025": 0.1798,
+    "cv_spearman": 0.6529,
+    "sigma_ft": 2.6371,
+    "n_oof": 734,
+    "n_folds": 6,
+    "cal_frames": 942,
+    "cal_days": 303.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\CA_Sacramento_River_at_Freeport",
+    "model_sha": "7809fa64a033affcbce648171a8cdff8eb0497cb5bd1a8c81c43da1b0ed04231",
+    "export_msg": "CA_Sacramento_River_at_Freeport: 942 frames, ROI 2477, sigma 2.6371, 2 extra refs"
+  },
+  "live_eligible": true
 }

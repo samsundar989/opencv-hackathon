@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 121.2
+    "fetch": 121.2,
+    "reference": 0.5,
+    "register_features": 3835.0,
+    "cv": 8.3,
+    "export": 3.6
   },
   "nwis_id": "05056215",
   "state": "ND",
   "name": "Edmore Coulee Trib nr Webster",
-  "status": "fetched"
+  "status": "done",
+  "reference": "ND_Edmore_Coulee_Trib_nr_Webster___2026-10-04T20-00-03Z.jpg",
+  "registration": {
+    "frames": 1534,
+    "daylight": 1513,
+    "reg_rate_all": 0.8903,
+    "reg_rate_last30d": 0.9338,
+    "n_daylight_last30d": 136,
+    "view_change_runs": 1,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "C",
+    "n": 798,
+    "n_pred": 798,
+    "reg_rate": 0.9338,
+    "calib_p5_p95_ft": 5.066,
+    "test_range_ft": 6.08,
+    "mae": 1.2381,
+    "nmae": 0.2444,
+    "mae_p15": 0.0024,
+    "mae_p24": 0.1828,
+    "mae_const": 1.1867,
+    "n_ev": 97,
+    "mae_ev": 1.8974,
+    "mae_p24_ev": 0.8997,
+    "spearman": 0.4535,
+    "bacc_flood": 0.5,
+    "bacc_flood_p24": 0.8381,
+    "n_flood": 56,
+    "gap_6h_lkv": 0.0515,
+    "gap_6h_cam": 1.2369,
+    "gap_24h_lkv": 0.1828,
+    "gap_24h_cam": 1.238,
+    "gap_72h_lkv": 0.4227,
+    "gap_72h_cam": 1.2382,
+    "gap_7d_lkv": 0.7365,
+    "gap_7d_cam": 1.2381,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 1.0556,
+    "within_025": 0.0915,
+    "cv_spearman": 0.4535,
+    "sigma_ft": 1.515,
+    "n_oof": 798,
+    "n_folds": 5,
+    "cal_frames": 1169,
+    "cal_days": 212.0,
+    "tier_reason": "CV Spearman < 0.5"
+  },
+  "tier": "C",
+  "export": {
+    "bundle": "models\\onboard\\ND_Edmore_Coulee_Trib_nr_Webster",
+    "model_sha": "7edb9f7015d8b7fc36f2dad6c3f5e22d6c5c8109d27c2e0d6c12ba9f9257c210",
+    "export_msg": "ND_Edmore_Coulee_Trib_nr_Webster: 1169 frames, ROI 511, sigma 1.515, 1 extra refs"
+  },
+  "live_eligible": false
 }

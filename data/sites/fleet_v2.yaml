@@ -831,8 +831,8 @@ sites:
   score: 0.75
   camera_type: large_river
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: WA_Cowlitz_River_at_Castle_Rock
   nwis_id: '14243000'
   state: WA
@@ -867,8 +867,8 @@ sites:
   score: 0.7
   camera_type: large_river
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: NY_Mohawk_River_at_Lock_9_at_Rotterdam_Junction_Upstream
   nwis_id: '01354230'
   state: NY
@@ -880,7 +880,7 @@ sites:
   camera_type: large_river
   batch: 2
   live: false
-  tier: .nan
+  tier: C
 - cam_id: WA_Pend_Oreille_River_at_Newport
   nwis_id: '12395500'
   state: WA
@@ -892,7 +892,7 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: .nan
+  tier: C
 - cam_id: ND_Edmore_Coulee_Trib_nr_Webster
   nwis_id: '05056215'
   state: ND
@@ -904,7 +904,7 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: .nan
+  tier: C
 - cam_id: AK_Salmon_River_near_Hyder
   nwis_id: '15008000'
   state: AK
@@ -916,7 +916,7 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: .nan
+  tier: C
 - cam_id: CA_Georgiana_Slough_Salmonid_Migratory_Barrier
   nwis_id: '381427121305401'
   state: CA
@@ -939,8 +939,8 @@ sites:
   score: 0.6595
   camera_type: small_stream
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: OH_Maumee_River_at_Antwerp
   nwis_id: 04183500
   state: OH
@@ -951,8 +951,8 @@ sites:
   score: 0.6562
   camera_type: large_river
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: CA_Suisun_Slough_nr_Benicia
   nwis_id: '11455740'
   state: CA
@@ -975,8 +975,8 @@ sites:
   score: 0.6
   camera_type: tidal_coastal
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: NY_Canajoharie_Creek_near_Canajoharie
   nwis_id: 01349150
   state: NY

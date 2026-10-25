@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 140.8
+    "fetch": 140.8,
+    "reference": 0.5,
+    "register_features": 3440.7,
+    "cv": 14.2,
+    "export": 12.5
   },
   "nwis_id": "04183500",
   "state": "OH",
   "name": "Maumee River at Antwerp",
-  "status": "fetched"
+  "status": "done",
+  "reference": "OH_Maumee_River_at_Antwerp___2026-10-03T20-00-21Z.jpg",
+  "registration": {
+    "frames": 2314,
+    "daylight": 2290,
+    "reg_rate_all": 0.7258,
+    "reg_rate_last30d": 0.8779,
+    "n_daylight_last30d": 213,
+    "view_change_runs": 6,
+    "view_change_linked": 4
+  },
+  "cv": {
+    "tier": "B",
+    "n": 1318,
+    "n_pred": 1318,
+    "reg_rate": 0.8779,
+    "calib_p5_p95_ft": 11.315,
+    "test_range_ft": 15.03,
+    "mae": 1.8526,
+    "nmae": 0.1637,
+    "mae_p15": 0.011,
+    "mae_p24": 0.8832,
+    "mae_const": 2.5917,
+    "n_ev": 937,
+    "mae_ev": 2.0297,
+    "mae_p24_ev": 1.1942,
+    "spearman": 0.8217,
+    "bacc_flood": 0.5385,
+    "bacc_flood_p24": 0.873,
+    "n_flood": 161,
+    "gap_6h_lkv": 0.2327,
+    "gap_6h_cam": 1.8526,
+    "gap_24h_lkv": 0.8832,
+    "gap_24h_cam": 1.8533,
+    "gap_72h_lkv": 1.7681,
+    "gap_72h_cam": 1.8532,
+    "gap_7d_lkv": 2.8736,
+    "gap_7d_cam": 1.8533,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 1.2285,
+    "within_025": 0.0948,
+    "cv_spearman": 0.8217,
+    "sigma_ft": 2.605,
+    "n_oof": 1318,
+    "n_folds": 7,
+    "cal_frames": 1603,
+    "cal_days": 299.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\OH_Maumee_River_at_Antwerp",
+    "model_sha": "bd6ee5f36918008e5dc7f1d363ef14a21576437fd7e1ac40a7d1e1bdfce2d53b",
+    "export_msg": "OH_Maumee_River_at_Antwerp: 1603 frames, ROI 1189, sigma 2.605, 6 extra refs"
+  },
+  "live_eligible": true
 }

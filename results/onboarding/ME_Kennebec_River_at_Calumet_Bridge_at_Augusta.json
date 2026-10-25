@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 179.7
+    "fetch": 179.7,
+    "reference": 0.6,
+    "register_features": 8484.2,
+    "cv": 47.6,
+    "export": 13.2
   },
   "nwis_id": "01049320",
   "state": "ME",
   "name": "Kennebec River at Calumet Bridge at Augusta",
-  "status": "fetched"
+  "status": "done",
+  "reference": "ME_Kennebec_River_at_Calumet_Bridge_at_Augusta___2026-09-11T17-00-39Z.jpg",
+  "registration": {
+    "frames": 4140,
+    "daylight": 3601,
+    "reg_rate_all": 0.9475,
+    "reg_rate_last30d": 0.947,
+    "n_daylight_last30d": 302,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "B",
+    "n": 3091,
+    "n_pred": 3091,
+    "reg_rate": 0.947,
+    "calib_p5_p95_ft": 6.9084,
+    "test_range_ft": 11.2978,
+    "mae": 0.9366,
+    "nmae": 0.1356,
+    "mae_p15": 0.1988,
+    "mae_p24": 0.6913,
+    "mae_const": 1.7302,
+    "n_ev": 2440,
+    "mae_ev": 0.9024,
+    "mae_p24_ev": 0.8408,
+    "spearman": 0.7896,
+    "bacc_flood": 0.5976,
+    "bacc_flood_p24": 0.8355,
+    "n_flood": 341,
+    "gap_6h_lkv": 2.256,
+    "gap_6h_cam": 0.9363,
+    "gap_24h_lkv": 0.6913,
+    "gap_24h_cam": 0.9362,
+    "gap_72h_lkv": 1.6288,
+    "gap_72h_cam": 0.9367,
+    "gap_7d_lkv": 2.4306,
+    "gap_7d_cam": 0.9351,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 0.713,
+    "within_025": 0.1951,
+    "cv_spearman": 0.7896,
+    "sigma_ft": 1.2594,
+    "n_oof": 3091,
+    "n_folds": 11,
+    "cal_frames": 3410,
+    "cal_days": 364.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\ME_Kennebec_River_at_Calumet_Bridge_at_Augusta",
+    "model_sha": "7899ca7ae90dd655cc22954bfebcbd3e63857b99809d98a45ad4c66d59bba111",
+    "export_msg": "ME_Kennebec_River_at_Calumet_Bridge_at_Augusta: 3410 frames, ROI 3600, sigma 1.2594, 0 extra refs"
+  },
+  "live_eligible": true
 }

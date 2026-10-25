@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 132.5
+    "fetch": 132.5,
+    "reference": 0.5,
+    "register_features": 4837.5,
+    "cv": 17.0,
+    "export": 11.4
   },
   "nwis_id": "03049807",
   "state": "PA",
   "name": "Pine Creek at Grant Avenue at Etna",
-  "status": "fetched"
+  "status": "done",
+  "reference": "PA_Pine_Creek_at_Grant_Avenue_at_Etna___2026-09-25T14-00-04Z.jpg",
+  "registration": {
+    "frames": 1757,
+    "daylight": 1757,
+    "reg_rate_all": 0.9226,
+    "reg_rate_last30d": 1.0,
+    "n_daylight_last30d": 150,
+    "view_change_runs": 2,
+    "view_change_linked": 1
+  },
+  "cv": {
+    "tier": "B",
+    "n": 1434,
+    "n_pred": 1434,
+    "reg_rate": 1.0,
+    "calib_p5_p95_ft": 2.2,
+    "test_range_ft": 7.02,
+    "mae": 0.2507,
+    "nmae": 0.1139,
+    "mae_p15": 0.0161,
+    "mae_p24": 0.4552,
+    "mae_const": 0.5264,
+    "n_ev": 627,
+    "mae_ev": 0.316,
+    "mae_p24_ev": 0.922,
+    "spearman": 0.8857,
+    "bacc_flood": 0.8009,
+    "bacc_flood_p24": 0.6556,
+    "n_flood": 162,
+    "gap_6h_lkv": 0.175,
+    "gap_6h_cam": 0.2507,
+    "gap_24h_lkv": 0.4552,
+    "gap_24h_cam": 0.2507,
+    "gap_72h_lkv": 0.6001,
+    "gap_72h_cam": 0.2507,
+    "gap_7d_lkv": 0.6814,
+    "gap_7d_cam": 0.2507,
+    "p1": false,
+    "has_events": true,
+    "p2": true,
+    "median_ae": 0.1882,
+    "within_025": 0.6346,
+    "cv_spearman": 0.8857,
+    "sigma_ft": 0.4546,
+    "n_oof": 1434,
+    "n_folds": 9,
+    "cal_frames": 1621,
+    "cal_days": 363.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\PA_Pine_Creek_at_Grant_Avenue_at_Etna",
+    "model_sha": "d8a1e85d0ecc62d9fa0aa8e4a450e6558986f6fe800f5e43c64b97bd2e5f2c21",
+    "export_msg": "PA_Pine_Creek_at_Grant_Avenue_at_Etna: 1621 frames, ROI 430, sigma 0.4546, 2 extra refs"
+  },
+  "live_eligible": true
 }

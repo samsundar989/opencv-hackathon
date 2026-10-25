@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 166.7
+    "fetch": 166.7,
+    "reference": 0.7,
+    "register_features": 1351.9,
+    "cv": 26.7,
+    "export": 15.0
   },
   "nwis_id": "04143600",
   "state": "MI",
   "name": "Kawkawlin River at State Park Dr at Bay City",
-  "status": "fetched"
+  "status": "done",
+  "reference": "MI_Kawkawlin_River_at_State_Park_Dr_at_Bay_City___2026-10-07T19-00-11Z.jpg",
+  "registration": {
+    "frames": 3548,
+    "daylight": 2951,
+    "reg_rate_all": 0.8634,
+    "reg_rate_last30d": 0.9551,
+    "n_daylight_last30d": 267,
+    "view_change_runs": 2,
+    "view_change_linked": 2
+  },
+  "cv": {
+    "tier": "B",
+    "n": 2315,
+    "n_pred": 2315,
+    "reg_rate": 0.9551,
+    "calib_p5_p95_ft": 2.39,
+    "test_range_ft": 4.297,
+    "mae": 0.3913,
+    "nmae": 0.1637,
+    "mae_p15": 0.034,
+    "mae_p24": 0.2997,
+    "mae_const": 0.5111,
+    "n_ev": 1054,
+    "mae_ev": 0.4224,
+    "mae_p24_ev": 0.5151,
+    "spearman": 0.7134,
+    "bacc_flood": 0.6052,
+    "bacc_flood_p24": 0.6215,
+    "n_flood": 255,
+    "gap_6h_lkv": 0.2334,
+    "gap_6h_cam": 0.3913,
+    "gap_24h_lkv": 0.2997,
+    "gap_24h_cam": 0.3913,
+    "gap_72h_lkv": 0.3287,
+    "gap_72h_cam": 0.3913,
+    "gap_7d_lkv": 0.3413,
+    "gap_7d_cam": 0.3913,
+    "p1": false,
+    "has_events": true,
+    "p2": true,
+    "median_ae": 0.3215,
+    "within_025": 0.4108,
+    "cv_spearman": 0.7134,
+    "sigma_ft": 0.4373,
+    "n_oof": 2315,
+    "n_folds": 11,
+    "cal_frames": 2548,
+    "cal_days": 364.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\MI_Kawkawlin_River_at_State_Park_Dr_at_Bay_City",
+    "model_sha": "8701ceafa8c5e3aa80d3d3ee9e55fd8a219165d207ca0cefbbe84c599ef196ab",
+    "export_msg": "MI_Kawkawlin_River_at_State_Park_Dr_at_Bay_City: 2548 frames, ROI 370, sigma 0.4373, 2 extra refs"
+  },
+  "live_eligible": true
 }

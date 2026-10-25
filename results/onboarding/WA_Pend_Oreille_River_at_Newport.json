@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 147.6
+    "fetch": 147.6,
+    "reference": 0.6,
+    "register_features": 8247.8,
+    "cv": 4.8,
+    "export": 3.7
   },
   "nwis_id": "12395500",
   "state": "WA",
   "name": "Pend Oreille River at Newport",
-  "status": "fetched"
+  "status": "done",
+  "reference": "WA_Pend_Oreille_River_at_Newport___2026-09-22T17-00-04Z.jpg",
+  "registration": {
+    "frames": 2513,
+    "daylight": 2507,
+    "reg_rate_all": 0.4248,
+    "reg_rate_last30d": 1.0,
+    "n_daylight_last30d": 156,
+    "view_change_runs": 1,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "C",
+    "n": 539,
+    "n_pred": 539,
+    "reg_rate": 1.0,
+    "calib_p5_p95_ft": 7.448,
+    "test_range_ft": 4.37,
+    "mae": 1.3658,
+    "nmae": 0.1834,
+    "mae_p15": 0.007,
+    "mae_p24": 0.314,
+    "mae_const": 1.8657,
+    "n_ev": 233,
+    "mae_ev": 1.8136,
+    "mae_p24_ev": 0.5999,
+    "spearman": 0.1467,
+    "bacc_flood": null,
+    "bacc_flood_p24": null,
+    "n_flood": 0,
+    "gap_6h_lkv": 0.1188,
+    "gap_6h_cam": 1.3593,
+    "gap_24h_lkv": 0.314,
+    "gap_24h_cam": 1.3453,
+    "gap_72h_lkv": 0.5963,
+    "gap_72h_cam": 1.2945,
+    "gap_7d_lkv": 0.7971,
+    "gap_7d_cam": 1.1289,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 0.6674,
+    "within_025": 0.1985,
+    "cv_spearman": 0.1467,
+    "sigma_ft": 1.5187,
+    "n_oof": 539,
+    "n_folds": 3,
+    "cal_frames": 1063,
+    "cal_days": 133.0,
+    "tier_reason": "CV Spearman < 0.5"
+  },
+  "tier": "C",
+  "export": {
+    "bundle": "models\\onboard\\WA_Pend_Oreille_River_at_Newport",
+    "model_sha": "d5b81576852be38a00bd9ee84f96bd6397a6b59b8f3face7265c0a9dfa09457a",
+    "export_msg": "WA_Pend_Oreille_River_at_Newport: 1063 frames, ROI 509, sigma 1.5187, 1 extra refs"
+  },
+  "live_eligible": false
 }

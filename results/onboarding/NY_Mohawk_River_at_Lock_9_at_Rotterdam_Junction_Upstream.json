@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 656.9
+    "fetch": 656.9,
+    "reference": 0.4,
+    "register_features": 5588.2,
+    "cv": 44.2,
+    "export": 10.3
   },
   "nwis_id": "01354230",
   "state": "NY",
   "name": "Mohawk River at Lock 9 at Rotterdam Junction Upstream",
-  "status": "fetched"
+  "status": "done",
+  "reference": "NY_Mohawk_River_at_Lock_9_at_Rotterdam_Junction_Upstream___2026-08-29T11-58-09Z.jpg",
+  "registration": {
+    "frames": 3126,
+    "daylight": 2943,
+    "reg_rate_all": 0.9969,
+    "reg_rate_last30d": 0.9647,
+    "n_daylight_last30d": 85,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "C",
+    "n": 2635,
+    "n_pred": 2635,
+    "reg_rate": 0.9647,
+    "calib_p5_p95_ft": 10.5356,
+    "test_range_ft": 19.1468,
+    "mae": 2.6685,
+    "nmae": 0.2533,
+    "mae_p15": 0.034,
+    "mae_p24": 0.8859,
+    "mae_const": 2.52,
+    "n_ev": 1721,
+    "mae_ev": 2.9084,
+    "mae_p24_ev": 1.2944,
+    "spearman": 0.3644,
+    "bacc_flood": 0.451,
+    "bacc_flood_p24": 0.7649,
+    "n_flood": 290,
+    "gap_6h_lkv": 0.334,
+    "gap_6h_cam": 2.6685,
+    "gap_24h_lkv": 0.8859,
+    "gap_24h_cam": 2.6669,
+    "gap_72h_lkv": 1.6435,
+    "gap_72h_cam": 2.667,
+    "gap_7d_lkv": 2.3763,
+    "gap_7d_cam": 2.6688,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 1.9976,
+    "within_025": 0.055,
+    "cv_spearman": 0.3644,
+    "sigma_ft": 3.482,
+    "n_oof": 2635,
+    "n_folds": 11,
+    "cal_frames": 2932,
+    "cal_days": 348.0,
+    "tier_reason": "CV Spearman < 0.5"
+  },
+  "tier": "C",
+  "export": {
+    "bundle": "models\\onboard\\NY_Mohawk_River_at_Lock_9_at_Rotterdam_Junction_Upstream",
+    "model_sha": "d1ff2a1786b903354daf9b7e55138b0f79821f1b951a8cab98195d883e6e86da",
+    "export_msg": "NY_Mohawk_River_at_Lock_9_at_Rotterdam_Junction_Upstream: 2932 frames, ROI 3600, sigma 3.482, 0 extra refs"
+  },
+  "live_eligible": false
 }
