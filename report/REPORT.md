@@ -1,6 +1,6 @@
 # RiverSight: public river webcams as calibrated water-level instruments
 
-**Technical report, OpenCV AI Competition 2026 (powered by AWS).** Draft v2, 2026-10-24. Live: https://d2aes2r6og8aap.cloudfront.net. Every number here is generated from, or traceable to, a committed file in `results/` (`python scripts/check_report_numbers.py`).
+**Technical report, OpenCV AI Competition 2026 (powered by AWS).** Final, 2026-10-25 (a last update may follow on 2026-10-26 if the live deployment changes). Live: https://d2aes2r6og8aap.cloudfront.net. Every number here is generated from, or traceable to, a committed file in `results/` (`python scripts/check_report_numbers.py`).
 
 ## 1. Problem
 
