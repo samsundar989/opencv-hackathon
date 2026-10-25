@@ -1,0 +1,151 @@
+{
+ "output": "results/video_assets/rough_cut.mp4",
+ "fps": 25,
+ "size": "1920x1080",
+ "duration_s": 204.92,
+ "script": "docs/VIDEO_SCRIPT_DRAFT.md v3",
+ "shots": [
+  {
+   "shot": "1a",
+   "in_s": 0.0,
+   "out_s": 5.0,
+   "what": "Samuel on camera (drop in)"
+  },
+  {
+   "shot": "1b",
+   "in_s": 5.0,
+   "out_s": 15.0,
+   "what": "Live home page: fleet map, 'Needs a person now', camera cards",
+   "source": "home.mp4",
+   "source_range_s": [
+    1.0,
+    16.0
+   ]
+  },
+  {
+   "shot": "2",
+   "in_s": 15.0,
+   "out_s": 45.0,
+   "what": "Salt Creek site page: stage slider sweep, connected wet overlay",
+   "source": "salt_creek_slider.mp4",
+   "source_range_s": [
+    2.5,
+    17.2
+   ]
+  },
+  {
+   "shot": "3",
+   "in_s": 45.0,
+   "out_s": 80.0,
+   "what": "Replay a flood, Salt Creek 3 Jul 2026 (out of sample): overlay rising, chart cursor, agent log, 'above range: gauge trusted'",
+   "source": "replay_salt_creek.mp4",
+   "source_range_s": [
+    1.5,
+    32.0
+   ]
+  },
+  {
+   "shot": "4a",
+   "in_s": 80.0,
+   "out_s": 85.0,
+   "what": "Registration card"
+  },
+  {
+   "shot": "4b",
+   "in_s": 85.0,
+   "out_s": 105.0,
+   "what": "/judge: frozen-test tiles (14/20, 0.18 ft, gap-fill 15/20 and 18/20)",
+   "source": "judge.mp4",
+   "source_range_s": [
+    2.0,
+    16.0
+   ]
+  },
+  {
+   "shot": "5",
+   "in_s": 105.0,
+   "out_s": 130.0,
+   "what": "/judge: v2 and prospective tiles, gauge-wins-while-online",
+   "source": "judge.mp4",
+   "source_range_s": [
+    16.0,
+    33.0
+   ]
+  },
+  {
+   "shot": "6a",
+   "in_s": 130.0,
+   "out_s": 145.0,
+   "what": "/approvals: approval cards with Claude's second opinion",
+   "source": "approvals.mp4",
+   "source_range_s": [
+    1.0,
+    16.2
+   ]
+  },
+  {
+   "shot": "6b",
+   "in_s": 145.0,
+   "out_s": 160.0,
+   "what": "/health: offline, moved, stuck in IR; ticket drafts need approval",
+   "source": "health.mp4",
+   "source_range_s": [
+    1.0,
+    18.9
+   ]
+  },
+  {
+   "shot": "7a",
+   "in_s": 160.0,
+   "out_s": 168.0,
+   "what": "Architecture diagram"
+  },
+  {
+   "shot": "7b",
+   "in_s": 168.0,
+   "out_s": 180.0,
+   "what": "/proof: COOL build provenance, Graviton5 instance identity",
+   "source": "proof.mp4",
+   "source_range_s": [
+    1.0,
+    14.0
+   ]
+  },
+  {
+   "shot": "8a",
+   "in_s": 180.0,
+   "out_s": 182.48,
+   "what": "Failure gallery"
+  },
+  {
+   "shot": "8b",
+   "in_s": 182.48,
+   "out_s": 184.96,
+   "what": "Failure gallery"
+  },
+  {
+   "shot": "8c",
+   "in_s": 184.96,
+   "out_s": 187.44,
+   "what": "Failure gallery"
+  },
+  {
+   "shot": "8d",
+   "in_s": 187.44,
+   "out_s": 189.92,
+   "what": "Failure gallery"
+  },
+  {
+   "shot": "9a",
+   "in_s": 189.92,
+   "out_s": 199.92,
+   "what": "Samuel on camera (drop in)"
+  },
+  {
+   "shot": "9b",
+   "in_s": 199.92,
+   "out_s": 204.92,
+   "what": "End card"
+  }
+ ]
+}

@@ -18,6 +18,7 @@ Stream gauges go dark, drift, ice up and get washed out, often when floods hit. 
 - **Shows the flood in the picture.** A slider on every site page draws what is under water at any stage, only where water can physically connect to the river.
 - **Fills gauge outages.** On frozen test days scored once, the camera beat the gauge's last known value at 15/20 sites after a 72-hour outage and at 18/20 after 7 days. The fused RiverSight stage (last gauge value, updated by the camera) halves the error during multi-day outages when the river moves: 0.55 vs 1.14 ft at 72 h.
 - **Checks both instruments.** It detects moved, fogged or re-aimed cameras through OpenCV registration and image-quality signals, and catches gauges that disagree with a confident camera.
+- **Replay a flood:** every featured site can replay a real past flood frame by frame (camera, gauge, overlay, agent decisions), so you can see it work even when rivers are calm.
 - **River Steward agent.** OpenCV-grounded rules act on flagged readings: re-anchor, quarantine, mark gap-fill provisional, densify sampling. Claude on Amazon Bedrock advises: it ranks the fleet, gives a second opinion and drafts alerts. A human approves anything that leaves the system.
 - **Runs live** on AWS Graviton5 with OpenCV's COOL build, every 15 minutes, for 20 frozen-test cameras plus newly onboarded ones.
 
@@ -38,7 +39,7 @@ Stream gauges go dark, drift, ice up and get washed out, often when floods hit. 
 - **The frozen test passed:** 14/20 sites within 0.25 ft or 10 % of range (bootstrap interval 12–16); median MAE 0.182 ft (95 % CI 0.148–0.22). Flood-state balanced accuracy 0.93 vs 0.75 for a 24-hour-stale gauge.
 - **Self-onboarding:** 30 of 40 new cameras qualified with one command each and the frozen setting, at about $0.055 of compute per camera.
 - **COOL, measured honestly:** bit-identical outputs, 1.16–1.21× faster on the classical registration path, flat end to end because the learned matcher dominates. One m9g.large covers all ~880 gauged HIVIS cameras at a 15-minute cadence for about $0.06 per camera-month.
-- **A DINOv2-in-OpenCV candidate model** cut year-long CV error from 0.380 to 0.252 ft and improved 19 of 20 sites. In a pre-registered live shadow it read 0.084 vs 0.183 ft on 249 paired readings.
+- **A DINOv2-in-OpenCV candidate model** cut year-long CV error from 0.380 to 0.252 ft and improved 19 of 20 sites. In a pre-registered live shadow it read 0.084 vs 0.183 ft on 249 paired readings, and it was promoted to the live model on Oct 24 under those pre-registered criteria.
 - **Autonomy chosen by measurement:** the hybrid (rules act, Claude advises, a human approves) scored 94.6 % on 98 frozen episodes. We also logged and fixed a real false alert that a human approved at a tidal site.
 - **Reproducible:** a fresh clone re-derives every reported number and verifies the frozen hashes in about 80 s.
 
@@ -52,7 +53,7 @@ See `docs/ROADMAP.md`: every gauged HIVIS camera, a public API, night/IR flood s
 OpenCV 5 (ALIKED, LightGlue, USAC_MAGSAC, DNN engine, FaceDetectorYN) · OpenCV COOL on AWS Graviton5 · Python · NumPy · AWS (EC2, S3, CloudFront, Lambda, SNS, Bedrock, CloudWatch, Budgets, CDK) · Claude on Amazon Bedrock · USGS HIVIS / NIMS · USGS NWIS · NWS NWPS · Leaflet · Chart.js
 
 ## Links
-- Live: https://d2aes2r6og8aap.cloudfront.net (start at `/judge`)
+- Live: https://d2aes2r6og8aap.cloudfront.net. Start at `/judge`, then Salt Creek → Replay a flood.
 - Repository: _(link at submission)_
 - Technical report: `report/REPORT.pdf`
 - Video: _(link at submission)_

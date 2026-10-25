@@ -347,7 +347,7 @@ W4 (`results/v2/README.md`). v2 adds a second view of each registered frame: DIN
 | sites improved | — | 19/20 (worst site +0.015 ft) |
 <!-- END:model_v2 -->
 
-v2 is better in every calendar month, most of all in the foliage months that drive v1's drift. The ablations show the DINOv2 features do the work; the seasonal tweaks (sun-position correction, recency weighting) add nothing or hurt. Limits: this is still CV inside one year, the frozen kill-test numbers are not recomputed, and the forward-in-time check is v2's shadow scoring on the live stream (D-0010 §2). Whether v2 is served is decided on Oct 25 (Cowork).
+v2 is better in every calendar month, most of all in the foliage months that drive v1's drift. The ablations show the DINOv2 features do the work; the seasonal tweaks (sun-position correction, recency weighting) add nothing or hurt. Limits: this is still CV inside one year, the frozen kill-test numbers are not recomputed, and the forward-in-time check is v2's shadow scoring on the live stream (D-0010 §2). **Promoted on Oct 24 (D-0014):** all three pre-registered criteria were met (CV, live shadow, cycle time under 5 minutes), so v2 now serves. v1 continues as the shadow, and the frozen-v1 prospective record continues as pre-registered (§6.9).
 
 <!-- BEGIN:shadow -->
 Live shadow, pre-registered (D-0010 §2): on 249 paired daylight readings at 16 sites, v2's median absolute error was **0.084 ft vs 0.183 ft** for the served v1 (difference -0.099 ft, site-bootstrap 95 % CI -0.236 to -0.021); v2 was better at 12 of 16 sites. Caveat: one calm day (median gauge range per site 0.02 ft).
