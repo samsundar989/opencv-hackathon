@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 137.6
+    "fetch": 137.6,
+    "reference": 0.6,
+    "register_features": 4774.4,
+    "cv": 22.7,
+    "export": 6.4
   },
   "nwis_id": "06342500",
   "state": "ND",
   "name": "Missouri River at Bismarck",
-  "status": "fetched"
+  "status": "done",
+  "reference": "ND_Missouri_River_at_Bismarck___2026-10-01T16-00-08Z.jpg",
+  "registration": {
+    "frames": 2243,
+    "daylight": 2229,
+    "reg_rate_all": 0.8946,
+    "reg_rate_last30d": 0.9875,
+    "n_daylight_last30d": 160,
+    "view_change_runs": 1,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "B",
+    "n": 1713,
+    "n_pred": 1713,
+    "reg_rate": 0.9875,
+    "calib_p5_p95_ft": 5.335,
+    "test_range_ft": 4.97,
+    "mae": 0.7717,
+    "nmae": 0.1446,
+    "mae_p15": 0.0055,
+    "mae_p24": 0.1322,
+    "mae_const": 0.7358,
+    "n_ev": 253,
+    "mae_ev": 1.1273,
+    "mae_p24_ev": 0.5623,
+    "spearman": 0.5986,
+    "bacc_flood": 0.8454,
+    "bacc_flood_p24": 0.7432,
+    "n_flood": 32,
+    "gap_6h_lkv": 0.1126,
+    "gap_6h_cam": 0.7719,
+    "gap_24h_lkv": 0.1322,
+    "gap_24h_cam": 0.7716,
+    "gap_72h_lkv": 0.2031,
+    "gap_72h_cam": 0.7714,
+    "gap_7d_lkv": 0.2868,
+    "gap_7d_cam": 0.7689,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 0.5568,
+    "within_025": 0.2323,
+    "cv_spearman": 0.5986,
+    "sigma_ft": 0.8348,
+    "n_oof": 1713,
+    "n_folds": 9,
+    "cal_frames": 1992,
+    "cal_days": 313.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\ND_Missouri_River_at_Bismarck",
+    "model_sha": "d6cad668f16bffa555e37232077b751fe135ee746d51211888be77b5df625347",
+    "export_msg": "ND_Missouri_River_at_Bismarck: 1992 frames, ROI 1449, sigma 0.8348, 1 extra refs"
+  },
+  "live_eligible": true
 }

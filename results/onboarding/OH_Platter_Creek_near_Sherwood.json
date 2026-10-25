@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 141.4
+    "fetch": 141.4,
+    "reference": 0.6,
+    "register_features": 6055.9,
+    "cv": 20.5,
+    "export": 13.6
   },
   "nwis_id": "04183979",
   "state": "OH",
   "name": "Platter Creek near Sherwood",
-  "status": "fetched"
+  "status": "done",
+  "reference": "OH_Platter_Creek_near_Sherwood___2026-09-28T18-00-06Z.jpg",
+  "registration": {
+    "frames": 2225,
+    "daylight": 2225,
+    "reg_rate_all": 0.9236,
+    "reg_rate_last30d": 0.9883,
+    "n_daylight_last30d": 171,
+    "view_change_runs": 3,
+    "view_change_linked": 2
+  },
+  "cv": {
+    "tier": "B",
+    "n": 1613,
+    "n_pred": 1613,
+    "reg_rate": 0.9883,
+    "calib_p5_p95_ft": 2.8625,
+    "test_range_ft": 9.31,
+    "mae": 0.3501,
+    "nmae": 0.1223,
+    "mae_p15": 0.0067,
+    "mae_p24": 0.4141,
+    "mae_const": 0.5561,
+    "n_ev": 457,
+    "mae_ev": 0.6539,
+    "mae_p24_ev": 1.3154,
+    "spearman": 0.7095,
+    "bacc_flood": 0.8087,
+    "bacc_flood_p24": 0.766,
+    "n_flood": 185,
+    "gap_6h_lkv": 0.1197,
+    "gap_6h_cam": 0.3501,
+    "gap_24h_lkv": 0.4141,
+    "gap_24h_cam": 0.3501,
+    "gap_72h_lkv": 0.6141,
+    "gap_72h_cam": 0.3503,
+    "gap_7d_lkv": 0.6931,
+    "gap_7d_cam": 0.3515,
+    "p1": false,
+    "has_events": true,
+    "p2": true,
+    "median_ae": 0.2112,
+    "within_025": 0.5704,
+    "cv_spearman": 0.7095,
+    "sigma_ft": 0.7731,
+    "n_oof": 1613,
+    "n_folds": 8,
+    "cal_frames": 1886,
+    "cal_days": 345.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\OH_Platter_Creek_near_Sherwood",
+    "model_sha": "c64372117f1a551d4cd1dd5d9c4cd06f478ee09fa31e1f29f86c30aa74a02268",
+    "export_msg": "OH_Platter_Creek_near_Sherwood: 1886 frames, ROI 1345, sigma 0.7731, 3 extra refs"
+  },
+  "live_eligible": true
 }

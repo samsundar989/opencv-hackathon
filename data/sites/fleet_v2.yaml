@@ -651,8 +651,8 @@ sites:
   score: 0.8307
   camera_type: small_stream
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: MN_Rainy_River_at_Boat_Landing_below_International_Falls
   nwis_id: 05129515
   state: MN
@@ -664,7 +664,7 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: .nan
+  tier: C
 - cam_id: WI_Cedar_Creek_near_Cedarburg
   nwis_id: 04086500
   state: WI
@@ -688,7 +688,7 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: .nan
+  tier: C
 - cam_id: WI_Wolf_River_at_New_London
   nwis_id: 04079000
   state: WI
@@ -699,8 +699,8 @@ sites:
   score: 0.8
   camera_type: large_river
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: OH_Blanchard_River_near_Dupont
   nwis_id: 04190000
   state: OH
@@ -711,8 +711,8 @@ sites:
   score: 0.8
   camera_type: large_river
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: NY_MOHAWK_RIVER_AT_LOCK_9_AT_ROTTERDAM_JUNCTION_NY
   nwis_id: '01354230'
   state: NY
@@ -723,8 +723,8 @@ sites:
   score: 0.8
   camera_type: large_river
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: ND_Cherry_Creek_on_State_Highway_23_near_Schafer
   nwis_id: '06337200'
   state: ND
@@ -736,7 +736,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: .nan
+  tier: C
 - cam_id: ND_Missouri_River_at_Bismarck
   nwis_id: '06342500'
   state: ND
@@ -747,8 +747,8 @@ sites:
   score: 0.7778
   camera_type: cold_climate
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: OH_Eagle_Creek_above_Findlay
   nwis_id: 04188496
   state: OH

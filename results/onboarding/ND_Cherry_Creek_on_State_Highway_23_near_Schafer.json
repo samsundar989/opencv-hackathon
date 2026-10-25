@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 130.5
+    "fetch": 130.5,
+    "reference": 0.9,
+    "register_features": 8246.2,
+    "cv": 3.1,
+    "export": 3.2
   },
   "nwis_id": "06337200",
   "state": "ND",
   "name": "Cherry Creek on State Highway 23 near Schafer",
-  "status": "fetched"
+  "status": "done",
+  "reference": "ND_Cherry_Creek_on_State_Highway_23_near_Schafer___2026-09-13T20-00-12Z.jpg",
+  "registration": {
+    "frames": 1855,
+    "daylight": 1820,
+    "reg_rate_all": 0.3912,
+    "reg_rate_last30d": 0.8354,
+    "n_daylight_last30d": 164,
+    "view_change_runs": 10,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "C",
+    "n": 374,
+    "n_pred": 374,
+    "reg_rate": 0.8354,
+    "calib_p5_p95_ft": 1.053,
+    "test_range_ft": 0.43,
+    "mae": 0.2316,
+    "nmae": 0.2199,
+    "mae_p15": 0.0081,
+    "mae_p24": 0.0342,
+    "mae_const": 0.1013,
+    "n_ev": 0,
+    "mae_ev": null,
+    "mae_p24_ev": null,
+    "spearman": 0.463,
+    "bacc_flood": null,
+    "bacc_flood_p24": null,
+    "n_flood": 0,
+    "gap_6h_lkv": 0.0195,
+    "gap_6h_cam": 0.2345,
+    "gap_24h_lkv": 0.0342,
+    "gap_24h_cam": 0.2157,
+    "gap_72h_lkv": 0.06,
+    "gap_72h_cam": 0.2416,
+    "gap_7d_lkv": 0.0876,
+    "gap_7d_cam": 0.2361,
+    "p1": true,
+    "has_events": false,
+    "p2": null,
+    "median_ae": 0.1274,
+    "within_025": 0.746,
+    "cv_spearman": 0.463,
+    "sigma_ft": 0.3567,
+    "n_oof": 374,
+    "n_folds": 4,
+    "cal_frames": 555,
+    "cal_days": 258.0,
+    "tier_reason": "CV Spearman < 0.5"
+  },
+  "tier": "C",
+  "export": {
+    "bundle": "models\\onboard\\ND_Cherry_Creek_on_State_Highway_23_near_Schafer",
+    "model_sha": "6af1f691a22be5971daa89cd92bcf94929b9a8074e9d4b2fed858e1420acfe4a",
+    "export_msg": "ND_Cherry_Creek_on_State_Highway_23_near_Schafer: 555 frames, ROI 654, sigma 0.3567, 10 extra refs"
+  },
+  "live_eligible": false
 }

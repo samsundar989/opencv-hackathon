@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 138.3
+    "fetch": 138.3,
+    "reference": 0.5,
+    "register_features": 5203.5,
+    "cv": 21.1,
+    "export": 6.2
   },
   "nwis_id": "05129515",
   "state": "MN",
   "name": "Rainy River at Boat Landing below International Falls",
-  "status": "fetched"
+  "status": "done",
+  "reference": "MN_Rainy_River_at_Boat_Landing_below_International_Falls___2026-09-12T14-00-03Z.jpg",
+  "registration": {
+    "frames": 2235,
+    "daylight": 2126,
+    "reg_rate_all": 0.921,
+    "reg_rate_last30d": 0.966,
+    "n_daylight_last30d": 206,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "C",
+    "n": 1789,
+    "n_pred": 1789,
+    "reg_rate": 0.966,
+    "calib_p5_p95_ft": 9.256,
+    "test_range_ft": 9.8,
+    "mae": 1.7668,
+    "nmae": 0.1909,
+    "mae_p15": 0.0103,
+    "mae_p24": 0.1609,
+    "mae_const": 2.1157,
+    "n_ev": 292,
+    "mae_ev": 1.8527,
+    "mae_p24_ev": 0.6906,
+    "spearman": 0.2386,
+    "bacc_flood": 0.5474,
+    "bacc_flood_p24": 0.984,
+    "n_flood": 190,
+    "gap_6h_lkv": 0.1815,
+    "gap_6h_cam": 1.7683,
+    "gap_24h_lkv": 0.1609,
+    "gap_24h_cam": 1.7523,
+    "gap_72h_lkv": 0.3847,
+    "gap_72h_cam": 1.7521,
+    "gap_7d_lkv": 0.7635,
+    "gap_7d_cam": 1.7526,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 0.9271,
+    "within_025": 0.1448,
+    "cv_spearman": 0.2386,
+    "sigma_ft": 2.6263,
+    "n_oof": 1789,
+    "n_folds": 10,
+    "cal_frames": 1949,
+    "cal_days": 364.0,
+    "tier_reason": "CV Spearman < 0.5"
+  },
+  "tier": "C",
+  "export": {
+    "bundle": "models\\onboard\\MN_Rainy_River_at_Boat_Landing_below_International_Falls",
+    "model_sha": "d1ac4d5fffb3d82ed6889be88c57c316685c9c43aacb0488ceff1139de56a3b2",
+    "export_msg": "MN_Rainy_River_at_Boat_Landing_below_International_Falls: 1949 frames, ROI 1610, sigma 2.6263, 0 extra refs"
+  },
+  "live_eligible": false
 }

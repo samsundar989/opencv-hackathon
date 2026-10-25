@@ -1,24 +1,24 @@
 {
   "per_camera": {
-    "sites_measured": 57,
+    "sites_measured": 65,
     "nims_listing_calls_median": 37.0,
     "usgs_iv_requests_per_site": 0.125,
     "frames_downloaded_median": 2218.0,
-    "mb_downloaded_median": 124.851425,
-    "fetch_wall_s_median": 142.7,
-    "cpu_s_median": 3834.1000000000004,
-    "cpu_s_p90": 6769.5199999999995,
-    "usd_per_site_median": 0.05207985833333334,
-    "cameras_per_cpu_hour": 0.8998224034729988
+    "mb_downloaded_median": 121.756,
+    "fetch_wall_s_median": 141.4,
+    "cpu_s_median": 4298.6,
+    "cpu_s_p90": 7124.9,
+    "usd_per_site_median": 0.05838931666666667,
+    "cameras_per_cpu_hour": 0.8521305813642683
   },
   "projection_all_gauged_hivis": {
     "cameras": 880,
     "nims_listing_calls": 32560.0,
-    "gb_downloaded": 109.869254,
-    "cpu_hours": 937.2244444444445,
-    "usd_compute": 45.83027533333334,
-    "wall_hours_fetch_sequential": 34.88222222222222,
-    "wall_hours_cpu_on_16_vcpu": 58.576527777777784
+    "gb_downloaded": 107.14528,
+    "cpu_hours": 1050.768888888889,
+    "usd_compute": 51.38259866666667,
+    "wall_hours_fetch_sequential": 34.56444444444445,
+    "wall_hours_cpu_on_16_vcpu": 65.67305555555556
   },
   "price_basis": "m9g.large $0.0978/h on-demand (2 vCPU)",
   "note": "CPU-seconds measured on the x86 dev box (sam-mega-pc), single thread per site."

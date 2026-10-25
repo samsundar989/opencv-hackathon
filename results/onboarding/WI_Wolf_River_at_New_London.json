@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 136.4
+    "fetch": 136.4,
+    "reference": 0.6,
+    "register_features": 4566.4,
+    "cv": 23.6,
+    "export": 6.6
   },
   "nwis_id": "04079000",
   "state": "WI",
   "name": "Wolf River at New London",
-  "status": "fetched"
+  "status": "done",
+  "reference": "WI_Wolf_River_at_New_London___2026-09-15T20-00-03Z.jpg",
+  "registration": {
+    "frames": 2192,
+    "daylight": 2010,
+    "reg_rate_all": 0.9751,
+    "reg_rate_last30d": 0.9935,
+    "n_daylight_last30d": 154,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "B",
+    "n": 1743,
+    "n_pred": 1743,
+    "reg_rate": 0.9935,
+    "calib_p5_p95_ft": 8.4205,
+    "test_range_ft": 10.8,
+    "mae": 1.5958,
+    "nmae": 0.1895,
+    "mae_p15": 0.0043,
+    "mae_p24": 0.2051,
+    "mae_const": 2.0302,
+    "n_ev": 502,
+    "mae_ev": 2.4257,
+    "mae_p24_ev": 0.4401,
+    "spearman": 0.5842,
+    "bacc_flood": 0.4994,
+    "bacc_flood_p24": 0.9695,
+    "n_flood": 195,
+    "gap_6h_lkv": 0.0536,
+    "gap_6h_cam": 1.5958,
+    "gap_24h_lkv": 0.2051,
+    "gap_24h_cam": 1.5958,
+    "gap_72h_lkv": 0.544,
+    "gap_72h_cam": 1.5958,
+    "gap_7d_lkv": 1.0094,
+    "gap_7d_cam": 1.5958,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 0.8629,
+    "within_025": 0.1343,
+    "cv_spearman": 0.5842,
+    "sigma_ft": 2.2947,
+    "n_oof": 1743,
+    "n_folds": 10,
+    "cal_frames": 1960,
+    "cal_days": 364.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\WI_Wolf_River_at_New_London",
+    "model_sha": "2f6d4927a022167f3c88541984ee860071cb4aaf6e7d34cdac7dd2f39746de84",
+    "export_msg": "WI_Wolf_River_at_New_London: 1960 frames, ROI 386, sigma 2.2947, 0 extra refs"
+  },
+  "live_eligible": true
 }

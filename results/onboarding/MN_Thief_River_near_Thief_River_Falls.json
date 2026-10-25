@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 135.2
+    "fetch": 135.2,
+    "reference": 0.6,
+    "register_features": 4274.0,
+    "cv": 16.9,
+    "export": 9.3
   },
   "nwis_id": "05076000",
   "state": "MN",
   "name": "Thief River near Thief River Falls",
-  "status": "fetched"
+  "status": "done",
+  "reference": "MN_Thief_River_near_Thief_River_Falls___2026-10-01T20-00-08Z.jpg",
+  "registration": {
+    "frames": 2165,
+    "daylight": 1792,
+    "reg_rate_all": 0.8092,
+    "reg_rate_last30d": 0.7542,
+    "n_daylight_last30d": 179,
+    "view_change_runs": 2,
+    "view_change_linked": 1
+  },
+  "cv": {
+    "tier": "C",
+    "n": 1268,
+    "n_pred": 1268,
+    "reg_rate": 0.7542,
+    "calib_p5_p95_ft": 4.0855,
+    "test_range_ft": 6.34,
+    "mae": 0.863,
+    "nmae": 0.2112,
+    "mae_p15": 0.0035,
+    "mae_p24": 0.2779,
+    "mae_const": 0.9482,
+    "n_ev": 421,
+    "mae_ev": 1.0951,
+    "mae_p24_ev": 0.7208,
+    "spearman": 0.5351,
+    "bacc_flood": 0.5,
+    "bacc_flood_p24": 0.9243,
+    "n_flood": 144,
+    "gap_6h_lkv": 0.0605,
+    "gap_6h_cam": 0.863,
+    "gap_24h_lkv": 0.2779,
+    "gap_24h_cam": 0.863,
+    "gap_72h_lkv": 0.5283,
+    "gap_72h_cam": 0.863,
+    "gap_7d_lkv": 0.8118,
+    "gap_7d_cam": 0.863,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 0.507,
+    "within_025": 0.2303,
+    "cv_spearman": 0.5351,
+    "sigma_ft": 1.1283,
+    "n_oof": 1268,
+    "n_folds": 10,
+    "cal_frames": 1450,
+    "cal_days": 364.0,
+    "tier_reason": "registration < 0.80 (last 30 d)"
+  },
+  "tier": "C",
+  "export": {
+    "bundle": "models\\onboard\\MN_Thief_River_near_Thief_River_Falls",
+    "model_sha": "e278c10474ad704c32e83057fe9f5b468b0b0f60362f2b21c0408fc27006d7c5",
+    "export_msg": "MN_Thief_River_near_Thief_River_Falls: 1450 frames, ROI 2299, sigma 1.1283, 2 extra refs"
+  },
+  "live_eligible": false
 }
