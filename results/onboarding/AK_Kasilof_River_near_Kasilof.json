@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 131.3
+    "fetch": 131.3,
+    "reference": 0.4,
+    "register_features": 3759.2,
+    "cv": 8.3,
+    "export": 8.0
   },
   "nwis_id": "15242000",
   "state": "AK",
   "name": "Kasilof River near Kasilof",
-  "status": "fetched"
+  "status": "done",
+  "reference": "AK_Kasilof_River_near_Kasilof___2026-10-01T22-00-08Z.jpg",
+  "registration": {
+    "frames": 1887,
+    "daylight": 1673,
+    "reg_rate_all": 0.8948,
+    "reg_rate_last30d": 0.9527,
+    "n_daylight_last30d": 148,
+    "view_change_runs": 2,
+    "view_change_linked": 1
+  },
+  "cv": {
+    "tier": "B",
+    "n": 709,
+    "n_pred": 709,
+    "reg_rate": 0.9527,
+    "calib_p5_p95_ft": 4.182,
+    "test_range_ft": 4.07,
+    "mae": 0.3648,
+    "nmae": 0.0872,
+    "mae_p15": 0.0071,
+    "mae_p24": 0.053,
+    "mae_const": 1.3906,
+    "n_ev": 0,
+    "mae_ev": null,
+    "mae_p24_ev": null,
+    "spearman": 0.9493,
+    "bacc_flood": 0.5333,
+    "bacc_flood_p24": 0.9911,
+    "n_flood": 105,
+    "gap_6h_lkv": 0.0192,
+    "gap_6h_cam": 0.3648,
+    "gap_24h_lkv": 0.053,
+    "gap_24h_cam": 0.3648,
+    "gap_72h_lkv": 0.154,
+    "gap_72h_cam": 0.3648,
+    "gap_7d_lkv": 0.347,
+    "gap_7d_cam": 0.3648,
+    "p1": true,
+    "has_events": false,
+    "p2": null,
+    "median_ae": 0.1754,
+    "within_025": 0.591,
+    "cv_spearman": 0.9493,
+    "sigma_ft": 0.5436,
+    "n_oof": 709,
+    "n_folds": 4,
+    "cal_frames": 1137,
+    "cal_days": 364.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\AK_Kasilof_River_near_Kasilof",
+    "model_sha": "44b813cfc5ec15f84104871401f544fd61fb2ea952147dc852844fa6c62f6e16",
+    "export_msg": "AK_Kasilof_River_near_Kasilof: 1137 frames, ROI 2646, sigma 0.5436, 2 extra refs"
+  },
+  "live_eligible": true
 }

@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 115.8
+    "fetch": 115.8,
+    "reference": 0.3,
+    "register_features": 2505.2,
+    "cv": 11.2,
+    "export": 3.8
   },
   "nwis_id": "05325000",
   "state": "MN",
   "name": "Minnesota River at Mankato MN",
-  "status": "fetched"
+  "status": "done",
+  "reference": "MN_Minnesota_River_at_Mankato_MN___2026-10-16T22-00-07Z.jpg",
+  "registration": {
+    "frames": 1275,
+    "daylight": 1194,
+    "reg_rate_all": 0.9489,
+    "reg_rate_last30d": 1.0,
+    "n_daylight_last30d": 72,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "B",
+    "n": 970,
+    "n_pred": 970,
+    "reg_rate": 1.0,
+    "calib_p5_p95_ft": 6.4875,
+    "test_range_ft": 7.88,
+    "mae": 0.9704,
+    "nmae": 0.1496,
+    "mae_p15": 0.0059,
+    "mae_p24": 0.4152,
+    "mae_const": 1.8522,
+    "n_ev": 534,
+    "mae_ev": 0.9595,
+    "mae_p24_ev": 0.6496,
+    "spearman": 0.7403,
+    "bacc_flood": 0.5841,
+    "bacc_flood_p24": 0.8579,
+    "n_flood": 113,
+    "gap_6h_lkv": 0.1095,
+    "gap_6h_cam": 0.9704,
+    "gap_24h_lkv": 0.4152,
+    "gap_24h_cam": 0.9698,
+    "gap_72h_lkv": 0.9834,
+    "gap_72h_cam": 0.9706,
+    "gap_7d_lkv": 1.4626,
+    "gap_7d_cam": 0.972,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 0.6665,
+    "within_025": 0.233,
+    "cv_spearman": 0.7403,
+    "sigma_ft": 1.342,
+    "n_oof": 970,
+    "n_folds": 9,
+    "cal_frames": 1130,
+    "cal_days": 364.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\MN_Minnesota_River_at_Mankato_MN",
+    "model_sha": "0ed49de61e106434a467c219c5401e6f33e3379dffcaf21f5fbd0bf7c337aa36",
+    "export_msg": "MN_Minnesota_River_at_Mankato_MN: 1130 frames, ROI 381, sigma 1.342, 0 extra refs"
+  },
+  "live_eligible": true
 }

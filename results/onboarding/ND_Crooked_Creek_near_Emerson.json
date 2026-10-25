@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 133.9
+    "fetch": 133.9,
+    "reference": 0.6,
+    "register_features": 5304.4,
+    "cv": 9.3,
+    "export": 4.5
   },
   "nwis_id": "06339200",
   "state": "ND",
   "name": "Crooked Creek near Emerson",
-  "status": "fetched"
+  "status": "done",
+  "reference": "ND_Crooked_Creek_near_Emerson___2026-09-10T22-00-08Z.jpg",
+  "registration": {
+    "frames": 2025,
+    "daylight": 1943,
+    "reg_rate_all": 0.9161,
+    "reg_rate_last30d": 1.0,
+    "n_daylight_last30d": 161,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "B",
+    "n": 1111,
+    "n_pred": 1111,
+    "reg_rate": 1.0,
+    "calib_p5_p95_ft": 1.91,
+    "test_range_ft": 2.15,
+    "mae": 0.3197,
+    "nmae": 0.1674,
+    "mae_p15": 0.0028,
+    "mae_p24": 0.0602,
+    "mae_const": 0.5075,
+    "n_ev": 19,
+    "mae_ev": 0.3877,
+    "mae_p24_ev": 0.9984,
+    "spearman": 0.7783,
+    "bacc_flood": 0.5841,
+    "bacc_flood_p24": 0.9744,
+    "n_flood": 111,
+    "gap_6h_lkv": 0.0207,
+    "gap_6h_cam": 0.3202,
+    "gap_24h_lkv": 0.0602,
+    "gap_24h_cam": 0.3213,
+    "gap_72h_lkv": 0.1293,
+    "gap_72h_cam": 0.3209,
+    "gap_7d_lkv": 0.2484,
+    "gap_7d_cam": 0.3199,
+    "p1": false,
+    "has_events": true,
+    "p2": true,
+    "median_ae": 0.2202,
+    "within_025": 0.5437,
+    "cv_spearman": 0.7783,
+    "sigma_ft": 0.3888,
+    "n_oof": 1111,
+    "n_folds": 6,
+    "cal_frames": 1346,
+    "cal_days": 342.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\ND_Crooked_Creek_near_Emerson",
+    "model_sha": "50170580fa1c9f7b05afb09bc4416c2d5994384002331c4954b679a956fdb3cc",
+    "export_msg": "ND_Crooked_Creek_near_Emerson: 1346 frames, ROI 2166, sigma 0.3888, 0 extra refs"
+  },
+  "live_eligible": true
 }

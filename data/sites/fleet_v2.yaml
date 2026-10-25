@@ -604,7 +604,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: .nan
+  tier: C
 - cam_id: AK_Kasilof_River_near_Kasilof
   nwis_id: '15242000'
   state: AK
@@ -615,8 +615,8 @@ sites:
   score: 0.875
   camera_type: cold_climate
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: ND_Crooked_Creek_near_Emerson
   nwis_id: 06339200
   state: ND
@@ -627,8 +627,8 @@ sites:
   score: 0.846
   camera_type: small_stream
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: MN_Minnesota_River_at_Mankato_MN
   nwis_id: '05325000'
   state: MN
@@ -639,8 +639,8 @@ sites:
   score: 0.8333
   camera_type: large_river
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: OH_Platter_Creek_near_Sherwood
   nwis_id: 04183979
   state: OH
@@ -676,7 +676,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: .nan
+  tier: C
 - cam_id: MN_Thief_River_near_Thief_River_Falls
   nwis_id: '05076000'
   state: MN

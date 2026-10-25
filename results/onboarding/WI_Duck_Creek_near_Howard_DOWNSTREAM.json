@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 143.0
+    "fetch": 143.0,
+    "reference": 1.3,
+    "register_features": 7748.8,
+    "cv": 20.2,
+    "export": 21.2
   },
   "nwis_id": "04072150",
   "state": "WI",
   "name": "Duck Creek near Howard DOWNSTREAM",
-  "status": "fetched"
+  "status": "done",
+  "reference": "WI_Duck_Creek_near_Howard_DOWNSTREAM___2026-10-04T18-00-04Z.jpg",
+  "registration": {
+    "frames": 2223,
+    "daylight": 2209,
+    "reg_rate_all": 0.7447,
+    "reg_rate_last30d": 0.9,
+    "n_daylight_last30d": 150,
+    "view_change_runs": 11,
+    "view_change_linked": 4
+  },
+  "cv": {
+    "tier": "C",
+    "n": 1422,
+    "n_pred": 1422,
+    "reg_rate": 0.9,
+    "calib_p5_p95_ft": 3.5399,
+    "test_range_ft": 8.1801,
+    "mae": 0.7678,
+    "nmae": 0.2169,
+    "mae_p15": 0.0075,
+    "mae_p24": 0.282,
+    "mae_const": 0.7574,
+    "n_ev": 381,
+    "mae_ev": 1.2322,
+    "mae_p24_ev": 0.8533,
+    "spearman": 0.4264,
+    "bacc_flood": 0.5248,
+    "bacc_flood_p24": 0.838,
+    "n_flood": 165,
+    "gap_6h_lkv": 0.0902,
+    "gap_6h_cam": 0.7678,
+    "gap_24h_lkv": 0.282,
+    "gap_24h_cam": 0.7678,
+    "gap_72h_lkv": 0.5753,
+    "gap_72h_cam": 0.7678,
+    "gap_7d_lkv": 0.674,
+    "gap_7d_cam": 0.7678,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 0.4264,
+    "within_025": 0.2785,
+    "cv_spearman": 0.4264,
+    "sigma_ft": 1.1517,
+    "n_oof": 1422,
+    "n_folds": 10,
+    "cal_frames": 1645,
+    "cal_days": 364.0,
+    "tier_reason": "CV Spearman < 0.5"
+  },
+  "tier": "C",
+  "export": {
+    "bundle": "models\\onboard\\WI_Duck_Creek_near_Howard_DOWNSTREAM",
+    "model_sha": "cc2b66babf2fc59eed3ec98742da4541c6dad9b7ce8656aa9ba55005d414f6ac",
+    "export_msg": "WI_Duck_Creek_near_Howard_DOWNSTREAM: 1645 frames, ROI 1253, sigma 1.1517, 11 extra refs"
+  },
+  "live_eligible": false
 }

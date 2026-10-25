@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 124.4
+    "fetch": 124.4,
+    "reference": 0.8,
+    "register_features": 3036.3,
+    "cv": 14.7,
+    "export": 4.1
   },
   "nwis_id": "04086500",
   "state": "WI",
   "name": "Cedar Creek near Cedarburg",
-  "status": "fetched"
+  "status": "done",
+  "reference": "WI_Cedar_Creek_near_Cedarburg___2026-09-26T16-00-06Z.jpg",
+  "registration": {
+    "frames": 1610,
+    "daylight": 1601,
+    "reg_rate_all": 0.9369,
+    "reg_rate_last30d": 0.9669,
+    "n_daylight_last30d": 121,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "C",
+    "n": 920,
+    "n_pred": 920,
+    "reg_rate": 0.9669,
+    "calib_p5_p95_ft": 2.179,
+    "test_range_ft": 4.59,
+    "mae": 0.5777,
+    "nmae": 0.2651,
+    "mae_p15": 0.006,
+    "mae_p24": 0.1773,
+    "mae_const": 0.5198,
+    "n_ev": 188,
+    "mae_ev": 0.7301,
+    "mae_p24_ev": 0.5455,
+    "spearman": 0.419,
+    "bacc_flood": 0.4668,
+    "bacc_flood_p24": 0.8793,
+    "n_flood": 111,
+    "gap_6h_lkv": 0.0593,
+    "gap_6h_cam": 0.584,
+    "gap_24h_lkv": 0.1773,
+    "gap_24h_cam": 0.5802,
+    "gap_72h_lkv": 0.3885,
+    "gap_72h_cam": 0.5819,
+    "gap_7d_lkv": 0.5157,
+    "gap_7d_cam": 0.5535,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 0.3706,
+    "within_025": 0.3261,
+    "cv_spearman": 0.419,
+    "sigma_ft": 0.8543,
+    "n_oof": 920,
+    "n_folds": 9,
+    "cal_frames": 1215,
+    "cal_days": 334.0,
+    "tier_reason": "CV Spearman < 0.5"
+  },
+  "tier": "C",
+  "export": {
+    "bundle": "models\\onboard\\WI_Cedar_Creek_near_Cedarburg",
+    "model_sha": "99ce359f6a0ce81c4ec75768d1131e78a58593e1685fd9f2c71b1f8617e4c097",
+    "export_msg": "WI_Cedar_Creek_near_Cedarburg: 1215 frames, ROI 768, sigma 0.8543, 0 extra refs"
+  },
+  "live_eligible": false
 }
