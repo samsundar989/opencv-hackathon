@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 156.3
+    "fetch": 156.3,
+    "reference": 0.4,
+    "register_features": 5837.8,
+    "cv": 33.9,
+    "export": 11.5
   },
   "nwis_id": "11455740",
   "state": "CA",
   "name": "Suisun Slough nr Benicia",
-  "status": "fetched"
+  "status": "done",
+  "reference": "CA_Suisun_Slough_nr_Benicia___2026-10-16T20-00-04Z.jpg",
+  "registration": {
+    "frames": 3149,
+    "daylight": 3149,
+    "reg_rate_all": 0.9911,
+    "reg_rate_last30d": 0.9909,
+    "n_daylight_last30d": 330,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "B",
+    "n": 2534,
+    "n_pred": 2534,
+    "reg_rate": 0.9909,
+    "calib_p5_p95_ft": 4.8,
+    "test_range_ft": 7.5,
+    "mae": 0.4637,
+    "nmae": 0.0966,
+    "mae_p15": 0.1446,
+    "mae_p24": 0.4558,
+    "mae_const": 1.2699,
+    "n_ev": 1795,
+    "mae_ev": 0.4307,
+    "mae_p24_ev": 0.5916,
+    "spearman": 0.9297,
+    "bacc_flood": 0.6236,
+    "bacc_flood_p24": 0.8707,
+    "n_flood": 216,
+    "gap_6h_lkv": 2.4237,
+    "gap_6h_cam": 0.4644,
+    "gap_24h_lkv": 0.4558,
+    "gap_24h_cam": 0.4639,
+    "gap_72h_lkv": 1.2741,
+    "gap_72h_cam": 0.4633,
+    "gap_7d_lkv": 2.0892,
+    "gap_7d_cam": 0.4636,
+    "p1": true,
+    "has_events": true,
+    "p2": true,
+    "median_ae": 0.3697,
+    "within_025": 0.3536,
+    "cv_spearman": 0.9297,
+    "sigma_ft": 0.5975,
+    "n_oof": 2534,
+    "n_folds": 7,
+    "cal_frames": 3112,
+    "cal_days": 258.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\CA_Suisun_Slough_nr_Benicia",
+    "model_sha": "47d4eb794d19a22eeab3a3ce17f0d762b802479639389754e6e433f914d8b9bb",
+    "export_msg": "CA_Suisun_Slough_nr_Benicia: 3112 frames, ROI 3600, sigma 0.5975, 0 extra refs"
+  },
+  "live_eligible": true
 }

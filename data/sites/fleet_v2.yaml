@@ -927,8 +927,8 @@ sites:
   score: 0.6667
   camera_type: tidal_coastal
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: PA_Pine_Creek_at_Grant_Avenue_at_Etna
   nwis_id: 03049807
   state: PA
@@ -963,8 +963,8 @@ sites:
   score: 0.6562
   camera_type: tidal_coastal
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: MI_Kawkawlin_River_at_State_Park_Dr_at_Bay_City
   nwis_id: '04143600'
   state: MI
@@ -988,7 +988,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: .nan
+  tier: C
 - cam_id: CA_Green_Slough_nr_Courtland
   nwis_id: '381905121413901'
   state: CA
@@ -1035,8 +1035,8 @@ sites:
   score: 0.5
   camera_type: large_river
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: AK_Taku_River_near_Juneau
   nwis_id: '15041200'
   state: AK
@@ -1048,6 +1048,6 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: .nan
+  tier: C
 selection_b2: scripts/onboard_pool.py --diverse → results/onboarding/candidates_ranked_b2.csv
   (D-0013 W5-1)

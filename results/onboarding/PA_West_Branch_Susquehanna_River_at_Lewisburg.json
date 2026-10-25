@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 112.0
+    "fetch": 112.0,
+    "reference": 0.7,
+    "register_features": 1187.4,
+    "cv": 3.2,
+    "export": 2.9
   },
   "nwis_id": "01553500",
   "state": "PA",
   "name": "West Branch Susquehanna River at Lewisburg",
-  "status": "fetched"
+  "status": "done",
+  "reference": "PA_West_Branch_Susquehanna_River_at_Lewisburg___2026-10-05T14-00-04Z.jpg",
+  "registration": {
+    "frames": 1014,
+    "daylight": 1014,
+    "reg_rate_all": 0.7535,
+    "reg_rate_last30d": 0.9318,
+    "n_daylight_last30d": 132,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "B",
+    "n": 588,
+    "n_pred": 588,
+    "reg_rate": 0.9318,
+    "calib_p5_p95_ft": 6.6785,
+    "test_range_ft": 10.35,
+    "mae": 1.4144,
+    "nmae": 0.2118,
+    "mae_p15": 0.0097,
+    "mae_p24": 0.5581,
+    "mae_const": 1.9383,
+    "n_ev": 351,
+    "mae_ev": 1.5314,
+    "mae_p24_ev": 0.862,
+    "spearman": 0.5313,
+    "bacc_flood": 0.5855,
+    "bacc_flood_p24": 0.7448,
+    "n_flood": 76,
+    "gap_6h_lkv": 0.1901,
+    "gap_6h_cam": 1.4144,
+    "gap_24h_lkv": 0.5581,
+    "gap_24h_cam": 1.4144,
+    "gap_72h_lkv": 1.1721,
+    "gap_72h_cam": 1.4144,
+    "gap_7d_lkv": 1.7407,
+    "gap_7d_cam": 1.4144,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 1.1314,
+    "within_025": 0.1003,
+    "cv_spearman": 0.5313,
+    "sigma_ft": 1.7102,
+    "n_oof": 588,
+    "n_folds": 4,
+    "cal_frames": 764,
+    "cal_days": 349.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\PA_West_Branch_Susquehanna_River_at_Lewisburg",
+    "model_sha": "be179e31b8fc6db321b58b5b9e6b46dc129ea8b6021463117580461a321aca46",
+    "export_msg": "PA_West_Branch_Susquehanna_River_at_Lewisburg: 764 frames, ROI 85, sigma 1.7102, 0 extra refs"
+  },
+  "live_eligible": true
 }

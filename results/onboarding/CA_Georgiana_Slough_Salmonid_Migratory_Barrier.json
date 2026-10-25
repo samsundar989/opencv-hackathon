@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 179.9
+    "fetch": 179.9,
+    "reference": 0.5,
+    "register_features": 15108.2,
+    "cv": 21.1,
+    "export": 16.9
   },
   "nwis_id": "381427121305401",
   "state": "CA",
   "name": "Sacramento R bl Walnut Grove Br A Walnut Grove",
-  "status": "fetched"
+  "status": "done",
+  "reference": "CA_Georgiana_Slough_Salmonid_Migratory_Barrier___2026-09-16T22-00-12Z.jpg",
+  "registration": {
+    "frames": 4170,
+    "daylight": 4154,
+    "reg_rate_all": 0.5101,
+    "reg_rate_last30d": 0.8567,
+    "n_daylight_last30d": 328,
+    "view_change_runs": 12,
+    "view_change_linked": 3
+  },
+  "cv": {
+    "tier": "B",
+    "n": 1859,
+    "n_pred": 1859,
+    "reg_rate": 0.8567,
+    "calib_p5_p95_ft": 4.775,
+    "test_range_ft": 7.99,
+    "mae": 0.5995,
+    "nmae": 0.1256,
+    "mae_p15": 0.0585,
+    "mae_p24": 0.2262,
+    "mae_const": 0.8602,
+    "n_ev": 688,
+    "mae_ev": 0.6381,
+    "mae_p24_ev": 0.4104,
+    "spearman": 0.7085,
+    "bacc_flood": 0.7814,
+    "bacc_flood_p24": 0.9622,
+    "n_flood": 151,
+    "gap_6h_lkv": 0.8922,
+    "gap_6h_cam": 0.5992,
+    "gap_24h_lkv": 0.2262,
+    "gap_24h_cam": 0.5995,
+    "gap_72h_lkv": 0.5807,
+    "gap_72h_cam": 0.5997,
+    "gap_7d_lkv": 0.9569,
+    "gap_7d_cam": 0.5995,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 0.452,
+    "within_025": 0.3082,
+    "cv_spearman": 0.7085,
+    "sigma_ft": 0.8407,
+    "n_oof": 1859,
+    "n_folds": 10,
+    "cal_frames": 2116,
+    "cal_days": 364.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\CA_Georgiana_Slough_Salmonid_Migratory_Barrier",
+    "model_sha": "bd3466d7add8fba89bcbec0ed1ddcc4dda909ee0e50b6a4a15ce669cdd577b2b",
+    "export_msg": "CA_Georgiana_Slough_Salmonid_Migratory_Barrier: 2116 frames, ROI 1182, sigma 0.8407, 12 extra refs"
+  },
+  "live_eligible": true
 }

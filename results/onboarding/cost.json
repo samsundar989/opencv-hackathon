@@ -1,24 +1,24 @@
 {
   "per_camera": {
-    "sites_measured": 82,
+    "sites_measured": 87,
     "nims_listing_calls_median": 37.0,
     "usgs_iv_requests_per_site": 0.125,
     "frames_downloaded_median": 2218.0,
-    "mb_downloaded_median": 138.4528725,
+    "mb_downloaded_median": 138.995801,
     "fetch_wall_s_median": 141.1,
-    "cpu_s_median": 4203.4,
-    "cpu_s_p90": 7741.910000000003,
-    "usd_per_site_median": 0.05709618333333332,
-    "cameras_per_cpu_hour": 0.8388560867363553
+    "cpu_s_median": 4298.6,
+    "cpu_s_p90": 7807.54,
+    "usd_per_site_median": 0.05838931666666667,
+    "cameras_per_cpu_hour": 0.8262295704714205
   },
   "projection_all_gauged_hivis": {
     "cameras": 880,
     "nims_listing_calls": 32560.0,
-    "gb_downloaded": 121.83852780000001,
-    "cpu_hours": 1027.4977777777776,
-    "usd_compute": 50.24464133333332,
+    "gb_downloaded": 122.31630487999999,
+    "cpu_hours": 1050.768888888889,
+    "usd_compute": 51.38259866666667,
     "wall_hours_fetch_sequential": 34.49111111111111,
-    "wall_hours_cpu_on_16_vcpu": 64.2186111111111
+    "wall_hours_cpu_on_16_vcpu": 65.67305555555556
   },
   "price_basis": "m9g.large $0.0978/h on-demand (2 vCPU)",
   "note": "CPU-seconds measured on the x86 dev box (sam-mega-pc), single thread per site."

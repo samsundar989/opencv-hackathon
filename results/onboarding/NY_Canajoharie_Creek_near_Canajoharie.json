@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 135.0
+    "fetch": 135.0,
+    "reference": 0.7,
+    "register_features": 4853.0,
+    "cv": 5.5,
+    "export": 3.2
   },
   "nwis_id": "01349150",
   "state": "NY",
   "name": "Canajoharie Creek near Canajoharie",
-  "status": "fetched"
+  "status": "done",
+  "reference": "NY_Canajoharie_Creek_near_Canajoharie___2026-09-14T18-00-09Z.jpg",
+  "registration": {
+    "frames": 1696,
+    "daylight": 1696,
+    "reg_rate_all": 0.556,
+    "reg_rate_last30d": 0.7399,
+    "n_daylight_last30d": 173,
+    "view_change_runs": 5,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "C",
+    "n": 626,
+    "n_pred": 626,
+    "reg_rate": 0.7399,
+    "calib_p5_p95_ft": 1.4195,
+    "test_range_ft": 1.88,
+    "mae": 0.3286,
+    "nmae": 0.2315,
+    "mae_p15": 0.0022,
+    "mae_p24": 0.0772,
+    "mae_const": 0.1311,
+    "n_ev": 41,
+    "mae_ev": 0.2011,
+    "mae_p24_ev": 0.6346,
+    "spearman": 0.1798,
+    "bacc_flood": 0.8228,
+    "bacc_flood_p24": 0.5275,
+    "n_flood": 14,
+    "gap_6h_lkv": 0.033,
+    "gap_6h_cam": 0.3286,
+    "gap_24h_lkv": 0.0772,
+    "gap_24h_cam": 0.3286,
+    "gap_72h_lkv": 0.1083,
+    "gap_72h_cam": 0.3286,
+    "gap_7d_lkv": 0.1417,
+    "gap_7d_cam": 0.3286,
+    "p1": false,
+    "has_events": true,
+    "p2": true,
+    "median_ae": 0.3166,
+    "within_025": 0.3962,
+    "cv_spearman": 0.1798,
+    "sigma_ft": 0.2266,
+    "n_oof": 626,
+    "n_folds": 4,
+    "cal_frames": 942,
+    "cal_days": 224.0,
+    "tier_reason": "registration < 0.80 (last 30 d); CV Spearman < 0.5"
+  },
+  "tier": "C",
+  "export": {
+    "bundle": "models\\onboard\\NY_Canajoharie_Creek_near_Canajoharie",
+    "model_sha": "9f5c21e2fff307477fe32eb966945fc3d497f791ab218c2a888e9c03f834d02a",
+    "export_msg": "NY_Canajoharie_Creek_near_Canajoharie: 942 frames, ROI 2428, sigma 0.2266, 5 extra refs"
+  },
+  "live_eligible": false
 }

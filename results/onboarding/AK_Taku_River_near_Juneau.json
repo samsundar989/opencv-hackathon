@@ -9,10 +9,30 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 90.9
+    "fetch": 90.9,
+    "reference": 0.2,
+    "register_features": 76.5,
+    "cv": 0.0
   },
   "nwis_id": "15041200",
   "state": "AK",
   "name": "Taku River near Juneau",
-  "status": "fetched"
+  "status": "done",
+  "reference": "AK_Taku_River_near_Juneau___2026-09-15T18-00-07Z.jpg",
+  "registration": {
+    "frames": 187,
+    "daylight": 187,
+    "reg_rate_all": 0.5936,
+    "reg_rate_last30d": 0.6667,
+    "n_daylight_last30d": 30,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "C",
+    "tier_reason": "too little data for forward-chaining CV",
+    "n_oof": 0
+  },
+  "tier": "C",
+  "live_eligible": false
 }
