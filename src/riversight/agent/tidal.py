@@ -112,6 +112,33 @@ def residual_quantiles(g: pd.Series, step_h: int = 3) -> dict:
             "resid_n": len(r)}
 
 
+FORECAST_FIT_DAYS = 15     # ≥ 14.8 d: the M2/S2 beat (spring–neap cycle), which makes a king tide, is resolved
+KING_TIDE_PCTL = "daily_max_p99"
+
+
+def forecast_high(g: pd.Series, now, hours: float = 24.0, fit_days: float = FORECAST_FIT_DAYS) -> dict | None:
+    """Highest *predicted* tide in (now, now + hours] from a harmonic fit on the fit_days before now − 6 h
+    (D-0014 king tides). None when the history is too short for a fit."""
+    g = g.dropna().sort_index()
+    now = pd.Timestamp(now)
+    w = g[(g.index > now - pd.Timedelta(days=fit_days)) & (g.index < now - pd.Timedelta(hours=6))]
+    m = fit(w)
+    if m is None:
+        return None
+    ts = pd.date_range(now, now + pd.Timedelta(hours=hours), freq="10min")
+    th = ((ts - m["t0"]).total_seconds() / 3600.0).to_numpy()
+    pred = _design(th) @ m["coef"]
+    i = int(np.argmax(pred))
+    return {"predicted_high_ft": round(float(pred[i]), 3), "predicted_high_time": ts[i].isoformat(),
+            "fit_days_used": round((w.index[-1] - w.index[0]).total_seconds() / 86400, 1)}
+
+
+def king_tide(fc: dict | None, daily_max: dict | None) -> bool:
+    """The predicted tide itself reaches the site's daily-maximum p99 (an astronomical king tide, no surge needed)."""
+    thr = (daily_max or {}).get(KING_TIDE_PCTL)
+    return bool(fc and thr is not None and fc["predicted_high_ft"] >= thr)
+
+
 def assess(g_recent: pd.Series, now, daily_max: dict | None = None) -> dict:
     """Tidal reading of the last days of gauge data at `now`: predicted tide, residual, and a verdict.
 

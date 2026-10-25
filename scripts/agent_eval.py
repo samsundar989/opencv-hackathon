@@ -146,7 +146,7 @@ def make_ctx(ep: dict, evidence: str, sink: Sink) -> tools.ToolContext:
     root = root if root.is_absolute() else ROOT / root
     return tools.ToolContext(mode="eval", evidence=evidence, bundle_root=root, sink=sink, now=pd.Timestamp(c["now"]),
                              gauge_fault=c.get("gauge_fault"), bank_exclude=tuple(c.get("bank_exclude") or ()),
-                             gauge_inline=c.get("gauge_inline"), event=ep["event"])
+                             gauge_inline=c.get("gauge_inline"), recal_inline=c.get("recal_inline"), event=ep["event"])
 
 
 def run_episode(ep, arm, rep, sink):

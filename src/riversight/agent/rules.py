@@ -23,7 +23,10 @@ as the LLM agent and maps their numbers to actions with fixed, hand-written thre
   within σ of the max, or the last known gauge (≤ 24 h) already at the max.
   While RISING, fog / texture loss alone do not make a frame unusable (muddy, bank-covering water is not fog).
   Tidal sites (agent/tidal_sites.json; D-0013 W2-1): RISING alerts only on water above the predicted tide (harmonic
-  residual ≥ max(0.5 ft, 3σ)) or above the site's daily-maximum p99; an ordinary tide is a logged NOOP.
+  residual ≥ max(0.5 ft, 3σ)) or above the site's daily-maximum p99; an ordinary tide is a logged NOOP, unless the
+  predicted tide for the next 24 h reaches the daily-max p99 -> TIDE_ADVISORY (low severity, approval; D-0014).
+  RECALIBRATE (D-0014) on DISAGREE / OUT_OF_RANGE when W4's drift signal fires or a flood extended the calibrated
+  range, and a refit bundle built on the served model exists (tool recal_status) -> approval; W4/W1 promote it.
 """
 from __future__ import annotations
 
@@ -190,7 +193,9 @@ def rising(ctx, ev, d, why):
     if tide and tide.get("ok") and not tide.get("non_tidal_rise"):
         # D-0013 W2-1: on a tidal site a rise is the tide unless the water stands above the predicted tide
         why.append(f"tidal site: {g['latest_ft']} ft is the ordinary tide (predicted {tide['predicted_tide_ft']} ft, "
-                   f"residual {tide['residual_ft']:+.2f} ft < {tide['surge_threshold_ft']:.2f}); no alert")
+                   f"residual {tide['residual_ft']:+.2f} ft < {tide['surge_threshold_ft']:.2f}); no flood alert")
+        if tide.get("king_tide"):
+            return [king_tide_advisory(tide, why)]
         return [action("NOOP", reason="tidal", residual_ft=tide["residual_ft"])]
     age = g.get("age_min")
     now_ft = g.get("latest_ft") if age is not None and age <= 60 else None      # age 0.0 is fresh, not missing
@@ -215,7 +220,37 @@ def rising(ctx, ev, d, why):
     out.append(action("DRAFT_ALERT", stage_ft=now_ft, crest_ft=crest, crest_source="nws" if fc.get("available") else "trend_3h",
                       rate_ft_per_h=rate, overlay_now=o1.get("overlay_key"), overlay_crest=o2.get("overlay_key")))
     why.append(f"rising {rate:+.2f} ft/h at {now_ft} ft (site p90 {p90}); alert drafted for approval with overlays")
+    if tide and tide.get("king_tide"):                # surge on top of a king tide: the advisory adds the tide context
+        out.append(king_tide_advisory(tide, why))
     return out
+
+
+def king_tide_advisory(tide: dict, why: list) -> dict:
+    """D-0014: the *predicted* tide reaches the site's daily-max p99 -> low-severity advisory, approval needed."""
+    why.append(f"predicted high tide {tide['predicted_high_24h_ft']} ft at {str(tide.get('predicted_high_time'))[:16]} UTC "
+               f"reaches this site's daily-max p99 {tide.get('daily_max_p99_ft')} ft: king-tide advisory for approval")
+    return action("TIDE_ADVISORY", severity="low", predicted_high_ft=tide["predicted_high_24h_ft"],
+                  predicted_high_time=tide.get("predicted_high_time"), daily_max_p99_ft=tide.get("daily_max_p99_ft"),
+                  text="Predicted high tide above this site's typical maximum; NWS may issue a coastal flood advisory.")
+
+
+RECAL_FLAGS = {"DISAGREE", "OUT_OF_RANGE"}           # how drift / a flood that extended the range shows in readings
+
+
+def recalibration(ctx, ev, d, why):
+    """D-0014 W2-2: draft RECALIBRATE (approval needed) when W4's drift signal fires or a flood extended the
+    calibrated range, and a refit bundle built on the served model exists. Evidence goes in the args."""
+    rs = _run(ctx, d, "recal_status", cam=ev["cam_id"])
+    if not rs.get("available") or not (rs.get("drifting") or rs.get("range_extended")):
+        return []
+    dr, m = rs.get("drift") or {}, rs.get("recal_meta") or {}
+    why.append("camera residuals drift from the gauge" if rs.get("drifting") else "a flood extended the calibrated range")
+    why.append(f"a refit bundle ({m.get('n_new_frames')} new frames) is ready: recalibration drafted for approval")
+    return [action("RECALIBRATE", reason="drifting" if rs.get("drifting") else "range_extended",
+                   median_residual_ft=dr.get("median_residual_ft"), sigma_ft=dr.get("sigma_ft"), n_drift=dr.get("n"),
+                   n_new_frames=m.get("n_new_frames"), new_from=m.get("new_from"), new_to=m.get("new_to"),
+                   stage_max_before_ft=m.get("stage_max_before_ft"), stage_max_after_ft=m.get("stage_max_after_ft"),
+                   served_model_sha=rs.get("served_model_sha"), recal_model_sha=m.get("model_sha"))]
 
 
 def low_quality(ctx, ev, d, why):
@@ -246,6 +281,8 @@ def decide(event: dict[str, Any], ctx: tools.ToolContext) -> dict[str, Any]:
     for f in schema.BEHAVIOUR_ORDER:
         if f in flags and f in BEHAVIOURS:
             acts += BEHAVIOURS[f](ctx, event, d, why)
+    if RECAL_FLAGS & set(event.get("reading", {}).get("flags") or []) and "VIEW_CHANGE" not in flags:
+        acts += recalibration(ctx, event, d, why)     # a moved camera needs re-anchoring, not a refit
     if not acts:
         why.append("no actionable flag")
     d["actions"] = acts

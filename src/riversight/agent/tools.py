@@ -48,6 +48,7 @@ class ToolContext:
     gauge_fault: dict | None = None            # eval only: {"kind": dropout|offset|drift|flatline, ...}
     bank_exclude: tuple[str, ...] = ()         # eval only: reference files hidden from the bank
     gauge_inline: list | None = None           # eval only: [[iso time, ft], ...] when the history cache lacks it
+    recal_inline: dict | None = None           # eval only: {"drift": {...}, "recal_meta": {...}} instead of live/recal/ on S3
     event: dict | None = None
     write_overlays: bool = True
 
@@ -475,6 +476,13 @@ def get_gauge(ctx: ToolContext, nwis_id: str | None = None, hours: float = 24) -
                                                "above_daily_max_p99", "non_tidal_rise", "tidal_r2")}
         out["tidal"]["daily_max_p99_ft"] = tid.get("daily_max_p99")
         out["summary"] += "; " + a["summary"]
+        # D-0014 king tides: the next 24 h of predicted tide, fit on 15 days so the spring–neap cycle is resolved
+        fc = tidal.forecast_high(gauge_series(ctx, cam, 24 * tidal.FORECAST_FIT_DAYS), g.index[-1])
+        if fc:
+            out["tidal"].update(predicted_high_24h_ft=fc["predicted_high_ft"], predicted_high_time=fc["predicted_high_time"],
+                                king_tide=tidal.king_tide(fc, tid))
+            out["summary"] += (f"; predicted high tide next 24 h {fc['predicted_high_ft']:.2f} ft at {fc['predicted_high_time'][:16]}"
+                               + (" (KING TIDE: at or above the site's daily-max p99)" if out["tidal"]["king_tide"] else ""))
     return out
 
 
@@ -547,10 +555,44 @@ def fetch_recent_frames(ctx: ToolContext, cam: str | None = None, n: int = 4) ->
 
 # ---- registry ---------------------------------------------------------------------------------------
 
+def recal_status(ctx: ToolContext, cam: str | None = None) -> dict:
+    """W4's online-recalibration evidence for a site (D-0014 W2-2): the drift signal (live/recal/drift/<cam>.json:
+    7-day median of served raw − gauge vs the site σ) and the weekly shadow refit (live/recal/models/<cam>/meta_v2.json).
+    `available`: a refit bundle exists that is not the served model and was built on it (parent = served sha)."""
+    cam = _cam(ctx, cam)
+    if ctx.recal_inline is not None:
+        drift, meta = ctx.recal_inline.get("drift"), ctx.recal_inline.get("recal_meta")
+    else:
+        sink = ctx.sink or Sink()
+
+        def _j(key):
+            try:
+                t = sink.get_text(key)
+                return json.loads(t) if t else None
+            except Exception:                                                     # noqa: BLE001
+                return None
+        drift, meta = _j(f"live/recal/drift/{cam}.json"), _j(f"live/recal/models/{cam}/meta_v2.json")
+    served = ctx.reading.get("model_sha")
+    available = bool(meta and meta.get("model_sha") and meta.get("model_sha") != served
+                     and (not served or not meta.get("parent_model_sha") or meta.get("parent_model_sha") == served))
+    before, after = (meta or {}).get("stage_max_before_ft"), (meta or {}).get("stage_max_after_ft")
+    extended = bool(before is not None and after is not None and after > before + 0.01)
+    drifting = bool((drift or {}).get("drifting"))
+    out = {"drift": drift, "recal_meta": meta, "served_model_sha": served, "available": available,
+           "drifting": drifting, "range_extended": extended}
+    out["summary"] = ("no recalibration evidence" if not (drift or meta) else
+                      f"drift: {'DRIFTING' if drifting else 'not drifting'}"
+                      + (f" (7-day median residual {drift.get('median_residual_ft')} ft vs σ {drift.get('sigma_ft')} ft, n {drift.get('n')})" if drift else "")
+                      + (f"; refit bundle {'available' if available else 'not usable'} ({meta.get('n_new_frames')} new frames"
+                         + (f", calibrated max {before} -> {after} ft" if extended else "") + ")" if meta else "; no refit bundle"))
+    return out
+
+
 TOOLS: dict[str, Callable[..., dict]] = {
     "reregister_fullres": reregister_fullres, "compare_to_last_good": compare_to_last_good,
     "image_quality": image_quality, "estimate_stage": estimate_stage, "render_wet_overlay": render_wet_overlay,
     "get_gauge": get_gauge, "get_nws_forecast": get_nws_forecast, "fetch_recent_frames": fetch_recent_frames,
+    "recal_status": recal_status,
 }
 
 _S = {"type": "string"}

@@ -3,8 +3,8 @@
 Both policies return the same Decision dict. `finalize()` is the single choke point that enforces the
 human-control rules no matter who decided:
 
-  * DRAFT_ALERT and OPEN_TICKET always need approval (an approval id is minted for them);
-  * only the seven known action types survive; anything else is dropped and noted;
+  * DRAFT_ALERT, OPEN_TICKET, TIDE_ADVISORY and RECALIBRATE always need approval (an approval id is minted);
+  * only the known action types survive; anything else is dropped and noted;
   * NOOP is removed when a real action is present, and added when nothing is left.
 """
 from __future__ import annotations
@@ -14,8 +14,10 @@ import json
 import time
 from typing import Any
 
-ACTION_TYPES = ("SET_REFERENCE", "QUARANTINE", "DENSIFY", "MARK_PROVISIONAL", "OPEN_TICKET", "DRAFT_ALERT", "NOOP")
-NEEDS_APPROVAL = {"DRAFT_ALERT", "OPEN_TICKET"}
+ACTION_TYPES = ("SET_REFERENCE", "QUARANTINE", "DENSIFY", "MARK_PROVISIONAL", "OPEN_TICKET", "DRAFT_ALERT",
+                "TIDE_ADVISORY", "RECALIBRATE", "NOOP")
+# TIDE_ADVISORY (D-0014): low-severity king-tide notice; RECALIBRATE (D-0014): promote W4's refit bundle. Both page a human.
+NEEDS_APPROVAL = {"DRAFT_ALERT", "OPEN_TICKET", "TIDE_ADVISORY", "RECALIBRATE"}
 FLAGS = ("VIEW_CHANGE", "LOW_QUALITY", "GAUGE_STALE", "DISAGREE", "RISING", "OUT_OF_RANGE", "NIGHT")
 # behaviour order when one reading carries several flags (most consequential first)
 BEHAVIOUR_ORDER = ("RISING", "VIEW_CHANGE", "OUT_OF_RANGE", "DISAGREE", "GAUGE_STALE", "LOW_QUALITY", "NIGHT")

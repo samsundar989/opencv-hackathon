@@ -119,6 +119,26 @@ def drift_review(event: Event, ctx: ToolContext, d: Decision, converse=None) -> 
     return schema.finalize(event, d)
 
 
+ADVISORY_HOLD_H, RECAL_HOLD_H = 12.0, 72.0
+
+
+def once_per(event: Event, d: Decision, sink: Sink, typ: str, hold_h: float) -> Decision:
+    """One `typ` action per site per hold_h (D-0014 TIDE_ADVISORY / RECALIBRATE): every flood tide on a tidal site
+    and every disagreeing reading of a drifting site would otherwise page the approver again."""
+    if not any(a["type"] == typ for a in d["actions"]):
+        return d
+    key = f"live/agent/once/{event.get('cam_id')}__{typ}.json"
+    t = pd.Timestamp((event.get("reading") or {}).get("t_frame") or pd.Timestamp.now(tz="UTC"))
+    txt = sink.get_text(key)
+    last = json.loads(txt) if txt else None
+    if last and (t - pd.Timestamp(last["t"])).total_seconds() < hold_h * 3600:
+        d["actions"] = [a for a in d["actions"] if a["type"] != typ]
+        d["rationale"] += f" [{typ} already drafted {last['t']}; duplicate suppressed]"
+        return schema.finalize(event, d)
+    sink.put_json(key, {"t": t.isoformat(), "approval_id": d.get("approval_id")})
+    return d
+
+
 def second_opinion(event: Event, ctx: ToolContext, d: Decision, converse=None) -> Decision:
     """Sonnet 4.6 re-decides an event whose decision (Haiku 4.5, or the rules in rules_first mode) would page a
     human (RIVERSIGHT_AGENT_ESCALATE=1). The first decision stands; disagreement is recorded for the approver."""
@@ -186,6 +206,8 @@ def handle(event: Event, ctx: ToolContext | None = None, model: str | None = Non
     if event.get("mode", "live") != "eval":           # eval episodes are independent; live/replay keep state
         d = alert_hysteresis(event, d, sink)
         d = ticket_hysteresis(event, d, sink)
+        d = once_per(event, d, sink, "TIDE_ADVISORY", ADVISORY_HOLD_H)
+        d = once_per(event, d, sink, "RECALIBRATE", RECAL_HOLD_H)
     if record:
         ledger.add(d.get("tokens_in", 0) + d.get("tokens_out", 0), d.get("usd", 0.0))
     if write_log:
