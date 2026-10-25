@@ -33,7 +33,7 @@ Three people, each making a real decision with a camera they already have but ca
 
 ![System architecture](../docs/img/architecture.svg)
 
-Offline, each site is calibrated once from up to 12 months of frames and gauge readings. Live, one Graviton worker reads the newest frame of each of the 20 calibrated cameras every 15 minutes, produces a stage ± σ plus quality flags, and writes it to S3 behind CloudFront. Flagged readings go to the River Steward agent. Details: `docs/ARCHITECTURE.md`.
+Offline, each site is calibrated once from up to 12 months of frames and gauge readings. Live, one Graviton worker reads the newest frame of every served camera (the 20 frozen-test cameras plus the tier-B cameras onboarded since, §6.10) every 15 minutes, produces a stage ± σ plus quality flags, and writes it to S3 behind CloudFront. Flagged readings go to the River Steward agent. Details: `docs/ARCHITECTURE.md`.
 
 ![Agent loop](../docs/img/agent_loop.svg)
 
@@ -301,7 +301,7 @@ Window: 2026-10-23 21:28 UTC (first COOL cycle) to 2026-10-24 21:17 UTC so far; 
 
 Flags raised: VIEW_CHANGE 42, LOW_QUALITY 69, GAUGE_STALE 0, DISAGREE 47, RISING 77, OUT_OF_RANGE 49. Agent actions: DENSIFY 75, NOOP 58, QUARANTINE 39, OPEN_TICKET 18, MARK_PROVISIONAL 15, DRAFT_ALERT 4.
 
-Model v2 in shadow on the same live frames: median absolute error 0.084 ft vs 0.183 ft for the served v1 on 249 paired readings (§6.11).
+Model v2 in shadow on the same live frames: median absolute error 0.084 ft vs 0.183 ft for v1, the model served at the time, on 249 paired readings (§6.11).
 <!-- END:prospective -->
 
 ### 6.10 Onboarding new cameras and real gauge outages
@@ -350,7 +350,7 @@ W4 (`results/v2/README.md`). v2 adds a second view of each registered frame: DIN
 v2 is better in every calendar month, most of all in the foliage months that drive v1's drift. The ablations show the DINOv2 features do the work; the seasonal tweaks (sun-position correction, recency weighting) add nothing or hurt. Limits: this is still CV inside one year, the frozen kill-test numbers are not recomputed, and the forward-in-time check is v2's shadow scoring on the live stream (D-0010 §2). **Promoted on Oct 24 (D-0014):** all three pre-registered criteria were met (CV, live shadow, cycle time under 5 minutes), so v2 now serves. v1 continues as the shadow, and the frozen-v1 prospective record continues as pre-registered (§6.9).
 
 <!-- BEGIN:shadow -->
-Live shadow, pre-registered (D-0010 §2): on 249 paired daylight readings at 16 sites, v2's median absolute error was **0.084 ft vs 0.183 ft** for the served v1 (difference -0.099 ft, site-bootstrap 95 % CI -0.236 to -0.021); v2 was better at 12 of 16 sites. Caveat: one calm day (median gauge range per site 0.02 ft).
+Live shadow, pre-registered (D-0010 §2): on 249 paired daylight readings at 16 sites, v2's median absolute error was **0.084 ft vs 0.183 ft** for v1, the model served at the time (difference -0.099 ft, site-bootstrap 95 % CI -0.236 to -0.021); v2 was better at 12 of 16 sites. Caveat: one calm day (median gauge range per site 0.02 ft).
 <!-- END:shadow -->
 
 **Online recalibration** (W4, shadow only, `results/v2/recal_summary.csv`). The Hancock lesson (§6.6) is that a model calibrated on the past cannot read a flood above its calibrated range. Refitting on a schedule, inside the history, so each refit has seen the most recent floods:

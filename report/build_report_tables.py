@@ -152,7 +152,7 @@ def prospective() -> str:
     rows += ["", f"Flags raised: {flags}. Agent actions: {acts}."]
     if fl.get("shadow_n"):
         rows += ["", f"Model v2 in shadow on the same live frames: median absolute error {fl['shadow_median_ae_ft']} ft vs "
-                 f"{fl['v1_median_ae_on_shadow_rows_ft']} ft for the served v1 on {fl['shadow_n']} paired readings (§6.11)."]
+                 f"{fl['v1_median_ae_on_shadow_rows_ft']} ft for v1, the model served at the time, on {fl['shadow_n']} paired readings (§6.11)."]
     return "\n".join(rows)
 
 
@@ -275,7 +275,7 @@ def shadow() -> str:
         return "_No shadow decision data committed yet._"
     d = json.loads(f.read_text(encoding="utf-8"))
     return (f"Live shadow, pre-registered (D-0010 §2): on {d['pairs']} paired daylight readings at {d['sites']} sites, v2's median absolute error was "
-            f"**{d['v2_median_ae_ft']} ft vs {d['v1_median_ae_ft']} ft** for the served v1 (difference {d['diff_v2_minus_v1_ft']} ft, site-bootstrap 95 % CI "
+            f"**{d['v2_median_ae_ft']} ft vs {d['v1_median_ae_ft']} ft** for v1, the model served at the time (difference {d['diff_v2_minus_v1_ft']} ft, site-bootstrap 95 % CI "
             f"{d['diff_site_bootstrap_95ci'][0]} to {d['diff_site_bootstrap_95ci'][1]}); v2 was better at {d['sites_v2_better']} of {d['sites']} sites. "
             f"Caveat: one calm day (median gauge range per site {d['median_gauge_range_ft_per_site']} ft).")
 
