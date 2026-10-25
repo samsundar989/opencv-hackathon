@@ -1,0 +1,38 @@
+[
+  {
+    "cam_id": "TX_Tenmile_Ck_at_Parkinson_Rd_nr_Ferris",
+    "status": "refit",
+    "n_base": 2433,
+    "n_logged": 119,
+    "n_new_used": 119,
+    "refit_wall_s": 16.7,
+    "peak_rss_gb": 2.28,
+    "max_abs_diff_vs_served_bundle": {
+      "w": 1.3461454173580023e-14,
+      "ym": 0.0,
+      "r": 3.122502256758253e-17,
+      "q": 0.0
+    },
+    "same_roi": true,
+    "stage_max_before_ft": 22.04,
+    "stage_max_after_ft": 22.04
+  },
+  {
+    "cam_id": "WI_East_Branch_Pecatonica_River_near_Blanchardville_Bullet",
+    "status": "refit",
+    "n_base": 985,
+    "n_logged": 113,
+    "n_new_used": 113,
+    "refit_wall_s": 7.3,
+    "peak_rss_gb": 2.28,
+    "max_abs_diff_vs_served_bundle": {
+      "w": 4.954370247389761e-15,
+      "ym": 0.0,
+      "r": 7.632783294297951e-17,
+      "q": 0.0
+    },
+    "same_roi": true,
+    "stage_max_before_ft": 10.45,
+    "stage_max_after_ft": 10.45
+  }
+]
