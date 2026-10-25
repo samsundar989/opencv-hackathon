@@ -35,6 +35,7 @@ def _ctx(flags, **kw):
 
 
 def test_rising_on_tidal_site(monkeypatch):
+    monkeypatch.setenv("RIVERSIGHT_TIDE_ADVISORY", "1")
     tide = {"ok": True, "non_tidal_rise": False, "predicted_tide_ft": 9.0, "residual_ft": 0.1, "surge_threshold_ft": 0.5,
             "daily_max_p99_ft": 12.5, "predicted_high_24h_ft": 12.7, "predicted_high_time": "2026-01-01T06:00:00+00:00"}
     calls = {"get_gauge": {"latest_ft": 9.1, "age_min": 5, "change_1h_ft": 0.4, "tidal": dict(tide, king_tide=True)}}
@@ -45,6 +46,9 @@ def test_rising_on_tidal_site(monkeypatch):
     assert schema.action_types(d) == ["TIDE_ADVISORY"]
     a = d["actions"][0]
     assert a["needs_approval"] and a["args"]["severity"] == "low" and d["approval_id"]
+    monkeypatch.setenv("RIVERSIGHT_TIDE_ADVISORY", "0")                 # the shipped default: the advisory is off
+    assert schema.action_types(rules.decide(ev, ctx)) == ["NOOP"]
+    monkeypatch.setenv("RIVERSIGHT_TIDE_ADVISORY", "1")
     calls["get_gauge"]["tidal"] = dict(tide, king_tide=False)
     d = rules.decide(ev, ctx)
     assert schema.action_types(d) == ["NOOP"] and d["approval_id"] is None

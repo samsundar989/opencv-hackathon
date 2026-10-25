@@ -194,7 +194,7 @@ def rising(ctx, ev, d, why):
         # D-0013 W2-1: on a tidal site a rise is the tide unless the water stands above the predicted tide
         why.append(f"tidal site: {g['latest_ft']} ft is the ordinary tide (predicted {tide['predicted_tide_ft']} ft, "
                    f"residual {tide['residual_ft']:+.2f} ft < {tide['surge_threshold_ft']:.2f}); no flood alert")
-        if tide.get("king_tide"):
+        if tide.get("king_tide") and tide_advisory_on():
             return [king_tide_advisory(tide, why)]
         return [action("NOOP", reason="tidal", residual_ft=tide["residual_ft"])]
     age = g.get("age_min")
@@ -220,9 +220,17 @@ def rising(ctx, ev, d, why):
     out.append(action("DRAFT_ALERT", stage_ft=now_ft, crest_ft=crest, crest_source="nws" if fc.get("available") else "trend_3h",
                       rate_ft_per_h=rate, overlay_now=o1.get("overlay_key"), overlay_crest=o2.get("overlay_key")))
     why.append(f"rising {rate:+.2f} ft/h at {now_ft} ft (site p90 {p90}); alert drafted for approval with overlays")
-    if tide and tide.get("king_tide"):                # surge on top of a king tide: the advisory adds the tide context
+    if tide and tide.get("king_tide") and tide_advisory_on():   # surge on a king tide: the advisory adds tide context
         out.append(king_tide_advisory(tide, why))
     return out
+
+
+def tide_advisory_on() -> bool:
+    """RIVERSIGHT_TIDE_ADVISORY (default "0"): the v5 rules run caught 0/4 real king tides at Savannah and raised one
+    advisory on an ordinary tide (results/agent_eval/V5_TIDE_RECAL.md), so it ships off until Cowork decides (Q-0014).
+    The v5 evaluation ran with it on (RIVERSIGHT_TIDE_ADVISORY=1)."""
+    import os
+    return os.environ.get("RIVERSIGHT_TIDE_ADVISORY", "0") == "1"
 
 
 def king_tide_advisory(tide: dict, why: list) -> dict:

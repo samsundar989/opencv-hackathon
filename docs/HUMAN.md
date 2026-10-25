@@ -181,3 +181,46 @@ W5 continues meanwhile: it hands every tier-B bundle (`models/onboard/<cam>/`) a
 - **v2 is promoted to serving now** (D-0010 §2: all criteria met). v1 stays as the shadow and the frozen-v1 prospective record continues.
 - **W1:** the G2 fixes first: the 50-camera title, the approval TTL/expiry and verified hysteresis, and marking the superseded tidal alerts.
 - Every worker continues down its D-0014 list until the Mon 12:00 CT freeze.
+
+## Cowork — 2026-10-25 03:05 CT (overnight check)
+- **Live site is healthy:** cycle at 07:47Z, 50 sites, 0 errors.
+- **W1 has been idle since 17:10 CT.** D-0014 serving (v2), the TTL and the recal hooks are NOT deployed. Samuel will restart W1 in the morning with the D-0014 list. Docs correctly say "v2 approved, not yet deployed" (thanks, W3/W4). **Video script shot 5** gets reworded if v2 isn't serving by recording time (Cowork handles it at 08:30).
+- **Fused offset (W1/W4 question) ruling:**
+  - **Live** serves the plain fused filter (`F.b = 0`, no 48 h anchor). It's simpler and was better at gaps ≥ 24 h in W4's simulation.
+  - **Reports** keep the pre-registered `fused_bias` as the primary result and state that the serving choice was made post hoc from the same simulation, to be validated prospectively.
+  - W1 applies this with the D-0014 deploy; W3 adds one sentence to report §6.12.
+
+## Cowork → W4, W5, W3 — 2026-10-25 12:20 CT: REASSIGNMENT (D-0015). W1 and W2 have been idle since Sat ~17:00 CT.
+The freeze is Mon 12:00 CT. Active sessions take over the idle owners' D-0014 items, cross-path, approved by Cowork. Log every cross-path change in your status file and keep commits small.
+
+**W4 takes W1's deploy list** (needs a valid `aws login`; if `aws sts get-caller-identity --profile riversight` fails, write one line here and wait; Cowork pings Samuel). In order, deploying after each item:
+1. Serve v2 (D-0014). v1 becomes the shadow. The prospective scorer reports three groups: frozen v1 / served v2 / onboarded.
+2. Fused filter `F.b = 0` on live (ruling 03:05 CT).
+3. Your recal cycle-wiring patch, with `RIVERSIGHT_RECAL` on in shadow mode. Promotion stays off until an approved RECALIBRATE exists.
+4. G2 fixes: the home title "Live: 50 USGS river cameras…" plus the subline; the approval TTL (pending > 24 h → expired, kept in the log, removed from the panel); mark the pre-fix First Mallard tide alerts "superseded by tidal logic".
+5. Guard stop action at 100% of the $100 budget.
+6. `RIVERSIGHT_AGENT_DAILY_TOKENS=150000`.
+7. W5's batch-2 tier-B bundles, if the cycle stays < 10 min. Otherwise onboarded sites run every 30 min.
+
+Measure the cycle time after each step. **Nothing risky after Mon 10:00 CT.**
+
+**W5 (after batch 2) takes W2's list:**
+1. King-tide `TIDE_ADVISORY`: low severity, needs approval, logged post-freeze. Episode set v5 with expected actions written first; rerun the **rules arm only** (no Bedrock).
+2. `RECALIBRATE` as a rules action from W4's drift signal, drafted with evidence. Promotion only after human approval.
+
+Hand both to W4 for deploy.
+
+**W3:**
+- After W4 deploys, recapture B-roll for the home page (50-camera title) and the site page (v2 model label).
+- Update the README, report and Devpost wording from "approved, not yet deployed" to "serving", but only once `latest.json` shows the v2 model_sha.
+
+## Q-0014 — 2026-10-25 20:30 CT — King-tide advisory failed its pre-registered test: ship it off? (W5, for Cowork)
+- **Result** (`results/agent_eval/V5_TIDE_RECAL.md`; episode set v5 committed at `0e5cd00` before the run; rules arm, 3 reps, no Bedrock):
+  - The advisory caught **0/4 real king tides** at Savannah. The harmonic forecast times the high water well, but it predicts it 0.2–0.7 ft below the daily-max p99: those days carry river/wind water that four tidal constituents can't predict.
+  - It raised **1 advisory on an ordinary tide** (Savannah Oct 13: predicted 6.18 ft; the day stayed below p90).
+  - **RECALIBRATE passed 30/30** (synthetic W4 fixtures), and the 120 v4 episodes are unchanged at 92.59 %.
+- **What W5 did:** the advisory sits behind `RIVERSIGHT_TIDE_ADVISORY`, **default off**. RECALIBRATE is on. Both are handed to W4 for the D-0015 deploy.
+- **Options:**
+  - **(a) Keep it off** and report it as a tested-and-rejected rule (recommended: honest, and no false advisories on the judged site).
+  - **(b) Turn it on**, labelled experimental.
+  - **(c) Improve the forecast post hoc** (more constituents, a 29-day fit, NOAA predictions where a station exists). That's a post-hoc change with only 4 events to test on, so it isn't recommended before the freeze.
