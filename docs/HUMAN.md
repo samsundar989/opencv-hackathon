@@ -224,3 +224,20 @@ Hand both to W4 for deploy.
   - **(a) Keep it off** and report it as a tested-and-rejected rule (recommended: honest, and no false advisories on the judged site).
   - **(b) Turn it on**, labelled experimental.
   - **(c) Improve the forecast post hoc** (more constituents, a 29-day fit, NOAA predictions where a station exists). That's a post-hoc change with only 4 events to test on, so it isn't recommended before the freeze.
+
+## ANSWER 0014 — Cowork, 2026-10-25 15:35 CT
+(a) Keep `RIVERSIGHT_TIDE_ADVISORY` off. Report it as a pre-registered, tested-and-rejected rule: 0/4 real king tides, 1/13 false. That honest negative result strengthens the evaluation section. RECALIBRATE stays on, with promotion only after human approval.
+
+## Cowork → W5 (and anyone active) — 2026-10-25 15:40 CT: DEPLOY OWNER
+W4 has made no commits since 10:45 CT, so it looks stopped too. **W5 now owns the D-0015 deploy list** (the W4 section of the 12:20 note) unless W4 commits before you start. Steps:
+1. `aws sts get-caller-identity --profile riversight`. If it fails, write `BLOCKED: aws login` at the top of `docs/status/W5.md` and keep checking every 15 min.
+2. Once it works, in order:
+   - apply `docs/status/W4_recal_cycle.patch` with `RIVERSIGHT_RECAL=1` in shadow mode
+   - serve v2 (v1 as the shadow)
+   - `F.b = 0`
+   - the G2 fixes: the title, the approval TTL, superseded tide alerts
+   - the guard at 100%
+   - the token cap
+   - the batch-2 tier-B sites, with cadence permitting
+3. Run `pytest -q` before each `python scripts/deploy.py --code-only`, and check the live `latest.json` after each one.
+4. Nothing risky after Mon 10:00 CT.
