@@ -9,10 +9,30 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 91.7
+    "fetch": 91.7,
+    "reference": 0.1,
+    "register_features": 469.2,
+    "cv": 0.0
   },
   "nwis_id": "15297476",
   "state": "AK",
   "name": "Red Cloud River at Anton Larsen Bay near Kodiak",
-  "status": "fetched"
+  "status": "done",
+  "reference": "AK_Red_Cloud_River_at_Anton_Larsen_Bay_near_Kodiak___2026-09-28T20-00-08Z.jpg",
+  "registration": {
+    "frames": 211,
+    "daylight": 211,
+    "reg_rate_all": 0.8863,
+    "reg_rate_last30d": 0.9474,
+    "n_daylight_last30d": 19,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "C",
+    "tier_reason": "too little data for forward-chaining CV",
+    "n_oof": 0
+  },
+  "tier": "C",
+  "live_eligible": false
 }

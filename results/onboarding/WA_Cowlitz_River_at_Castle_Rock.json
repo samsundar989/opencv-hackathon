@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 118.0
+    "fetch": 118.0,
+    "reference": 0.3,
+    "register_features": 328.5,
+    "cv": 10.7,
+    "export": 7.0
   },
   "nwis_id": "14243000",
   "state": "WA",
   "name": "Cowlitz River at Castle Rock",
-  "status": "fetched"
+  "status": "done",
+  "reference": "WA_Cowlitz_River_at_Castle_Rock___2026-10-17T20-02-25Z.jpg",
+  "registration": {
+    "frames": 1351,
+    "daylight": 1289,
+    "reg_rate_all": 0.8371,
+    "reg_rate_last30d": 0.8261,
+    "n_daylight_last30d": 23,
+    "view_change_runs": 2,
+    "view_change_linked": 2
+  },
+  "cv": {
+    "tier": "B",
+    "n": 836,
+    "n_pred": 836,
+    "reg_rate": 0.8261,
+    "calib_p5_p95_ft": 5.401,
+    "test_range_ft": 13.19,
+    "mae": 0.3989,
+    "nmae": 0.0739,
+    "mae_p15": 0.0068,
+    "mae_p24": 0.2358,
+    "mae_const": 1.1092,
+    "n_ev": 229,
+    "mae_ev": 0.4582,
+    "mae_p24_ev": 0.6841,
+    "spearman": 0.9293,
+    "bacc_flood": 0.8233,
+    "bacc_flood_p24": 0.9685,
+    "n_flood": 57,
+    "gap_6h_lkv": 0.089,
+    "gap_6h_cam": 0.3989,
+    "gap_24h_lkv": 0.2358,
+    "gap_24h_cam": 0.3989,
+    "gap_72h_lkv": 0.4712,
+    "gap_72h_cam": 0.3989,
+    "gap_7d_lkv": 0.5655,
+    "gap_7d_cam": 0.3989,
+    "p1": true,
+    "has_events": true,
+    "p2": true,
+    "median_ae": 0.3245,
+    "within_025": 0.3971,
+    "cv_spearman": 0.9293,
+    "sigma_ft": 0.6104,
+    "n_oof": 836,
+    "n_folds": 8,
+    "cal_frames": 1079,
+    "cal_days": 356.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\WA_Cowlitz_River_at_Castle_Rock",
+    "model_sha": "472699d20abedf492f2b58a9599fcc0bc2e314629228c3d8f61d5fb0179e144e",
+    "export_msg": "WA_Cowlitz_River_at_Castle_Rock: 1079 frames, ROI 1319, sigma 0.6104, 2 extra refs"
+  },
+  "live_eligible": true
 }

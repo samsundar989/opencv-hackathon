@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 135.2
+    "fetch": 135.2,
+    "reference": 0.5,
+    "register_features": 2680.7,
+    "cv": 13.2,
+    "export": 5.1
   },
   "nwis_id": "15239900",
   "state": "AK",
   "name": "Anchor River near Anchor Point",
-  "status": "fetched"
+  "status": "done",
+  "reference": "AK_Anchor_River_near_Anchor_Point___2026-09-18T20-00-05Z.jpg",
+  "registration": {
+    "frames": 2084,
+    "daylight": 2014,
+    "reg_rate_all": 0.8972,
+    "reg_rate_last30d": 0.9822,
+    "n_daylight_last30d": 169,
+    "view_change_runs": 5,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "B",
+    "n": 1394,
+    "n_pred": 1394,
+    "reg_rate": 0.9822,
+    "calib_p5_p95_ft": 3.9725,
+    "test_range_ft": 3.12,
+    "mae": 0.8565,
+    "nmae": 0.2156,
+    "mae_p15": 0.0089,
+    "mae_p24": 0.2037,
+    "mae_const": 0.4438,
+    "n_ev": 336,
+    "mae_ev": 0.8797,
+    "mae_p24_ev": 0.5868,
+    "spearman": 0.5554,
+    "bacc_flood": 0.4355,
+    "bacc_flood_p24": 0.4978,
+    "n_flood": 6,
+    "gap_6h_lkv": 0.073,
+    "gap_6h_cam": 0.8565,
+    "gap_24h_lkv": 0.2037,
+    "gap_24h_cam": 0.8565,
+    "gap_72h_lkv": 0.2976,
+    "gap_72h_cam": 0.8565,
+    "gap_7d_lkv": 0.4191,
+    "gap_7d_cam": 0.8565,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 0.6313,
+    "within_025": 0.2719,
+    "cv_spearman": 0.5554,
+    "sigma_ft": 0.9157,
+    "n_oof": 1394,
+    "n_folds": 6,
+    "cal_frames": 1656,
+    "cal_days": 364.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\AK_Anchor_River_near_Anchor_Point",
+    "model_sha": "4d9533e0ba6f37bc228202dadc3d868fab9ba28e690999726af67cfa4c4118c0",
+    "export_msg": "AK_Anchor_River_near_Anchor_Point: 1656 frames, ROI 1485, sigma 0.9157, 5 extra refs"
+  },
+  "live_eligible": true
 }

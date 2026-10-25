@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 139.8
+    "fetch": 139.8,
+    "reference": 0.9,
+    "register_features": 3325.1,
+    "cv": 22.5,
+    "export": 6.1
   },
   "nwis_id": "021305805",
   "state": "SC",
   "name": "CROOKED CREEK BELOW N MARLBORO ST AT BENNETTSVILLE",
-  "status": "fetched"
+  "status": "done",
+  "reference": "SC_CROOKED_CREEK_BELOW_N_MARLBORO_ST_AT_BENNETTSVILLE___2026-09-14T16-00-12Z.jpg",
+  "registration": {
+    "frames": 2082,
+    "daylight": 2082,
+    "reg_rate_all": 0.8924,
+    "reg_rate_last30d": 0.9846,
+    "n_daylight_last30d": 195,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "B",
+    "n": 1615,
+    "n_pred": 1615,
+    "reg_rate": 0.9846,
+    "calib_p5_p95_ft": 1.6926,
+    "test_range_ft": 2.58,
+    "mae": 0.23,
+    "nmae": 0.1359,
+    "mae_p15": 0.0026,
+    "mae_p24": 0.1319,
+    "mae_const": 0.4126,
+    "n_ev": 226,
+    "mae_ev": 0.3375,
+    "mae_p24_ev": 0.4852,
+    "spearman": 0.7686,
+    "bacc_flood": 0.8291,
+    "bacc_flood_p24": 0.8005,
+    "n_flood": 142,
+    "gap_6h_lkv": 0.037,
+    "gap_6h_cam": 0.23,
+    "gap_24h_lkv": 0.1319,
+    "gap_24h_cam": 0.2289,
+    "gap_72h_lkv": 0.2643,
+    "gap_72h_cam": 0.2297,
+    "gap_7d_lkv": 0.3402,
+    "gap_7d_cam": 0.2312,
+    "p1": true,
+    "has_events": true,
+    "p2": true,
+    "median_ae": 0.18,
+    "within_025": 0.631,
+    "cv_spearman": 0.7686,
+    "sigma_ft": 0.294,
+    "n_oof": 1615,
+    "n_folds": 10,
+    "cal_frames": 1856,
+    "cal_days": 364.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\SC_CROOKED_CREEK_BELOW_N_MARLBORO_ST_AT_BENNETTSVILLE",
+    "model_sha": "68a5ba280cd7b96abce0a7940b03360ba4c5f4428c7e0ec66d50942c88156bb8",
+    "export_msg": "SC_CROOKED_CREEK_BELOW_N_MARLBORO_ST_AT_BENNETTSVILLE: 1856 frames, ROI 1738, sigma 0.294, 0 extra refs"
+  },
+  "live_eligible": true
 }

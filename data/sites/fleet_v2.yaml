@@ -760,7 +760,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: .nan
+  tier: C
 - cam_id: OH_St_Marys_River_at_Walcot_Street_at_Willshire
   nwis_id: 04181049
   state: OH
@@ -771,8 +771,8 @@ sites:
   score: 0.7778
   camera_type: large_river
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: MN_Minnehaha_Creek_below_Grays_Bay_Dam_in_Minnetonka
   nwis_id: 05289100
   state: MN
@@ -783,8 +783,8 @@ sites:
   score: 0.775
   camera_type: tidal_coastal
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: SC_CROOKED_CREEK_BELOW_N_MARLBORO_ST_AT_BENNETTSVILLE
   nwis_id: 021305805
   state: SC
@@ -795,8 +795,8 @@ sites:
   score: 0.77
   camera_type: small_stream
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: AK_Red_Cloud_River_at_Anton_Larsen_Bay_near_Kodiak
   nwis_id: '15297476'
   state: AK
@@ -808,7 +808,7 @@ sites:
   camera_type: tidal_coastal
   batch: 2
   live: false
-  tier: .nan
+  tier: C
 - cam_id: IL_Vermilion_River_near_Danville
   nwis_id: 03339000
   state: IL
@@ -819,8 +819,8 @@ sites:
   score: 0.75
   camera_type: large_river
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: CA_Sacramento_River_at_Freeport
   nwis_id: '11447650'
   state: CA
@@ -843,8 +843,8 @@ sites:
   score: 0.75
   camera_type: cold_climate
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: AK_Anchor_River_near_Anchor_Point
   nwis_id: '15239900'
   state: AK
@@ -855,8 +855,8 @@ sites:
   score: 0.7292
   camera_type: cold_climate
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: ME_Kennebec_River_at_Calumet_Bridge_at_Augusta
   nwis_id: 01049320
   state: ME

@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 133.4
+    "fetch": 133.4,
+    "reference": 0.5,
+    "register_features": 2826.9,
+    "cv": 13.8,
+    "export": 4.9
   },
   "nwis_id": "03339000",
   "state": "IL",
   "name": "Vermilion River near Danville",
-  "status": "fetched"
+  "status": "done",
+  "reference": "IL_Vermilion_River_near_Danville___2026-10-18T14-00-03Z.jpg",
+  "registration": {
+    "frames": 1994,
+    "daylight": 1991,
+    "reg_rate_all": 0.9011,
+    "reg_rate_last30d": 0.9634,
+    "n_daylight_last30d": 164,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "B",
+    "n": 1314,
+    "n_pred": 1314,
+    "reg_rate": 0.9634,
+    "calib_p5_p95_ft": 10.822,
+    "test_range_ft": 22.57,
+    "mae": 1.3828,
+    "nmae": 0.1278,
+    "mae_p15": 0.0186,
+    "mae_p24": 1.0362,
+    "mae_const": 2.5389,
+    "n_ev": 792,
+    "mae_ev": 1.5376,
+    "mae_p24_ev": 1.6536,
+    "spearman": 0.7501,
+    "bacc_flood": 0.8869,
+    "bacc_flood_p24": 0.8387,
+    "n_flood": 155,
+    "gap_6h_lkv": 0.3362,
+    "gap_6h_cam": 1.3834,
+    "gap_24h_lkv": 1.0362,
+    "gap_24h_cam": 1.3828,
+    "gap_72h_lkv": 2.246,
+    "gap_72h_cam": 1.3794,
+    "gap_7d_lkv": 3.1484,
+    "gap_7d_cam": 1.3827,
+    "p1": false,
+    "has_events": true,
+    "p2": true,
+    "median_ae": 0.739,
+    "within_025": 0.1956,
+    "cv_spearman": 0.7501,
+    "sigma_ft": 2.2859,
+    "n_oof": 1314,
+    "n_folds": 7,
+    "cal_frames": 1549,
+    "cal_days": 286.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\IL_Vermilion_River_near_Danville",
+    "model_sha": "7acd3b6cdc7d75cb5f69d211cbba778a14184e49159a1499e7dc382eeb56ab92",
+    "export_msg": "IL_Vermilion_River_near_Danville: 1549 frames, ROI 1756, sigma 2.2859, 0 extra refs"
+  },
+  "live_eligible": true
 }

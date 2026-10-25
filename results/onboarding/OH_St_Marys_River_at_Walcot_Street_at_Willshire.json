@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 150.5
+    "fetch": 150.5,
+    "reference": 0.6,
+    "register_features": 7004.8,
+    "cv": 24.2,
+    "export": 6.6
   },
   "nwis_id": "04181049",
   "state": "OH",
   "name": "St Marys River at Walcot Street at Willshire",
-  "status": "fetched"
+  "status": "done",
+  "reference": "OH_St_Marys_River_at_Walcot_Street_at_Willshire___2026-10-05T16-01-17Z.jpg",
+  "registration": {
+    "frames": 2517,
+    "daylight": 2504,
+    "reg_rate_all": 0.9213,
+    "reg_rate_last30d": 0.9439,
+    "n_daylight_last30d": 196,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "B",
+    "n": 1905,
+    "n_pred": 1905,
+    "reg_rate": 0.9439,
+    "calib_p5_p95_ft": 9.2105,
+    "test_range_ft": 15.62,
+    "mae": 1.7278,
+    "nmae": 0.1876,
+    "mae_p15": 0.01,
+    "mae_p24": 0.8022,
+    "mae_const": 2.2333,
+    "n_ev": 1030,
+    "mae_ev": 2.2553,
+    "mae_p24_ev": 1.4187,
+    "spearman": 0.518,
+    "bacc_flood": 0.6482,
+    "bacc_flood_p24": 0.852,
+    "n_flood": 218,
+    "gap_6h_lkv": 0.2379,
+    "gap_6h_cam": 1.7297,
+    "gap_24h_lkv": 0.8022,
+    "gap_24h_cam": 1.7315,
+    "gap_72h_lkv": 1.6603,
+    "gap_72h_cam": 1.7362,
+    "gap_7d_lkv": 2.7649,
+    "gap_7d_cam": 1.7474,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 1.0659,
+    "within_025": 0.1601,
+    "cv_spearman": 0.518,
+    "sigma_ft": 2.3572,
+    "n_oof": 1905,
+    "n_folds": 10,
+    "cal_frames": 2180,
+    "cal_days": 364.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\OH_St_Marys_River_at_Walcot_Street_at_Willshire",
+    "model_sha": "9b1e799da4e23d664bf29733147c46b7b16bc89238b916e4b31e06eb4667a97e",
+    "export_msg": "OH_St_Marys_River_at_Walcot_Street_at_Willshire: 2180 frames, ROI 163, sigma 2.3572, 0 extra refs"
+  },
+  "live_eligible": true
 }

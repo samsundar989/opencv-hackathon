@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 144.4
+    "fetch": 144.4,
+    "reference": 0.6,
+    "register_features": 10438.0,
+    "cv": 9.0,
+    "export": 17.9
   },
   "nwis_id": "04188496",
   "state": "OH",
   "name": "Eagle Creek above Findlay",
-  "status": "fetched"
+  "status": "done",
+  "reference": "OH_Eagle_Creek_above_Findlay___2026-10-13T22-00-22Z.jpg",
+  "registration": {
+    "frames": 2493,
+    "daylight": 2470,
+    "reg_rate_all": 0.4692,
+    "reg_rate_last30d": 0.7927,
+    "n_daylight_last30d": 164,
+    "view_change_runs": 16,
+    "view_change_linked": 4
+  },
+  "cv": {
+    "tier": "C",
+    "n": 895,
+    "n_pred": 895,
+    "reg_rate": 0.7927,
+    "calib_p5_p95_ft": 3.6457,
+    "test_range_ft": 6.0597,
+    "mae": 0.3729,
+    "nmae": 0.1023,
+    "mae_p15": 0.0124,
+    "mae_p24": 0.7026,
+    "mae_const": 0.9181,
+    "n_ev": 572,
+    "mae_ev": 0.3931,
+    "mae_p24_ev": 1.0496,
+    "spearman": 0.9236,
+    "bacc_flood": 0.843,
+    "bacc_flood_p24": 0.5758,
+    "n_flood": 80,
+    "gap_6h_lkv": 0.2285,
+    "gap_6h_cam": 0.3729,
+    "gap_24h_lkv": 0.7026,
+    "gap_24h_cam": 0.3729,
+    "gap_72h_lkv": 0.9818,
+    "gap_72h_cam": 0.3729,
+    "gap_7d_lkv": 1.1511,
+    "gap_7d_cam": 0.3729,
+    "p1": false,
+    "has_events": true,
+    "p2": true,
+    "median_ae": 0.2828,
+    "within_025": 0.4413,
+    "cv_spearman": 0.9236,
+    "sigma_ft": 0.48,
+    "n_oof": 895,
+    "n_folds": 6,
+    "cal_frames": 1159,
+    "cal_days": 364.0,
+    "tier_reason": "registration < 0.80 (last 30 d)"
+  },
+  "tier": "C",
+  "export": {
+    "bundle": "models\\onboard\\OH_Eagle_Creek_above_Findlay",
+    "model_sha": "5a86e91c630b6627785a38ec42f75bd81eba28139fdc7b7d33fc4a461d082ad5",
+    "export_msg": "OH_Eagle_Creek_above_Findlay: 1159 frames, ROI 1383, sigma 0.48, 16 extra refs"
+  },
+  "live_eligible": false
 }

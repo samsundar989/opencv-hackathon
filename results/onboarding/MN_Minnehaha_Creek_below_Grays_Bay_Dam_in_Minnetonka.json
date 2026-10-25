@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 134.8
+    "fetch": 134.8,
+    "reference": 0.2,
+    "register_features": 5636.8,
+    "cv": 21.9,
+    "export": 9.6
   },
   "nwis_id": "05289100",
   "state": "MN",
   "name": "Minnehaha Creek below Grays Bay Dam in Minnetonka",
-  "status": "fetched"
+  "status": "done",
+  "reference": "MN_Minnehaha_Creek_below_Grays_Bay_Dam_in_Minnetonka___2026-09-20T14-00-05Z.jpg",
+  "registration": {
+    "frames": 2078,
+    "daylight": 2071,
+    "reg_rate_all": 0.9536,
+    "reg_rate_last30d": 0.98,
+    "n_daylight_last30d": 150,
+    "view_change_runs": 4,
+    "view_change_linked": 1
+  },
+  "cv": {
+    "tier": "B",
+    "n": 1719,
+    "n_pred": 1719,
+    "reg_rate": 0.98,
+    "calib_p5_p95_ft": 1.58,
+    "test_range_ft": 1.94,
+    "mae": 0.2512,
+    "nmae": 0.159,
+    "mae_p15": 0.0083,
+    "mae_p24": 0.05,
+    "mae_const": 0.4038,
+    "n_ev": 49,
+    "mae_ev": 0.5761,
+    "mae_p24_ev": 0.4392,
+    "spearman": 0.7183,
+    "bacc_flood": 0.5028,
+    "bacc_flood_p24": 0.9135,
+    "n_flood": 181,
+    "gap_6h_lkv": 0.0211,
+    "gap_6h_cam": 0.2505,
+    "gap_24h_lkv": 0.05,
+    "gap_24h_cam": 0.2501,
+    "gap_72h_lkv": 0.1134,
+    "gap_72h_cam": 0.2491,
+    "gap_7d_lkv": 0.1896,
+    "gap_7d_cam": 0.2485,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 0.1647,
+    "within_025": 0.6271,
+    "cv_spearman": 0.7183,
+    "sigma_ft": 0.3326,
+    "n_oof": 1719,
+    "n_folds": 11,
+    "cal_frames": 1907,
+    "cal_days": 364.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\MN_Minnehaha_Creek_below_Grays_Bay_Dam_in_Minnetonka",
+    "model_sha": "e46d5cdc15ea6951764c6135f9f82429a8f789235d02e310f4374c6e9138dc55",
+    "export_msg": "MN_Minnehaha_Creek_below_Grays_Bay_Dam_in_Minnetonka: 1907 frames, ROI 1008, sigma 0.3326, 4 extra refs"
+  },
+  "live_eligible": true
 }
