@@ -999,8 +999,8 @@ sites:
   score: 0.5714
   camera_type: tidal_coastal
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: NY_Rondout_Creek_at_Rondout
   nwis_id: '01372007'
   state: NY
@@ -1011,8 +1011,8 @@ sites:
   score: 0.5556
   camera_type: small_stream
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: TX_Trinity_Rv_nr_Rosser
   nwis_id: 08062500
   state: TX
@@ -1023,8 +1023,8 @@ sites:
   score: 0.5093
   camera_type: large_river
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: PA_West_Branch_Susquehanna_River_at_Lewisburg
   nwis_id: '01553500'
   state: PA

@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 144.3
+    "fetch": 144.3,
+    "reference": 0.5,
+    "register_features": 7544.1,
+    "cv": 13.5,
+    "export": 5.0
   },
   "nwis_id": "08062500",
   "state": "TX",
   "name": "Trinity Rv nr Rosser",
-  "status": "fetched"
+  "status": "done",
+  "reference": "TX_Trinity_Rv_nr_Rosser___2026-09-14T16-00-03Z.jpg",
+  "registration": {
+    "frames": 2570,
+    "daylight": 2565,
+    "reg_rate_all": 0.7162,
+    "reg_rate_last30d": 0.9845,
+    "n_daylight_last30d": 194,
+    "view_change_runs": 3,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "B",
+    "n": 1484,
+    "n_pred": 1484,
+    "reg_rate": 0.9845,
+    "calib_p5_p95_ft": 12.8045,
+    "test_range_ft": 27.64,
+    "mae": 1.3704,
+    "nmae": 0.107,
+    "mae_p15": 0.0238,
+    "mae_p24": 1.3885,
+    "mae_const": 3.1108,
+    "n_ev": 783,
+    "mae_ev": 1.7528,
+    "mae_p24_ev": 2.5688,
+    "spearman": 0.9477,
+    "bacc_flood": 0.8604,
+    "bacc_flood_p24": 0.8056,
+    "n_flood": 148,
+    "gap_6h_lkv": 0.4566,
+    "gap_6h_cam": 1.3704,
+    "gap_24h_lkv": 1.3885,
+    "gap_24h_cam": 1.3704,
+    "gap_72h_lkv": 2.6898,
+    "gap_72h_cam": 1.3704,
+    "gap_7d_lkv": 3.1081,
+    "gap_7d_cam": 1.3704,
+    "p1": false,
+    "has_events": true,
+    "p2": true,
+    "median_ae": 0.8791,
+    "within_025": 0.1611,
+    "cv_spearman": 0.9477,
+    "sigma_ft": 2.2682,
+    "n_oof": 1484,
+    "n_folds": 6,
+    "cal_frames": 1830,
+    "cal_days": 242.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\TX_Trinity_Rv_nr_Rosser",
+    "model_sha": "6cc5b29405426569b96f3db38f7a9d4f1d23f685c3cdfc877ef77872a6993db9",
+    "export_msg": "TX_Trinity_Rv_nr_Rosser: 1830 frames, ROI 1209, sigma 2.2682, 3 extra refs"
+  },
+  "live_eligible": true
 }

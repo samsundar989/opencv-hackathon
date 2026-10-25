@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 179.4
+    "fetch": 179.4,
+    "reference": 0.5,
+    "register_features": 10773.7,
+    "cv": 18.4,
+    "export": 6.8
   },
   "nwis_id": "01372007",
   "state": "NY",
   "name": "Rondout Creek at Rondout",
-  "status": "fetched"
+  "status": "done",
+  "reference": "NY_Rondout_Creek_at_Rondout___2026-10-08T19-00-08Z.jpg",
+  "registration": {
+    "frames": 4009,
+    "daylight": 4005,
+    "reg_rate_all": 0.6494,
+    "reg_rate_last30d": 0.9309,
+    "n_daylight_last30d": 304,
+    "view_change_runs": 3,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "B",
+    "n": 2434,
+    "n_pred": 2434,
+    "reg_rate": 0.9309,
+    "calib_p5_p95_ft": 4.07,
+    "test_range_ft": 6.84,
+    "mae": 0.5543,
+    "nmae": 0.1362,
+    "mae_p15": 0.1453,
+    "mae_p24": 0.5599,
+    "mae_const": 1.1121,
+    "n_ev": 1856,
+    "mae_ev": 0.5523,
+    "mae_p24_ev": 0.6955,
+    "spearman": 0.8391,
+    "bacc_flood": 0.6292,
+    "bacc_flood_p24": 0.773,
+    "n_flood": 226,
+    "gap_6h_lkv": 2.1732,
+    "gap_6h_cam": 0.5543,
+    "gap_24h_lkv": 0.5599,
+    "gap_24h_cam": 0.5543,
+    "gap_72h_lkv": 1.3494,
+    "gap_72h_cam": 0.5543,
+    "gap_7d_lkv": 2.1241,
+    "gap_7d_cam": 0.5543,
+    "p1": false,
+    "has_events": true,
+    "p2": true,
+    "median_ae": 0.4325,
+    "within_025": 0.3003,
+    "cv_spearman": 0.8391,
+    "sigma_ft": 0.7375,
+    "n_oof": 2434,
+    "n_folds": 10,
+    "cal_frames": 2601,
+    "cal_days": 364.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\NY_Rondout_Creek_at_Rondout",
+    "model_sha": "090d65125394597a73acd185089bba3a49c24f6b7d18347f51bf1313a14cc53b",
+    "export_msg": "NY_Rondout_Creek_at_Rondout: 2601 frames, ROI 3600, sigma 0.7375, 3 extra refs"
+  },
+  "live_eligible": true
 }

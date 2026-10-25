@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 150.6
+    "fetch": 150.6,
+    "reference": 0.5,
+    "register_features": 10211.6,
+    "cv": 2.1,
+    "export": 2.7
   },
   "nwis_id": "381905121413901",
   "state": "CA",
   "name": "Green Slough nr Courtland",
-  "status": "fetched"
+  "status": "done",
+  "reference": "CA_Green_Slough_nr_Courtland___2026-10-04T00-00-10Z.jpg",
+  "registration": {
+    "frames": 2837,
+    "daylight": 2837,
+    "reg_rate_all": 0.3144,
+    "reg_rate_last30d": 0.9498,
+    "n_daylight_last30d": 319,
+    "view_change_runs": 2,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "B",
+    "n": 715,
+    "n_pred": 715,
+    "reg_rate": 0.9498,
+    "calib_p5_p95_ft": 3.15,
+    "test_range_ft": 4.42,
+    "mae": 0.4459,
+    "nmae": 0.1416,
+    "mae_p15": 0.1032,
+    "mae_p24": 0.2842,
+    "mae_const": 0.7334,
+    "n_ev": 345,
+    "mae_ev": 0.4158,
+    "mae_p24_ev": 0.4625,
+    "spearman": 0.8362,
+    "bacc_flood": 0.6369,
+    "bacc_flood_p24": 0.8483,
+    "n_flood": 75,
+    "gap_6h_lkv": 1.5527,
+    "gap_6h_cam": 0.4461,
+    "gap_24h_lkv": 0.2842,
+    "gap_24h_cam": 0.4459,
+    "gap_72h_lkv": 0.7571,
+    "gap_72h_cam": 0.4459,
+    "gap_7d_lkv": 1.1931,
+    "gap_7d_cam": 0.4459,
+    "p1": false,
+    "has_events": true,
+    "p2": true,
+    "median_ae": 0.4061,
+    "within_025": 0.3203,
+    "cv_spearman": 0.8362,
+    "sigma_ft": 0.4941,
+    "n_oof": 715,
+    "n_folds": 3,
+    "cal_frames": 891,
+    "cal_days": 310.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\CA_Green_Slough_nr_Courtland",
+    "model_sha": "183d350dc6e84b55e2d75190a96da5d01e5a3b18dc5a8c954419bc8e9983068d",
+    "export_msg": "CA_Green_Slough_nr_Courtland: 891 frames, ROI 642, sigma 0.4941, 2 extra refs"
+  },
+  "live_eligible": true
 }
