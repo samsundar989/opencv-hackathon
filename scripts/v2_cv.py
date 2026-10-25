@@ -59,26 +59,10 @@ CONFIGS = ["v1", "dino_roi", "dino_v1roi", "dino_all", "dino_roi+norm",
 
 
 def parse(cfg: str) -> dict:
-    """'v1+dino_roi+norm@0.5+sun+rec120' → kernels, weight, ingredients."""
-    parts = cfg.split("+")
-    d = {"v1": "v1" in parts, "dino": None, "w": 1.0, "norm": False, "sun": None, "tau": None}
-    for p in parts:
-        name, _, w = p.partition("@")
-        if name.startswith("dino_") or name == "gmean":
-            d["dino"] = name
-        if name == "norm":
-            d["norm"] = True
-        if name in ("sun", "sundoy"):
-            d["sun"] = name
-        if name.startswith("rec"):
-            d["tau"] = float(name[3:])
-        if w:
-            d["w"] = float(w)
-    if not d["v1"]:
-        d["w"] = 1.0
-    elif d["dino"] is None:
-        d["w"] = 0.0
-    return d
+    """'v1+dino_roi+norm@0.5+sun+rec120' → kernels, weight, ingredients (moved to scene_v2.parse_config so the
+    worker's recalibration job can use it without scripts/)."""
+    from riversight.calib.scene_v2 import parse_config
+    return parse_config(cfg)
 
 
 def load_site(cam: str):

@@ -116,6 +116,32 @@ def kalman_r(loo: np.ndarray) -> float:
     return max(float(np.var(loo)) * (1 - np.clip(rho, 0, 0.95)), 1e-6)
 
 
+# ---- configuration strings (scripts/v2_cv.py CONFIGS) ------------------------------------------------
+
+def parse_config(cfg: str) -> dict:
+    """'v1+dino_roi+norm@0.5+sun+rec120' → kernels, weight, ingredients."""
+    parts = cfg.split("+")
+    d = {"v1": "v1" in parts, "dino": None, "w": 1.0, "norm": False, "sun": None, "tau": None}
+    for p in parts:
+        name, _, w = p.partition("@")
+        if name.startswith("dino_") or name == "gmean":
+            d["dino"] = name
+        if name == "norm":
+            d["norm"] = True
+        if name in ("sun", "sundoy"):
+            d["sun"] = name
+        if name.startswith("rec"):
+            d["tau"] = float(name[3:])
+        if w:
+            d["w"] = float(w)
+    if not d["v1"]:
+        d["w"] = 1.0
+    elif d["dino"] is None:
+        d["w"] = 0.0
+    return d
+
+
+
 # ---- live shadow bundle (primal form) -----------------------------------------------------------------
 
 def fit_bundle(X: np.ndarray, P: np.ndarray, t: pd.DatetimeIndex, h: np.ndarray, spec: dict, lat: float,

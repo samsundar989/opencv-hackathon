@@ -52,12 +52,11 @@ def cv_sigma(cam: str, config: str) -> float:
     return float(np.std(z["P"][k][ok] - z["h"][ok])) if ok.sum() > 5 else float("nan")
 
 
-def export_site(cam: str, site: dict, config: str, out_root: Path) -> str:
-    from export_site_models import gauge_all, load_all
-    from riversight.calib import scene_v2 as S
-    from riversight.live.bundle import kalman_q
-    from v2_cv import parse
-    t, h, F, fns = load_all(cam)
+def training_set(cam: str, cut: pd.Timestamp | None = None):
+    """(t, h, F, P, n_dropped) — the v1 live-model frames (export_site_models.load_all) that have DINO tokens.
+    Also the base set of the weekly recalibration (scripts/v2_recal_base.py)."""
+    from export_site_models import load_all
+    t, h, F, fns = load_all(cam, cut)
     toks = {}
     for n in ("dino_calib.npz", "dino_live.npz"):
         z = np.load(DATA / "derived" / cam / n)
@@ -65,8 +64,16 @@ def export_site(cam: str, site: dict, config: str, out_root: Path) -> str:
             toks.setdefault(f, (n, i))
     Pz = {n: np.load(DATA / "derived" / cam / n)["P"] for n in ("dino_calib.npz", "dino_live.npz")}
     keep = np.array([f in toks for f in fns])
-    t, h, F = t[keep], h[keep], F[keep]
     P = np.stack([Pz[toks[f][0]][toks[f][1]] for f, k in zip(fns, keep) if k])
+    return t[keep], h[keep], F[keep], P, int((~keep).sum())
+
+
+def export_site(cam: str, site: dict, config: str, out_root: Path) -> str:
+    from export_site_models import gauge_all
+    from riversight.calib import scene_v2 as S
+    from riversight.live.bundle import kalman_q
+    from v2_cv import parse
+    t, h, F, P, n_drop = training_set(cam)
     g = gauge_all(cam)
     arr = S.fit_bundle(F, P, t, h, parse(config), float(site["lat"]), float(site["lng"]), kalman_q(g.index, g.values))
     d, tmp = out_root / cam, out_root / f".{cam}.part"
@@ -74,7 +81,7 @@ def export_site(cam: str, site: dict, config: str, out_root: Path) -> str:
     tmp.mkdir(parents=True)
     np.savez_compressed(tmp / "scene_model_v2.npz", **arr)
     meta = {"cam_id": cam, "lat": float(site["lat"]), "lon": float(site["lng"]), "config": config,
-            "sigma_ft": round(cv_sigma(cam, config), 4), "n_train_frames": int(len(t)), "n_dropped_no_tokens": int((~keep).sum()),
+            "sigma_ft": round(cv_sigma(cam, config), 4), "n_train_frames": int(len(t)), "n_dropped_no_tokens": n_drop,
             "n_roi_blocks": int(arr["roi"].sum()), "n_dino_patches": int(arr["dino_roi"].sum()) if "dino_roi" in arr else 0,
             "dino_onnx_sha256": __import__("riversight.vision.dino_features", fromlist=["x"]).MODEL_SHA256,
             "pca_basis_sha256": sha(BASIS), "model_sha": sha(tmp / "scene_model_v2.npz"),
