@@ -50,14 +50,17 @@ def freeze():
     print(f"froze {len(models)} models -> {FROZEN}")
 
 
-def freeze_onboarded():
-    """D-0012: the tier-B onboarded bundles as deployed, scored as their own group from their first live cycle."""
-    out = OUT / "frozen_models_onboarded.json"
+def freeze_onboarded(batch2: bool = False):
+    """D-0012: the tier-B onboarded bundles as deployed, scored as their own group from their first live cycle.
+    batch2 (D-0013 W5-1, deployed by W5 under D-0015): only the tier-B sites not in the batch-1 group, as a separate
+    group `onboarded_b2` with its own window start, so neither record is changed by the other."""
+    out = OUT / ("frozen_models_onboarded_b2.json" if batch2 else "frozen_models_onboarded.json")
     if out.exists():
         sys.exit(f"refusing: {out} exists (frozen once)")
+    b1 = set(json.loads((OUT / "frozen_models_onboarded.json").read_text(encoding="utf-8"))["models"]) if batch2 else set()
     models = {}
     for d in sorted((ROOT / "models" / "onboard").iterdir()):
-        if not (d / "meta.json").exists():
+        if not (d / "meta.json").exists() or d.name in b1:
             continue
         m = json.loads((d / "meta.json").read_text(encoding="utf-8"))
         if m.get("tier") not in ("A", "B"):
@@ -66,8 +69,9 @@ def freeze_onboarded():
         assert sha == m["model_sha"], d.name
         models[d.name] = {"model_sha": sha, "nwis_id": m["nwis_id"], "trained_at": m["trained_at"], "tier": m["tier"],
                           "n_calib_frames": m["n_calib_frames"], "calib_end": m["calib_end"]}
-    doc = {"decision": "D-0012 Q-0012 option 1 (onboarded group, never mixed with the frozen 20); rules of D-0010 §1",
-           "group": "onboarded", "window_start_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+    doc = {"decision": "D-0012 Q-0012 option 1 (onboarded group, never mixed with the frozen 20); rules of D-0010 §1"
+                       + ("; batch 2 (D-0013 W5-1) as its own group, frozen by W5 (D-0015) before its first served cycle" if batch2 else ""),
+           "group": "onboarded_b2" if batch2 else "onboarded", "window_start_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
            "note": "frozen at deploy time, before the first cycle that serves these bundles",
            "bundles": "W5 onboarding (models/onboard, frozen D-0007 setting, 12 months to 2026-10-23)",
            "frozen_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"), "models": models}
@@ -80,14 +84,15 @@ def main():
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--freeze", action="store_true")
     g.add_argument("--freeze-onboarded", action="store_true")
+    g.add_argument("--freeze-onboarded-b2", action="store_true")
     g.add_argument("--s3", metavar="BUCKET")
     g.add_argument("--local", nargs="?", const=str(ROOT / "live_local"))
     ap.add_argument("--profile", default="riversight")
     a = ap.parse_args()
     if a.freeze:
         return freeze()
-    if a.freeze_onboarded:
-        return freeze_onboarded()
+    if a.freeze_onboarded or a.freeze_onboarded_b2:
+        return freeze_onboarded(batch2=a.freeze_onboarded_b2)
     from riversight.live import prospective
     from riversight.live.store import LocalStore, S3Store
     if a.s3:

@@ -23,7 +23,7 @@ env = cdk.Environment(account=os.environ.get("CDK_DEFAULT_ACCOUNT"), region=regi
 email = ctx("alert_email")
 
 GuardStack(app, "RiverSightGuard", env=env, email=email, budget_usd=float(ctx("budget_usd")),
-           stop_pct=float(ctx("stop_at_pct")), description="RiverSight D-0004 budget guard ($100 cap, stop EC2 at 90%)")
+           stop_pct=float(ctx("stop_at_pct")), description="RiverSight D-0004 budget guard ($100 cap, stop EC2 at 100% per ANSWER 0013)")
 if ctx("deploy_live") != "0":
     LiveStack(app, "RiverSightLive", env=env, email=email, worker_ami=ctx("worker_ami"),
               instance_type=ctx("worker_instance_type"), bedrock_profile=ctx("bedrock_profile"),

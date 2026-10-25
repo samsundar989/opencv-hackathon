@@ -4,7 +4,7 @@
     "region": "us-east-2",
     "alert_email": "samsundar989@gmail.com",
     "budget_usd": 100,
-    "stop_at_pct": 90,
+    "stop_at_pct": 100,
     "worker_ami": "cool",
     "worker_instance_type": "m9g.large",
     "bedrock_profile": "us.anthropic.claude-*",

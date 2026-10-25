@@ -3,7 +3,7 @@
   * Budget `riversight-cap`: $100 of gross cost (credits excluded, so it measures what the card could be
     charged), cumulative from 2026-10-01 (annual period, so the October and November spend add up instead
     of resetting on Nov 1). Email alerts at 25/50/75/90 % actual and 100 % forecasted.
-  * Stop action: the same budget notifies the `riversight-stop` SNS topic at 90 % actual; a Lambda stops
+  * Stop action: the same budget notifies the `riversight-stop` SNS topic at `stop_at_pct` (100 % since ANSWER 0013) actual; a Lambda stops
     every running instance tagged Project=riversight (reversible; nothing is terminated).
 
 A CloudWatch billing alarm (D-0004's backup) needs the EstimatedCharges metric, which exists only in

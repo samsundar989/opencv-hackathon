@@ -12,7 +12,8 @@
 </head>
 <body>
 <main>
-  <h1>Live: 20 USGS river cameras read as water-level gauges</h1>
+  <h1 id="title">Live: USGS river cameras read as water-level gauges</h1>
+  <p class="small muted" id="subtitle"></p>
   <p class="lede">Each camera's newest frame is registered to its own reference with OpenCV 5 (ALIKED + LightGlue + MAGSAC).
     A per-site scene model, calibrated from the camera's own USGS gauge history, then reads the river stage from the picture.
     Blue in the images shows what is under water at that stage. When a gauge goes offline, the camera keeps reading
@@ -37,6 +38,14 @@
   try { idx = await RS.json("live/index.json"); }
   catch (e) { strip.innerHTML = `<span class="err">No live data yet (${RS.esc(e.message)}).</span>`; return; }
   let sites = idx.sites || [];
+  {   // D-0014 G2-1: the title counts what the live index serves (frozen 20 + onboarded), never a hard-coded number
+    const nOnb = sites.filter((s) => s.group === "onboarded").length, nAll = sites.length;
+    if (nAll) {
+      document.getElementById("title").textContent = `Live: ${nAll} USGS river cameras read as water-level gauges`;
+      document.getElementById("subtitle").textContent = nOnb
+        ? `${nAll - nOnb} frozen-test cameras + ${nOnb} onboarded this weekend (self-calibrated from each gauge's history)` : "";
+    }
+  }
   // D-0011 W1-4: count every status, so a night-time strip doesn't read as "broken"
   const by = {};
   sites.forEach((s) => { by[s.status || "pending"] = (by[s.status || "pending"] || 0) + 1; });

@@ -40,7 +40,10 @@ def load_readings(store, cams: list[str], start: pd.Timestamp, end: pd.Timestamp
                     continue
                 rows.append({"cam_id": r["cam_id"], "t_frame": r["t_frame"], "t_cycle": r["t_cycle"],
                              "daylight": r.get("daylight"), "reg_ok": (r.get("registration") or {}).get("ok"),
-                             "model_sha": r.get("model_sha"), "camera_ft": r.get("camera_stage_ft"),
+                             # frozen v1 (D-0010 §1): its own number even after v2 is served (D-0014)
+                             "model_sha": r.get("model_sha"),
+                             "camera_ft": r["v1_stage_ft"] if "v1_stage_ft" in r else r.get("camera_stage_ft"),
+                             "served_model": r.get("served_model", "v1"),
                              "camera_at_least_ft": r.get("camera_at_least_ft"), "shadow_ft": r.get("shadow_stage_ft"),
                              "flags": "|".join(r.get("flags", [])),
                              "status": r.get("status"), "agent_actions": "|".join((r.get("agent") or {}).get("actions") or [])})

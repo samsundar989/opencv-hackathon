@@ -112,9 +112,10 @@ def tarball() -> bytes:
         for f in ONNX:
             add(ROOT / "models" / "onnx" / f, f"models/onnx/{f}")
         add(ROOT / "results" / "live_prospective" / "frozen_models.json", "results/live_prospective/frozen_models.json")
-        fo = ROOT / "results" / "live_prospective" / "frozen_models_onboarded.json"
-        if fo.exists():
-            add(fo, "results/live_prospective/frozen_models_onboarded.json")
+        for name in ("frozen_models_onboarded.json", "frozen_models_onboarded_b2.json"):   # b2: W5 batch 2 (D-0015)
+            fo = ROOT / "results" / "live_prospective" / name
+            if fo.exists():
+                add(fo, f"results/live_prospective/{name}")
         add(ROOT / "infra" / "worker" / "worker.env", "worker.env")
         for d in onboarded_bundles():                          # W5 tier-B sites (D-0012), served as their own group
             add(d, f"models/onboard/{d.name}")

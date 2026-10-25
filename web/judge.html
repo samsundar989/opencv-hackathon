@@ -13,7 +13,7 @@
   <h1>For judges: a 60-second tour</h1>
   <p class="panel small" id="uptime" aria-live="polite">Checking the live worker…</p>
   <ol class="panel" style="padding-left:32px">
-    <li><a href="index.html">Live</a>: 20 public USGS river cameras, re-read every 15 minutes by a Graviton worker. Camera stage ± σ sits next to the USGS gauge.</li>
+    <li><a href="index.html">Live</a>: <span id="ncams">the 20 frozen-test public USGS river cameras plus the cameras onboarded this weekend</span>, re-read by a Graviton worker. Camera stage ± σ sits next to the USGS gauge.</li>
     <li>Open a featured site: <a href="site.html?cam=IL_Salt_Creek_at_Wood_Dale">Salt Creek, IL</a>,
       <a href="site.html?cam=NY_Neversink_River_at_Godeffroy">Neversink, NY</a> or <a href="site.html?cam=NY_East_Branch_Delaware_River_at_Hancock_Staff">Hancock, NY</a>
       (then Bean Creek, Stony Brook, Buffalo Bayou). Pecatonica's camera has sent nothing since Oct 20, but its
@@ -98,6 +98,11 @@ python scripts/deploy.py                      # the AWS stack (us-east-2), budge
   } catch (e) { document.getElementById("kpis").innerHTML = `<div class="panel err">${RS.esc(e.message)}</div>`; }
   await RS.panel("uptime", async (el) => {
     const i = await RS.json("live/index.json");
+    {   // D-0014 G2-1: tour step 1 counts what the live index serves
+      const ss = i.sites || [], nOnb = ss.filter((x) => x.group === "onboarded").length;
+      if (ss.length) document.getElementById("ncams").textContent =
+        `${ss.length} public USGS river cameras (${ss.length - nOnb} frozen-test + ${nOnb} onboarded this weekend)`;
+    }
     const m = (Date.now() - Date.parse(i.cycle_started)) / 60000;
     el.innerHTML = `${m < 35 ? "🟢" : m < 75 ? "🟡" : "🔴"} Live worker: last cycle <b>${RS.ago(i.cycle_started)}</b>
       (runs every 15 min on Graviton, OpenCV ${RS.esc(i.opencv?.version)}${i.opencv?.cool ? " COOL" : ""}); ${i.n_errors} site errors in that cycle.

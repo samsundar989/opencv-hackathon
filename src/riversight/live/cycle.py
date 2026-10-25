@@ -237,8 +237,8 @@ class SiteRegistrar:
 
 def fuse(state: dict, model: SiteModel, frame: Frame, t_cycle: datetime, raw: float | None, g_fresh: float | None,
          g_t, flags: list[str], at_least: float | None) -> dict:
-    """Headline stage: the gauge when fresh; when stale, a camera-driven Kalman (camera − gauge offset anchored
-    over the last 48 h of paired readings, the site's D-0007 r and q) whose σ grows without frames; above the
+    """Headline stage: the gauge when fresh; when stale, a camera-driven Kalman (the site's D-0007 r and q; camera −
+    gauge offset b = 0 live, or anchored over the last 48 h with RIVERSIGHT_FUSED_BIAS=1) whose σ grows without frames; above the
     calibrated range with the gauge down, a lower bound. Provenance travels with the number."""
     from riversight.calib.fusion import BIAS_WINDOW, MIN_BIAS_FRAMES, Fused
     q, r = float(model.a["q"]), float(model.a["r"])
@@ -254,7 +254,9 @@ def fuse(state: dict, model: SiteModel, frame: Frame, t_cycle: datetime, raw: fl
         if usable_cam:
             pairs.append([t_frame, raw, g_fresh])
         F.gauge(pd.Timestamp(g_t).timestamp(), g_fresh)
-        F.b = float(pd.Series([c - g for _, c, g in pairs]).median()) if len(pairs) >= MIN_BIAS_FRAMES else 0.0
+        # Cowork ruling 2026-10-25 03:05 CT: live serves the plain fused filter (F.b = 0); the 48 h anchored offset
+        # (pre-registered fused_bias, reported) only with RIVERSIGHT_FUSED_BIAS=1
+        F.b = float(pd.Series([c - g for _, c, g in pairs]).median())             if len(pairs) >= MIN_BIAS_FRAMES and os.environ.get("RIVERSIGHT_FUSED_BIAS", "0") == "1" else 0.0
         out = (F.x, F.sigma, "gauge")
     elif at_least is not None:
         F.predict(t_frame, q)
@@ -279,9 +281,15 @@ SHADOW_DIR = Path(os.environ.get("RIVERSIGHT_SHADOW_BUNDLES", BUNDLES.parent / "
 _SHADOW: dict = {}
 
 
+def serve_v2() -> bool:
+    """D-0014: v2 promoted under the pre-registered D-0010 §2 criteria. Off unless RIVERSIGHT_SERVE_V2=1 (worker.env)."""
+    return os.environ.get("RIVERSIGHT_SERVE_V2", "0") == "1"
+
+
 def shadow_v2(cam: str, img: np.ndarray, H, ref_shape, frame: "Frame", state: dict) -> dict | None:
     """v2 (DINOv2 tokens in cv2.dnn + v1 block features) estimate beside v1. Absent bundles or any error → None;
     a v2 failure never touches the v1 reading."""
+    _SHADOW.pop("last", None)
     if not (SHADOW_DIR / cam).is_dir():
         return None
     t0 = time.perf_counter()
@@ -301,11 +309,66 @@ def shadow_v2(cam: str, img: np.ndarray, H, ref_shape, frame: "Frame", state: di
         raw2 = float(_SHADOW[cam].predict_raw(F, P, frame.time))
         ks2, x2, _ = _SHADOW[cam].kalman_step(KalmanState.from_json(state.get("kalman_v2")), frame.time.timestamp(), raw2)
         state["kalman_v2"] = ks2.to_json()
-        return {"shadow_raw_ft": _r(raw2), "shadow_stage_ft": _r(x2), "shadow_model": "v2",
-                "shadow_ms": round((time.perf_counter() - t0) * 1000)}
+        _SHADOW["last"] = (cam, F, P, raw2)                # W4 recal (D-0014): logged in run_site once flags are final
+        out = {"shadow_raw_ft": _r(raw2), "shadow_stage_ft": _r(x2), "shadow_model": "v2",
+               "shadow_ms": round((time.perf_counter() - t0) * 1000)}
+        out.update(recal_shadow(cam, F, P, frame, state) or {})
+        return out
     except Exception as e:
         traceback.print_exc()
         return {"shadow_error": repr(e)[:200]}
+
+
+# ---- weekly self-recalibration (W4, D-0014; riversight.calib.recal) ---------------------------------
+
+RECAL_DIR = Path(os.environ.get("RIVERSIGHT_RECAL_BUNDLES", BUNDLES.parent / "sites_recal"))
+RECAL_LOCK = Path(os.environ.get("RIVERSIGHT_RECAL_LOCK", "/tmp/riversight_recal.lock"))
+
+
+def recal_shadow(cam: str, F: np.ndarray, P: np.ndarray, frame: "Frame", state: dict) -> dict | None:
+    """The latest weekly refit of this site's v2 bundle, scored beside the served model (never served without a
+    human-approved RECALIBRATE). Absent bundle → None; any error → an error field, never an exception."""
+    d = RECAL_DIR / cam
+    if not (d / "meta_v2.json").exists():
+        return None
+    try:
+        from riversight.calib.scene_v2 import ShadowV2
+        mt = (d / "meta_v2.json").stat().st_mtime
+        if _SHADOW.get(("recal", cam), (None,))[0] != mt:
+            _SHADOW[("recal", cam)] = (mt, ShadowV2(d))
+        sh = _SHADOW[("recal", cam)][1]
+        raw3 = float(sh.predict_raw(F, P, frame.time))
+        ks3, x3, _ = sh.kalman_step(KalmanState.from_json(state.get("kalman_recal")), frame.time.timestamp(), raw3)
+        state["kalman_recal"] = ks3.to_json()
+        return {"recal_shadow_raw_ft": _r(raw3), "recal_shadow_ft": _r(x3), "recal_model_sha": str(sh.meta.get("model_sha", ""))[:12]}
+    except Exception as e:
+        traceback.print_exc()
+        return {"recal_shadow_error": repr(e)[:200]}
+
+
+def maybe_recal_jobs(store, now: datetime | None = None) -> str | None:
+    """Launch the weekly refit (Mondays 06–07 UTC, if the last run is > 6 days old) or the hourly drift update as
+    a detached, low-priority process, so the cycle never waits for it. S3 only; RIVERSIGHT_RECAL=0 disables."""
+    if not isinstance(store, S3Store) or os.environ.get("RIVERSIGHT_RECAL", "1") == "0":
+        return None
+    now = pd.Timestamp(now or utcnow())
+    if RECAL_LOCK.exists() and time.time() - RECAL_LOCK.stat().st_mtime < 2 * 3600:
+        return None
+    last = (store.get_json("live/recal/models/_last_run.json") or {}).get("finished")
+    if now.weekday() == 0 and now.hour == 6 and (not last or now - pd.Timestamp(last) > pd.Timedelta("6D")):
+        cmd = ["refit", "--cache", str(Path.home() / ".cache" / "riversight" / "recal_base"), "--out", str(RECAL_DIR)]
+    else:
+        lastd = (store.get_json("live/recal/drift/_last.json") or {}).get("t")
+        if lastd and now - pd.Timestamp(lastd) < pd.Timedelta("55min"):
+            return None
+        store.put_json("live/recal/drift/_last.json", {"t": iso(now)})
+        cmd = ["drift"]
+    RECAL_LOCK.write_text(str(os.getpid()))
+    args = [sys.executable, "-m", "riversight.calib.recal", *cmd, "--s3", store.bucket, "--bundles", str(SHADOW_DIR)]
+    nice = ["nice", "-n", "19"] if os.name == "posix" else []
+    sh = f"{' '.join(nice + args)} > /tmp/riversight_recal_{cmd[0]}.log 2>&1; rm -f {RECAL_LOCK}"
+    subprocess.Popen(["/bin/sh", "-c", sh] if os.name == "posix" else args, cwd=ROOT, start_new_session=True)
+    return cmd[0]
 
 
 # ---- overlay ----------------------------------------------------------------------------------------
@@ -435,6 +498,8 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
     raw = cam_x = None
     H = None
     shadow = None
+    v1_fields: dict = {}
+    served_meta: dict | None = None
     if night:
         flags.append("NIGHT")
     else:
@@ -458,12 +523,18 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
                 ks, cam_x, _ = model.kalman_step(KalmanState.from_json(state.get("kalman")), frame.time.timestamp(), raw)
                 state["kalman"] = ks.to_json()
             shadow = shadow_v2(cam, img, H, tuple(meta["ref_shape"]), frame, state)
+            if serve_v2() and shadow and shadow.get("shadow_raw_ft") is not None and cam_x is not None:
+                # D-0014: v2 is served; v1 keeps running beside it. model_sha stays the frozen v1 identity so the
+                # pre-registered frozen-v1 prospective record (D-0010 §1) continues on v1_stage_ft.
+                v1_fields = {"v1_raw_ft": _r(raw), "v1_stage_ft": _r(cam_x)}
+                raw, cam_x = float(shadow["shadow_raw_ft"]), float(shadow["shadow_stage_ft"])
+                served_meta = _SHADOW[cam].meta
     g_val, g_t, g_rise = gauge.at(meta["nwis_id"], t_cycle)
     g_age = None if g_t is None else (pd.Timestamp(t_cycle) - g_t).total_seconds() / 60
     if g_age is None or g_age > GAUGE_STALE_MIN:
         flags.append("GAUGE_STALE")
     g_fresh = g_val if "GAUGE_STALE" not in flags else None
-    sigma = meta.get("sigma_ft") or 0.0
+    sigma = (served_meta or meta).get("sigma_ft") or meta.get("sigma_ft") or 0.0
     released = release_quarantine(state, model, frame, raw, g_fresh, sigma, store, t_cycle) if state.get("quarantined") else False
     if released:
         cam_x = raw
@@ -526,8 +597,23 @@ def run_site(model: SiteModel, frame: Frame, store, gauge: Gauge, t_cycle: datet
         "model_sha": meta["model_sha"][:12], "code_sha": code_sha(), "opencv": opencv_info(), "mode": mode,
         "privacy": {"faces_blurred": privacy.get("faces_blurred", 0), "detector": "YuNet", "score": FACE_SCORE},
     }
-    if shadow:                                      # W4 v2 candidate (D-0010 §2): logged and scored, never served
+    if shadow:                                      # W4 v2 (D-0010 §2); served when RIVERSIGHT_SERVE_V2=1 (D-0014)
         reading.update(shadow)
+    if served_meta is not None:
+        reading.update(v1_fields, served_model="v2", served_model_sha=str(served_meta.get("model_sha", ""))[:12],
+                       served_config=served_meta.get("config"))
+        if at_least is not None:
+            reading["v1_stage_ft"] = None               # same rule as camera_stage_ft: no number above the range
+    else:
+        reading["served_model"] = "v1" if cam_x is not None else None     # night / unregistered: nothing served
+    last = _SHADOW.pop("last", None)
+    if last is not None and last[0] == cam:         # W4 weekly self-recalibration (D-0014): persist F, P + gauge
+        try:
+            from riversight.calib import recal
+            recal.log_features(store, cam, frame.time, last[1].astype(np.float16), last[2], g_val, g_t,
+                               reading["flags"], raw_ft=last[3])
+        except Exception:
+            traceback.print_exc()
     reading.update(fuse(state, model, frame, t_cycle, raw, g_fresh, g_t, flags, at_least))
     if not night and reg["ok"]:                     # D-0009 W1-2: remembered for night / stale display
         state["last_daylight"] = {k: reading[k] for k in (
@@ -766,9 +852,18 @@ def run_cycle(store, models: list[SiteModel], agent_fn=default_agent_fn, now: da
             write_health(store)
     except Exception:
         traceback.print_exc()
+    try:                                            # D-0014 G2-2/3: approval TTL + superseded tide alerts
+        from riversight.live.approvals_ttl import expire_approvals
+        expire_approvals(store)
+    except Exception:
+        traceback.print_exc()
     try:                                            # W2: ranked "needs a person" list for the dashboard
         from riversight.agent.triage import write_triage
         write_triage(store)
+    except Exception:
+        traceback.print_exc()
+    try:                                            # W4 weekly refit / hourly drift (D-0014), detached
+        maybe_recal_jobs(store)
     except Exception:
         traceback.print_exc()
     from riversight.live.proof import proof, put_metrics
@@ -841,7 +936,8 @@ def score_prospective_hourly(store) -> None:
     """D-0010 §1: refresh live/prospective/* at most once an hour (one batched NWIS IV request)."""
     from riversight.live import prospective
     for path, prefix in ((FROZEN_MODELS, "live/prospective"),
-                         (FROZEN_MODELS.with_name("frozen_models_onboarded.json"), "live/prospective/onboarded")):
+                         (FROZEN_MODELS.with_name("frozen_models_onboarded.json"), "live/prospective/onboarded"),
+                         (FROZEN_MODELS.with_name("frozen_models_onboarded_b2.json"), "live/prospective/onboarded_b2")):
         if not path.exists():
             continue
         last = (store.get_json(f"{prefix}/summary.json") or {}).get("generated_utc")
