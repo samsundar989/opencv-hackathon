@@ -9,10 +9,30 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 134.5
+    "fetch": 134.5,
+    "reference": 0.0,
+    "register_features": 3541.4,
+    "cv": 0.1
   },
   "nwis_id": "02336300",
   "state": "GA",
   "name": "Peachtree Creek at Atlanta",
-  "status": "fetched"
+  "status": "done",
+  "reference": "GA_Peachtree_Creek_at_Atlanta___2026-09-08T18-00-13Z.jpg",
+  "registration": {
+    "frames": 1682,
+    "daylight": 1682,
+    "reg_rate_all": 0.0892,
+    "reg_rate_last30d": 0.7263,
+    "n_daylight_last30d": 95,
+    "view_change_runs": 5,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "C",
+    "tier_reason": "too little data for forward-chaining CV",
+    "n_oof": 0
+  },
+  "tier": "C",
+  "live_eligible": false
 }

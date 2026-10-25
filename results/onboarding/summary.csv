@@ -11,7 +11,7 @@ CA_Green_Slough_nr_Courtland,fetched,,,,,,,,,,,,,,,,,,,,,,,,,3252,2837,37,2829,1
 CA_Sacramento_River_at_Freeport,fetched,,,,,,,,,,,,,,,,,,,,,,,,,11816,2752,37,2749,149.3,,,,,,large_river,2
 CA_Suisun_Slough_nr_Benicia,fetched,,,,,,,,,,,,,,,,,,,,,,,,,13237,3149,37,3144,156.3,,,,,,tidal_coastal,2
 GA_Big_Creek_near_Alpharetta,done,B,True,meets tier B,2128.0,11.0,0.5201,0.3132,0.1463,False,0.4239,0.6362,0.6881,0.6978,0.6881,0.5199,0.9718,0.5201,0.8348,364.0,2339.0,3.556,0.9634,0.8768,0.0,24577,2688,37,2688,149.0,0.5,272.5,28.6,,7.0,small_stream,2
-GA_Peachtree_Creek_at_Atlanta,fetched,,,,,,,,,,,,,,,,,,,,,,,,,10476,1682,37,1682,134.5,,,,,,small_stream,2
+GA_Peachtree_Creek_at_Atlanta,done,C,False,too little data for forward-chaining CV,0.0,,,,,,,,,,,,,,,,,,0.7263,0.0892,5.0,10476,1682,37,1682,134.5,0.0,3541.4,0.1,,,small_stream,2
 GA_Savannah_River_at_USACE_Dock_at_Savannah,done,B,True,meets tier B,3616.0,11.0,0.4294,0.2951,0.051,True,0.4458,0.9738,1.0822,2.4651,1.0822,0.4294,4.7732,0.4294,0.628,364.0,4003.0,8.42,0.9757,0.9529,0.0,24842,4245,37,4245,189.2,0.5,4837.2,60.6,,15.8,tidal_coastal,1
 GA_Sweetwater_Creek_at_Austell,done,B,True,meets tier B,2034.0,10.0,0.5985,0.3269,0.1415,False,0.4061,0.7565,0.6494,0.8985,0.6494,0.598,1.2408,0.5989,0.9891,364.0,2364.0,4.23,0.9628,0.9255,0.0,24780,2630,37,2629,150.5,0.7,228.8,26.4,,7.4,small_stream,2
 GA_Withlacoochee_River_at_Skipper_Bridge_Road_near_Bemiss,done,B,True,meets tier B,1900.0,10.0,1.0847,0.5595,0.1438,False,0.2626,0.8284,0.4883,1.9324,0.4883,1.0847,1.9402,1.0847,1.711,364.0,2198.0,7.543,0.9255,0.8846,0.0,24435,2506,37,2506,158.0,0.5,326.5,26.1,,6.9,large_river,1
@@ -44,7 +44,7 @@ ND_Crooked_Creek_near_Emerson,fetched,,,,,,,,,,,,,,,,,,,,,,,,,4643,2025,37,2024,
 ND_Edmore_Coulee_Trib_nr_Webster,fetched,,,,,,,,,,,,,,,,,,,,,,,,,3179,1534,37,1532,121.2,,,,,,cold_climate,2
 ND_Missouri_River_at_Bismarck,fetched,,,,,,,,,,,,,,,,,,,,,,,,,8679,2243,37,2242,137.6,,,,,,cold_climate,2
 ND_Missouri_River_below_Mandan,done,B,True,meets tier B,1556.0,10.0,0.5796,0.3337,0.1025,False,0.3985,0.6977,0.16,1.0468,0.16,0.5795,0.3574,0.5804,0.8155,364.0,1814.0,5.6535,0.8938,0.8388,1.0,8573,2205,37,2204,142.7,0.7,3099.3,26.1,,10.3,cold_climate,1
-ND_Souris_River_near_Sherwood,fetched,,,,,,,,,,,,,,,,,,,,,,,,,8142,2219,37,2218,137.4,,,,,,cold_climate,2
+ND_Souris_River_near_Sherwood,done,C,False,CV Spearman < 0.5,1578.0,9.0,1.191,0.6802,0.2494,False,0.1952,0.3457,0.2548,1.3138,0.2548,1.191,0.8616,1.191,1.7027,339.0,1765.0,4.776,0.9639,0.8179,9.0,8142,2219,37,2218,137.4,0.4,4495.5,17.7,,21.3,cold_climate,2
 NE_Missouri_River_at_Decatur,done,B,True,meets tier B,1079.0,10.0,0.6904,0.5006,0.1239,False,0.2252,0.6397,0.181,1.3938,0.181,0.6904,0.4911,0.6904,0.9787,364.0,1337.0,5.572,0.9153,0.7918,3.0,13809,1713,37,1713,131.8,0.5,2705.0,15.8,,7.6,large_river,1
 NY_Canajoharie_Creek_near_Canajoharie,fetched,,,,,,,,,,,,,,,,,,,,,,,,,3398,1696,37,1693,135.0,,,,,,small_stream,2
 NY_Genesee_River_at_Avon_Staff_Gage,done,C,False,registration < 0.80 (last 30 d),1738.0,10.0,2.1606,2.0452,0.1472,False,0.0472,0.9025,1.0126,4.8819,1.0126,2.1606,2.2852,2.1606,2.4916,364.0,2076.0,14.68,0.6464,0.699,15.0,4812,2970,37,2968,160.4,0.5,2362.2,26.3,,49.0,large_river,1
@@ -53,7 +53,7 @@ NY_Mohawk_River_at_Lock_9_at_Rotterdam_Junction_Downstream_Zoom,done,C,False,reg
 NY_MOHAWK_RIVER_AT_LOCK_9_AT_ROTTERDAM_JUNCTION_NY,fetched,,,,,,,,,,,,,,,,,,,,,,,,,78982,3127,245,3126,666.3,,,,,,large_river,2
 NY_Mohawk_River_at_Lock_9_at_Rotterdam_Junction_Upstream,fetched,,,,,,,,,,,,,,,,,,,,,,,,,79275,3126,245,3126,656.9,,,,,,large_river,2
 NY_Rondout_Creek_at_Rondout,fetched,,,,,,,,,,,,,,,,,,,,,,,,,4124,4009,37,3999,179.4,,,,,,small_stream,2
-NY_Schoharie_Creek_at_Prattsville_Upstream_View,fetched,,,,,,,,,,,,,,,,,,,,,,,,,4411,2155,37,2155,141.0,,,,,,small_stream,2
+NY_Schoharie_Creek_at_Prattsville_Upstream_View,done,B,True,meets tier B,1811.0,11.0,0.3673,0.2181,0.1257,False,0.5533,0.8457,0.3535,0.6619,0.3535,0.3673,0.6683,0.3684,0.7688,364.0,1997.0,2.922,0.9886,0.9295,5.0,4411,2155,37,2155,141.0,0.0,4261.2,27.1,,10.3,small_stream,2
 OH_Auglaize_River_near_Defiance,done,C,False,CV Spearman < 0.5,1335.0,6.0,1.3184,1.0829,0.1932,False,0.1139,0.2726,0.747,1.2385,0.747,1.3195,1.7284,1.3199,1.6525,364.0,1770.0,6.8255,0.9811,0.6339,3.0,4388,2804,37,2796,164.5,0.6,9624.2,14.9,,13.3,large_river,1
 OH_Blanchard_River_near_Dupont,fetched,,,,,,,,,,,,,,,,,,,,,,,,,4798,2788,37,2781,160.2,,,,,,large_river,2
 OH_Eagle_Creek_above_Findlay,fetched,,,,,,,,,,,,,,,,,,,,,,,,,8339,2493,37,2484,144.4,,,,,,small_stream,2
@@ -84,7 +84,7 @@ WI_Cedar_Creek_near_Cedarburg,fetched,,,,,,,,,,,,,,,,,,,,,,,,,3397,1610,37,1602,
 WI_Chippewa_River_at_Durand,done,B,True,meets tier B,1368.0,10.0,0.8806,0.5753,0.1463,False,0.2083,0.7234,0.3325,1.5816,0.3325,0.8806,0.8974,0.8806,1.1913,364.0,1601.0,6.02,0.9333,0.9804,0.0,3734,1800,37,1790,131.7,0.3,3954.2,19.1,,5.0,cold_climate,1
 WI_Chippewa_River_at_Grand_Ave_at_Eau_Claire,done,B,True,meets tier B,1696.0,10.0,0.7024,0.3831,0.1216,False,0.3508,0.7614,0.3453,1.2815,0.3453,0.7024,0.9688,0.7024,1.1247,364.0,1894.0,5.777,0.9275,0.8885,0.0,5459,2500,37,2490,145.8,0.4,4931.6,19.5,,5.3,cold_climate,2
 WI_Duck_Creek_near_Howard_DOWNSTREAM,fetched,,,,,,,,,,,,,,,,,,,,,,,,,8751,2223,37,2214,143.0,,,,,,small_stream,2
-WI_East_River_at_N_Baird_Street_at_Green_Bay,fetched,,,,,,,,,,,,,,,,,,,,,,,,,8384,3929,37,3919,178.7,,,,,,tidal_coastal,2
+WI_East_River_at_N_Baird_Street_at_Green_Bay,done,B,True,meets tier B,3227.0,11.0,0.3404,0.2669,0.133,False,0.472,0.7814,0.3167,0.6376,0.3167,0.3418,0.4401,0.342,0.4436,364.0,3518.0,2.56,0.9536,0.9401,0.0,8384,3929,37,3919,178.7,0.0,3882.1,51.2,,13.2,tidal_coastal,2
 WI_Fox_River_at_Princeton,done,B,True,meets tier B,1321.0,10.0,0.9163,0.7781,0.1809,False,0.1552,0.6689,0.1198,1.1925,0.1198,0.9163,0.4959,0.9163,1.1523,364.0,1585.0,5.064,0.8387,0.8719,0.0,4078,1826,37,1818,130.6,0.6,2661.8,20.0,,4.9,large_river,1
 WI_Nemadji_River_near_South_Superior,done,C,False,CV Spearman < 0.5,1015.0,10.0,3.004,2.0304,0.3417,False,0.066,0.0113,0.7482,2.7698,0.7482,3.004,1.4967,3.004,3.9219,364.0,1226.0,8.79,0.8539,0.9115,0.0,1793,1352,37,1342,121.8,0.6,3412.4,16.6,,4.2,cold_climate,1
 WI_Wisconsin_River_at_Muscoda,done,B,True,meets tier B,1871.0,11.0,1.3753,0.8705,0.2262,False,0.1716,0.672,0.2922,1.3784,0.2922,1.3663,0.9046,1.36,1.9589,364.0,2058.0,6.08,0.9726,0.9513,0.0,4336,2267,37,2257,148.5,0.6,5392.0,21.7,,5.7,large_river,1

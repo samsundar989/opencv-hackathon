@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 137.4
+    "fetch": 137.4,
+    "reference": 0.4,
+    "register_features": 4495.5,
+    "cv": 17.7,
+    "export": 21.3
   },
   "nwis_id": "05114000",
   "state": "ND",
   "name": "Souris River near Sherwood",
-  "status": "fetched"
+  "status": "done",
+  "reference": "ND_Souris_River_near_Sherwood___2026-09-22T22-00-06Z.jpg",
+  "registration": {
+    "frames": 2219,
+    "daylight": 2158,
+    "reg_rate_all": 0.8179,
+    "reg_rate_last30d": 0.9639,
+    "n_daylight_last30d": 166,
+    "view_change_runs": 9,
+    "view_change_linked": 5
+  },
+  "cv": {
+    "tier": "C",
+    "n": 1578,
+    "n_pred": 1578,
+    "reg_rate": 0.9639,
+    "calib_p5_p95_ft": 4.776,
+    "test_range_ft": 8.07,
+    "mae": 1.191,
+    "nmae": 0.2494,
+    "mae_p15": 0.0058,
+    "mae_p24": 0.2548,
+    "mae_const": 1.3138,
+    "n_ev": 501,
+    "mae_ev": 1.5448,
+    "mae_p24_ev": 0.6454,
+    "spearman": 0.3457,
+    "bacc_flood": 0.5825,
+    "bacc_flood_p24": 0.8607,
+    "n_flood": 177,
+    "gap_6h_lkv": 0.0778,
+    "gap_6h_cam": 1.191,
+    "gap_24h_lkv": 0.2548,
+    "gap_24h_cam": 1.191,
+    "gap_72h_lkv": 0.5348,
+    "gap_72h_cam": 1.191,
+    "gap_7d_lkv": 0.8616,
+    "gap_7d_cam": 1.191,
+    "p1": false,
+    "has_events": true,
+    "p2": false,
+    "median_ae": 0.6802,
+    "within_025": 0.1952,
+    "cv_spearman": 0.3457,
+    "sigma_ft": 1.7027,
+    "n_oof": 1578,
+    "n_folds": 9,
+    "cal_frames": 1765,
+    "cal_days": 339.0,
+    "tier_reason": "CV Spearman < 0.5"
+  },
+  "tier": "C",
+  "export": {
+    "bundle": "models\\onboard\\ND_Souris_River_near_Sherwood",
+    "model_sha": "363a33d88cfca3fd512acea1512138b05456f6068edbc9c2c64c9b5292e9868c",
+    "export_msg": "ND_Souris_River_near_Sherwood: 1765 frames, ROI 1049, sigma 1.7027, 9 extra refs"
+  },
+  "live_eligible": false
 }

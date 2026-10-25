@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 178.7
+    "fetch": 178.7,
+    "reference": 0.0,
+    "register_features": 3882.1,
+    "cv": 51.2,
+    "export": 13.2
   },
   "nwis_id": "04085138",
   "state": "WI",
   "name": "East River at N Baird Street at Green Bay",
-  "status": "fetched"
+  "status": "done",
+  "reference": "WI_East_River_at_N_Baird_Street_at_Green_Bay___2026-09-10T22-00-08Z.jpg",
+  "registration": {
+    "frames": 3929,
+    "daylight": 3820,
+    "reg_rate_all": 0.9401,
+    "reg_rate_last30d": 0.9536,
+    "n_daylight_last30d": 302,
+    "view_change_runs": 0,
+    "view_change_linked": 0
+  },
+  "cv": {
+    "tier": "B",
+    "n": 3227,
+    "n_pred": 3227,
+    "reg_rate": 0.9536,
+    "calib_p5_p95_ft": 2.56,
+    "test_range_ft": 5.164,
+    "mae": 0.3404,
+    "nmae": 0.133,
+    "mae_p15": 0.0412,
+    "mae_p24": 0.3167,
+    "mae_const": 0.6376,
+    "n_ev": 1491,
+    "mae_ev": 0.381,
+    "mae_p24_ev": 0.5457,
+    "spearman": 0.7814,
+    "bacc_flood": 0.5743,
+    "bacc_flood_p24": 0.5988,
+    "n_flood": 352,
+    "gap_6h_lkv": 0.3685,
+    "gap_6h_cam": 0.3413,
+    "gap_24h_lkv": 0.3167,
+    "gap_24h_cam": 0.3418,
+    "gap_72h_lkv": 0.3871,
+    "gap_72h_cam": 0.3423,
+    "gap_7d_lkv": 0.4401,
+    "gap_7d_cam": 0.342,
+    "p1": false,
+    "has_events": true,
+    "p2": true,
+    "median_ae": 0.2669,
+    "within_025": 0.472,
+    "cv_spearman": 0.7814,
+    "sigma_ft": 0.4436,
+    "n_oof": 3227,
+    "n_folds": 11,
+    "cal_frames": 3518,
+    "cal_days": 364.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\WI_East_River_at_N_Baird_Street_at_Green_Bay",
+    "model_sha": "30458dc9e63c2c8546352d040dea3d3927664532c41659772a7d010739138c74",
+    "export_msg": "WI_East_River_at_N_Baird_Street_at_Green_Bay: 3518 frames, ROI 934, sigma 0.4436, 0 extra refs"
+  },
+  "live_eligible": true
 }

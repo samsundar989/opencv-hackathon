@@ -9,10 +9,71 @@
     "download_errors": 0
   },
   "seconds": {
-    "fetch": 141.0
+    "fetch": 141.0,
+    "reference": 0.0,
+    "register_features": 4261.2,
+    "cv": 27.1,
+    "export": 10.3
   },
   "nwis_id": "01350000",
   "state": "NY",
   "name": "Schoharie Creek at Prattsville Upstream View",
-  "status": "fetched"
+  "status": "done",
+  "reference": "NY_Schoharie_Creek_at_Prattsville_Upstream_View___2026-10-08T14-00-19Z.jpg",
+  "registration": {
+    "frames": 2155,
+    "daylight": 2155,
+    "reg_rate_all": 0.9295,
+    "reg_rate_last30d": 0.9886,
+    "n_daylight_last30d": 175,
+    "view_change_runs": 5,
+    "view_change_linked": 1
+  },
+  "cv": {
+    "tier": "B",
+    "n": 1811,
+    "n_pred": 1811,
+    "reg_rate": 0.9886,
+    "calib_p5_p95_ft": 2.922,
+    "test_range_ft": 12.56,
+    "mae": 0.3673,
+    "nmae": 0.1257,
+    "mae_p15": 0.0069,
+    "mae_p24": 0.3535,
+    "mae_const": 0.6619,
+    "n_ev": 463,
+    "mae_ev": 0.5768,
+    "mae_p24_ev": 1.1721,
+    "spearman": 0.8457,
+    "bacc_flood": 0.8916,
+    "bacc_flood_p24": 0.8191,
+    "n_flood": 188,
+    "gap_6h_lkv": 0.1015,
+    "gap_6h_cam": 0.367,
+    "gap_24h_lkv": 0.3535,
+    "gap_24h_cam": 0.3673,
+    "gap_72h_lkv": 0.5436,
+    "gap_72h_cam": 0.3672,
+    "gap_7d_lkv": 0.6683,
+    "gap_7d_cam": 0.3684,
+    "p1": false,
+    "has_events": true,
+    "p2": true,
+    "median_ae": 0.2181,
+    "within_025": 0.5533,
+    "cv_spearman": 0.8457,
+    "sigma_ft": 0.7688,
+    "n_oof": 1811,
+    "n_folds": 11,
+    "cal_frames": 1997,
+    "cal_days": 364.0,
+    "tier_reason": "meets tier B"
+  },
+  "tier": "B",
+  "export": {
+    "bundle": "models\\onboard\\NY_Schoharie_Creek_at_Prattsville_Upstream_View",
+    "model_sha": "aaffe0127b15063cb055d54448888d178d834934135c406872df4fb6f81d21ba",
+    "export_msg": "NY_Schoharie_Creek_at_Prattsville_Upstream_View: 1997 frames, ROI 2302, sigma 0.7688, 5 extra refs"
+  },
+  "live_eligible": true
 }

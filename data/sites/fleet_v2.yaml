@@ -544,7 +544,7 @@ sites:
   camera_type: small_stream
   batch: 2
   live: false
-  tier: .nan
+  tier: C
 - cam_id: ND_Souris_River_near_Sherwood
   nwis_id: '05114000'
   state: ND
@@ -556,7 +556,7 @@ sites:
   camera_type: cold_climate
   batch: 2
   live: false
-  tier: .nan
+  tier: C
 - cam_id: GA_Big_Creek_near_Alpharetta
   nwis_id: '02335700'
   state: GA
@@ -579,8 +579,8 @@ sites:
   score: 0.9
   camera_type: tidal_coastal
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: NY_Schoharie_Creek_at_Prattsville_Upstream_View
   nwis_id: '01350000'
   state: NY
@@ -591,8 +591,8 @@ sites:
   score: 0.8889
   camera_type: small_stream
   batch: 2
-  live: false
-  tier: .nan
+  live: true
+  tier: B
 - cam_id: WI_Duck_Creek_near_Howard_DOWNSTREAM
   nwis_id: '04072150'
   state: WI
