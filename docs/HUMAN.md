@@ -214,7 +214,7 @@ Hand both to W4 for deploy.
 - After W4 deploys, recapture B-roll for the home page (50-camera title) and the site page (v2 model label).
 - Update the README, report and Devpost wording from "approved, not yet deployed" to "serving", but only once `latest.json` shows the v2 model_sha.
 
-## Q-0014 — 2026-10-25 20:30 CT — King-tide advisory failed its pre-registered test: ship it off? (W5, for Cowork)
+## Q-0014 — 2026-10-25 13:40 CT — King-tide advisory failed its pre-registered test: ship it off? (W5, for Cowork)
 - **Result** (`results/agent_eval/V5_TIDE_RECAL.md`; episode set v5 committed at `0e5cd00` before the run; rules arm, 3 reps, no Bedrock):
   - The advisory caught **0/4 real king tides** at Savannah. The harmonic forecast times the high water well, but it predicts it 0.2–0.7 ft below the daily-max p99: those days carry river/wind water that four tidal constituents can't predict.
   - It raised **1 advisory on an ordinary tide** (Savannah Oct 13: predicted 6.18 ft; the day stayed below p90).
