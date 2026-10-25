@@ -363,7 +363,7 @@ Live shadow, pre-registered (D-0010 §2): on 249 paired daylight readings at 16 
 | weekly | 0.240 | 0.165 | 1.81 / 1.54 |
 <!-- END:recal -->
 
-Weekly refits cut the error for both models. On frames above the original calibrated range the error shrinks but stays large, so readings there are still shown as a lower bound. The share of frames outside the model's own calibrated range falls from 7.9 % with a fit-once model to 1.7 % with weekly refits, but the first record flood at a site (Hancock's 29 July) is still unreadable until it has happened once. The served model is not changed before the deadline unless D-0010-style criteria are met.
+Weekly refits cut the error for both models. On frames above the original calibrated range the error shrinks but stays large, so readings there are still shown as a lower bound. The share of frames outside the model's own calibrated range falls from 7.9 % with a fit-once model to 1.7 % with weekly refits, but the first record flood at a site (Hancock's 29 July) is still unreadable until it has happened once. The served model is not changed before the deadline unless D-0010-style criteria are met. **Status:** the weekly self-recalibration (log each reading's features with its matched gauge value, refit weekly in shadow, promote only after a human approves a `RECALIBRATE` action, with a kill switch) is implemented and was tested end to end through a replay on real live data (W4, D-0014). It is ready for the live worker but not deployed at the time of writing.
 
 ### 6.12 What a user gets: the fused RiverSight stage during an outage
 
