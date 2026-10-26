@@ -20,7 +20,7 @@ python report/verify_frozen.py                      # frozen config + scoring mo
 git diff --exit-code results report                 # re-derived files are byte-identical to the committed ones
 ```
 
-Measured on the dev box (Windows 11, Python 3.14, commit recorded in the JSON): **79.6 s** end to end. The clone takes 2.1 s, the venv 4.6 s, `pip install` 58.9 s, `pytest` 11.2 s, and the re-derivation and check steps about 3 s together. The final `git diff` is empty.
+Measured on the dev box (Windows 11, Python 3.14, commit recorded in the JSON): **81.3 s** end to end (Oct 26, final re-time). The clone takes 2.7 s, the venv 4.7 s, `pip install` 60.3 s, `pytest` 10.8 s, and the re-derivation and check steps about 3 s together. The final `git diff` is empty.
 
 What this proves: every headline number and every report table is computed by committed code from committed per-site predictions (`results/kill_test_v2/<cam>_pred.csv`) and summaries. Tests also check that the summary agrees with the frozen verdict JSON (`tests/w3/`).
 
