@@ -85,6 +85,11 @@ Fetching frames and refitting needs the local image cache. Full fresh-clone step
 | `infra/`, `web/` | AWS CDK stack, dashboard |
 | `report/` | technical report and the summary script |
 | `docs/` | plan, decisions (`DECISIONS.md`), interfaces, research |
+| `models/` | per-site model bundles: `sites/` (frozen-test 20, v1), `sites_v2/` (v2, DINOv2), `onboard/` (self-onboarded), `onnx/` (DNN weights); see `models/MANIFEST.md` |
+| `tests/` | `pytest -q` suite |
+| `data/` | site lists and small metadata (raw frames are fetched, not committed) |
+| `experiments/` | exploratory notebooks and scripts, not on the live path |
+| `docs/archive/` | sprint hand-off prompts, kept for provenance |
 
 ## Data and credits
 
