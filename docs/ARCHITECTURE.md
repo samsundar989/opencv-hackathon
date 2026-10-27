@@ -17,7 +17,7 @@ Sources are Mermaid (`docs/img/*.mmd`); the SVG/PNG next to them are rendered wi
 
 ![River Steward agent loop](img/agent_loop.svg)
 
-The agent is only called for **flagged** readings, so a quiet day costs nothing in LLM calls. It is plain Bedrock Converse tool use (Claude Haiku 5.5 through the `us.` inference profile) with at most 8 tool calls per event at temperature 0. The tools are OpenCV functions over the site bundle and frames (`docs/INTERFACES.md` §4). The LLM gets numbers and one-line summaries, **never images**. If Bedrock fails or the daily token cap is hit, a deterministic rules policy makes the decision; it is also the evaluation baseline.
+The agent is only called for **flagged** readings, so a quiet day costs nothing in LLM calls. Deterministic rules take the actions; Claude Sonnet 4.6 on Bedrock (Converse tool use through the `us.` inference profile) advises with fleet triage, a second opinion on anything that pages a human, and gauge-drift review. Each LLM call is plain Converse tool use with at most 8 tool calls per event at temperature 0. The tools are OpenCV functions over the site bundle and frames (`docs/INTERFACES.md` §4). The LLM gets numbers and one-line summaries, **never images**. If Bedrock fails or the daily token cap is hit, a deterministic rules policy makes the decision; it is also the evaluation baseline.
 
 What OpenCV output changes:
 

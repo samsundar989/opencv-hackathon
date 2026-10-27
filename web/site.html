@@ -11,15 +11,30 @@
 </head>
 <body>
 <main>
-  <p class="small"><a href="index.html">← all sites</a></p>
-  <h1 id="title">Site</h1>
-  <div class="panel strip" id="strip">Loading…</div>
+  <p class="small"><a href="index.html">← all cameras</a></p>
+  <section class="hero" style="gap:10px">
+    <h1 id="title">Site</h1>
+    <div id="strip" aria-live="polite">Loading…</div>
+  </section>
+  <section class="panel" style="margin-top:16px" id="replay-sec" hidden>
+    <h2 style="margin-top:0">▶ Replay a real flood <span class="info" tabindex="0" id="replay-note" data-tip=""></span></h2>
+    <div class="two">
+      <div>
+        <div class="replay-wrap"><img id="rp-img" alt="Replay frame: camera view with the area under water in blue" style="width:100%;border-radius:10px;background:var(--chip);aspect-ratio:16/9;object-fit:contain;display:block">
+          <div class="cap" id="rp-cap" hidden></div></div>
+        <div class="slider">
+          <button type="button" id="rp-play" class="primary big" aria-label="Play the flood replay">▶ Play</button>
+          <input type="range" id="rp-pos" min="0" max="0" value="0" aria-label="Replay position">
+          <output id="rp-time"></output>
+        </div>
+        <div style="position:relative;height:180px"><canvas id="rp-chart" aria-label="Camera stage vs gauge during the replayed flood"></canvas></div>
+      </div>
+      <div><div class="small" id="rp-now"></div><h3 style="font-size:14px">What the agent did <span class="info" tabindex="0" data-tip="OpenCV-grounded rules take the actions; Claude on Amazon Bedrock gives a second opinion; any alert waits for a person to approve it."></span></h3><div class="small" id="rp-log" style="max-height:420px;overflow:auto"></div></div>
+    </div>
+  </section>
   <div class="two" style="margin-top:16px">
     <section class="panel">
-      <h2 style="margin-top:0">What's under water at a given stage?</h2>
-      <p class="muted small" style="margin:0 0 8px">Drag the slider. Blue is where the water reaches at that stage: blocks whose
-        flood height h* is at or below it <i>and</i> that connect to the river (a flood-fill, so no blue on hillsides or sky).
-        Each block's h* was learned from this camera's own gauge history. Nobody surveyed anything.</p>
+      <h2 style="margin-top:0">What's under water at a given stage? <span class="info" tabindex="0" data-tip="Drag the slider. Blue is where the water reaches at that stage: image blocks whose learned flood height is at or below it and that connect to the river (a flood-fill, so no blue on hillsides or sky). Each block's flood height was learned from this camera's own gauge history. Nobody surveyed anything."></span></h2>
       <div id="banner"></div>
       <div class="stage-wrap"><img id="ph" hidden alt="Latest camera frame (loading the full-size image)" style="width:100%">
         <canvas id="cv" hidden role="img" aria-label="Latest camera frame with the area under water at the selected stage in blue"></canvas></div>
@@ -32,49 +47,28 @@
       <div class="small muted" id="marks"></div>
       <div class="small" id="nws"></div>
     </section>
-    <section>
-      <div class="panel">
-        <h2 style="margin-top:0">Now</h2>
-        <div id="now">—</div>
-      </div>
-      <div class="panel" style="margin-top:12px">
-        <h2 style="margin-top:0">Frozen-test result for this camera</h2>
-        <div id="frozen" class="small">—</div>
-      </div>
+    <section class="panel">
+      <h2 style="margin-top:0">Last 7 days <span class="info" tabindex="0" data-tip="Blue: the camera's reading with its ± σ band. Black: the USGS gauge. Triangles: readings the system flagged. Night and above-range frames have no camera number."></span></h2>
+      <div style="position:relative;height:300px"><canvas id="chart" aria-label="Seven-day chart of camera stage against gauge stage"></canvas></div>
+      <p class="small muted" id="chartnote"></p>
     </section>
   </div>
-  <section class="panel" style="margin-top:16px" id="replay-sec" hidden>
-    <h2 style="margin-top:0">Replay a flood</h2>
-    <p class="muted small" id="replay-note"></p>
-    <div class="two">
-      <div>
-        <img id="rp-img" alt="Replay frame: camera view with the area under water in blue" style="width:100%;border-radius:8px;background:var(--chip);aspect-ratio:16/9;object-fit:contain">
-        <div class="slider">
-          <button type="button" id="rp-play" aria-label="Play the flood replay">▶ Play</button>
-          <input type="range" id="rp-pos" min="0" max="0" value="0" aria-label="Replay position">
-          <output id="rp-time"></output>
-        </div>
-        <div style="position:relative;height:180px"><canvas id="rp-chart" aria-label="Camera stage vs gauge during the replayed flood"></canvas></div>
+  <details class="more">
+    <summary>Technical details <span class="muted small">(registration, calibration, frozen-test score, agent log, flood-height map)</span></summary>
+    <div class="inner">
+      <div class="two">
+        <section class="panel"><h2 style="margin-top:0">Now</h2><div id="now">—</div></section>
+        <section class="panel"><h2 style="margin-top:0">Frozen-test result for this camera</h2><div id="frozen" class="small">—</div></section>
       </div>
-      <div><div class="small" id="rp-now"></div><h3 style="font-size:14px">What the agent did</h3><div class="small" id="rp-log" style="max-height:420px;overflow:auto"></div></div>
+      <div class="two">
+        <section class="panel"><h2 style="margin-top:0">Agent decisions</h2><div id="agent" class="small">—</div></section>
+        <section class="panel">
+          <h2 style="margin-top:0">Flood-height map <span class="info" tabindex="0" data-tip="Colour = the stage at which each image block turns wet, learned from the gauge history; grey = unreliable. From the frozen-protocol model (calibration before Oct 3)."></span></h2>
+          <img id="fh" alt="Flood-height map: the stage at which each image block becomes wet" style="width:100%;border-radius:8px">
+        </section>
+      </div>
     </div>
-  </section>
-  <section class="panel" style="margin-top:16px">
-    <h2 style="margin-top:0">Last 7 days: camera ± σ vs gauge</h2>
-    <div style="position:relative;height:300px"><canvas id="chart" aria-label="Seven-day chart of camera stage against gauge stage"></canvas></div>
-    <p class="small muted" id="chartnote"></p>
-  </section>
-  <div class="two" style="margin-top:16px">
-    <section class="panel">
-      <h2 style="margin-top:0">Agent decisions</h2>
-      <div id="agent" class="small">—</div>
-    </section>
-    <section class="panel">
-      <h2 style="margin-top:0">Flood-height map (h* per block)</h2>
-      <img id="fh" alt="Flood-height map: the stage at which each image block becomes wet" style="width:100%;border-radius:8px">
-      <p class="small muted">Colour = stage at which the block turns wet; grey = unreliable. From the frozen-protocol model (calibration before Oct 3).</p>
-    </section>
-  </div>
+  </details>
 </main>
 <script>
 (async () => {
@@ -108,11 +102,13 @@
 
   await RS.panel("strip", async (strip) => {
     if (!latest) { strip.textContent = "No live reading yet for this site."; return; }
-    strip.innerHTML = `${RS.fused(latest)} ${RS.pill(latest.status)} <span>frame ${RS.ago(latest.t_frame)}</span>
-      <span>camera <b>${RS.cam(latest)}</b></span>
-      <span>gauge <b>${RS.ft(latest.gauge_stage_ft)}</b> <span class="muted small">(${latest.gauge_age_min ?? "—"} min old)</span></span>
-      <span>flood state <b>${RS.esc(latest.flood_state)}</b></span> ${RS.flags(latest.flags)}
-      <div class="small muted" style="flex-basis:100%">Why "${RS.esc(RS.LABEL[latest.status] || latest.status)}"? ${RS.esc(RS.WHY[latest.status] || "")}</div>`;
+    const big = latest.fused_stage_ft != null
+      ? `${latest.fused_source === "lower bound" ? "≥ " : ""}${Number(latest.fused_stage_ft).toFixed(2)} ft` : RS.ft(latest.gauge_stage_ft);
+    strip.innerHTML = `<div class="bignum"><span class="sub">RiverSight stage</span><span class="v">${big}</span>${RS.pill(latest.status)}
+      <span class="info" tabindex="0" data-tip="${RS.esc((RS.WHY[latest.status] || "") + " The headline is the gauge when it is fresh, and the camera's gap-fill (with growing uncertainty) when the gauge is down.")}"></span></div>
+      <div class="bignum sub" style="margin-top:4px"><span>camera <b>${RS.cam(latest)}</b></span>
+      <span>gauge <b>${RS.ft(latest.gauge_stage_ft)}</b> (${latest.gauge_age_min ?? "—"} min old)</span>
+      <span>flood state <b>${RS.esc(latest.flood_state || "—")}</b></span><span>frame ${RS.ago(latest.t_frame)}</span></div>`;
   });
 
   await RS.panel("now", async (el) => {
@@ -166,6 +162,7 @@
       }
       return out;
     }
+    const maxThr = hstar ? Math.max(...hstar.thr.filter((v) => v !== null)) : Infinity;
     const map = (H, x, y) => { const w = H[6] * x + H[7] * y + H[8]; return [(H[0] * x + H[1] * y + H[2]) / w, (H[3] * x + H[4] * y + H[5]) / w]; };
     function draw() {
       const s = Number(slider.value);
@@ -178,21 +175,43 @@
       if (!hstar || !meta || shown.noOverlay) return;
       const [rows, cols] = hstar.grid, [rh, rw] = meta.ref_shape;
       const sx = rw / hstar.small_wh[0] * hstar.block_px, sy = rh / hstar.small_wh[1] * hstar.block_px;
-      const flooded = connected(s);
-      ctx.fillStyle = "rgba(30,140,255,0.45)";
-      ctx.beginPath();
+      const flooded = connected(Math.min(s, maxThr));
+      // display-only hole fill: an *unknown* block (no learned h*) with 3+ flooded neighbours is drawn wet, so the
+      // water reads as one surface instead of a sieve. Blocks with a learned h* above the stage are never filled.
+      const fill = flooded.slice();
       for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
-        if (!flooded[r * cols + c]) continue;
-        const pts = [[c, r], [c + 1, r], [c + 1, r + 1], [c, r + 1]].map(([x, y]) => {
+        const i = r * cols + c;
+        if (flooded[i] || hstar.thr[i] !== null) continue;
+        const nb = (r > 0 && flooded[i - cols]) + (r < rows - 1 && flooded[i + cols]) + (c > 0 && flooded[i - 1]) + (c < cols - 1 && flooded[i + 1]);
+        if (nb >= 3) fill[i] = 1;
+      }
+      const above = s > maxThr + 1e-6;
+      // draw the blocks into a mask, then composite it softened (a block grid read as jagged, patchy water)
+      const mk = document.createElement("canvas"); mk.width = cv.width; mk.height = cv.height;
+      const m = mk.getContext("2d");
+      m.fillStyle = "#1e8cff"; m.beginPath();
+      for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+        if (!fill[r * cols + c]) continue;
+        const pts = [[c - 0.02, r - 0.02], [c + 1.02, r - 0.02], [c + 1.02, r + 1.02], [c - 0.02, r + 1.02]].map(([x, y]) => {
           const p = [x * sx, y * sy];
           return Hinv ? map(Hinv, p[0], p[1]) : [p[0] * cv.width / rw, p[1] * cv.height / rh];
         });
-        ctx.moveTo(...pts[0]); pts.slice(1).forEach((p) => ctx.lineTo(...p)); ctx.closePath();
+        m.moveTo(...pts[0]); pts.slice(1).forEach((p) => m.lineTo(...p)); m.closePath();
       }
-      ctx.fill();
-      ctx.fillStyle = "rgba(0,0,0,.6)"; ctx.fillRect(0, cv.height - 30, cv.width, 30);
-      ctx.fillStyle = "#fff"; ctx.font = "16px system-ui, sans-serif";
-      ctx.fillText(`Under water at ${s.toFixed(2)} ft (blue)`, 10, cv.height - 10);
+      m.fill();
+      if (above) {   // hatch: the camera has never seen the river this high, so this extent is a lower bound
+        m.globalCompositeOperation = "source-atop"; m.strokeStyle = "rgba(255,255,255,.55)"; m.lineWidth = Math.max(2, cv.width / 300);
+        m.beginPath(); for (let x = -cv.height; x < cv.width; x += Math.max(10, cv.width / 70)) { m.moveTo(x, cv.height); m.lineTo(x + cv.height, 0); } m.stroke();
+      }
+      ctx.save(); ctx.globalAlpha = 0.5; ctx.filter = `blur(${Math.max(1, Math.round(cv.width / 400))}px)`; ctx.drawImage(mk, 0, 0); ctx.restore();
+      const bar = Math.max(30, Math.round(cv.height / 18));
+      ctx.fillStyle = above ? "rgba(154,103,0,.9)" : "rgba(0,0,0,.6)"; ctx.fillRect(0, cv.height - bar, cv.width, bar);
+      const label = above ? `${s.toFixed(2)} ft: above what this camera has learned. Hatched = water reaches at least this far.`
+        : `Under water at ${s.toFixed(2)} ft (blue)`;
+      let fs = Math.round(bar * 0.5);
+      ctx.font = `${fs}px system-ui, sans-serif`;
+      while (fs > 9 && ctx.measureText(label).width > cv.width - 20) { fs--; ctx.font = `${fs}px system-ui, sans-serif`; }
+      ctx.fillStyle = "#fff"; ctx.fillText(label, 10, cv.height - bar * 0.33);
     }
     if (hstar) {
       const vals = hstar.thr.filter((v) => v !== null);
@@ -274,9 +293,11 @@
     if (!F.length) return;
     sec.hidden = false;
     const base = `replays/${encodeURIComponent(ev.event)}/`;
-    document.getElementById("replay-note").innerHTML = `A real flood, ${RS.esc(man.window[0].slice(0, 10))} → ${RS.esc(man.window[1].slice(0, 10))}, replayed through the
-      live pipeline with a model trained only on frames before ${RS.esc(man.bundle_cut)} (so the camera meets this flood out of sample).
-      Calibrated range ${man.calibrated_range_ft.map((v) => Number(v).toFixed(2)).join("–")} ft. Agent: ${RS.esc(man.policy)}; alerts would wait for a person.`;
+    document.getElementById("replay-note").dataset.tip = `A real flood, ${man.window[0].slice(0, 10)} → ${man.window[1].slice(0, 10)}, replayed through the
+      live pipeline with a model trained only on frames before ${man.bundle_cut} (so the camera meets this flood out of sample).
+      Calibrated range ${man.calibrated_range_ft.map((v) => Number(v).toFixed(2)).join("–")} ft. Agent: ${man.policy}; alerts would wait for a person.`;
+    const calHi = Number(man.calibrated_range_ft[1]);
+    if (location.hash === "#replay-sec") sec.scrollIntoView({ behavior: "smooth", block: "start" });
     if (typeof Chart === "undefined" && document.readyState !== "complete") await new Promise((r) => window.addEventListener("load", r, { once: true }));
     const css = getComputedStyle(document.documentElement), c = (v) => css.getPropertyValue(v).trim();
     const xs = (k) => F.filter((f) => f[k] != null).map((f) => ({ x: Date.parse(f.t), y: f[k] }));
@@ -295,6 +316,15 @@
     function show(i) {
       const f = F[i];
       img.src = base + f.overlay;
+      // above the calibrated range the camera saturates: the blue stops growing at the largest extent it has learned. Say so on the frame.
+      const cap = document.getElementById("rp-cap");
+      if (f.camera_at_least_ft != null || (f.gauge_ft != null && f.gauge_ft > calHi)) {
+        cap.hidden = false; cap.className = "cap warn";
+        cap.textContent = `Water is above anything this camera learned (${calHi.toFixed(2)} ft): blue shows the largest learned extent, the real flood reaches further. Gauge ${RS.ft(f.gauge_ft).replace(" ft", "")} ft is trusted.`;
+      } else if (f.camera_ft != null) {
+        cap.hidden = false; cap.className = "cap";
+        cap.textContent = `Blue = under water at the camera's reading, ${Number(f.camera_ft).toFixed(2)} ft`;
+      } else cap.hidden = true;
       document.getElementById("rp-time").textContent = new Date(f.t).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
       ch.data.datasets[3].data = [{ x: Date.parse(f.t), y: f.camera_ft ?? f.camera_at_least_ft ?? f.gauge_ft }]; ch.update("none");
       document.getElementById("rp-now").innerHTML = `${RS.pill(f.status)} camera <b>${RS.cam({ camera_stage_ft: f.camera_ft, camera_sigma_ft: f.sigma_ft, camera_at_least_ft: f.camera_at_least_ft })}</b>

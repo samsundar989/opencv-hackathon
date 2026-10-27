@@ -1,0 +1,282 @@
+{
+  "decision": "D-0012 Q-0012 option 1 (onboarded group, never mixed with the frozen 20); rules of D-0010 \u00a71; batch 2 (D-0013 W5-1) as its own group, frozen by W5 (D-0015) before its first served cycle",
+  "group": "onboarded_b2",
+  "window_start_utc": "2026-10-27T05:04:35+00:00",
+  "note": "frozen at deploy time, before the first cycle that serves these bundles",
+  "bundles": "W5 onboarding (models/onboard, frozen D-0007 setting, 12 months to 2026-10-23)",
+  "frozen_utc": "2026-10-27T05:04:35+00:00",
+  "models": {
+    "AK_Anchor_River_near_Anchor_Point": {
+      "model_sha": "4d9533e0ba6f37bc228202dadc3d868fab9ba28e690999726af67cfa4c4118c0",
+      "nwis_id": "15239900",
+      "trained_at": "2026-10-25T10:20:51+00:00",
+      "tier": "B",
+      "n_calib_frames": 1656,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "AK_Kasilof_River_near_Kasilof": {
+      "model_sha": "44b813cfc5ec15f84104871401f544fd61fb2ea952147dc852844fa6c62f6e16",
+      "nwis_id": "15242000",
+      "trained_at": "2026-10-25T04:05:34+00:00",
+      "tier": "B",
+      "n_calib_frames": 1137,
+      "calib_end": "2026-10-22T20:00:05+00:00"
+    },
+    "CA_Dutch_Slough_below_Jersey_Island_Road_at_Jersey_Island": {
+      "model_sha": "0b23b01cff47d6092c47187937ebc0b7331bf7659840a9312533f9f6fe13d9e3",
+      "nwis_id": "11313433",
+      "trained_at": "2026-10-25T00:28:25+00:00",
+      "tier": "B",
+      "n_calib_frames": 3573,
+      "calib_end": "2026-10-22T23:00:12+00:00"
+    },
+    "CA_Georgiana_Slough_Salmonid_Migratory_Barrier": {
+      "model_sha": "bd3466d7add8fba89bcbec0ed1ddcc4dda909ee0e50b6a4a15ce669cdd577b2b",
+      "nwis_id": "381427121305401",
+      "trained_at": "2026-10-25T16:01:13+00:00",
+      "tier": "B",
+      "n_calib_frames": 2116,
+      "calib_end": "2026-10-22T23:00:04+00:00"
+    },
+    "CA_Green_Slough_nr_Courtland": {
+      "model_sha": "183d350dc6e84b55e2d75190a96da5d01e5a3b18dc5a8c954419bc8e9983068d",
+      "nwis_id": "381905121413901",
+      "trained_at": "2026-10-25T16:49:47+00:00",
+      "tier": "B",
+      "n_calib_frames": 891,
+      "calib_end": "2026-10-22T23:00:02+00:00"
+    },
+    "CA_Sacramento_River_at_Freeport": {
+      "model_sha": "7809fa64a033affcbce648171a8cdff8eb0497cb5bd1a8c81c43da1b0ed04231",
+      "nwis_id": "11447650",
+      "trained_at": "2026-10-25T11:35:16+00:00",
+      "tier": "B",
+      "n_calib_frames": 942,
+      "calib_end": "2026-10-22T23:00:04+00:00"
+    },
+    "CA_Suisun_Slough_nr_Benicia": {
+      "model_sha": "47d4eb794d19a22eeab3a3ce17f0d762b802479639389754e6e433f914d8b9bb",
+      "nwis_id": "11455740",
+      "trained_at": "2026-10-25T14:17:27+00:00",
+      "tier": "B",
+      "n_calib_frames": 3112,
+      "calib_end": "2026-10-22T23:00:02+00:00"
+    },
+    "GA_Big_Creek_near_Alpharetta": {
+      "model_sha": "b3c4550d5817b124fdc921bb91fd0c1891553b9946594184edc248d37b4fd5f0",
+      "nwis_id": "02335700",
+      "trained_at": "2026-10-25T00:52:04+00:00",
+      "tier": "B",
+      "n_calib_frames": 2339,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "GA_Sweetwater_Creek_at_Austell": {
+      "model_sha": "52b4ba3ce677b1d49f4d74a4749d7a716c5208dcb287fa5a705ad6f99e4f9994",
+      "nwis_id": "02336910",
+      "trained_at": "2026-10-24T22:04:44+00:00",
+      "tier": "B",
+      "n_calib_frames": 2364,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "IL_Vermilion_River_near_Danville": {
+      "model_sha": "7acd3b6cdc7d75cb5f69d211cbba778a14184e49159a1499e7dc382eeb56ab92",
+      "nwis_id": "03339000",
+      "trained_at": "2026-10-25T09:58:26+00:00",
+      "tier": "B",
+      "n_calib_frames": 1549,
+      "calib_end": "2026-10-22T22:00:12+00:00"
+    },
+    "ME_Kennebec_River_at_Calumet_Bridge_at_Augusta": {
+      "model_sha": "7899ca7ae90dd655cc22954bfebcbd3e63857b99809d98a45ad4c66d59bba111",
+      "nwis_id": "01049320",
+      "trained_at": "2026-10-25T12:20:52+00:00",
+      "tier": "B",
+      "n_calib_frames": 3410,
+      "calib_end": "2026-10-22T21:00:04+00:00"
+    },
+    "MI_Kawkawlin_River_at_State_Park_Dr_at_Bay_City": {
+      "model_sha": "8701ceafa8c5e3aa80d3d3ee9e55fd8a219165d207ca0cefbbe84c599ef196ab",
+      "nwis_id": "04143600",
+      "trained_at": "2026-10-25T13:59:30+00:00",
+      "tier": "B",
+      "n_calib_frames": 2548,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "MN_Minnehaha_Creek_below_Grays_Bay_Dam_in_Minnetonka": {
+      "model_sha": "e46d5cdc15ea6951764c6135f9f82429a8f789235d02e310f4374c6e9138dc55",
+      "nwis_id": "05289100",
+      "trained_at": "2026-10-25T09:15:34+00:00",
+      "tier": "B",
+      "n_calib_frames": 1907,
+      "calib_end": "2026-10-22T22:01:21+00:00"
+    },
+    "MN_Minnesota_River_at_Mankato_MN": {
+      "model_sha": "0ed49de61e106434a467c219c5401e6f33e3379dffcaf21f5fbd0bf7c337aa36",
+      "nwis_id": "05325000",
+      "trained_at": "2026-10-25T03:57:16+00:00",
+      "tier": "B",
+      "n_calib_frames": 1130,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "MN_Redwood_River_near_Marshall": {
+      "model_sha": "9472f5d72e0bd62f4faea8711db484ddd1af621f6929036b5730b04d8f4aa5c9",
+      "nwis_id": "05315000",
+      "trained_at": "2026-10-24T23:43:01+00:00",
+      "tier": "B",
+      "n_calib_frames": 1701,
+      "calib_end": "2026-10-22T22:00:13+00:00"
+    },
+    "ND_Crooked_Creek_near_Emerson": {
+      "model_sha": "50170580fa1c9f7b05afb09bc4416c2d5994384002331c4954b679a956fdb3cc",
+      "nwis_id": "06339200",
+      "trained_at": "2026-10-25T04:38:02+00:00",
+      "tier": "B",
+      "n_calib_frames": 1346,
+      "calib_end": "2026-10-01T00:00:08+00:00"
+    },
+    "ND_Missouri_River_at_Bismarck": {
+      "model_sha": "d6cad668f16bffa555e37232077b751fe135ee746d51211888be77b5df625347",
+      "nwis_id": "06342500",
+      "trained_at": "2026-10-25T07:41:05+00:00",
+      "tier": "B",
+      "n_calib_frames": 1992,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "NY_MOHAWK_RIVER_AT_LOCK_9_AT_ROTTERDAM_JUNCTION_NY": {
+      "model_sha": "a464f3fe851101d4a9c48902dd014b0eddc2574f35253debadcdd73a02bd1d8b",
+      "nwis_id": "01354230",
+      "trained_at": "2026-10-25T07:20:06+00:00",
+      "tier": "B",
+      "n_calib_frames": 2878,
+      "calib_end": "2026-10-06T14:01:10+00:00"
+    },
+    "NY_Rondout_Creek_at_Rondout": {
+      "model_sha": "090d65125394597a73acd185089bba3a49c24f6b7d18347f51bf1313a14cc53b",
+      "nwis_id": "01372007",
+      "trained_at": "2026-10-25T17:17:27+00:00",
+      "tier": "B",
+      "n_calib_frames": 2601,
+      "calib_end": "2026-10-22T21:00:04+00:00"
+    },
+    "NY_Schoharie_Creek_at_Prattsville_Upstream_View": {
+      "model_sha": "aaffe0127b15063cb055d54448888d178d834934135c406872df4fb6f81d21ba",
+      "nwis_id": "01350000",
+      "trained_at": "2026-10-25T03:15:15+00:00",
+      "tier": "B",
+      "n_calib_frames": 1997,
+      "calib_end": "2026-10-22T20:00:13+00:00"
+    },
+    "OH_Blanchard_River_near_Dupont": {
+      "model_sha": "13f250876423021a905373c0c0e030c866c3f94f4ac4de9fb3fbd574ac8c45fe",
+      "nwis_id": "04190000",
+      "trained_at": "2026-10-25T07:32:49+00:00",
+      "tier": "B",
+      "n_calib_frames": 2537,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "OH_Maumee_River_at_Antwerp": {
+      "model_sha": "bd6ee5f36918008e5dc7f1d363ef14a21576437fd7e1ac40a7d1e1bdfce2d53b",
+      "nwis_id": "04183500",
+      "trained_at": "2026-10-25T13:36:16+00:00",
+      "tier": "B",
+      "n_calib_frames": 1603,
+      "calib_end": "2026-10-22T22:00:12+00:00"
+    },
+    "OH_Platter_Creek_near_Sherwood": {
+      "model_sha": "c64372117f1a551d4cd1dd5d9c4cd06f478ee09fa31e1f29f86c30aa74a02268",
+      "nwis_id": "04183979",
+      "trained_at": "2026-10-25T05:38:46+00:00",
+      "tier": "B",
+      "n_calib_frames": 1886,
+      "calib_end": "2026-10-22T22:00:12+00:00"
+    },
+    "OH_St_Marys_River_at_Walcot_Street_at_Willshire": {
+      "model_sha": "9b1e799da4e23d664bf29733147c46b7b16bc89238b916e4b31e06eb4667a97e",
+      "nwis_id": "04181049",
+      "trained_at": "2026-10-25T09:30:05+00:00",
+      "tier": "B",
+      "n_calib_frames": 2180,
+      "calib_end": "2026-10-22T22:00:02+00:00"
+    },
+    "PA_Pine_Creek_at_Grant_Avenue_at_Etna": {
+      "model_sha": "d8a1e85d0ecc62d9fa0aa8e4a450e6558986f6fe800f5e43c64b97bd2e5f2c21",
+      "nwis_id": "03049807",
+      "trained_at": "2026-10-25T13:41:58+00:00",
+      "tier": "B",
+      "n_calib_frames": 1621,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "PA_West_Branch_Susquehanna_River_at_Lewisburg": {
+      "model_sha": "be179e31b8fc6db321b58b5b9e6b46dc129ea8b6021463117580461a321aca46",
+      "nwis_id": "01553500",
+      "trained_at": "2026-10-25T16:21:07+00:00",
+      "tier": "B",
+      "n_calib_frames": 764,
+      "calib_end": "2026-10-22T20:00:08+00:00"
+    },
+    "SC_CROOKED_CREEK_BELOW_N_MARLBORO_ST_AT_BENNETTSVILLE": {
+      "model_sha": "68a5ba280cd7b96abce0a7940b03360ba4c5f4428c7e0ec66d50942c88156bb8",
+      "nwis_id": "021305805",
+      "trained_at": "2026-10-25T09:03:11+00:00",
+      "tier": "B",
+      "n_calib_frames": 1856,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "TX_Stoneledge_Div_of_Little_Bear_Ck_nr_Manchaca": {
+      "model_sha": "ee83a6185922c001824710bf6e3a0b04ab4a07a961b77ea190f00228b81fd853",
+      "nwis_id": "08158823",
+      "trained_at": "2026-10-24T22:22:05+00:00",
+      "tier": "B",
+      "n_calib_frames": 1604,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "TX_Trinity_Rv_nr_Rosser": {
+      "model_sha": "6cc5b29405426569b96f3db38f7a9d4f1d23f685c3cdfc877ef77872a6993db9",
+      "nwis_id": "08062500",
+      "trained_at": "2026-10-25T17:09:04+00:00",
+      "tier": "B",
+      "n_calib_frames": 1830,
+      "calib_end": "2026-10-22T22:00:02+00:00"
+    },
+    "TX_Zacate_Ck_at_Laredo": {
+      "model_sha": "2d55bebbdb663f80f323954023a2269997566042e57f07323037e5af03953555",
+      "nwis_id": "08458995",
+      "trained_at": "2026-10-24T22:46:57+00:00",
+      "tier": "B",
+      "n_calib_frames": 1329,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    },
+    "WA_Cowlitz_River_at_Castle_Rock": {
+      "model_sha": "472699d20abedf492f2b58a9599fcc0bc2e314629228c3d8f61d5fb0179e144e",
+      "nwis_id": "14243000",
+      "trained_at": "2026-10-25T09:35:52+00:00",
+      "tier": "B",
+      "n_calib_frames": 1079,
+      "calib_end": "2026-10-20T22:00:12+00:00"
+    },
+    "WI_Chippewa_River_at_Grand_Ave_at_Eau_Claire": {
+      "model_sha": "b375bd51cd186426ddabe369bc948a7603b52c5fcdb215bde4df9428c658fc68",
+      "nwis_id": "05366800",
+      "trained_at": "2026-10-24T23:44:42+00:00",
+      "tier": "B",
+      "n_calib_frames": 1894,
+      "calib_end": "2026-10-22T20:00:08+00:00"
+    },
+    "WI_East_River_at_N_Baird_Street_at_Green_Bay": {
+      "model_sha": "30458dc9e63c2c8546352d040dea3d3927664532c41659772a7d010739138c74",
+      "nwis_id": "04085138",
+      "trained_at": "2026-10-25T03:09:23+00:00",
+      "tier": "B",
+      "n_calib_frames": 3518,
+      "calib_end": "2026-10-22T22:00:12+00:00"
+    },
+    "WI_Wolf_River_at_New_London": {
+      "model_sha": "2f6d4927a022167f3c88541984ee860071cb4aaf6e7d34cdac7dd2f39746de84",
+      "nwis_id": "04079000",
+      "trained_at": "2026-10-25T06:21:01+00:00",
+      "tier": "B",
+      "n_calib_frames": 1960,
+      "calib_end": "2026-10-22T22:00:04+00:00"
+    }
+  }
+}

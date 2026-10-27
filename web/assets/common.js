@@ -104,6 +104,11 @@ const RS = (() => {
   const qs = (k) => new URLSearchParams(location.search).get(k);
   const days = (n) => [...Array(n).keys()].map((i) => new Date(Date.now() - i * 86400000).toISOString().slice(0, 10)).reverse();
 
-  return { header, json, jsonl, esc, ft, nice, ago, pill, flags, qs, days, cam, panel, FEATURED, featuredRank, lastDay, LABEL, WHY, fused };
+  // display status: many HIVIS cameras simply stop publishing after dark, which the worker marks "stale".
+  // If it is dark at the camera and its last frame is recent (< 18 h), show it as night; a camera silent for longer stays stale.
+  const status = (s) => (s && s.status === "stale" && s.daylight === false && s.t_frame
+    && Date.now() - Date.parse(s.t_frame) < 18 * 3600e3) ? "night" : s?.status;
+
+  return { header, json, jsonl, esc, ft, nice, ago, pill, flags, qs, days, cam, panel, FEATURED, featuredRank, lastDay, LABEL, WHY, fused, status };
 })();
 document.addEventListener("DOMContentLoaded", RS.header);

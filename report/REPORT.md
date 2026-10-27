@@ -60,7 +60,7 @@ Full table, with what breaks without each call: `docs/OPENCV5_USAGE.md`.
 Live at https://d2aes2r6og8aap.cloudfront.net since 2026-10-23, in us-east-2 (`docs/DEPLOY.md`, `infra/`).
 - **Worker:** one EC2 m9g.large (Graviton5) from the **COOL G5 AMI**. A systemd timer runs one cycle over all calibrated cameras every 15 minutes. `/proof` publishes the instance-identity document, AMI id, `cv2.__file__`, version and `getBuildInformation()` hash, so a judge can check which OpenCV produced the readings.
 - **Storage and front door:** a private S3 bucket (models, live readings, overlays, approvals) behind CloudFront with origin access control; the dashboard is static.
-- **Agent:** Amazon Bedrock (Claude Haiku 5.5 through the `us.` inference profile, Converse tool use) for flagged readings only; a deterministic rules policy as fallback.
+- **Agent:** for flagged readings only, a deterministic rules policy takes the actions using OpenCV evidence; Amazon Bedrock (Claude Sonnet 4.6 through the `us.` cross-region inference profile, Converse tool use) ranks the fleet, gives a recorded second opinion on anything that pages a human, and reviews suspected gauge drift. Claude Haiku 4.5 and Sonnet 4.6 were also evaluated as stand-alone deciders (agent evaluation section). Claude 5.5 models were not available to this AWS account.
 - **Human approval:** a Lambda Function URL behind a token; SNS e-mail to the operator.
 - **Guardrails:** an AWS Budget on the $100 cap (D-0004) whose 90 % action stops every instance tagged for the project, created before the first launch; IMDSv2; no SSH (SSM only); least-privilege roles.
 - **Operations:** `docs/RUNBOOK.md` (worker down, USGS down, Bedrock throttled, tear-down).
@@ -338,7 +338,7 @@ About a month of overlap with the gauge is enough. More history does not help th
   - There are losses too, for example a winter ice gap on the Root River.
 - So the camera helps when the river moves while the gauge is dark, which is when a fill-in matters. It wins in more of those cases than it loses, but not all of them.
 
-### 6.11 Model v2 candidate: DINOv2 features in `cv2.dnn`
+### 6.11 Model v2: DINOv2 features in `cv2.dnn` (serving since Oct 27)
 
 W4 (`results/v2/README.md`). v2 adds a second view of each registered frame: DINOv2-S/14 patch tokens computed by OpenCV 5's DNN engine (`cv2.dnn.readNetFromONNX`; checked against onnxruntime). The tokens go through a fixed, label-free PCA fitted on cameras outside the evaluation, then get the same flood-height-map reliability selection and ridge, combined with v1 at equal weight. Every other knob is the frozen D-0007 setting. It was evaluated with exactly the D-0007 protocol (monthly forward-chaining CV inside the calibration history; v1 reproduces the frozen numbers exactly), and the selection rule was committed before any v2 result existed.
 
@@ -352,7 +352,7 @@ W4 (`results/v2/README.md`). v2 adds a second view of each registered frame: DIN
 | sites improved | — | 19/20 (worst site +0.015 ft) |
 <!-- END:model_v2 -->
 
-v2 is better in every calendar month, most of all in the foliage months that drive v1's drift. The ablations show the DINOv2 features do the work; the seasonal tweaks (sun-position correction, recency weighting) add nothing or hurt. Limits: this is still CV inside one year, the frozen kill-test numbers are not recomputed, and the forward-in-time check is v2's shadow scoring on the live stream (D-0010 §2). **Approved to serve on Oct 24 (D-0014):** all three pre-registered criteria were met (CV, live shadow, cycle time under 5 minutes). At the time of writing the live worker has not yet been redeployed, so v1 still serves and v2 runs as the shadow (the `model_sha` in each live reading shows which). Either way, the frozen-v1 prospective record continues as pre-registered (§6.9).
+v2 is better in every calendar month, most of all in the foliage months that drive v1's drift. The ablations show the DINOv2 features do the work; the seasonal tweaks (sun-position correction, recency weighting) add nothing or hurt. Limits: this is still CV inside one year, the frozen kill-test numbers are not recomputed, and the forward-in-time check is v2's shadow scoring on the live stream (D-0010 §2). **Approved to serve on Oct 24 (D-0014):** all three pre-registered criteria were met (CV, live shadow, cycle time under 5 minutes). The live worker was redeployed on Oct 27 (about 00:05 CT): v2 now serves, and v1 runs beside it, its value kept in `v1_stage_ft`, so the pre-registered frozen-v1 prospective record is scored exactly as before. Either way, the frozen-v1 prospective record continues as pre-registered (§6.9).
 
 <!-- BEGIN:shadow -->
 Live shadow, pre-registered (D-0010 §2): on 249 paired daylight readings at 16 sites, v2's median absolute error was **0.084 ft vs 0.183 ft** for v1, the model served at the time (difference -0.099 ft, site-bootstrap 95 % CI -0.236 to -0.021); v2 was better at 12 of 16 sites. Caveat: one calm day (median gauge range per site 0.02 ft).
@@ -382,7 +382,7 @@ The product's headline number is a fusion: the gauge while it is fresh; during a
 | 72h | 0.406 | **0.300** | 0.257 | 0.289 | 15/16 sites | 0.55 vs 1.14 |
 | 7d | 0.501 | **0.339** | 0.273 | 0.290 | 15/16 sites | 0.46 vs 1.19 |
 
-With the v2 candidate camera, the primary fused estimate is 0.080 / 0.190 / 0.253 / 0.284 ft for 6 h / 24 h / 72 h / 7 d outages.
+With v2 as the camera model, the primary fused estimate is 0.080 / 0.190 / 0.253 / 0.284 ft for 6 h / 24 h / 72 h / 7 d outages.
 <!-- END:fusion -->
 
 For a few hours, the last gauge value is as good as anything; the camera does not beat persistence over short gaps. Over days, the fused estimate is clearly better, and most of all in the hours when the river actually moves. In those hours it cuts the error by about half at 72 h and 7 days. The bias correction we declared primary helps at 24 h but is worse than plain fusion at 72 h and 7 days; we report both rather than switch after seeing the result.

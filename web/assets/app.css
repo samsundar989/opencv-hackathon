@@ -96,3 +96,44 @@ footer { max-width: 1200px; margin: 24px auto 32px; padding: 0 16px; color: var(
 .ticks .tick { position: absolute; transform: translateX(-50%); text-align: center; white-space: nowrap; border-left: 1px solid var(--warn); padding-left: 3px; line-height: 1.2; }
 .ticks .tick.minor, .ticks .tick.moderate, .ticks .tick.major { color: var(--bad); border-color: var(--bad); }
 .catbtn { font-size: 12px; padding: 2px 8px; margin: 2px 0; }
+
+/* ---- Oct 26 UI pass: calmer, card-first layout; long text moves behind (i) tips ---- */
+body { font: 15px/1.55 "Inter", "Segoe UI Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.panel { border-radius: 14px; padding: 16px; }
+h1 { font-size: 26px; letter-spacing: -.01em; }
+h2 { font-size: 18px; letter-spacing: -.005em; }
+.hero { display: grid; gap: 14px; padding: 22px 22px 18px; border-radius: 18px; margin: 4px 0 14px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--water) 16%, var(--panel)), var(--panel) 70%); border: 1px solid var(--line); }
+.hero h1 { margin: 0; font-size: 30px; line-height: 1.15; }
+.hero p { margin: 0; color: var(--muted); max-width: 62ch; font-size: 16px; }
+.steps { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.step { display: flex; gap: 10px; align-items: flex-start; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; font-size: 14px; }
+.step .n { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--water); color: #fff; font-weight: 700; display: grid; place-items: center; font-size: 13px; }
+.cta { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn.big, button.big { font-size: 15px; padding: 10px 16px; border-radius: 10px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+.btn.primary, button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.info { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; font: 600 11px/1 system-ui, sans-serif;
+  background: var(--chip); color: var(--muted); border: 1px solid var(--line); cursor: help; position: relative; vertical-align: middle; margin-left: 4px; }
+.info::before { content: "i"; font-style: italic; }
+.info:hover::after, .info:focus::after { content: attr(data-tip); position: absolute; left: 50%; top: calc(100% + 6px); transform: translateX(-50%);
+  width: min(340px, 80vw); padding: 10px 12px; border-radius: 10px; background: var(--ink); color: var(--bg); font: 400 13px/1.45 system-ui, sans-serif;
+  font-style: normal; z-index: 2000; box-shadow: 0 6px 24px rgba(0,0,0,.25); white-space: normal; text-align: left; }
+details.more { margin-top: 16px; }
+details.more > summary { cursor: pointer; font-weight: 600; padding: 12px 16px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); list-style: none; }
+details.more > summary::-webkit-details-marker { display: none; }
+details.more > summary::before { content: "▸ "; color: var(--muted); }
+details.more[open] > summary::before { content: "▾ "; }
+details.more > .inner { margin-top: 12px; display: grid; gap: 16px; }
+.bignum { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; }
+.bignum .v { font-size: 34px; font-weight: 750; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.bignum .sub { color: var(--muted); font-size: 14px; }
+.card { border-radius: 14px; transition: transform .12s ease, box-shadow .12s ease; }
+.card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(20, 32, 43, .12); }
+.replay-wrap { position: relative; }
+.replay-wrap .cap { position: absolute; left: 8px; right: 8px; bottom: 8px; padding: 6px 10px; border-radius: 8px; font-size: 13px;
+  background: rgba(0,0,0,.65); color: #fff; }
+.replay-wrap .cap.warn { background: rgba(154, 103, 0, .9); }
+#rp-play { min-width: 110px; }
+.legend-dot { display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: rgba(30,140,255,.6); vertical-align: -1px; }
+.legend-hatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px;
+  background: repeating-linear-gradient(45deg, rgba(30,140,255,.75) 0 3px, rgba(255,255,255,.6) 3px 6px); }

@@ -1,0 +1,15 @@
+{
+ "setup": {
+  "instance": "m9g.large (AWS Graviton5), us-east-2",
+  "COOL": "OpenCV 5.1.0-dev, COOL Graviton5 AMI (/opt/cool, Python 3.14)",
+  "baseline": "pip opencv-python-headless 5.0.0.93 on the same instance",
+  "workload": "the live RiverSight cycle on real HIVIS frames"
+ },
+ "end_to_end_fleet_speedup_880_cams_2_threads": "1.0067x (flat)",
+ "classical_registration_speedup_ORB_MAGSAC": "1.16x (1 thread) / 1.21x (2 threads)",
+ "classical_frame_pipeline_speedup": "1.13x (1 thread) / 1.21x (2 threads)",
+ "why_flat": "ALIKED+LightGlue (DNN) is 97.8% of stage time; COOL does not accelerate it",
+ "outputs_identical": "7/8 stages bit-identical across 20 sites; full stage pipeline differs by at most 0.00044 ft",
+ "cost_at_15_min_cadence": "$0.059 per camera-month; 1262 cameras per m9g.large",
+ "sources": "results/cool_bench/cool_g5_m9g_2026-10-24/*.csv, amdahl.png; built by scripts/cool_summary.py"
+}

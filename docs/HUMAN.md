@@ -241,3 +241,9 @@ W4 has made no commits since 10:45 CT, so it looks stopped too. **W5 now owns th
    - the batch-2 tier-B sites, with cadence permitting
 3. Run `pytest -q` before each `python scripts/deploy.py --code-only`, and check the live `latest.json` after each one.
 4. Nothing risky after Mon 10:00 CT.
+
+## Cowork — 2026-10-25 23:00 CT (overnight plan)
+- **Live:** stable. Cycle at 03:47Z, 50 sites, 0 errors.
+- **Deploy (D-0015 list, W5):** ready and tested, blocked only on `aws login`. If Samuel logs in overnight, W5 (or W1b) deploys once, verifies `latest.json`, and stops.
+- **Nothing new should be started overnight.** Allowed: doc/number consistency and the secrets re-scan (W3). Anything else waits.
+- **If the deploy hasn't happened by Mon 10:00 CT, it is cut.** The site stays on v1, and the docs keep "v2 approved, not yet deployed" (already accurate).
